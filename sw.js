@@ -1,11 +1,10 @@
-const CACHE = 'darts-v17-20260416';
-const BASE = '/DartsByTom';
+const CACHE = 'darts-v18-20260416';
 const FILES = [
-  BASE + '/',
-  BASE + '/index.html',
-  BASE + '/manifest.json',
-  BASE + '/icon-192.png',
-  BASE + '/icon-512.png',
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
 ];
 
 self.addEventListener('install', function(e) {
@@ -31,8 +30,7 @@ self.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
-  // Altijd vers ophalen voor HTML
-  if(e.request.url.includes('.html') || e.request.url.endsWith(BASE + '/')) {
+  if(e.request.url.includes('.html') || e.request.url.endsWith('/DartsByTom/') || e.request.url.endsWith('/DartsByTom')) {
     e.respondWith(
       fetch(e.request).then(function(response) {
         var clone = response.clone();
