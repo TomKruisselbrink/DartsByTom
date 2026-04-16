@@ -24,7 +24,7 @@
 @keyframes glow{0%,100%{box-shadow:var(--glow)}50%{box-shadow:0 0 35px rgba(239,68,68,0.5)}}
 @keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 @keyframes winPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-@keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
 .score-animate{animation:scoreFlip .25s ease-out,scorePulse .3s ease-out}
 .score-bust{animation:bustShake .4s ease-out}
@@ -409,6 +409,17 @@ select{background:var(--card);border:1px solid var(--border);border-radius:var(-
   </div>
   <div id="header-right" style="display:flex;gap:6px"></div>
 </div>
+<!-- ═══════ DUBBEL SELECTIE MODAL ═══════ -->
+<div id="double-modal" style="display:none;position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.88);flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:0">
+  <div style="background:var(--surface);border-top:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px 32px;width:100%;max-width:480px">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:14px;font-weight:800;color:var(--text)" id="double-modal-title">Welke dubbel gooi je uit?</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">Tik op de dubbel waarmee je hebt uitgegooid</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px" id="double-grid"></div>
+    <button onclick="onDoubleSelected(null)" style="width:100%;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer">Sla over / onbekend</button>
+  </div>
+</div>
 <div id="app-content">
 
 <!-- HOME -->
@@ -783,38 +794,43 @@ select{background:var(--card);border:1px solid var(--border);border-radius:var(-
 
 <!-- SHANGHAI -->
 <div class="screen" id="screen-shanghai">
-  <div id="sh-players" style="margin-bottom:12px"></div>
 
-  <!-- Big target display -->
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;text-align:center">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Doel</div>
-    <div id="sh-target2" style="font-size:72px;font-weight:900;line-height:1;color:var(--accent);text-shadow:0 0 30px rgba(239,68,68,0.4)">1</div>
-    <div style="display:flex;justify-content:center;gap:20px;margin-top:10px">
-      <div style="text-align:center">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Beurt</div>
-        <div id="sh-turn-name" style="font-size:16px;font-weight:800;color:var(--text)">—</div>
+  <!-- BIG TARGET — same style as Halve It -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;text-align:center">
+    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Ronde <span id="sh-round-num">1</span> — Gooi op</div>
+    <div id="sh-target2" style="font-size:72px;font-weight:900;line-height:1.1;color:var(--accent);text-shadow:0 0 24px rgba(239,68,68,.4)">1</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px" id="sh-max-label">van 7</div>
+    <!-- Info row -->
+    <div style="display:flex;justify-content:center;gap:0;margin-top:10px;border-top:1px solid var(--border);padding-top:10px">
+      <div style="flex:1;text-align:center;padding:0 4px">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Beurt</div>
+        <div id="sh-turn-name" style="font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
       </div>
-      <div style="width:1px;background:var(--border)"></div>
-      <div style="text-align:center">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Pijlen</div>
-        <div id="sh-darts-turn" style="font-size:16px;font-weight:800;color:var(--text)">0/3</div>
+      <div style="width:1px;background:var(--border);flex-shrink:0"></div>
+      <div style="flex:1;text-align:center;padding:0 4px">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Pijlen</div>
+        <div id="sh-darts-turn" style="font-size:16px;font-weight:900;color:var(--text)">0/3</div>
       </div>
-      <div style="width:1px;background:var(--border)"></div>
-      <div style="text-align:center">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Punten</div>
-        <div id="sh-turn-pts" style="font-size:16px;font-weight:800;color:var(--accent2)">0</div>
+      <div style="width:1px;background:var(--border);flex-shrink:0"></div>
+      <div style="flex:1;text-align:center;padding:0 4px">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Deze beurt</div>
+        <div id="sh-turn-pts" style="font-size:16px;font-weight:900;color:var(--accent2)">0</div>
       </div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:0">
-    <div class="gap8">
-      <button class="btn" style="flex:1" onclick="shScore(1)">Enkel</button>
-      <button class="btn" style="flex:1" onclick="shScore(2)">Dubbel</button>
-      <button class="btn" style="flex:1" onclick="shScore(3)">Driedubbel</button>
-      <button class="btn" style="color:var(--muted)" onclick="shMiss()">Mis</button>
+  <!-- SCORE BUTTONS -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(1)">Enkel</button>
+      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(2)">Dubbel</button>
+      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(3)">Triple</button>
     </div>
+    <button class="btn" style="width:100%;padding:12px;color:var(--muted);font-size:14px" onclick="shMiss()">✕ Mis — geen punt op dit getal</button>
   </div>
+
+  <!-- PLAYERS GRID -->
+  <div id="sh-players" style="margin-bottom:0"></div>
 </div>
 
 <!-- HALVE IT -->
@@ -1007,7 +1023,7 @@ var state={
   dartCount:[],allDartCount:[],
   // legs/sets
   matchFormat:'firstto',matchN:2,matchSets:1,
-  legWins:[],setWins:[],currentSet:1,currentLeg:1,legsInSet:[],
+  legWins:[],setWins:[],currentSet:1,currentLeg:1,legsInSet:[],legsData:[],
   atcTarget:[],atcDarts:0,atcHistory:[],
   shRound:1,shTarget:1,shMaxTarget:7,shScores:[],shDarts:0,shTurnPts:0,shHistory:[],
   hiRound:0,hiSeq:[],hiScores:[],hiRoundScores:[],hiHistory:[],hiTurnPts:0,
@@ -1138,6 +1154,18 @@ function confirmGroupCode(){
   groupCode = val;
   document.getElementById('group-modal').style.display = 'none';
   document.getElementById('fb-loading').style.display = 'flex';
+  // Auto-upload any existing local stats to Firebase
+  try {
+    var localRaw = localStorage.getItem('darts_db');
+    if(localRaw){
+      var localData = JSON.parse(localRaw);
+      Object.keys(localData).forEach(function(name){
+        fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(localData[name], {merge:true})
+          .catch(function(e){console.error('Auto-upload fout voor '+name, e);});
+      });
+      console.log('Lokale stats ge-upload naar groep '+groupCode);
+    }
+  } catch(e){ console.error('Auto-upload mislukt', e); }
   startFirebaseListener();
   updateGroupTile();
 }
@@ -1177,6 +1205,7 @@ function updatePlayerStat(name,gameType,data){
   if(!p.gameHistory)p.gameHistory=[];
   var entry={date:new Date().toLocaleDateString('nl-NL'),gameType:gameType,won:data.won,darts:data.darts,score:data.score};
   if(data.detailedStats)entry.detailedStats=data.detailedStats;
+  if(data.legBreakdown)entry.legBreakdown=data.legBreakdown;
   if(data.legResult)entry.legResult=data.legResult;     // e.g. "2–1"
   if(data.setResult)entry.setResult=data.setResult;     // e.g. "2–1"
   if(data.matchFormat)entry.matchFormat=data.matchFormat;
@@ -1893,7 +1922,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore){
   state.currentPlayer=0;state.round=1;
   state.dartCount=players.map(function(){return 0});
   state.allDartCount=players.map(function(){return 0});
-  state.history=[];state.allHistory=[];
+  state.history=[];state.allHistory=[];state.legsData=[];
   // legs/sets (only for x01)
   state.matchFormat=fmt||'firstto';state.matchN=n||1;state.matchSets=sets||1;
   state.legWins=players.map(function(){return 0});
@@ -2697,13 +2726,40 @@ function setsNeededToWin(){
   return state.matchFormat==='firstto'?state.matchSets:Math.ceil(state.matchSets/2);
 }
 
+function saveLegData(winnerName){
+  if(!state.legsData)state.legsData=[];
+  var legData={legNum:state.currentLeg,winner:winnerName,playerStats:{}};
+  state.players.forEach(function(name,i){
+    var turns=state.history.filter(function(h){return h.player===i&&!h.bust;});
+    var total=turns.reduce(function(s,h){return s+h.score;},0);
+    var n=turns.length;
+    var turnAvg=n>0?Math.round(total/n*10)/10:0;
+    var high=turns.reduce(function(m,h){return h.score>m?h.score:m;},0);
+    legData.playerStats[name]={avg:turnAvg,darts:state.dartCount[i]||0,high:high,count180:turns.filter(function(h){return h.score===180;}).length};
+  });
+  state.legsData.push(legData);
+}
+
 function endGame501(winnerName){
   if(state.trnMode&&state.trnMatchCallback){
     var cb=state.trnMatchCallback;state.trnMode=false;state.trnMatchCallback=null;
     state.botPlayerIndex=-1;
     cb(winnerName);return;
   }
+  // Save this leg's stats before history gets cleared
+  saveLegData(winnerName);
+  // If double-out, ask which double was thrown
+  if(state.doubleOut){
+    showDoubleSelectModal(winnerName,function(dbl){
+      if(dbl)recordDoubleHit(winnerName,dbl);
+      finishEndGame501(winnerName);
+    });
+  } else {
+    finishEndGame501(winnerName);
+  }
+}
 
+function finishEndGame501(winnerName){
   var wi=state.players.indexOf(winnerName);
   var legsNeeded=legsNeededToWin();
   var setsNeeded=setsNeededToWin();
@@ -2724,9 +2780,9 @@ function endGame501(winnerName){
   }
 
   if(matchOver){
-    // Build result strings for stats
     var legResultStr=state.players.map(function(n,i){return state.legWins[i]||0}).join('–');
     var setResultStr=state.matchSets>1?state.players.map(function(n,i){return state.setWins[i]||0}).join('–'):null;
+    var legsSnapshot=state.legsData?state.legsData.slice():[];
     state.players.forEach(function(n,i){
       var ds=calcDetailedStats(i);
       updatePlayerStat(n,state.gameType,{
@@ -2734,6 +2790,7 @@ function endGame501(winnerName){
         darts:state.allDartCount[i]||state.dartCount[i],
         score:0,
         detailedStats:ds,
+        legBreakdown:legsSnapshot,
         legResult:legResultStr,
         setResult:setResultStr,
         matchFormat:(state.matchFormat==='firstto'?'FT':'BO')+state.matchN+(state.matchSets>1?' '+state.matchSets+'sets':'')
@@ -2750,7 +2807,8 @@ function endGame501(winnerName){
     state.history=[];state.round=1;
     state.dartCount=state.players.map(function(){return 0});
     state.currentLeg++;
-    state.currentPlayer=wi===0?1:0;
+    // Wissel op volgorde van leg — leg 1: speler 0, leg 2: speler 1, etc.
+    state.currentPlayer=(state.currentLeg-1)%state.players.length;
     setScoreFeedback(winnerName+' wint de leg!'+(setOver?' Set gewonnen!':''),'var(--success)');
     setTimeout(function(){
       renderGame();
@@ -2857,14 +2915,24 @@ function atcUndo(){
 // ═══════════════════════════════════════════
 function renderShanghai(){
   document.getElementById('sh-target2').textContent=state.shTarget;
+  document.getElementById('sh-round-num').textContent=state.shRound;
+  var maxEl=document.getElementById('sh-max-label');
+  if(maxEl)maxEl.textContent='van '+state.shMaxTarget;
   document.getElementById('sh-turn-name').textContent=state.players[state.currentPlayer];
   document.getElementById('sh-darts-turn').textContent=state.shDarts+'/3';
   document.getElementById('sh-turn-pts').textContent=state.shTurnPts;
   var el=document.getElementById('sh-players');el.innerHTML='';
-  var grid=document.createElement('div');grid.style.cssText='display:grid;gap:8px;grid-template-columns:'+pgrid(state.players.length);
+  var grid=document.createElement('div');
+  grid.style.cssText='display:grid;gap:8px;grid-template-columns:'+pgrid(state.players.length);
   state.players.forEach(function(name,i){
-    var div=document.createElement('div');div.className='player-card'+(i===state.currentPlayer?' active':'');
-    div.innerHTML='<div class="pname">'+name+'</div><div class="score-big">'+(state.shScores[i]||0)+'</div><div class="sub-info">Doel: '+state.shTarget+'</div>';
+    var isActive=i===state.currentPlayer;
+    var div=document.createElement('div');
+    div.className='player-card'+(isActive?' active':'');
+    div.style.cssText=isActive?'border-color:var(--accent);background:rgba(239,68,68,.06)':'';
+    div.innerHTML=
+      '<div class="pname" style="font-size:12px;color:'+(isActive?'var(--accent)':'var(--muted)')+'">'+name+'</div>'+
+      '<div class="score-big" style="font-size:32px;color:var(--text)">'+(state.shScores[i]||0)+'</div>'+
+      '<div class="sub-info" style="font-size:10px;color:var(--muted)">pijlen: '+(state.dartCount[i]||0)+'</div>';
     grid.appendChild(div);
   });
   el.appendChild(grid);
@@ -3420,7 +3488,7 @@ function renderStats(){
       '</div>'+
       tabsHtml+
       summaryHtml+
-      (activeFilter==='alle'?buildPersonalRecords(name)+buildAvgGraph(name):'')+
+      (activeFilter==='alle'?buildPersonalRecords(name)+buildAvgGraph(name)+buildDoubleStats(name):'')+
       avgBlock+
       otherBlock+
       '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Recente wedstrijden</div>'+
@@ -3879,9 +3947,31 @@ function renderHistory(){
       if(ds.count180)info.push(ds.count180+'×180');
     }
     if(g.matchFormat)info.push(g.matchFormat);
-    var playerEncoded=historySelectedPlayer.replace(/'/g,"\\'");
+    var legHtml='';
+    if(g.legBreakdown&&g.legBreakdown.length){
+      var lid='ld-'+historySelectedPlayer.replace(/[^a-z0-9]/gi,'')+'-'+i;
+      legHtml='<div id="'+lid+'" style="display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:8px">'+
+        g.legBreakdown.map(function(leg,li){
+          var pStats=leg.playerStats||{};
+          var players=Object.keys(pStats);
+          return'<div style="margin-bottom:6px">'+
+            '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Leg '+(li+1)+(leg.winner?' · 🏆 '+leg.winner:'')+'</div>'+
+            '<div style="display:flex;gap:5px;flex-wrap:wrap">'+
+            players.map(function(pn){var ps=pStats[pn];
+              return'<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:11px">'+
+                '<strong style="color:'+(pn===leg.winner?'var(--success)':'var(--text)')+'">'+pn+'</strong>'+
+                ' · gem <strong>'+ps.avg+'</strong>'+
+                (ps.count180?' · '+ps.count180+'×180':'')+
+                ' · '+ps.darts+'p'+
+              '</div>';
+            }).join('')+
+            '</div></div>';
+        }).join('')+
+      '</div>'+
+      '<button onclick="toggleLegDetail('+JSON.stringify(lid)+')" style="font-size:11px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
+    }
     return'<div style="padding:10px 0;border-bottom:1px solid var(--border)'+(i===0?';border-top:1px solid var(--border)':'')+'" class="fade-in">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:'+(info.length?'5':'0')+'px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:'+(info.length||legHtml?'5':'0')+'px">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
           '<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
             (g.won?'Win':'Verlies')+
@@ -3893,12 +3983,13 @@ function renderHistory(){
         '</div>'+
         '<div style="display:flex;align-items:center;gap:8px">'+
           (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+ds.avg3+'</div><div style="font-size:9px;color:var(--muted)">gem</div></div>':'')+
-          ('<button onclick="deleteMatchEntry('+JSON.stringify(historySelectedPlayer)+','+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;color:var(--danger);font-size:14px;line-height:1" title="Wedstrijd verwijderen">\u{1F5D1}</button>')+
+          ('<button onclick="deleteMatchEntry('+JSON.stringify(historySelectedPlayer)+','+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;color:var(--danger);font-size:14px;line-height:1" title="Wedstrijd verwijderen">🗑</button>')+
         '</div>'+
       '</div>'+
-      (info.length?'<div style="display:flex;flex-wrap:wrap;gap:5px">'+
+      (info.length?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px">'+
         info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--muted)">'+t+'</span>';}).join('')+
       '</div>':'')+
+      legHtml+
     '</div>';
   }).join(''):'<div class="empty">Nog geen wedstrijden voor deze speler</div>';
 
@@ -3973,7 +4064,7 @@ function buildAvgGraph(name){
   var avgs=x01.map(function(g){return g.detailedStats.avg3});
   var maxV=Math.max.apply(null,avgs)||1;
   var minV=Math.max(0,Math.min.apply(null,avgs)-10);
-  var W=280,H=70,pad=4;
+  var W=280,H=80,pad=10;
   var pts=avgs.map(function(v,i){
     var x=pad+i*(W-2*pad)/(avgs.length-1);
     var y=H-pad-(v-minV)/(maxV-minV+0.01)*(H-2*pad);
@@ -3982,8 +4073,10 @@ function buildAvgGraph(name){
   var pathD='M'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' L');
   var fillD=pathD+' L'+pts[pts.length-1][0].toFixed(1)+','+H+' L'+pts[0][0].toFixed(1)+','+H+' Z';
   var dots=pts.map(function(p,i){
-    return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5"/>'+
-      '<title>'+avgs[i]+'</title>';
+    var labelY=p[1]-8;
+    var labelAnchor=i===0?'start':i===avgs.length-1?'end':'middle';
+    return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5"/>'+
+      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="8" font-weight="700" text-anchor="'+labelAnchor+'" font-family="Nunito,sans-serif">'+avgs[i]+'</text>';
   }).join('');
   return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">📈 Gemiddelde over tijd</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px">'+
@@ -4266,9 +4359,75 @@ function renderCo121History(){
   }).join('');
 }
 
+
+// ═══════════════════════════════════════════
+// DUBBEL TRACKING
+// ═══════════════════════════════════════════
+var _doubleCallback=null;
+function showDoubleSelectModal(winnerName,callback){
+  _doubleCallback=callback;
+  document.getElementById('double-modal-title').textContent=winnerName+' — welke dubbel gooi je uit?';
+  var grid=document.getElementById('double-grid');
+  grid.innerHTML='';
+  // D1-D20
+  for(var n=1;n<=20;n++){
+    (function(num){
+      var btn=document.createElement('button');
+      btn.textContent='D'+num;
+      btn.style.cssText='padding:9px 4px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s';
+      btn.onclick=function(){onDoubleSelected('D'+num);};
+      grid.appendChild(btn);
+    })(n);
+  }
+  // D-Bull (25) — spans 2 cols
+  var bull=document.createElement('button');
+  bull.textContent='Bull (D25)';
+  bull.style.cssText='padding:9px 4px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent2);font-size:13px;font-weight:700;cursor:pointer;grid-column:span 5;margin-top:2px';
+  bull.onclick=function(){onDoubleSelected('D25');};
+  grid.appendChild(bull);
+  document.getElementById('double-modal').style.display='flex';
+}
+function onDoubleSelected(dbl){
+  document.getElementById('double-modal').style.display='none';
+  if(_doubleCallback){var cb=_doubleCallback;_doubleCallback=null;cb(dbl);}
+}
+function recordDoubleHit(playerName,dbl){
+  if(!dbl)return;
+  var db=getDB();
+  if(!db[playerName])return;
+  if(!db[playerName].doubleStats)db[playerName].doubleStats={};
+  db[playerName].doubleStats[dbl]=(db[playerName].doubleStats[dbl]||0)+1;
+  saveDB(db);
+}
+function buildDoubleStats(name){
+  var db=getDB();var p=db[name];if(!p||!p.doubleStats)return'';
+  var ds=p.doubleStats;
+  var entries=Object.keys(ds).map(function(k){return{key:k,val:ds[k]};});
+  if(!entries.length)return'';
+  entries.sort(function(a,b){return b.val-a.val;});
+  var total=entries.reduce(function(s,e){return s+e.val;},0);
+  var top=entries.slice(0,8);
+  var bars=top.map(function(e){
+    var pct=Math.round(e.val/total*100);
+    return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">'+
+      '<div style="font-size:12px;font-weight:700;min-width:38px;color:var(--accent2)">'+e.key+'</div>'+
+      '<div style="flex:1;background:var(--surface);border-radius:20px;height:8px;overflow:hidden">'+
+        '<div style="width:'+pct+'%;background:var(--accent2);height:100%;border-radius:20px;transition:width .4s"></div>'+
+      '</div>'+
+      '<div style="font-size:11px;color:var(--muted);min-width:44px;text-align:right">'+pct+'% ('+e.val+'x)</div>'+
+    '</div>';
+  }).join('');
+  return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px">🎯 Favoriete dubbels ('+total+' checkouts)</div>'+
+    '<div style="background:var(--card);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px">'+bars+'</div>';
+}
+
 // ═══════════════════════════════════════════
 // WEDSTRIJD VERWIJDEREN
 // ═══════════════════════════════════════════
+function toggleLegDetail(lid){
+  var e=document.getElementById(lid);
+  if(e)e.style.display=e.style.display===''?'none':'';
+}
 function deleteMatchEntry(playerName, index){
   if(!confirm('Deze wedstrijd verwijderen?'))return;
   var db=getDB();
