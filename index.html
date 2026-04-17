@@ -746,25 +746,37 @@ select{background:var(--card);border:1px solid var(--border);border-radius:var(-
     <div id="match-score-inner" style="display:flex;align-items:center;justify-content:center;gap:0"></div>
   </div>
 
-  <!-- Score input -->
-  <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0">
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:5px">
-      <input type="number" id="score-input" min="0" max="180" placeholder="Score…"
-        inputmode="numeric" pattern="[0-9]*"
-        style="flex:1;font-size:24px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--text)"
-        onkeydown="if(event.key==='Enter')submitScore()"
-        oninput="onScoreInput(this)">
-      <button class="btn btn-primary" style="padding:10px 14px;font-size:20px;flex-shrink:0" onclick="submitScore()">↵</button>
+  <!-- Score input — custom numpad -->
+  <input type="number" id="score-input" min="0" max="180"
+    style="position:absolute;opacity:0;pointer-events:none;width:0;height:0"
+    onkeydown="if(event.key==='Enter')submitScore()" oninput="onScoreInput(this)">
+  <div style="padding:8px 12px 0;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0">
+    <!-- Score display -->
+    <div id="numpad-display" style="font-size:36px;font-weight:900;text-align:center;padding:8px 10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--accent);letter-spacing:3px;margin-bottom:7px;min-height:62px;display:flex;align-items:center;justify-content:center">—</div>
+    <!-- Quick scores -->
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:7px">
+      <button class="btn btn-sm" onclick="quickScore(0)" style="color:var(--muted);padding:7px 2px;font-size:12px">0</button>
+      <button class="btn btn-sm" onclick="quickScore(26)" style="padding:7px 2px;font-size:12px">26</button>
+      <button class="btn btn-sm" onclick="quickScore(45)" style="padding:7px 2px;font-size:12px">45</button>
+      <button class="btn btn-sm" onclick="quickScore(60)" style="padding:7px 2px;font-size:12px">60</button>
+      <button class="btn btn-sm" onclick="quickScore(100)" style="padding:7px 2px;font-size:12px">100</button>
+      <button class="btn btn-sm" onclick="quickScore(140)" style="padding:7px 2px;font-size:12px">140</button>
+      <button class="btn btn-sm" onclick="quickScore(180)" style="color:var(--warning);font-weight:800;padding:7px 2px;font-size:12px">180</button>
     </div>
-    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-sm" onclick="quickScore(0)" style="color:var(--muted)">0</button>
-      <button class="btn btn-sm" onclick="quickScore(26)">26</button>
-      <button class="btn btn-sm" onclick="quickScore(41)">41</button>
-      <button class="btn btn-sm" onclick="quickScore(60)">60</button>
-      <button class="btn btn-sm" onclick="quickScore(85)">85</button>
-      <button class="btn btn-sm" onclick="quickScore(100)">100</button>
-      <button class="btn btn-sm" onclick="quickScore(140)">140</button>
-      <button class="btn btn-sm" onclick="quickScore(180)" style="color:var(--warning);font-weight:800">180</button>
+    <!-- Numpad grid 3×4 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding-bottom:8px">
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('1')">1</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('2')">2</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('3')">3</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('4')">4</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('5')">5</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('6')">6</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('7')">7</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('8')">8</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('9')">9</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0;color:var(--muted)" onclick="numpadPress('del')">⌫</button>
+      <button class="btn" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('0')">0</button>
+      <button class="btn btn-primary" style="font-size:22px;font-weight:700;padding:15px 0" onclick="numpadPress('enter')">↵</button>
     </div>
   </div>
 
@@ -940,10 +952,13 @@ select{background:var(--card);border:1px solid var(--border);border-radius:var(-
     <div class="win-sub" id="win-sub" style="color:var(--muted);font-size:14px;margin-bottom:20px"></div>
     <div id="win-stats" style="margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto"></div>
     <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;margin:0 auto">
-      <button class="btn btn-primary btn-full" onclick="stopConfetti();showScreen('screen-setup')">Nieuw spel</button>
-      <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-leaderboard')">📊 Ranglijst</button>
-      <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-stats')">Statistieken</button>
-      <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-home')">Home</button>
+      <button class="btn btn-primary btn-full" id="btn-rematch" style="display:none;font-size:16px" onclick="rematch()">🔁 Rematch — zelfde spelers</button>
+      <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-setup')">Nieuw spel</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-leaderboard')">📊 Ranglijst</button>
+        <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-stats')">Statistieken</button>
+      </div>
+      <button class="btn btn-full" style="color:var(--muted);font-size:13px" onclick="stopConfetti();showScreen('screen-home')">Home</button>
     </div>
   </div>
 </div>
@@ -1947,6 +1962,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore){
     state.scores=players.map(function(){return start});
     state.x01Start=start;  // remember for leg resets
     state.history=[];
+    setTimeout(saveRematchConfig,0);
     renderGame();showScreen('screen-game');
     if(state.botPlayerIndex===0){setTimeout(triggerBotTurn,800);}
   } else if(gameType==='atc'){
@@ -2297,14 +2313,14 @@ function renderGame(){
 
     var cell=document.createElement('div');
     cell.style.cssText='padding:'+cardPad+';text-align:center;'+(pi>0?'border-left:1px solid var(--border);':'')+
-      (isActive?'background:rgba(233,69,96,0.07);':'');
+      (isActive?'background:rgba(254,104,7,0.07);':'');
 
     cell.innerHTML=
       '<div style="font-size:10px;font-weight:700;color:'+(isActive?'var(--accent)':'var(--muted)')+';letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px">'+name+'</div>'+
       '<div style="font-size:'+scoreFontSize+';font-weight:900;line-height:1.05;color:'+(isActive?'var(--accent)':'var(--text)')+'">'+rem+'</div>'+
       coHtml+
       (imp?'<div style="font-size:10px;color:var(--muted);margin-top:2px">niet uitgoooibaar</div>':(!coHtml?'<div style="min-height:12px"></div>':''))+
-      '<div style="font-size:10px;color:var(--muted);margin-top:4px">'+avg3str(pi)+'</div>';
+      '<div style="font-size:10px;color:var(--muted);margin-top:4px">gem. <span style="color:var(--text);font-weight:800">'+avg3str(pi)+'</span></div>';
 
     sbGrid.appendChild(cell);
 
@@ -2351,9 +2367,9 @@ function renderGame(){
   });
 
   // Focus input — always re-enable in case bot left it disabled
+  clearNumpad();
   var inp=document.getElementById('score-input');
-  inp.value='';inp.disabled=false;
-  setTimeout(function(){inp.focus()},60);
+  inp.disabled=false;
 }
 
 function onScoreInput(inp){
@@ -2580,7 +2596,63 @@ function getCheckout(n){
   return CHECKOUTS[n]||null;
 }
 
+// ─── Custom numpad ───────────────────────────────────────
+var _numpadVal='';
+function clearNumpad(){
+  _numpadVal='';
+  var inp=document.getElementById('score-input');
+  if(inp)inp.value='';
+  var disp=document.getElementById('numpad-display');
+  if(disp){disp.textContent='—';disp.style.color='var(--accent)';}
+}
+function numpadPress(key){
+  if(key==='del'){
+    _numpadVal=_numpadVal.slice(0,-1);
+  } else if(key==='enter'){
+    submitScore();return;
+  } else {
+    if(_numpadVal.length>=3)return;
+    // Prevent leading zero (except single 0)
+    if(_numpadVal==='0')_numpadVal='';
+    _numpadVal+=key;
+  }
+  var v=parseInt(_numpadVal)||0;
+  var inp=document.getElementById('score-input');
+  if(inp)inp.value=_numpadVal||'';
+  var disp=document.getElementById('numpad-display');
+  if(disp){
+    disp.textContent=_numpadVal||'—';
+    disp.style.color=_numpadVal?((v>180)?'var(--danger)':'var(--accent)'):'var(--accent)';
+  }
+}
+
+// ─── Rematch ─────────────────────────────────────────────
+var rematchConfig=null;
+function saveRematchConfig(){
+  if(!state.players||!state.players.length)return;
+  rematchConfig={
+    players:state.players.slice(),
+    gameType:state.gameType,
+    doubleOut:state.doubleOut,
+    doubleIn:state.doubleIn,
+    matchN:state.matchN,
+    matchSets:state.matchSets,
+    matchFormat:state.matchFormat,
+    x01Start:state.x01Start||501
+  };
+}
+function rematch(){
+  if(!rematchConfig)return;
+  stopConfetti();
+  var c=rematchConfig;
+  state.botPlayerIndex=-1;
+  launchGame(c.gameType,c.players,c.doubleOut,c.matchFormat,c.matchN,c.matchSets,c.x01Start);
+}
+
 function quickScore(val){
+  _numpadVal=String(val);
+  var disp=document.getElementById('numpad-display');
+  if(disp)disp.textContent=String(val);
   document.getElementById('score-input').value=val;
   submitScore();
 }
@@ -2604,18 +2676,20 @@ function submitScore(){
   // Bust: score too high
   if(newScore<0){
     setScoreFeedback('Bust! Score te hoog — beurt overgeslagen','var(--danger)');
+    if(navigator.vibrate)navigator.vibrate([60,30,60]);
     pushEntry({player:cur,score:0,remaining:remaining,bust:true});
     state.dartCount[cur]++;state.allDartCount[cur]++;
-    inp.value='';
+    clearNumpad();
     setTimeout(function(){nextPlayer501()},900);
     return;
   }
   // Bust: left on 1 with double out
   if(newScore===1&&state.doubleOut){
     setScoreFeedback('Bust! Kan niet op 1 eindigen met double out','var(--danger)');
+    if(navigator.vibrate)navigator.vibrate([60,30,60]);
     pushEntry({player:cur,score:0,remaining:remaining,bust:true});
     state.dartCount[cur]++;state.allDartCount[cur]++;
-    inp.value='';
+    clearNumpad();
     setTimeout(function(){nextPlayer501()},900);
     return;
   }
@@ -2623,7 +2697,7 @@ function submitScore(){
   // Win
   if(newScore===0){
     if(state.doubleOut){
-      inp.value='';
+      clearNumpad();
       // Show confirmation in the active player's co-hint div
       var sbGrid=document.getElementById('sb-players');
       var n2=state.players.length;
@@ -2647,7 +2721,7 @@ function submitScore(){
     state.dartCount[cur]++;state.allDartCount[cur]++;
     pushEntry({player:cur,score:score,remaining:remaining,bust:false,won:true,
       checkoutAttempt:true,checkoutHit:true});
-    inp.value='';
+    clearNumpad();
     endGame501(state.players[cur]);
     return;
   }
@@ -2655,11 +2729,12 @@ function submitScore(){
   // Normal score — track if this was a checkout attempt that was missed
   state.scores[cur]=newScore;
   state.dartCount[cur]++;state.allDartCount[cur]++;
+  if(score===180&&navigator.vibrate)navigator.vibrate([200]);
   // Was the player on a checkout score before this turn?
   var wasCheckout=!isImpossible(remaining)&&remaining<=170;
   pushEntry({player:cur,score:score,remaining:remaining,newRemaining:newScore,bust:false,
     checkoutAttempt:wasCheckout,checkoutMissed:wasCheckout}); // missed because didn't finish
-  inp.value='';
+  clearNumpad();
   setTimeout(function(){nextPlayer501()},400);
 }
 
@@ -3359,6 +3434,8 @@ function renderHiHistory(){
 // ═══════════════════════════════════════════
 function showWin(winner,sub,extra){
   document.getElementById('win-title').innerHTML='<span style="color:var(--accent)">'+winner+'</span> wint!';
+  var rbtn=document.getElementById('btn-rematch');
+  if(rbtn)rbtn.style.display=rematchConfig?'block':'none';
   document.getElementById('win-sub').textContent=sub;
   document.getElementById('win-stats').innerHTML=extra?'<div class="card">'+extra+'</div>':'';
   showScreen('screen-win');
