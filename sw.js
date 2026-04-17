@@ -1,11 +1,5 @@
-const CACHE = 'darts-v18-20260416';
-const FILES = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-];
+const CACHE = 'darts-v17-20260417';
+const FILES = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', function(e) {
   e.waitUntil(
@@ -21,6 +15,7 @@ self.addEventListener('activate', function(e) {
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.map(function(k) {
+          // Delete ALL old caches
           if(k !== CACHE) return caches.delete(k);
         })
       );
@@ -30,7 +25,8 @@ self.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
-  if(e.request.url.includes('.html') || e.request.url.endsWith('/DartsByTom/') || e.request.url.endsWith('/DartsByTom')) {
+  // Always fetch fresh for HTML, use cache for assets
+  if(e.request.url.endsWith('.html') || e.request.url.endsWith('/')) {
     e.respondWith(
       fetch(e.request).then(function(response) {
         var clone = response.clone();

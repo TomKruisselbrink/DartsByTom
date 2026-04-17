@@ -1,9 +1,8 @@
 {
-  "name": "Darts by Tom",
+  "name": "Darts Scorer",
   "short_name": "Darts",
   "description": "Darts scorekeeping app — 501, Around the Clock, Shanghai, Halve It & Toernooi",
-  "start_url": "/DartsByTom/index.html",
-  "scope": "/DartsByTom/",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d0d0d",
