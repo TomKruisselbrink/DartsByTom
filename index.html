@@ -2445,10 +2445,10 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     renderGame();showScreen('screen-game');
     if(state.botPlayerIndex===0){setTimeout(triggerBotTurn,800);}
   } else if(gameType==='atc'){
-    state.atcTarget=players.map(function(){return 1});state.atcDarts=0;state.atcHistory=[];state.atcMode=atcMode;renderATC();showScreen('screen-atc');
+    state.atcTarget=players.map(function(){return 1});state.atcDarts=0;state.atcHistory=[];state.atcMode=atcMode;setTimeout(saveRematchConfig,0);renderATC();showScreen('screen-atc');
   } else if(gameType==='shanghai7'||gameType==='shanghai20'){
     state.shRound=1;state.shTarget=1;state.shMaxTarget=gameType==='shanghai20'?20:7;
-    state.shScores=players.map(function(){return 0});state.shDarts=0;state.shTurnPts=0;state.shHistory=[];state.shHalve=shHalveOpt;renderShanghai();showScreen('screen-shanghai');
+    state.shScores=players.map(function(){return 0});state.shDarts=0;state.shTurnPts=0;state.shHistory=[];state.shHalve=shHalveOpt;setTimeout(saveRematchConfig,0);renderShanghai();showScreen('screen-shanghai');
   } else if(gameType==='halveit'){
     state.hiSeq=hiSequence.map(function(s){return Object.assign({},s)});
     state.hiRound=0;state.hiScores=players.map(function(){return 0});
@@ -2457,9 +2457,9 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.hiHits=players.map(function(){return 0;});
     state.hiMisses=players.map(function(){return 0;});
     state.hiColorPijlen=[];state.hiRandom3Options=null;state.hiRandom3Round=-1;
-    renderHalveIt();showScreen('screen-halveit');
+    setTimeout(saveRematchConfig,0);renderHalveIt();showScreen('screen-halveit');
   } else if(gameType==='checkout121'){
-    launchCo121(players);
+    launchCo121(players);setTimeout(saveRematchConfig,0);
   }
 }
 
@@ -2859,14 +2859,32 @@ function onScoreInput(inp){
   updateScoreboardCheckout(inp.value);
 }
 
+
+// Actual dartboard sector colors
+var DART_RED_NUMS={20:1,18:1,13:1,10:1,2:1,3:1,7:1,8:1,14:1,12:1};
+var DART_GREEN_NUMS={1:1,4:1,6:1,15:1,17:1,19:1,16:1,11:1,9:1,5:1};
+function dartBadgeColor(d){
+  // d = e.g. 'T20', 'D17', '20', 'Bull', '25', '50', 'D-Bull'
+  var isDouble=d.charAt(0)==='D';
+  var isTriple=d.charAt(0)==='T';
+  var numStr=isDouble||isTriple?d.slice(1):d;
+  var n=parseInt(numStr);
+  if(d==='Bull'||d==='bull'||n===25)return'#16a34a';          // outer bull — green
+  if(d==='D-Bull'||d==='D-bull'||n===50)return'#cc2222';      // bullseye — red
+  if(isDouble||isTriple){
+    return DART_RED_NUMS[n]?'#cc2222':'#16a34a';              // red or green sector
+  }
+  // Single: use same sector color but lighter/darker variant
+  return DART_RED_NUMS[n]?'#374151':'#4b5563';                 // dark grey tones for singles
+}
+
 function buildCheckoutBadgesLarge(co){
   var darts=co.split(' ');
   return darts.map(function(d){
-    var bg='var(--accent2)';
-    if(d.charAt(0)==='T')bg='#f59e0b';
-    else if(d.charAt(0)==='D')bg='var(--accent)';
-    else if(d==='Bull'||d==='bull')bg='#a855f7';
-    return '<span style="display:inline-block;background:'+bg+';color:#fff;font-size:15px;font-weight:800;padding:5px 12px;border-radius:20px;white-space:nowrap;letter-spacing:.3px">'+d+'</span>';
+    var bg=dartBadgeColor(d);
+    var prefix=d.charAt(0)==='D'?'D':d.charAt(0)==='T'?'T':'';
+    var label=d;
+    return '<span style="display:inline-flex;flex-direction:column;align-items:center;background:'+bg+';color:#fff;font-size:15px;font-weight:800;padding:5px 12px;border-radius:20px;white-space:nowrap;letter-spacing:.3px">'+label+'</span>';
   }).join('<span style="color:var(--muted);font-size:14px;margin:0 3px;font-weight:300">→</span>');
 }
 function updateCheckoutStrip(){
@@ -2888,10 +2906,7 @@ function updateCheckoutStrip(){
 function buildCheckoutBadges(co){
   var darts=co.split(' ');
   return darts.map(function(d){
-    var bg='var(--accent2)';
-    if(d.charAt(0)==='T')bg='#f59e0b';
-    else if(d.charAt(0)==='D')bg='var(--accent)';
-    else if(d==='Bull'||d==='bull')bg='#a855f7';
+    var bg=dartBadgeColor(d);
     return '<span style="display:inline-block;background:'+bg+';color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap">'+d+'</span>';
   }).join('<span style="color:var(--muted);font-size:11px;margin:0 1px">→</span>');
 }
@@ -3145,7 +3160,10 @@ function saveRematchConfig(){
     matchN:state.matchN,
     matchSets:state.matchSets,
     matchFormat:state.matchFormat,
-    x01Start:state.x01Start||501
+    x01Start:state.x01Start||501,
+    atcMode:state.atcMode||'basic',
+    shHalve:state.shHalve||false,
+    hiSeq:state.hiSeq?state.hiSeq.map(function(s){return Object.assign({},s)}):null
   };
 }
 function rematch(){
@@ -3153,6 +3171,10 @@ function rematch(){
   stopConfetti();
   var c=rematchConfig;
   state.botPlayerIndex=-1;
+  // Restore game-specific options
+  if(c.atcMode)atcMode=c.atcMode;
+  if(c.shHalve!==undefined)shHalveOpt=c.shHalve;
+  if(c.hiSeq)hiSequence=c.hiSeq.map(function(s){return Object.assign({},s)});
   launchGame(c.gameType,c.players,c.doubleOut,c.matchFormat,c.matchN,c.matchSets,c.x01Start);
 }
 
