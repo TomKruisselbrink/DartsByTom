@@ -24,7 +24,7 @@
 @keyframes glow{0%,100%{box-shadow:var(--glow)}50%{box-shadow:0 0 35px rgba(254,104,7,0.5)}}
 @keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 @keyframes winPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-@keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes coinSpin{0%{transform:scaleX(1);background:#e53e3e}25%{transform:scaleX(0)}50%{transform:scaleX(1);background:#0677FE}75%{transform:scaleX(0)}100%{transform:scaleX(1);background:#e53e3e}}
 
 .score-animate{animation:scoreFlip .25s ease-out,scorePulse .3s ease-out}
 .score-bust{animation:bustShake .4s ease-out}
@@ -1032,7 +1032,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </div>
     <div id="sp-pick-grid" style="display:none"></div>
     <div id="sp-coin-area" style="display:none;text-align:center;padding:8px 0">
-      <div id="coin-emoji" style="font-size:52px;margin-bottom:6px;display:inline-block">🪙</div>
+      <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:#888;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.5)">?</div>
       <div id="coin-result" style="font-size:14px;font-weight:700;color:var(--accent);min-height:22px;margin-bottom:10px"></div>
       <button class="btn btn-sm btn-primary" onclick="flipCoin()">Gooi het muntje</button>
     </div>
@@ -1628,6 +1628,7 @@ function startFirebaseListener(){
   });
 }
 function updatePlayerStat(name,gameType,data){
+  if(state.botPlayerIndex>=0&&state.players[state.botPlayerIndex]===name)return;
   var db=getDB();
   if(!db[name])db[name]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
   var p=db[name];p.games++;if(data.won)p.wins++;
@@ -1773,16 +1774,27 @@ function flipCoin(){
   if(_coinFlipping||setupPlayers.length<2)return;
   _coinFlipping=true;
   var result=document.getElementById('coin-result');
-  var emoji=document.getElementById('coin-emoji');
+  var coin=document.getElementById('coin-emoji');
   if(result)result.textContent='';
-  if(emoji)emoji.style.animation='spin .12s linear infinite';
   var winner=Math.floor(Math.random()*setupPlayers.length);
+  var winColor=winner%2===0?'#e53e3e':'#0677FE';
+  if(coin){
+    coin.textContent='';
+    coin.style.animation='coinSpin .25s linear infinite';
+    coin.style.background='#888';
+    coin.style.transform='';
+  }
   setTimeout(function(){
-    if(emoji)emoji.style.animation='';
+    if(coin){
+      coin.style.animation='none';
+      coin.style.background=winColor;
+      coin.style.transform='scaleX(1)';
+      coin.textContent=winner%2===0?'R':'B';
+    }
     setupStartPlayer=winner;
-    if(result)result.innerHTML='<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> <strong>'+setupPlayers[winner]+'</strong> begint!';
+    if(result)result.innerHTML='<strong style="color:'+winColor+'">'+setupPlayers[winner]+'</strong> begint!';
     _coinFlipping=false;
-  },1500);
+  },1400);
 }
 function renderStartPlayerCard(){
   var card=document.getElementById('start-player-card');
@@ -4651,7 +4663,7 @@ function renderHistory(){
         '</div>'+
         '<div style="display:flex;align-items:center;gap:8px">'+
           (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+ds.avg3+'</div><div style="font-size:9px;color:var(--muted)">gem</div></div>':'')+
-          ('<button onclick="deleteMatchEntry('+JSON.stringify(historySelectedPlayer)+','+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;color:var(--danger);font-size:14px;line-height:1;display:inline-flex;align-items:center" title="Wedstrijd verwijderen"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--danger)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>')+
+          ('<button onclick="deleteMatchEntry('+JSON.stringify(historySelectedPlayer).replace(/"/g,"'")+','+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;color:var(--danger);font-size:14px;line-height:1;display:inline-flex;align-items:center" title="Wedstrijd verwijderen"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--danger)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>')+
         '</div>'+
       '</div>'+
       (info.length?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px">'+
