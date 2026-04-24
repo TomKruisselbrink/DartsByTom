@@ -3148,6 +3148,28 @@ function numpadPress(key){
   }
 }
 
+
+// ─── Physical keyboard → numpad (PC/laptop support) ──────
+document.addEventListener('keydown', function(e){
+  // Only active during 501/301 game screen
+  var active = document.querySelector('.screen.active');
+  if(!active || active.id !== 'screen-game') return;
+  // Don't intercept while an input/textarea has focus
+  var tag = document.activeElement ? document.activeElement.tagName : '';
+  if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  var k = e.key;
+  if(k >= '0' && k <= '9'){
+    e.preventDefault();
+    numpadPress(k);
+  } else if(k === 'Backspace' || k === 'Delete'){
+    e.preventDefault();
+    numpadPress('del');
+  } else if(k === 'Enter'){
+    e.preventDefault();
+    numpadPress('enter');
+  }
+});
+
 // ─── Rematch ─────────────────────────────────────────────
 var rematchConfig=null;
 function saveRematchConfig(){
