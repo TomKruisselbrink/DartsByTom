@@ -758,6 +758,24 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <div style="display:flex;align-items:center;gap:8px"><span id="cloud-status-dot" title="" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:none;flex-shrink:0"></span></div>  <div id="header-right" style="display:flex;gap:6px"></div>
 </div>
 <!-- ═══════ DUBBEL SELECTIE MODAL ═══════ -->
+<div id="trn-start-modal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.88);flex-direction:column;align-items:center;justify-content:center;padding:24px">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;width:100%;max-width:380px">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:800;color:var(--text)">Wie begint deze leg?</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">Gooi een muntje of kies zelf</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <button id="trn-start-p1" onclick="trnChooseStart(0)" style="padding:14px 8px;background:#e53e3e;border:none;border-radius:var(--radius-sm);color:#fff;font-size:14px;font-weight:800;cursor:pointer;border:3px solid transparent"></button>
+      <button id="trn-start-p2" onclick="trnChooseStart(1)" style="padding:14px 8px;background:#0677FE;border:none;border-radius:var(--radius-sm);color:#fff;font-size:14px;font-weight:800;cursor:pointer;border:3px solid transparent"></button>
+    </div>
+    <div style="text-align:center;margin-bottom:14px">
+      <div id="trn-start-coin" style="width:52px;height:52px;border-radius:50%;background:#888;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5)">?</div>
+      <button onclick="trnFlipCoin()" class="btn btn-sm" style="background:var(--card);border:1px solid var(--border);color:var(--text)">&#x1FA99; Muntje gooien</button>
+    </div>
+    <div id="trn-start-result" style="text-align:center;font-size:13px;font-weight:700;min-height:20px;margin-bottom:12px"></div>
+    <button id="trn-start-go" onclick="trnConfirmStart()" class="btn btn-primary btn-full" disabled style="opacity:.4">Speel &#8594;</button>
+  </div>
+</div>
 <div id="double-modal" style="display:none;position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.88);flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:0">
   <div style="background:var(--surface);border-top:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px 32px;width:100%;max-width:480px">
     <div style="text-align:center;margin-bottom:16px">
@@ -2436,20 +2454,30 @@ function shuffleArray(arr){
 function buildRoundRobin(players){
   trn.rrMatches=[];
   trn.rrStandings=players.map(function(p){return{name:p,played:0,won:0,lost:0,pts:0}});
-  // Generate all pairs
   var pairs=[];
   for(var i=0;i<players.length;i++){
     for(var j=i+1;j<players.length;j++){
       pairs.push({p1:players[i],p2:players[j],w1:0,w2:0,winner:null,done:false});
     }
   }
-  // Shuffle for random schedule
-  shuffleArray(pairs);
-  // Further randomise home/away per match
-  pairs.forEach(function(m){
-    if(Math.random()<0.5){var t=m.p1;m.p1=m.p2;m.p2=t;}
-  });
-  trn.rrMatches=pairs;
+  // Randomise home/away
+  pairs.forEach(function(m){if(Math.random()<0.5){var t=m.p1;m.p1=m.p2;m.p2=t;}});
+  // Greedy scheduler: avoid same player in consecutive matches
+  var remaining=shuffleArray(pairs.slice());
+  var scheduled=[];
+  while(remaining.length>0){
+    var last=scheduled.length>0?scheduled[scheduled.length-1]:null;
+    var found=-1;
+    if(last){
+      for(var k=0;k<remaining.length;k++){
+        var m=remaining[k];
+        if(m.p1!==last.p1&&m.p1!==last.p2&&m.p2!==last.p1&&m.p2!==last.p2){found=k;break;}
+      }
+    }
+    if(found===-1)found=0;
+    scheduled.push(remaining.splice(found,1)[0]);
+  }
+  trn.rrMatches=scheduled;
 }
 
 // ═══════════════════════════════════════════
@@ -2485,14 +2513,70 @@ function startGroupKnockout(){
 // ═══════════════════════════════════════════
 // TOURNAMENT MATCH LAUNCH
 // ═══════════════════════════════════════════
+
+var _trnStartMatch=null,_trnStartCallback=null,_trnStartIdx=null,_trnCoinFlipping=false;
+function showTrnStartModal(match,onWin){
+  _trnStartMatch=match;_trnStartCallback=onWin;_trnStartIdx=null;_trnCoinFlipping=false;
+  var p1btn=document.getElementById('trn-start-p1');
+  var p2btn=document.getElementById('trn-start-p2');
+  var coin=document.getElementById('trn-start-coin');
+  var res=document.getElementById('trn-start-result');
+  var go=document.getElementById('trn-start-go');
+  if(p1btn){p1btn.textContent=match.p1;p1btn.style.borderColor='transparent';}
+  if(p2btn){p2btn.textContent=match.p2;p2btn.style.borderColor='transparent';}
+  if(coin){coin.textContent='?';coin.style.background='#888';coin.style.animation='';}
+  if(res)res.textContent='';
+  if(go){go.disabled=true;go.style.opacity='.4';}
+  document.getElementById('trn-start-modal').style.display='flex';
+}
+function trnChooseStart(idx){
+  _trnStartIdx=idx;
+  var p1btn=document.getElementById('trn-start-p1');
+  var p2btn=document.getElementById('trn-start-p2');
+  var res=document.getElementById('trn-start-result');
+  var go=document.getElementById('trn-start-go');
+  var coin=document.getElementById('trn-start-coin');
+  var col=idx===0?'#e53e3e':'#0677FE';
+  var name=idx===0?_trnStartMatch.p1:_trnStartMatch.p2;
+  if(p1btn)p1btn.style.borderColor=idx===0?'#fff':'transparent';
+  if(p2btn)p2btn.style.borderColor=idx===1?'#fff':'transparent';
+  if(coin){coin.textContent=idx===0?'R':'B';coin.style.background=col;coin.style.animation='';}
+  if(res)res.innerHTML='<strong style="color:'+col+'">'+name+'</strong> begint!';
+  if(go){go.disabled=false;go.style.opacity='1';}
+}
+function trnFlipCoin(){
+  if(_trnCoinFlipping)return;
+  _trnCoinFlipping=true;
+  var coin=document.getElementById('trn-start-coin');
+  var res=document.getElementById('trn-start-result');
+  var go=document.getElementById('trn-start-go');
+  if(res)res.textContent='';
+  if(go){go.disabled=true;go.style.opacity='.4';}
+  if(coin){coin.textContent='';coin.style.animation='coinSpin .25s linear infinite';coin.style.background='#888';}
+  var winner=Math.floor(Math.random()*2);
+  setTimeout(function(){
+    _trnCoinFlipping=false;
+    trnChooseStart(winner);
+  },1200);
+}
+function trnConfirmStart(){
+  if(_trnStartIdx===null)return;
+  document.getElementById('trn-start-modal').style.display='none';
+  var match=_trnStartMatch,cb=_trnStartCallback,startIdx=_trnStartIdx;
+  _trnStartMatch=null;_trnStartCallback=null;_trnStartIdx=null;
+  launchTrnMatchWithStart(match,cb,startIdx);
+}
 function launchTrnMatch(match,onWin){
+  showTrnStartModal(match,onWin);
+}
+function launchTrnMatchWithStart(match,onWin,startIdx){
   trn.currentMatch=match;
   state.trnMode=true;
   state.trnMatchCallback=onWin;
-  // Determine game type string based on score
   var score=trn.gameScore||501;
-  var gameType=score===301?'301':'501'; // use 501 engine for any x01 score
-  launchGame(gameType,[match.p1,match.p2],trn.doubleOut,'bestof',trn.bestOf,1,score);
+  var gameType=score===301?'301':'501';
+  var players=startIdx===1?[match.p2,match.p1]:[match.p1,match.p2];
+  launchGame(gameType,players,trn.doubleOut,'bestof',trn.bestOf,1,score);
 }
 
 function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
