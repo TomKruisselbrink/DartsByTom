@@ -773,7 +773,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <button onclick="trnFlipCoin()" class="btn btn-sm" style="background:var(--card);border:1px solid var(--border);color:var(--text)">&#x1FA99; Muntje gooien</button>
     </div>
     <div id="trn-start-result" style="text-align:center;font-size:13px;font-weight:700;min-height:20px;margin-bottom:12px"></div>
-    <button id="trn-start-go" onclick="trnConfirmStart()" class="btn btn-primary btn-full" disabled style="opacity:.4">Speel &#8594;</button>
+    <button id="trn-start-go" onclick="trnConfirmStart()" class="btn btn-primary btn-full" style="opacity:.4;pointer-events:none">Speel &#8594;</button>
   </div>
 </div>
 <div id="double-modal" style="display:none;position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.88);flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:0">
@@ -2386,7 +2386,7 @@ function startTournament(){
     gameScore=parseInt(document.getElementById('trn-game-custom-val').value)||1001;
   }
   trn.gameScore=gameScore;
-  trn.players=trnPlayers.slice();trn.currentMatch=null;trn.phase='group';
+  trn.players=trnPlayers.slice();trn.currentMatch=null;trn.phase='group';trn.rrPhase='rr';trn.rrPlayoffMatches=[];
 
   if(trnFormat==='knockout'){
     buildKnockoutBracket(shuffle(trn.players));
@@ -2526,7 +2526,7 @@ function showTrnStartModal(match,onWin){
   if(p2btn){p2btn.textContent=match.p2;p2btn.style.borderColor='transparent';}
   if(coin){coin.textContent='?';coin.style.background='#888';coin.style.animation='';}
   if(res)res.textContent='';
-  if(go){go.disabled=true;go.style.opacity='.4';}
+  if(go){go.style.opacity='.4';go.style.pointerEvents='none';}
   document.getElementById('trn-start-modal').style.display='flex';
 }
 function trnChooseStart(idx){
@@ -2542,7 +2542,7 @@ function trnChooseStart(idx){
   if(p2btn)p2btn.style.borderColor=idx===1?'#fff':'transparent';
   if(coin){coin.textContent=idx===0?'R':'B';coin.style.background=col;coin.style.animation='';}
   if(res)res.innerHTML='<strong style="color:'+col+'">'+name+'</strong> begint!';
-  if(go){go.disabled=false;go.style.opacity='1';}
+  if(go){go.style.opacity='1';go.style.pointerEvents='auto';}
 }
 function trnFlipCoin(){
   if(_trnCoinFlipping)return;
@@ -2560,7 +2560,7 @@ function trnFlipCoin(){
   },1200);
 }
 function trnConfirmStart(){
-  if(_trnStartIdx===null)return;
+  if(_trnStartIdx===null||document.getElementById('trn-start-go').style.pointerEvents==='none')return;
   document.getElementById('trn-start-modal').style.display='none';
   var match=_trnStartMatch,cb=_trnStartCallback,startIdx=_trnStartIdx;
   _trnStartMatch=null;_trnStartCallback=null;_trnStartIdx=null;
@@ -2697,13 +2697,64 @@ function renderKnockoutOverview(el,isSubphase){
   });
 }
 
+function startRRPlayoff(){
+  var sorted=trn.rrStandings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won;});
+  trn.rrPlayoffMatches=[];
+  for(var i=0;i<sorted.length-1;i+=2){
+    var lbl=i===0?'Finale':(i===2?'Strijd om de 3e plek':'Pot '+(i/2+1));
+    trn.rrPlayoffMatches.push({p1:sorted[i].name,p2:sorted[i+1].name,w1:0,w2:0,winner:null,done:false,isPlayoff:true,label:lbl});
+  }
+  trn.rrPhase='playoff';
+  renderTrnOverview();showScreen('screen-trn-overview');
+}
 function renderRROverview(el){
   var allDone=trn.rrMatches.every(function(m){return m.done;});
+
+  if(trn.rrPhase==='playoff'){
+    // Show playoff phase
+    var playoffAllDone=trn.rrPlayoffMatches.length>0&&trn.rrPlayoffMatches.every(function(m){return m.done;});
+    if(playoffAllDone){
+      var champ=trn.rrPlayoffMatches[0].winner;
+      var champDiv=document.createElement('div');
+      champDiv.innerHTML='<div class="win-icon" style="padding:8px 0"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(254,104,7,0.5))\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div><div class="win-title">'+champ+'</div><div class="win-sub">Toernooi winnaar!</div>';
+      el.appendChild(champDiv);
+    }
+    var sec=document.createElement('div');sec.className='bracket-round';
+    var t=document.createElement('div');t.className='bracket-round-title';t.textContent='Finale ronde';
+    sec.appendChild(t);
+    var pfCurrentIdx=-1;
+    for(var pi=0;pi<trn.rrPlayoffMatches.length;pi++){if(!trn.rrPlayoffMatches[pi].done){pfCurrentIdx=pi;break;}}
+    trn.rrPlayoffMatches.forEach(function(match,i){
+      var isCurrent=(i===pfCurrentIdx);
+      var isLocked=(!match.done&&i>pfCurrentIdx);
+      sec.appendChild(matchHeader(match,match.label,isCurrent,isLocked));
+    });
+    el.appendChild(sec);
+    // Also show final RR standings collapsible
+    var standSec=document.createElement('div');standSec.className='bracket-round';standSec.style.marginTop='12px';
+    var st=document.createElement('div');st.className='bracket-round-title';st.textContent='Eindstand poule';
+    standSec.appendChild(st);
+    var sorted2=trn.rrStandings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won;});
+    var mini=document.createElement('div');mini.className='card';
+    mini.innerHTML=sorted2.map(function(s,i){return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.won+'W/'+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';}).join('');
+    standSec.appendChild(mini);el.appendChild(standSec);
+    return;
+  }
+
   if(allDone){
     var sorted=trn.rrStandings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won;});
-    var winDiv=document.createElement('div');
-    winDiv.innerHTML='<div class="win-icon" style="padding:8px 0"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(254,104,7,0.5))\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div><div class="win-title">'+sorted[0].name+'</div><div class="win-sub">Winnaar Round Robin!</div>';
-    el.appendChild(winDiv);
+    // Show standings summary
+    var sumDiv=document.createElement('div');sumDiv.className='card';sumDiv.style.marginBottom='12px';
+    sumDiv.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px;letter-spacing:.5px">EINDSTAND POULE</div>'+
+      sorted.map(function(s,i){return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.won+'W/'+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';}).join('');
+    el.appendChild(sumDiv);
+    if(sorted.length>=2){
+      var pfBtn=document.createElement('button');
+      pfBtn.className='btn btn-primary btn-full';pfBtn.style.marginBottom='16px';
+      pfBtn.innerHTML='&#127941; Start finale ronde &#8594;';
+      pfBtn.onclick=startRRPlayoff;
+      el.appendChild(pfBtn);
+    }
   }
 
   // Find index of first unfinished match
@@ -2782,7 +2833,7 @@ function trnRecordLegWin(match,winnerName){
     match.done=true;
     var loser=match.winner===match.p1?match.p2:match.p1;
     // update standings with legs won/lost
-    if(trn.format==='roundrobin'){
+    if(trn.format==='roundrobin'&&!match.isPlayoff){
       updateRRStandings(match);
     } else if(trn.format==='group'&&trn.phase==='group'){
       updateGroupStandings(match);
