@@ -2257,6 +2257,7 @@ function triggerBotTurn(){
     // Win
     if(newRemaining===0){
       setScoreFeedback('🤖 Bot gooit '+score+' — uitgegooid!','var(--accent)');
+      state.botLastFinish=remaining;
       state.scores[state.botPlayerIndex]=0;
       state.dartCount[state.botPlayerIndex]++;
       state.allDartCount[state.botPlayerIndex]++;
@@ -3423,7 +3424,7 @@ function quickScore(val){
 function submitScore(){
   var inp=document.getElementById('score-input');
   var raw=inp.value.trim();
-  if(raw===''){setScoreFeedback('Vul een score in (0–180)','var(--warning)');return;}
+  if(raw===''){raw='0';}
   var score=parseInt(raw);
   if(isNaN(score)||score<0||score>180){setScoreFeedback('Ongeldige score (0–180)','var(--danger)');return;}
 
@@ -3598,12 +3599,16 @@ function endGame501(winnerName){
     state.botPlayerIndex=-1;
     cb(winnerName);return;
   }
-  // If double-out, ask which double was thrown
-  if(state.doubleOut){
+  // If double-out, ask which double was thrown (skip for bot — show info instead)
+  var botIdx=state.botPlayerIndex;
+  var winnerIsBot=botIdx>=0&&state.players[botIdx]===winnerName;
+  if(state.doubleOut&&!winnerIsBot){
     showDoubleSelectModal(winnerName,function(dbl){
       if(dbl)recordDoubleHit(winnerName,dbl);
       finishEndGame501(winnerName);
     });
+  } else if(state.doubleOut&&winnerIsBot){
+    showBotFinishModal(winnerName,function(){finishEndGame501(winnerName);});
   } else {
     finishEndGame501(winnerName);
   }
@@ -4053,8 +4058,8 @@ function renderHiInputArea(item){
       '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">'+
         '<input type="number" id="hi-custom-score" min="0" max="180" placeholder="Score…"'+
         ' style="flex:1;font-size:20px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--text)"'+
-        ' onkeydown="if(event.key===\'Enter\'){var v=parseInt(this.value)||0;if(v>0)hiAddPts(v);else hiEndTurn(false);}">'+
-        '<button class="btn btn-primary" style="padding:10px 14px;font-size:18px" onclick="var v=parseInt(document.getElementById(\'hi-custom-score\').value)||0;if(v>0)hiAddPts(v);else hiEndTurn(false);">↵</button>'+
+        ' onkeydown="if(event.key===\'Enter\'){var v=parseInt(this.value)||0;if(v>0){state.hiTurnPts+=v;hiEndTurn(true);}else if(state.hiTurnPts>0){hiEndTurn(true);}else{hiEndTurn(false);}}">'+
+        '<button class="btn btn-primary" style="padding:10px 14px;font-size:18px" onclick="var v=parseInt(document.getElementById(\'hi-custom-score\').value)||0;if(v>0){state.hiTurnPts+=v;hiEndTurn(true);}else if(state.hiTurnPts>0){hiEndTurn(true);}else{hiEndTurn(false);}">↵</button>'+
       '</div>'+
       '<button class="btn btn-full" style="color:var(--muted);font-size:13px" onclick="hiEndTurn(false)">Mis — score gehalveerd</button>'+
       (state.hiTurnPts>0?'<button class="btn btn-primary btn-full" style="margin-top:8px" onclick="hiEndTurn(true)">Bevestig — +'+state.hiTurnPts+' punten</button>':'');
@@ -5244,6 +5249,28 @@ function renderCo121History(){
 // DUBBEL TRACKING
 // ═══════════════════════════════════════════
 var _doubleCallback=null;
+function showBotFinishModal(botName,callback){
+  var finish=state.botLastFinish||0;
+  var co=finish>0?getCheckout(finish):null;
+  var coStr=co?('<div style="font-size:13px;color:var(--muted);margin-top:6px">Checkout: '+co+'</div>'):'';
+  var modal=document.getElementById('double-modal');
+  var titleEl=document.getElementById('double-modal-title');
+  var grid=document.getElementById('double-grid');
+  titleEl.textContent='🤖 '+botName+' gooit uit op '+finish+'!';
+  titleEl.style.color='var(--accent)';
+  grid.innerHTML='<div style="grid-column:span 5;text-align:center;padding:12px 0;font-size:28px;font-weight:900;color:var(--accent)">'+finish+'</div>'+
+    '<div style="grid-column:span 5;text-align:center">'+coStr+'</div>';
+  // Replace skip button with OK button
+  var skipBtn=modal.querySelector('button[onclick*="onDoubleSelected(null)"]');
+  if(skipBtn){skipBtn.textContent='OK — ga verder';skipBtn.onclick=function(){
+    titleEl.style.color='';
+    skipBtn.textContent='Sla over / onbekend';
+    skipBtn.onclick=function(){onDoubleSelected(null);};
+    modal.style.display='none';
+    callback();
+  };}
+  modal.style.display='flex';
+}
 function showDoubleSelectModal(winnerName,callback){
   _doubleCallback=callback;
   document.getElementById('double-modal-title').textContent=winnerName+' — welke dubbel gooi je uit?';
