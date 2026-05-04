@@ -933,7 +933,12 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <div id="gt-opts-halveit" style="display:none;margin-top:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <div class="label" style="margin:0">Doelvolgorde</div>
-        <button class="btn btn-xs" onclick="resetSeq()">Reset</button>
+        <div style="display:flex;gap:6px;align-items:center">
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer">
+            <input type="checkbox" id="hi-random-order" onchange="hiRandomOrder=this.checked"> Willekeurig
+          </label>
+          <button class="btn btn-xs" onclick="resetSeq()">Reset</button>
+        </div>
       </div>
       <div id="seq-editor"></div>
       <div style="display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap">
@@ -1424,6 +1429,7 @@ var DEFAULT_SEQ=[
   {type:'bull',val:25,label:'Bull'}
 ];
 var hiSequence=[];
+var hiRandomOrder=false;
 var setupPlayers=[];
 var selectedGame='501';
 var doubleOut=true;
@@ -1450,7 +1456,7 @@ var state={
   co121Target:121,co121DartsLeft:9,co121Round:1,co121SafehouseScore:null,
   co121Streak:0,co121Scores:[],co121History:[],co121StartScore:121,
   trnMode:false,trnMatchCallback:null,
-  botPlayerIndex:-1
+  botPlayerIndex:-1,
 };
 
 // Tournament state
@@ -1652,11 +1658,15 @@ function startFirebaseListener(){
 function updatePlayerStat(name,gameType,data){
   if(state.botPlayerIndex>=0&&state.players[state.botPlayerIndex]===name)return;
   var db=getDB();
+  // Solo game: don't count wins (no opponent to beat)
+  var isSolo=state.players.length<=1;
+  if(isSolo)data=Object.assign({},data,{won:false});
   if(!db[name])db[name]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
   var p=db[name];p.games++;if(data.won)p.wins++;
   p.totalDarts+=(data.darts||0);p.totalScore+=(data.score||0);
   if(!p.gameHistory)p.gameHistory=[];
-  var entry={date:new Date().toLocaleDateString('nl-NL'),gameType:gameType,won:data.won,darts:data.darts,score:data.score};
+  var _opp=state.players.filter(function(n){return n!==name;});
+  var entry={date:new Date().toLocaleDateString('nl-NL'),gameType:gameType,won:data.won,darts:data.darts,score:data.score,opponents:_opp.length?_opp:undefined};
   if(data.detailedStats)entry.detailedStats=data.detailedStats;
   if(data.legBreakdown)entry.legBreakdown=data.legBreakdown;
   if(data.legResult)entry.legResult=data.legResult;     // e.g. "2–1"
@@ -2612,7 +2622,9 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.shRound=1;state.shTarget=1;state.shMaxTarget=gameType==='shanghai20'?20:7;
     state.shScores=players.map(function(){return 0});state.shDarts=0;state.shTurnPts=0;state.shHistory=[];state.shHalve=shHalveOpt;setTimeout(saveRematchConfig,0);renderShanghai();showScreen('screen-shanghai');
   } else if(gameType==='halveit'){
-    state.hiSeq=hiSequence.map(function(s){return Object.assign({},s)});
+    var hiSeqCopy=hiSequence.map(function(s){return Object.assign({},s)});
+    if(hiRandomOrder){for(var _si=hiSeqCopy.length-1;_si>0;_si--){var _sj=Math.floor(Math.random()*(_si+1));var _st=hiSeqCopy[_si];hiSeqCopy[_si]=hiSeqCopy[_sj];hiSeqCopy[_sj]=_st;}}
+    state.hiSeq=hiSeqCopy;
     state.hiRound=0;state.hiScores=players.map(function(){return 0});
     state.hiRoundScores=players.map(function(){return[]});
     state.hiHistory=[];state.hiTurnPts=0;state.hiDartsThrown=0;
@@ -3462,7 +3474,6 @@ function submitScore(){
   if(newScore===0){
     if(state.doubleOut){
       clearNumpad();
-      // Show confirmation in the active player's co-hint div
       var sbGrid=document.getElementById('sb-players');
       var n2=state.players.length;
       var cellIdx2=n2===2&&cur===1?2:cur;
@@ -3474,7 +3485,7 @@ function submitScore(){
             '<div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:4px">Double?</div>'+
             '<div style="display:flex;gap:6px;justify-content:center">'+
               '<button class="btn btn-primary btn-sm" onclick="confirmDouble(true,'+remaining+','+score+','+cur+')">✓ Ja!</button>'+
-              '<button class="btn btn-sm" style="border-color:var(--danger);color:var(--danger)" onclick="confirmDouble(false,'+remaining+','+score+','+cur+')">✕ Bust</button>'+
+              '<button class="btn btn-sm" style="border-color:var(--danger);color:var(--danger)" onclick="confirmDouble(false,'+remaining+','+score+','+cur+')">✗ Nee</button>'+
             '</div>'+
           '</div>';
       }
@@ -3494,13 +3505,13 @@ function submitScore(){
   state.scores[cur]=newScore;
   state.dartCount[cur]++;state.allDartCount[cur]++;
   if(score===180&&navigator.vibrate)navigator.vibrate([200]);
-  // Was the player on a checkout score before this turn?
   var wasCheckout=!isImpossible(remaining)&&remaining<=170;
   pushEntry({player:cur,score:score,remaining:remaining,newRemaining:newScore,bust:false,
-    checkoutAttempt:wasCheckout,checkoutMissed:wasCheckout}); // missed because didn't finish
+    checkoutAttempt:wasCheckout,checkoutMissed:wasCheckout});
   clearNumpad();
   setTimeout(function(){nextPlayer501()},400);
 }
+
 
 function confirmDouble(isDouble,remaining,score,cur){
   setScoreFeedback('','');
@@ -3536,7 +3547,6 @@ function nextPlayer501(){
 function undoThrow(){
   if(!state.history.length)return;
   var last=state.history.pop();
-  // also remove from allHistory
   if(state.allHistory&&state.allHistory.length)state.allHistory.pop();
   state.scores[last.player]=last.remaining;
   state.dartCount[last.player]=Math.max(0,state.dartCount[last.player]-1);
@@ -3967,14 +3977,14 @@ function renderHiInputArea(item){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak een willekeurige double — 3x mis = score gehalveerd</div>'+
       '<div class="gap6" style="flex-wrap:wrap">'+
-      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn btn-sm" onclick="hiAddPts('+(n*2)+')">D'+n+'</button>';}).join('')+
-      '<button class="btn btn-sm" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
+      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn" style="padding:10px 6px;font-size:14px;font-weight:700" onclick="hiAddPts('+(n*2)+')">D'+n+'</button>';}).join('')+
+      '<button class="btn" style="color:var(--muted);padding:10px 6px;font-size:14px" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='treble'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak een willekeurige triple — 3x mis = score gehalveerd</div>'+
       '<div class="gap6" style="flex-wrap:wrap">'+
-      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn btn-sm" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
-      '<button class="btn btn-sm" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
+      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn" style="padding:10px 6px;font-size:14px;font-weight:700" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
+      '<button class="btn" style="color:var(--muted);padding:10px 6px;font-size:14px" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='bull'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak de bull — 3x mis = score gehalveerd</div>'+
@@ -4046,7 +4056,8 @@ function renderHiInputArea(item){
       '</div>'+
       '<div style="display:flex;gap:8px;margin-bottom:10px">'+
         opts3.map(function(o){
-          return '<button onclick="hiRandom3Hit('+o+')" style="flex:1;background:rgba(156,39,176,.15);border:2px solid rgba(156,39,176,.4);border-radius:var(--radius-sm);padding:12px 6px;font-size:22px;font-weight:900;color:#9c27b0;cursor:pointer">'+o+'</button>';
+          var coHint=getCheckout(o);
+          return '<button onclick="hiRandom3Hit('+o+')" style="flex:1;background:rgba(156,39,176,.15);border:2px solid rgba(156,39,176,.4);border-radius:var(--radius-sm);padding:10px 6px;font-size:22px;font-weight:900;color:#9c27b0;cursor:pointer;line-height:1.1">'+o+(coHint?'<div style=\"font-size:9px;color:rgba(156,39,176,.7);margin-top:3px;white-space:normal;line-height:1.3\">'+coHint+'</div>':'')+'</button>';
         }).join('')+
       '</div>'+
       '<button class="btn btn-full" style="color:var(--muted)" onclick="hiEndTurn(false)">Niet gelukt — score gehalveerd</button>'+
@@ -4255,11 +4266,38 @@ function renderStats(){
     (p.gameHistory||[]).forEach(function(g){if(allTypes.indexOf(g.gameType)<0)allTypes.push(g.gameType);});
 
     var activeFilter=statsGameFilter[name]||'alle';
+    var activeVs=statsVsFilter[name]||'alle';
 
-    // Filter history
-    var filtered=(p.gameHistory||[]).filter(function(g){
-      return activeFilter==='alle'||g.gameType===activeFilter;
+    // Collect all opponents this player has faced
+    var allOpponents=['alle'];
+    (p.gameHistory||[]).forEach(function(g){
+      (g.opponents||[]).forEach(function(opp){
+        if(allOpponents.indexOf(opp)<0)allOpponents.push(opp);
+      });
     });
+
+    // Filter history by game type AND opponent
+    var filtered=(p.gameHistory||[]).filter(function(g){
+      var typeOk=activeFilter==='alle'||g.gameType===activeFilter;
+      var vsOk=activeVs==='alle'||(g.opponents&&g.opponents.indexOf(activeVs)>=0);
+      return typeOk&&vsOk;
+    });
+
+    // VS-filter tab buttons (only show if there are opponents)
+    var vsTabsHtml='';
+    if(allOpponents.length>1){
+      var vsBtns=allOpponents.map(function(opp){
+        var lbl=opp==='alle'?'Alle':opp;var isActive=opp===activeVs;
+        var btn=document.createElement('button');
+        btn.style.cssText='padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:'+(isActive?'var(--accent2)':'var(--surface)')+';color:'+(isActive?'#fff':'var(--muted)');
+        btn.textContent=lbl;
+        (function(n,o){btn.onclick=function(){setStatsVsFilter(n,o);};})(name,opp);
+        return btn.outerHTML;
+      }).join('');
+      vsTabsHtml='<div style="margin-bottom:10px">'+
+        '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Versus</div>'+
+        '<div style="display:flex;gap:4px;flex-wrap:wrap">'+vsBtns+'</div></div>';
+    }
 
     // Summary for filtered games
     var fGames=filtered.length;
@@ -4372,6 +4410,7 @@ function renderStats(){
         '</div>'+
       '</div>'+
       tabsHtml+
+      vsTabsHtml+
       summaryHtml+
       (activeFilter==='alle'?buildPersonalRecords(name)+buildAvgGraph(name)+buildDoubleStats(name):'')+
       avgBlock+
@@ -4382,6 +4421,7 @@ function renderStats(){
   });
 }
 
+function setStatsVsFilter(name,opp){statsVsFilter[name]=opp;renderStats();}
 function setStatsFilter(name,gameType){
   statsGameFilter[name]=gameType;
   renderStats();
