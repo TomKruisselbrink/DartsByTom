@@ -1430,6 +1430,24 @@ var DEFAULT_SEQ=[
 ];
 var hiSequence=[];
 var hiRandomOrder=false;
+function generateRandomHiSeq(length){
+  var pool=[];
+  // Numbers 1-20
+  for(var _n=1;_n<=20;_n++)pool.push({type:'num',val:_n,label:String(_n)});
+  // Bull
+  pool.push({type:'bull',val:25,label:'Bull'});
+  // Specific doubles D1-D20
+  for(var _n=1;_n<=20;_n++)pool.push({type:'spec_double',val:_n,label:'D'+_n});
+  // Specific triples T1-T20
+  for(var _n=1;_n<=20;_n++)pool.push({type:'spec_treble',val:_n,label:'T'+_n});
+  // Specials
+  pool.push({type:'same_color',val:0,label:'3 dezelfde kleuren'});
+  pool.push({type:'diff_color',val:0,label:'3 verschillende kleuren'});
+  pool.push({type:'random3',val:0,label:'1 van 3 getallen'});
+  // Shuffle pool
+  for(var _i=pool.length-1;_i>0;_i--){var _j=Math.floor(Math.random()*(_i+1));var _t=pool[_i];pool[_i]=pool[_j];pool[_j]=_t;}
+  return pool.slice(0,Math.min(length,pool.length));
+}
 var setupPlayers=[];
 var selectedGame='501';
 var doubleOut=true;
@@ -1500,6 +1518,10 @@ var currentLbTab = 'avg';
 var fbListener = null;
 
 function getDB(){return dbCache;}
+function _loadLocalDB(){
+  try{var raw=localStorage.getItem('darts_db');if(raw){var d=JSON.parse(raw);if(d&&typeof d==='object')return d;}}catch(e){}
+  return null;
+}
 
 function icon(n,s,c){
   s=s||20;c=c||'currentColor';
@@ -1527,6 +1549,8 @@ function icon(n,s,c){
 
 function saveDB(db){
   dbCache = db;
+  // Always persist locally as backup
+  try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
   if(!groupCode) return;
   // Write each player doc to Firestore
   Object.keys(db).forEach(function(name){
@@ -2622,8 +2646,9 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.shRound=1;state.shTarget=1;state.shMaxTarget=gameType==='shanghai20'?20:7;
     state.shScores=players.map(function(){return 0});state.shDarts=0;state.shTurnPts=0;state.shHistory=[];state.shHalve=shHalveOpt;setTimeout(saveRematchConfig,0);renderShanghai();showScreen('screen-shanghai');
   } else if(gameType==='halveit'){
-    var hiSeqCopy=hiSequence.map(function(s){return Object.assign({},s)});
-    if(hiRandomOrder){for(var _si=hiSeqCopy.length-1;_si>0;_si--){var _sj=Math.floor(Math.random()*(_si+1));var _st=hiSeqCopy[_si];hiSeqCopy[_si]=hiSeqCopy[_sj];hiSeqCopy[_sj]=_st;}}
+    var hiSeqCopy;
+    if(hiRandomOrder){hiSeqCopy=generateRandomHiSeq(hiSequence.length);}
+    else{hiSeqCopy=hiSequence.map(function(s){return Object.assign({},s)});}
     state.hiSeq=hiSeqCopy;
     state.hiRound=0;state.hiScores=players.map(function(){return 0});
     state.hiRoundScores=players.map(function(){return[]});
@@ -3866,7 +3891,7 @@ function shUndo(){
 // ═══════════════════════════════════════════
 // GAME: HALVE IT
 // ═══════════════════════════════════════════
-function hiSeqLabel(item){if(!item)return'—';return item.label||item.type;}
+function hiSeqLabel(item){if(!item)return'—';if(item.type==='spec_double')return'D'+item.val;if(item.type==='spec_treble')return'T'+item.val;return item.label||item.type;}
 function hiCurItem(){return state.hiSeq[state.hiRound];}
 function renderHalveIt(){
   var item=hiCurItem();
@@ -3887,7 +3912,9 @@ function renderHalveIt(){
       'bull':function(){return 'Bull';},
       'same_color':function(){return '3 zelfde kleuren';},
       'diff_color':function(){return '3 verschillende kleuren';},
-      'random3':function(){return 'Random getal';}
+      'random3':function(){return 'Random getal';},
+      'spec_double':function(it){return 'D'+it.val;},
+      'spec_treble':function(it){return 'T'+it.val;}
     };
     var subMap={
       'num':function(it){return 'Gooi het getal '+it.val;},
@@ -3896,7 +3923,9 @@ function renderHalveIt(){
       'bull':function(){return 'Gooi de bull (25 of 50)';},
       'same_color':function(){return '3 pijlen dezelfde kleur';},
       'diff_color':function(){return '3 pijlen 3 verschillende kleuren';},
-      'random3':function(){return '1 van 3 getallen gooien';}
+      'random3':function(){return '1 van 3 getallen gooien';},
+      'spec_double':function(it){return 'Gooi dubbel '+it.val+' ('+it.val*2+' punten)';},
+      'spec_treble':function(it){return 'Gooi triple '+it.val+' ('+it.val*3+' punten)';}
     };
     var lFn=labelMap[item.type];
     var sFn=subMap[item.type];
@@ -3910,7 +3939,7 @@ function renderHalveIt(){
     else                          bigTarget.setAttribute('data-size','lg');
     bigSub.textContent=sFn?sFn(item):'';
     // Color accent based on type
-    var colorMap={num:'var(--accent)',double:'var(--accent)',treble:'#f59e0b',bull:'#a855f7',same_color:'#3b82f6',diff_color:'#22c55e',random3:'#9c27b0'};
+    var colorMap={num:'var(--accent)',double:'var(--accent)',treble:'#f59e0b',bull:'#a855f7',same_color:'#3b82f6',diff_color:'#22c55e',random3:'#9c27b0',spec_double:'var(--accent)',spec_treble:'#f59e0b'};
     bigTarget.style.color=colorMap[item.type]||'var(--accent)';
   } else {
     bigTarget.textContent='✓';bigSub.textContent='Alle rondes gespeeld';
@@ -3985,6 +4014,20 @@ function renderHiInputArea(item){
       '<div class="gap6" style="flex-wrap:wrap">'+
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn" style="padding:10px 6px;font-size:14px;font-weight:700" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
       '<button class="btn" style="color:var(--muted);padding:10px 6px;font-size:14px" onclick="hiAddPts(0)">Mis</button></div>';
+  } else if(item.type==='spec_double'){
+    var _sv=item.val*2;
+    el.innerHTML=dartBar+
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak D'+item.val+' ('+_sv+' punten) — mis = score gehalveerd</div>'+
+      '<div class="gap8">'+
+      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="hiAddPts('+_sv+')">Raak! D'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
+      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
+  } else if(item.type==='spec_treble'){
+    var _sv=item.val*3;
+    el.innerHTML=dartBar+
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak T'+item.val+' ('+_sv+' punten) — mis = score gehalveerd</div>'+
+      '<div class="gap8">'+
+      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="hiAddPts('+_sv+')">Raak! T'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
+      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='bull'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak de bull — 3x mis = score gehalveerd</div>'+
@@ -4288,11 +4331,8 @@ function renderStats(){
     if(allOpponents.length>1){
       var vsBtns=allOpponents.map(function(opp){
         var lbl=opp==='alle'?'Alle':opp;var isActive=opp===activeVs;
-        var btn=document.createElement('button');
-        btn.style.cssText='padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:'+(isActive?'var(--accent2)':'var(--surface)')+';color:'+(isActive?'#fff':'var(--muted)');
-        btn.textContent=lbl;
-        (function(n,o){btn.onclick=function(){setStatsVsFilter(n,o);};})(name,opp);
-        return btn.outerHTML;
+        var en=encodeURIComponent(name);var eo=encodeURIComponent(opp);
+        return'<button onclick="setStatsVsFilter(decodeURIComponent(\''+en+'\'),decodeURIComponent(\''+eo+'\'))" style="padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:'+(isActive?'var(--accent2)':'var(--surface)')+';color:'+(isActive?'#fff':'var(--muted)')+'">'+lbl+'</button>';
       }).join('');
       vsTabsHtml='<div style="margin-bottom:10px">'+
         '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Versus</div>'+
@@ -5396,6 +5436,9 @@ function deleteMatchEntry(playerName, index){
 // APP INITIALISATIE MET FIREBASE
 // ═══════════════════════════════════════════
 (function initApp(){
+  // Load local stats backup immediately (before Firebase)
+  var localBackup=_loadLocalDB();
+  if(localBackup&&Object.keys(localBackup).length>0)dbCache=localBackup;
   // Always hide modal + loading on startup — user can choose to connect via home screen
   document.getElementById('group-modal').style.display='none';
   document.getElementById('fb-loading').style.display='none';
