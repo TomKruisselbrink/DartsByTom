@@ -3895,6 +3895,17 @@ function hiSeqLabel(item){if(!item)return'—';if(item.type==='spec_double')retu
 function hiCurItem(){return state.hiSeq[state.hiRound];}
 function renderHalveIt(){
   var item=hiCurItem();
+  // Safety: if all rounds done, trigger end screen
+  if(!item&&state.hiSeq&&state.hiSeq.length>0&&state.hiRound>=state.hiSeq.length){
+    var _ms=Math.max.apply(null,state.hiScores);var _wi=state.hiScores.indexOf(_ms);
+    var _sh=state.players.map(function(n,i){
+      var hits=state.hiHits?state.hiHits[i]:0;var misses=state.hiMisses?state.hiMisses[i]:0;
+      var pct=hits+misses>0?Math.round(hits/(hits+misses)*100):0;
+      return'<div class="stat-row"><span>'+n+'</span><strong>'+state.hiScores[i]+'</strong>'+
+        '<span style="color:var(--muted);font-size:11px;margin-left:8px">'+hits+'/'+(hits+misses)+' raak ('+pct+'%)</span></div>';
+    }).join('');
+    showWin(state.players.length===1?'Eindstand':state.players[_wi],'Halve It eindstand',_sh);return;
+  }
   document.getElementById('hi-round-num').textContent=state.hiRound+1;
   document.getElementById('hi-total-rounds').textContent=state.hiSeq.length;
   document.getElementById('hi-turn-name').textContent=state.players[state.currentPlayer];
@@ -4019,15 +4030,15 @@ function renderHiInputArea(item){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak D'+item.val+' ('+_sv+' punten) — mis = score gehalveerd</div>'+
       '<div class="gap8">'+
-      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="hiAddPts('+_sv+')">Raak! D'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
+      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="state.hiTurnPts='+_sv+';hiEndTurn(true)">Raak! D'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
+      '<button class="btn" style="color:var(--muted)" onclick="hiEndTurn(false)">Mis</button></div>';
   } else if(item.type==='spec_treble'){
     var _sv=item.val*3;
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak T'+item.val+' ('+_sv+' punten) — mis = score gehalveerd</div>'+
       '<div class="gap8">'+
-      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="hiAddPts('+_sv+')">Raak! T'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
+      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="state.hiTurnPts='+_sv+';hiEndTurn(true)">Raak! T'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
+      '<button class="btn" style="color:var(--muted)" onclick="hiEndTurn(false)">Mis</button></div>';
   } else if(item.type==='bull'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak de bull — 3x mis = score gehalveerd</div>'+
@@ -4229,7 +4240,8 @@ function hiEndTurn(scored){
   if(scored)state.hiHits[cur]++;else state.hiMisses[cur]++;
   state.dartCount[cur]=(state.dartCount[cur]||0)+3;state.hiTurnPts=0;state.hiDartsThrown=0;
   state.currentPlayer=(state.currentPlayer+1)%state.players.length;
-  if(state.currentPlayer===state.firstPlayer){
+  var _hiRoundDone=(state.players.length<=1)||(state.currentPlayer===state.firstPlayer);
+  if(_hiRoundDone){
     state.hiRound++;
     if(state.hiRound>=state.hiSeq.length){
       var maxScore=Math.max.apply(null,state.hiScores);var winIdx=state.hiScores.indexOf(maxScore);
@@ -4283,7 +4295,10 @@ function renderHiHistory(){
 // WIN & STATS
 // ═══════════════════════════════════════════
 function showWin(winner,sub,extra){
-  document.getElementById('win-title').innerHTML='<span style="color:var(--accent)">'+winner+'</span> wint!';
+  var isSoloEnd=(state.players&&state.players.length<=1)||winner==='Eindstand';
+  document.getElementById('win-title').innerHTML=isSoloEnd?
+    '<span style="color:var(--accent)">Eindstand</span>':
+    '<span style="color:var(--accent)">'+winner+'</span> wint!';
   var rbtn=document.getElementById('btn-rematch');
   if(rbtn)rbtn.style.display=rematchConfig?'block':'none';
   document.getElementById('win-sub').textContent=sub;
@@ -4435,7 +4450,7 @@ function renderStats(){
             '<span style="font-size:13px;font-weight:600">'+typeLabel+'</span>'+
             '<span style="color:var(--muted);font-size:11px;margin-left:6px">'+g.date+'</span>'+
           '</div>'+
-          (g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+
+          (!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+
         '</div>'+
         (infoItems.length?'<div style="color:var(--muted);font-size:11px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+
       '</div>';
@@ -4938,9 +4953,9 @@ function renderHistory(){
     return'<div style="padding:10px 0;border-bottom:1px solid var(--border)'+(i===0?';border-top:1px solid var(--border)':'')+'" class="fade-in">'+
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:'+(info.length||legHtml?'5':'0')+'px">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
-          '<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
+          (!g.opponents||!g.opponents.length?'':'<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
             (g.won?'Win':'Verlies')+
-          '</div>'+
+          '</div>')+
           '<div>'+
             '<div style="font-size:13px;font-weight:700">'+g.gameType+'</div>'+
             '<div style="font-size:11px;color:var(--muted)">'+g.date+'</div>'+
