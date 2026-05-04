@@ -4028,17 +4028,17 @@ function renderHiInputArea(item){
   } else if(item.type==='spec_double'){
     var _sv=item.val*2;
     el.innerHTML=dartBar+
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak D'+item.val+' ('+_sv+' punten) — mis = score gehalveerd</div>'+
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak D'+item.val+' ('+_sv+' punten) — 3x mis = score gehalveerd</div>'+
       '<div class="gap8">'+
       '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="state.hiTurnPts='+_sv+';hiEndTurn(true)">Raak! D'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiEndTurn(false)">Mis</button></div>';
+      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='spec_treble'){
     var _sv=item.val*3;
     el.innerHTML=dartBar+
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak T'+item.val+' ('+_sv+' punten) — mis = score gehalveerd</div>'+
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak T'+item.val+' ('+_sv+' punten) — 3x mis = score gehalveerd</div>'+
       '<div class="gap8">'+
       '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="state.hiTurnPts='+_sv+';hiEndTurn(true)">Raak! T'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiEndTurn(false)">Mis</button></div>';
+      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='bull'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak de bull — 3x mis = score gehalveerd</div>'+
