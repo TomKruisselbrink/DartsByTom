@@ -1225,7 +1225,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <div style="width:1px;background:var(--border);flex-shrink:0"></div>
       <div style="flex:1;text-align:center;padding:0 4px">
         <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Pijlen</div>
-        <div id="sh-darts-turn" style="font-size:16px;font-weight:900;color:var(--text)">0/3</div>
+        <div id="sh-darts-turn" style="display:flex;align-items:center;justify-content:center;gap:2px;min-height:24px">⚪⚪⚪</div>
       </div>
       <div style="width:1px;background:var(--border);flex-shrink:0"></div>
       <div style="flex:1;text-align:center;padding:0 4px">
@@ -1239,7 +1239,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <div class="card" style="margin-bottom:10px">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
       <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(1)">Enkel</button>
-      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(2)">Dubbel</button>
+      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(2)">Double</button>
       <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(3)">Triple</button>
     </div>
     <button class="btn" style="width:100%;padding:12px;color:var(--muted);font-size:14px" onclick="shMiss()">✕ Mis — geen punt op dit getal</button>
@@ -3828,7 +3828,12 @@ function renderShanghai(){
   var maxEl=document.getElementById('sh-max-label');
   if(maxEl)maxEl.textContent='van '+state.shMaxTarget;
   document.getElementById('sh-turn-name').textContent=state.players[state.currentPlayer];
-  document.getElementById('sh-darts-turn').textContent=state.shDarts+'/3';
+  var thrown=state.shDarts||0;
+  var dartsLeft=3-thrown;
+  var dartBarHtml=[0,1,2].map(function(i){return'<span style="font-size:18px">'+(i<thrown?'🎯':'⚪')+'</span>';}).join('')+
+    '<span style="font-size:11px;color:var(--muted);align-self:center;margin-left:5px">pijl '+(thrown+1)+' van 3</span>';
+  var dartBarEl=document.getElementById('sh-darts-turn');
+  if(dartBarEl)dartBarEl.innerHTML=dartBarHtml;
   document.getElementById('sh-turn-pts').textContent=state.shTurnPts;
   var el=document.getElementById('sh-players');el.innerHTML='';
   var grid=document.createElement('div');
@@ -3869,7 +3874,8 @@ function shEndTurn(){
   state.dartCount[state.currentPlayer]=(state.dartCount[state.currentPlayer]||0)+3;
   state.shDarts=0;state.shTurnPts=0;
   state.currentPlayer=(state.currentPlayer+1)%state.players.length;
-  if(state.currentPlayer===state.firstPlayer){
+  var _shRoundDone=(state.players.length<=1)||(state.currentPlayer===state.firstPlayer);
+  if(_shRoundDone){
     state.shRound++;state.shTarget++;
     if(state.shTarget>state.shMaxTarget){
       var maxScore=Math.max.apply(null,state.shScores);
@@ -4025,20 +4031,15 @@ function renderHiInputArea(item){
       '<div class="gap6" style="flex-wrap:wrap">'+
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn" style="padding:10px 6px;font-size:14px;font-weight:700" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
       '<button class="btn" style="color:var(--muted);padding:10px 6px;font-size:14px" onclick="hiAddPts(0)">Mis</button></div>';
-  } else if(item.type==='spec_double'){
-    var _sv=item.val*2;
+  } else if(item.type==='spec_double'||item.type==='spec_treble'){
+    var _n=item.val;
     el.innerHTML=dartBar+
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak D'+item.val+' ('+_sv+' punten) — 3x mis = score gehalveerd</div>'+
       '<div class="gap8">'+
-      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="state.hiTurnPts='+_sv+';hiEndTurn(true)">Raak! D'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
-  } else if(item.type==='spec_treble'){
-    var _sv=item.val*3;
-    el.innerHTML=dartBar+
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak T'+item.val+' ('+_sv+' punten) — 3x mis = score gehalveerd</div>'+
-      '<div class="gap8">'+
-      '<button class="btn btn-primary" style="flex:1;font-size:16px;font-weight:700" onclick="state.hiTurnPts='+_sv+';hiEndTurn(true)">Raak! T'+item.val+'<br><span style="font-size:12px">'+_sv+' pts</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>';
+      '<button class="btn" style="flex:1" onclick="hiAddPts('+_n+')">Enkel<br><span class="muted">'+_n+'</span></button>'+
+      '<button class="btn" style="flex:1" onclick="hiAddPts('+(_n*2)+')">Dubbel<br><span class="muted">'+(_n*2)+'</span></button>'+
+      '<button class="btn" style="flex:1" onclick="hiAddPts('+(_n*3)+')">3x<br><span class="muted">'+(_n*3)+'</span></button>'+
+      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>'+
+      '<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">3 pijlen op het '+_n+' — 0 punten = score gehalveerd</div>';
   } else if(item.type==='bull'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak de bull — 3x mis = score gehalveerd</div>'+
