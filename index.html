@@ -3947,8 +3947,8 @@ function renderHalveIt(){
       'same_color':function(){return '3 pijlen dezelfde kleur';},
       'diff_color':function(){return '3 pijlen 3 verschillende kleuren';},
       'random3':function(){return '1 van 3 getallen gooien';},
-      'spec_double':function(it){return 'Gooi dubbel '+it.val+' ('+it.val*2+' punten)';},
-      'spec_treble':function(it){return 'Gooi triple '+it.val+' ('+it.val*3+' punten)';}
+      'spec_double':function(it){return it.val*2+' pts per raak — mis = halveer';},
+      'spec_treble':function(it){return it.val*3+' pts per raak — mis = halveer';}
     };
     var lFn=labelMap[item.type];
     var sFn=subMap[item.type];
@@ -4038,14 +4038,15 @@ function renderHiInputArea(item){
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){return'<button class="btn" style="padding:10px 6px;font-size:14px;font-weight:700" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
       '<button class="btn" style="color:var(--muted);padding:10px 6px;font-size:14px" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='spec_double'||item.type==='spec_treble'){
-    var _n=item.val;
-    el.innerHTML=dartBar+
+    var _hitVal=item.type==='spec_double'?item.val*2:item.val*3;
+    var _tl=item.type==='spec_double'?'D'+item.val:'T'+item.val;
+    el.innerHTML=
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-align:center">Hoe vaak raak je '+_tl+' met 3 pijlen? ('+_hitVal+' pts per raak)</div>'+
       '<div class="gap8">'+
-      '<button class="btn" style="flex:1" onclick="hiAddPts('+_n+')">Enkel<br><span class="muted">'+_n+'</span></button>'+
-      '<button class="btn" style="flex:1" onclick="hiAddPts('+(_n*2)+')">Dubbel<br><span class="muted">'+(_n*2)+'</span></button>'+
-      '<button class="btn" style="flex:1" onclick="hiAddPts('+(_n*3)+')">3x<br><span class="muted">'+(_n*3)+'</span></button>'+
-      '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>'+
-      '<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">3 pijlen op het '+_n+' — 0 punten = score gehalveerd</div>';
+      '<button class="btn" style="flex:1" onclick="state.hiTurnPts='+_hitVal+';hiEndTurn(true)">1 raak<br><span class="muted">'+_hitVal+'</span></button>'+
+      '<button class="btn" style="flex:1" onclick="state.hiTurnPts='+(2*_hitVal)+';hiEndTurn(true)">2 raak<br><span class="muted">'+(2*_hitVal)+'</span></button>'+
+      '<button class="btn" style="flex:1" onclick="state.hiTurnPts='+(3*_hitVal)+';hiEndTurn(true)">3 raak<br><span class="muted">'+(3*_hitVal)+'</span></button>'+
+      '<button class="btn" style="color:var(--muted)" onclick="hiEndTurn(false)">Mis</button></div>';
   } else if(item.type==='bull'){
     el.innerHTML=dartBar+
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak de bull — 3x mis = score gehalveerd</div>'+
