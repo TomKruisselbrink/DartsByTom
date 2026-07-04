@@ -2643,7 +2643,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
   } else if(gameType==='atc'){
     state.atcTarget=players.map(function(){return 1});state.atcDarts=0;state.atcHistory=[];state.atcMode=atcMode;setTimeout(saveRematchConfig,0);renderATC();showScreen('screen-atc');
   } else if(gameType==='shanghai7'||gameType==='shanghai20'){
-    state.shRound=1;state.shTarget=1;state.shMaxTarget=gameType==='shanghai20'?20:7;
+    state.shRound=1;state.shTarget=1;state.shMaxTarget=gameType==='shanghai20'?20:7;state.shStatsSaved=false;
     state.shScores=players.map(function(){return 0});state.shDarts=0;state.shTurnPts=0;state.shHistory=[];state.shHalve=shHalveOpt;setTimeout(saveRematchConfig,0);renderShanghai();showScreen('screen-shanghai');
   } else if(gameType==='halveit'){
     var hiSeqCopy;
@@ -3823,6 +3823,12 @@ function atcUndo(){
 // GAME: SHANGHAI
 // ═══════════════════════════════════════════
 function renderShanghai(){
+  // Safety: if all rounds done, show win screen
+  if(state.shMaxTarget>0&&state.shTarget>state.shMaxTarget){
+    var _ms=Math.max.apply(null,state.shScores);var _wi=state.shScores.indexOf(_ms);
+    if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===_wi,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
+    showWin(state.players.length===1?'Eindstand':state.players[_wi],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+n+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
+  }
   document.getElementById('sh-target2').textContent=state.shTarget;
   document.getElementById('sh-round-num').textContent=state.shRound;
   var maxEl=document.getElementById('sh-max-label');
@@ -3874,13 +3880,13 @@ function shEndTurn(){
   state.dartCount[state.currentPlayer]=(state.dartCount[state.currentPlayer]||0)+3;
   state.shDarts=0;state.shTurnPts=0;
   state.currentPlayer=(state.currentPlayer+1)%state.players.length;
-  var _shRoundDone=(state.players.length<=1)||(state.currentPlayer===state.firstPlayer);
+  var _fp=state.firstPlayer!==undefined?state.firstPlayer:0;var _shRoundDone=(state.players.length<=1)||(state.currentPlayer===_fp);
   if(_shRoundDone){
     state.shRound++;state.shTarget++;
-    if(state.shTarget>state.shMaxTarget){
+    if(state.shTarget>state.shMaxTarget||state.shRound>state.shMaxTarget){
       var maxScore=Math.max.apply(null,state.shScores);
       var winIdx=state.shScores.indexOf(maxScore);
-      state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===winIdx,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0})});
+      if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===winIdx,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
       showWin(state.players[winIdx],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+n+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
     }
   }
