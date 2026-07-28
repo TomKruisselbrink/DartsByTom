@@ -5476,9 +5476,20 @@ function deleteMatchEntry(playerName, index){
 // Register service worker for PWA/offline
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/sw.js').catch(function(){});
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
   });
 }
+
+// Wake Lock — scherm aan houden tijdens gebruik
+var _wakeLock=null;
+function _requestWakeLock(){
+  if(!('wakeLock' in navigator))return;
+  navigator.wakeLock.request('screen').then(function(wl){_wakeLock=wl;}).catch(function(){});
+}
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible')_requestWakeLock();
+});
+window.addEventListener('load',_requestWakeLock);
 </script>
 </body>
 </html>
