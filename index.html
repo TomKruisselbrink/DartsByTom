@@ -13,358 +13,446 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Darts</title>
 <style>
-:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#242424;--accent:#FE6807;--accent2:#0677FE;--text:#f0f0f0;--muted:#6b7280;--border:rgba(255,255,255,0.08);--success:#22c55e;--danger:#ef4444;--warning:#f59e0b;--info:#3b82f6;--radius:12px;--radius-sm:8px;--glow:0 0 20px rgba(254,104,7,0.3)}
+/* ─── DESIGN TOKENS ─── */
+:root{
+  color-scheme:light dark;
+  --accent:#B5502F;
+  --accent2:#9DBF9E;
+  --success:#34C759;
+  --danger:#FF3B30;
+  --warning:#B5502F;
+  --info:#9DBF9E;
+  --radius:13px;
+  --radius-sm:10px;
+  /* Dark defaults */
+  --bg:#000000;
+  --surface:#1C1C1E;
+  --card:#2C2C2E;
+  --text:#FFFFFF;
+  --muted:#98989F;
+  --border:rgba(255,255,255,0.1);
+  --separator:rgba(255,255,255,0.06);
+  --shadow:0 2px 8px rgba(0,0,0,0.45);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
+  --header-bg:rgba(28,28,30,0.85);
+}
+@media (prefers-color-scheme:light){
+  :root{
+    --bg:#F2F2F7;
+    --surface:#FFFFFF;
+    --card:#EFEFF4;
+    --text:#000000;
+    --muted:#6E6E73;
+    --border:rgba(0,0,0,0.12);
+    --separator:rgba(0,0,0,0.06);
+    --shadow:0 1px 4px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.05);
+    --shadow-lg:0 4px 24px rgba(0,0,0,0.12);
+    --header-bg:rgba(242,242,247,0.9);
+  }
+}
 
-/* Score flip animation */
+/* ─── ANIMATIONS ─── */
 @keyframes scoreFlip{0%{transform:translateY(-8px);opacity:0}100%{transform:translateY(0);opacity:1}}
 @keyframes scorePulse{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes bustShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes dartThrow{0%{transform:translateX(30px);opacity:0}60%{transform:translateX(-3px);opacity:1}100%{transform:translateX(0);opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@keyframes glow{0%,100%{box-shadow:var(--glow)}50%{box-shadow:0 0 35px rgba(254,104,7,0.5)}}
 @keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 @keyframes winPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-@keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes coinSpin{0%{transform:scaleX(1);background:#e53e3e}25%{transform:scaleX(0)}50%{transform:scaleX(1);background:#0677FE}75%{transform:scaleX(0)}100%{transform:scaleX(1);background:#e53e3e}}
+@keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes coinSpin{0%{transform:scaleX(1);background:#FF3B30}25%{transform:scaleX(0)}50%{transform:scaleX(1);background:#9DBF9E}75%{transform:scaleX(0)}100%{transform:scaleX(1);background:#FF3B30}}
 
 .score-animate{animation:scoreFlip .25s ease-out,scorePulse .3s ease-out}
 .score-bust{animation:bustShake .4s ease-out}
 .dart-animate{animation:dartThrow .2s ease-out}
 .fade-in{animation:fadeIn .3s ease-out}
 .checkout-animate{animation:checkoutSlide .25s ease-out}
+
+/* ─── RESET & BASE ─── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIj4KICA8cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0ibm9uZSIvPgoKICA8IS0tIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkCAtLT4KICA8IS0tIERBUlQgR1JPVVAgMSDigJQgdG9wIGxlZnQsIDMgZGFydHMgYnVuZGxlZCAobGlrZSBpbWFnZSAxKSAtLT4KICA8IS0tIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkCAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NSw5NSkgcm90YXRlKC0zNSkiIG9wYWNpdHk9IjAuNDUiIHN0cm9rZT0iIzI1MjUyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDwhLS0gRGFydCBBIC0tPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwtMTApIj4KICAgICAgPGxpbmUgeDE9Ii01MiIgeTE9IjAiIHgyPSIyMCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMS40Ii8+CiAgICAgIDwhLS0gdGlwIC0tPgogICAgICA8bGluZSB4MT0iLTUyIiB5MT0iMCIgeDI9Ii02MiIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlPSIjMjUyNTI1Ii8+CiAgICAgIDwhLS0gYmFycmVsIHdpdGggc3RyaXBlcyAtLT4KICAgICAgPHJlY3QgeD0iLTMwIiB5PSItMy41IiB3aWR0aD0iMjQiIGhlaWdodD0iNyIgcng9IjMiIGZpbGw9IiMxZTFlMWUiIHN0cm9rZT0iIzJhMmEyYSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIHgxPSItMjQiIHkxPSItMy41IiB4Mj0iLTI0IiB5Mj0iMy41IiBzdHJva2U9IiMyZTJlMmUiIHN0cm9rZS13aWR0aD0iMS4yIi8+CiAgICAgIDxsaW5lIHgxPSItMTgiIHkxPSItMy41IiB4Mj0iLTE4IiB5Mj0iMy41IiBzdHJva2U9IiMyZTJlMmUiIHN0cm9rZS13aWR0aD0iMS4yIi8+CiAgICAgIDxsaW5lIHgxPSItMTIiIHkxPSItMy41IiB4Mj0iLTEyIiB5Mj0iMy41IiBzdHJva2U9IiMyZTJlMmUiIHN0cm9rZS13aWR0aD0iMS4yIi8+CiAgICAgIDwhLS0gc2hhZnQgLS0+CiAgICAgIDxsaW5lIHgxPSItNiIgeTE9IjAiIHgyPSIxOCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMS40Ii8+CiAgICAgIDwhLS0gZmxpZ2h0IChsZWFmIHNoYXBlKSAtLT4KICAgICAgPHBhdGggZD0iTTE4LDAgUTMwLC0xNCAyMCwtMTQgUTEwLC0xNCAxOCwwIiBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyYTJhMmEiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgICA8cGF0aCBkPSJNMTgsMCBRMzAsMTQgMjAsMTQgUTEwLDE0IDE4LDAiIGZpbGw9IiMxZTFlMWUiIHN0cm9rZT0iIzJhMmEyYSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIHgxPSIxOCIgeTE9IjAiIHgyPSIyOCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPC9nPgogICAgPCEtLSBEYXJ0IEIgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0LDApIj4KICAgICAgPGxpbmUgeDE9Ii01MiIgeTE9IjAiIHgyPSIyMCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMS40Ii8+CiAgICAgIDxsaW5lIHgxPSItNTIiIHkxPSIwIiB4Mj0iLTYyIiB5Mj0iMCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAgIDxyZWN0IHg9Ii0zMCIgeT0iLTMuNSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjciIHJ4PSIzIiBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyYTJhMmEiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgICA8bGluZSB4MT0iLTI0IiB5MT0iLTMuNSIgeDI9Ii0yNCIgeTI9IjMuNSIgc3Ryb2tlPSIjMmUyZTJlIiBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgICA8bGluZSB4MT0iLTE4IiB5MT0iLTMuNSIgeDI9Ii0xOCIgeTI9IjMuNSIgc3Ryb2tlPSIjMmUyZTJlIiBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgICA8bGluZSB4MT0iLTEyIiB5MT0iLTMuNSIgeDI9Ii0xMiIgeTI9IjMuNSIgc3Ryb2tlPSIjMmUyZTJlIiBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgICA8bGluZSB4MT0iLTYiIHkxPSIwIiB4Mj0iMTgiIHkyPSIwIiBzdHJva2Utd2lkdGg9IjEuNCIvPgogICAgICA8cGF0aCBkPSJNMTgsMCBRMzAsLTE0IDIwLC0xNCBRMTAsLTE0IDE4LDAiIGZpbGw9IiMxZTFlMWUiIHN0cm9rZT0iIzJhMmEyYSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxwYXRoIGQ9Ik0xOCwwIFEzMCwxNCAyMCwxNCBRMTAsMTQgMTgsMCIgZmlsbD0iIzFlMWUxZSIgc3Ryb2tlPSIjMmEyYTJhIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgICAgPGxpbmUgeDE9IjE4IiB5MT0iMCIgeDI9IjI4IiB5Mj0iMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8L2c+CiAgICA8IS0tIERhcnQgQyAtLT4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC00LDEwKSI+CiAgICAgIDxsaW5lIHgxPSItNTIiIHkxPSIwIiB4Mj0iMjAiIHkyPSIwIiBzdHJva2Utd2lkdGg9IjEuNCIvPgogICAgICA8bGluZSB4MT0iLTUyIiB5MT0iMCIgeDI9Ii02MiIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8cmVjdCB4PSItMzAiIHk9Ii0zLjUiIHdpZHRoPSIyNCIgaGVpZ2h0PSI3IiByeD0iMyIgZmlsbD0iIzFlMWUxZSIgc3Ryb2tlPSIjMmEyYTJhIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgICAgPGxpbmUgeDE9Ii0yNCIgeTE9Ii0zLjUiIHgyPSItMjQiIHkyPSIzLjUiIHN0cm9rZT0iIzJlMmUyZSIgc3Ryb2tlLXdpZHRoPSIxLjIiLz4KICAgICAgPGxpbmUgeDE9Ii0xOCIgeTE9Ii0zLjUiIHgyPSItMTgiIHkyPSIzLjUiIHN0cm9rZT0iIzJlMmUyZSIgc3Ryb2tlLXdpZHRoPSIxLjIiLz4KICAgICAgPGxpbmUgeDE9Ii0xMiIgeTE9Ii0zLjUiIHgyPSItMTIiIHkyPSIzLjUiIHN0cm9rZT0iIzJlMmUyZSIgc3Ryb2tlLXdpZHRoPSIxLjIiLz4KICAgICAgPGxpbmUgeDE9Ii02IiB5MT0iMCIgeDI9IjE4IiB5Mj0iMCIgc3Ryb2tlLXdpZHRoPSIxLjQiLz4KICAgICAgPHBhdGggZD0iTTE4LDAgUTMwLC0xNCAyMCwtMTQgUTEwLC0xNCAxOCwwIiBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyYTJhMmEiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgICA8cGF0aCBkPSJNMTgsMCBRMzAsMTQgMjAsMTQgUTEwLDE0IDE4LDAiIGZpbGw9IiMxZTFlMWUiIHN0cm9rZT0iIzJhMmEyYSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIHgxPSIxOCIgeTE9IjAiIHgyPSIyOCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPC9nPgogIDwvZz4KCiAgPCEtLSDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAgLS0+CiAgPCEtLSBEQVJUQk9BUkQg4oCUIGJvdHRvbSByaWdodCAobGlrZSBpbWFnZSAyLCBzaW1wbGlmaWVkIHNrZXRjaCkgLS0+CiAgPCEtLSDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzkwLDM5MCkiIG9wYWNpdHk9IjAuMzgiIHN0cm9rZT0iIzI1MjUyNSIgZmlsbD0ibm9uZSI+CiAgICA8IS0tIE91dGVyIHJpbmcgLS0+CiAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iODAiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iIzE0MTQxNCIvPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjcyIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI2MiIgc3Ryb2tlLXdpZHRoPSIxLjUiIGZpbGw9IiMxOTE5MTkiLz4KICAgIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI1MCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMzgiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSIjMTYxNjE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMjIiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjE0IiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0iIzFhMWExYSIvPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjYiICBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjIuNSIgZmlsbD0iIzI1MjUyNSIvPgogICAgPCEtLSAyMCBzZWN0b3IgbGluZXMgLS0+CiAgICA8bGluZSB4MT0iMCIgeTE9Ii04MCIgeDI9IjAiIHkyPSI4MCIgc3Ryb2tlLXdpZHRoPSIuOCIvPgogICAgPGxpbmUgeDE9Ii04MCIgeTE9IjAiIHgyPSI4MCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iLjgiLz4KICAgIDxsaW5lIHgxPSItNTciIHkxPSItNTciIHgyPSI1NyIgeTI9IjU3IiBzdHJva2Utd2lkdGg9Ii44Ii8+CiAgICA8bGluZSB4MT0iNTciIHkxPSItNTciIHgyPSItNTciIHkyPSI1NyIgc3Ryb2tlLXdpZHRoPSIuOCIvPgogICAgPGxpbmUgeDE9Ii0zMCIgeTE9Ii03NSIgeDI9IjMwIiB5Mj0iNzUiIHN0cm9rZS13aWR0aD0iLjYiLz4KICAgIDxsaW5lIHgxPSIzMCIgeTE9Ii03NSIgeDI9Ii0zMCIgeTI9Ijc1IiBzdHJva2Utd2lkdGg9Ii42Ii8+CiAgICA8bGluZSB4MT0iLTc1IiB5MT0iLTMwIiB4Mj0iNzUiIHkyPSIzMCIgc3Ryb2tlLXdpZHRoPSIuNiIvPgogICAgPGxpbmUgeDE9Ijc1IiB5MT0iLTMwIiB4Mj0iLTc1IiB5Mj0iMzAiIHN0cm9rZS13aWR0aD0iLjYiLz4KICAgIDxsaW5lIHgxPSItNjgiIHkxPSItNDQiIHgyPSI2OCIgeTI9IjQ0IiBzdHJva2Utd2lkdGg9Ii42Ii8+CiAgICA8bGluZSB4MT0iNDQiIHkxPSItNjgiIHgyPSItNDQiIHkyPSI2OCIgc3Ryb2tlLXdpZHRoPSIuNiIvPgogICAgPCEtLSBEYXJ0IHN0dWNrIGluIGJvYXJkIC0tPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTgsLTIyKSByb3RhdGUoMjApIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgICA8bGluZSB4MT0iLTI4IiB5MT0iMCIgeDI9IjgiIHkyPSIwIiBzdHJva2Utd2lkdGg9IjEuNCIvPgogICAgICA8bGluZSB4MT0iLTI4IiB5MT0iMCIgeDI9Ii0zNiIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgICAgIDxyZWN0IHg9Ii0xOCIgeT0iLTIuNSIgd2lkdGg9IjE0IiBoZWlnaHQ9IjUiIHJ4PSIyIiBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyODI4MjgiIHN0cm9rZS13aWR0aD0iLjgiLz4KICAgICAgPGxpbmUgeDE9Ii0xNCIgeTE9Ii0yLjUiIHgyPSItMTQiIHkyPSIyLjUiIHN0cm9rZT0iIzJkMmQyZCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIHgxPSItMTAiIHkxPSItMi41IiB4Mj0iLTEwIiB5Mj0iMi41IiBzdHJva2U9IiMyZDJkMmQiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgICA8cGF0aCBkPSJNOCwwIFExNiwtOCAxMSwtOCBRNiwtOCA4LDAiICBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyODI4MjgiIHN0cm9rZS13aWR0aD0iLjgiLz4KICAgICAgPHBhdGggZD0iTTgsMCBRMTYsOCAgMTEsOCAgUTYsOCAgOCwwIiAgZmlsbD0iIzFlMWUxZSIgc3Ryb2tlPSIjMjgyODI4IiBzdHJva2Utd2lkdGg9Ii44Ii8+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1LC0xMCkgcm90YXRlKDgpIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgICA8bGluZSB4MT0iLTI4IiB5MT0iMCIgeDI9IjgiIHkyPSIwIiBzdHJva2Utd2lkdGg9IjEuNCIvPgogICAgICA8bGluZSB4MT0iLTI4IiB5MT0iMCIgeDI9Ii0zNiIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgICAgIDxyZWN0IHg9Ii0xOCIgeT0iLTIuNSIgd2lkdGg9IjE0IiBoZWlnaHQ9IjUiIHJ4PSIyIiBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyODI4MjgiIHN0cm9rZS13aWR0aD0iLjgiLz4KICAgICAgPGxpbmUgeDE9Ii0xNCIgeTE9Ii0yLjUiIHgyPSItMTQiIHkyPSIyLjUiIHN0cm9rZT0iIzJkMmQyZCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIHgxPSItMTAiIHkxPSItMi41IiB4Mj0iLTEwIiB5Mj0iMi41IiBzdHJva2U9IiMyZDJkMmQiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgICA8cGF0aCBkPSJNOCwwIFExNiwtOCAxMSwtOCBRNiwtOCA4LDAiICBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiMyODI4MjgiIHN0cm9rZS13aWR0aD0iLjgiLz4KICAgICAgPHBhdGggZD0iTTgsMCBRMTYsOCAgMTEsOCAgUTYsOCAgOCwwIiAgZmlsbD0iIzFlMWUxZSIgc3Ryb2tlPSIjMjgyODI4IiBzdHJva2Utd2lkdGg9Ii44Ii8+CiAgICA8L2c+CiAgPC9nPgoKICA8IS0tIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkCAtLT4KICA8IS0tIFNJTkdMRSBEQVJUIOKAlCBtaWQgcmlnaHQsIGZseWluZyAtLT4KICA8IS0tIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkCAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0MDAsMTgwKSByb3RhdGUoLTE1KSIgb3BhY2l0eT0iMC4zOCIgc3Ryb2tlPSIjMjUyNTI1IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPGxpbmUgeDE9Ii00OCIgeTE9IjAiIHgyPSIxNiIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMS40Ii8+CiAgICA8bGluZSB4MT0iLTQ4IiB5MT0iMCIgeDI9Ii01OCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgICA8cmVjdCB4PSItMjgiIHk9Ii0zLjUiIHdpZHRoPSIyMCIgaGVpZ2h0PSI3IiByeD0iMyIgZmlsbD0iIzFlMWUxZSIgc3Ryb2tlPSIjMmEyYTJhIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDxsaW5lIHgxPSItMjIiIHkxPSItMy41IiB4Mj0iLTIyIiB5Mj0iMy41IiBzdHJva2U9IiMyZDJkMmQiIHN0cm9rZS13aWR0aD0iMS4yIi8+CiAgICA8bGluZSB4MT0iLTE2IiB5MT0iLTMuNSIgeDI9Ii0xNiIgeTI9IjMuNSIgc3Ryb2tlPSIjMmQyZDJkIiBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgPGxpbmUgeDE9Ii0xMCIgeTE9Ii0zLjUiIHgyPSItMTAiIHkyPSIzLjUiIHN0cm9rZT0iIzJkMmQyZCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz4KICAgIDxsaW5lIHgxPSItOCIgeTE9IjAiIHgyPSIxNCIgeTI9IjAiIHN0cm9rZS13aWR0aD0iMS4zIi8+CiAgICA8cGF0aCBkPSJNMTQsMCBRMjYsLTEzIDE3LC0xMyBROCwtMTMgMTQsMCIgIGZpbGw9IiMxZTFlMWUiIHN0cm9rZT0iIzJhMmEyYSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8cGF0aCBkPSJNMTQsMCBRMjYsMTMgIDE3LDEzICBROCwxMyAgMTQsMCIgIGZpbGw9IiMxZTFlMWUiIHN0cm9rZT0iIzJhMmEyYSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8bGluZSB4MT0iMTQiIHkxPSIwIiB4Mj0iMjYiIHkyPSIwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8L2c+CgogIDwhLS0g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQIC0tPgogIDwhLS0gU01BTEwgREFSVEJPQVJEIOKAlCB0b3AgcmlnaHQgLS0+CiAgPCEtLSDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDIwLDYwKSIgb3BhY2l0eT0iMC4zMiIgc3Ryb2tlPSIjMjMyMzIzIiBmaWxsPSJub25lIj4KICAgIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiIGZpbGw9IiMxMzEzMTMiLz4KICAgIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIzMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMjAiIHN0cm9rZS13aWR0aD0iMS4yIiBmaWxsPSIjMTgxODE4Ii8+CiAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMTAiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjQiICBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjEuNSIgZmlsbD0iIzIzMjMyMyIvPgogICAgPGxpbmUgeDE9IjAiIHkxPSItMzgiIHgyPSIwIiB5Mj0iMzgiIHN0cm9rZS13aWR0aD0iLjciLz4KICAgIDxsaW5lIHgxPSItMzgiIHkxPSIwIiB4Mj0iMzgiIHkyPSIwIiBzdHJva2Utd2lkdGg9Ii43Ii8+CiAgICA8bGluZSB4MT0iLTI3IiB5MT0iLTI3IiB4Mj0iMjciIHkyPSIyNyIgc3Ryb2tlLXdpZHRoPSIuNiIvPgogICAgPGxpbmUgeDE9IjI3IiB5MT0iLTI3IiB4Mj0iLTI3IiB5Mj0iMjciIHN0cm9rZS13aWR0aD0iLjYiLz4KICAgIDxsaW5lIHgxPSItMTQiIHkxPSItMzYiIHgyPSIxNCIgeTI9IjM2IiBzdHJva2Utd2lkdGg9Ii41Ii8+CiAgICA8bGluZSB4MT0iMTQiIHkxPSItMzYiIHgyPSItMTQiIHkyPSIzNiIgc3Ryb2tlLXdpZHRoPSIuNSIvPgogICAgPGxpbmUgeDE9Ii0zNiIgeTE9Ii0xNCIgeDI9IjM2IiB5Mj0iMTQiIHN0cm9rZS13aWR0aD0iLjUiLz4KICAgIDxsaW5lIHgxPSIzNiIgeTE9Ii0xNCIgeDI9Ii0zNiIgeTI9IjE0IiBzdHJva2Utd2lkdGg9Ii41Ii8+CiAgPC9nPgoKICA8IS0tIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkCAtLT4KICA8IS0tIENIRUNLTUFSSyDigJQgYm90dG9tIGxlZnQgYXJlYSAtLT4KICA8IS0tIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkCAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2MCw0MDApIiBvcGFjaXR5PSIwLjM1IiBzdHJva2U9IiMyNTI1MjUiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgICA8cG9seWxpbmUgcG9pbnRzPSItMTQsMCAtNCwxMiAxNCwtMTQiIHN0cm9rZS13aWR0aD0iMy41Ii8+CiAgPC9nPgoKICA8IS0tIENST1NTIOKAlCB0b3AgY2VudGVyIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyMCw1MCkiIG9wYWNpdHk9IjAuMyIgc3Ryb2tlPSIjMjUyNTI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPGxpbmUgeDE9Ii0xMCIgeTE9Ii0xMCIgeDI9IjEwIiB5Mj0iMTAiIHN0cm9rZS13aWR0aD0iMyIvPgogICAgPGxpbmUgeDE9IjEwIiB5MT0iLTEwIiB4Mj0iLTEwIiB5Mj0iMTAiIHN0cm9rZS13aWR0aD0iMyIvPgogIDwvZz4KCiAgPCEtLSBDSEVDS01BUksg4oCUIG1pZCBjZW50ZXIgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjUwLDI3MCkiIG9wYWNpdHk9IjAuMjgiIHN0cm9rZT0iIzIzMjMyMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDxwb2x5bGluZSBwb2ludHM9Ii0xMiwwIC0zLDEwIDEyLC0xMiIgc3Ryb2tlLXdpZHRoPSIzIi8+CiAgPC9nPgoKICA8IS0tIENST1NTIOKAlCBib3R0b20gY2VudGVyIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE4MCw0MzApIiBvcGFjaXR5PSIwLjI4IiBzdHJva2U9IiMyMzIzMjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8bGluZSB4MT0iLTkiIHkxPSItOSIgeDI9IjkiIHkyPSI5IiBzdHJva2Utd2lkdGg9IjIuNSIvPgogICAgPGxpbmUgeDE9IjkiIHkxPSItOSIgeDI9Ii05IiB5Mj0iOSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICA8L2c+CgogIDwhLS0gU01BTEwgQ1JPU1MgbWlkLWxlZnQgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAsMjcwKSIgb3BhY2l0eT0iMC4yOCIgc3Ryb2tlPSIjMjIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPGxpbmUgeDE9Ii03IiB5MT0iLTciIHgyPSI3IiB5Mj0iNyIgc3Ryb2tlLXdpZHRoPSIyLjIiLz4KICAgIDxsaW5lIHgxPSI3IiB5MT0iLTciIHgyPSItNyIgeTI9IjciIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgPC9nPgoKICA8IS0tIFNjb3JlIG51bWJlcnMgLS0+CiAgPHRleHQgeD0iMTc1IiB5PSIyMDAiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMxZTFlMWUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtd2VpZ2h0PSJib2xkIiBvcGFjaXR5PSIwLjQ1IiB0cmFuc2Zvcm09InJvdGF0ZSgtOCwxNzUsMjAwKSI+MTgwPC90ZXh0PgogIDx0ZXh0IHg9IjMwMCIgeT0iMzIwIiBmb250LXNpemU9IjEwIiBmaWxsPSIjMWUxZTFlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBvcGFjaXR5PSIwLjM4IiB0cmFuc2Zvcm09InJvdGF0ZSg1LDMwMCwzMjApIj5UMjA8L3RleHQ+CiAgPHRleHQgeD0iNTUiICB5PSIxNjUiIGZvbnQtc2l6ZT0iOSIgIGZpbGw9IiMxZTFlMWUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIG9wYWNpdHk9IjAuMzUiIHRyYW5zZm9ybT0icm90YXRlKC00LDU1LDE2NSkiPkQxNjwvdGV4dD4KICA8dGV4dCB4PSIyMjAiIHk9IjQ2MCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzFlMWUxZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgb3BhY2l0eT0iMC4zOCIgdHJhbnNmb3JtPSJyb3RhdGUoMywyMjAsNDYwKSI+NTAxPC90ZXh0PgogIDx0ZXh0IHg9IjMyMCIgeT0iMTMwIiBmb250LXNpemU9IjkiICBmaWxsPSIjMWUxZTFlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBvcGFjaXR5PSIwLjMyIiB0cmFuc2Zvcm09InJvdGF0ZSgtNiwzMjAsMTMwKSI+QnVsbDwvdGV4dD4KICA8dGV4dCB4PSIxMTAiIHk9IjM2MCIgZm9udC1zaXplPSI5IiAgZmlsbD0iIzFlMWUxZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgb3BhY2l0eT0iMC4zMiIgdHJhbnNmb3JtPSJyb3RhdGUoNywxMTAsMzYwKSI+RDIwPC90ZXh0PgoKICA8IS0tIFN1YnRsZSBkb3QgdGV4dHVyZSAtLT4KICA8ZyBmaWxsPSIjMTgxODE4IiBvcGFjaXR5PSIwLjU1Ij4KICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiAgcj0iMS4zIi8+CiAgICA8Y2lyY2xlIGN4PSIyODAiIGN5PSI5MCIgIHI9IjEuMyIvPgogICAgPGNpcmNsZSBjeD0iMzUwIiBjeT0iMjAwIiByPSIxLjMiLz4KICAgIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjI1MCIgcj0iMS4zIi8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSIzNTAiIHI9IjEuMyIvPgogICAgPGNpcmNsZSBjeD0iMzIwIiBjeT0iNDMwIiByPSIxLjMiLz4KICAgIDxjaXJjbGUgY3g9IjE0MCIgY3k9IjQ3MCIgcj0iMS4zIi8+CiAgICA8Y2lyY2xlIGN4PSI1MCIgIGN5PSI2MCIgIHI9IjEuMyIvPgogICAgPGNpcmNsZSBjeD0iNDYwIiBjeT0iMzAwIiByPSIxLjMiLz4KICAgIDxjaXJjbGUgY3g9IjQ2MCIgY3k9IjE1MCIgcj0iMS4zIi8+CiAgPC9nPgo8L3N2Zz4=");background-repeat:repeat;background-size:500px 500px;color:var(--text);display:flex;flex-direction:column;width:100%;margin:0 auto;height:100dvh}
-#app-header{background:var(--surface);padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:0 1px 20px rgba(254,104,7,0.15)}
-#app-header h1{font-size:20px;font-weight:700;letter-spacing:.5px;text-shadow:0 0 20px rgba(254,104,7,0.4)}
-#app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:600px;margin:0 auto;width:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  margin:0 auto;
+  height:100dvh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+/* Subtle depth gradient over the background */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,80,47,.07) 0%, transparent 70%),
+             radial-gradient(ellipse 60% 40% at 80% 100%, rgba(157,191,158,.05) 0%, transparent 60%);
+}
+@media (prefers-color-scheme:light){
+  body::before{
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,80,47,.06) 0%, transparent 70%);
+  }
+}
+#app-header,#app-content{position:relative;z-index:1;}
+
+/* ─── HEADER ─── */
+#app-header{
+  background:var(--header-bg);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  padding:14px 16px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:0.5px solid var(--separator);
+  flex-shrink:0;
+}
+#app-header h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+
+/* ─── CONTENT AREA ─── */
+#app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%}
 #app-content>.screen.active{flex:1}
 #app-content:has(#screen-game.active){padding:0;overflow:hidden;max-width:100%}
 .screen{display:none}.screen.active{display:block}
-h2{font-size:18px;font-weight:700;margin-bottom:4px}
-h3{font-size:15px;font-weight:600;margin-bottom:8px}
+
+/* ─── TYPOGRAPHY ─── */
+h2{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.3px}
+h3{font-size:17px;font-weight:600;margin-bottom:8px}
 .muted{color:var(--muted);font-size:13px}
-.label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.card{background:var(--surface);border-radius:var(--radius);padding:14px 16px;border:1px solid var(--border);margin-bottom:12px}
+.label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:4px}
+
+/* ─── CARD ─── */
+.card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  border:0.5px solid var(--border);
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+
+/* ─── BUTTONS ─── */
 .btn{
   background:var(--card);
-  border:1px solid var(--border);
-  border-radius:50px;
-  padding:10px 18px;
-  font-size:13px;
-  font-weight:700;
+  border:0.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px 18px;
+  font-size:15px;
+  font-weight:600;
   color:var(--text);
   cursor:pointer;
-  letter-spacing:.6px;
-  text-transform:uppercase;
   touch-action:manipulation;
-  transition:all .4s ease;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-  position:relative;
-  overflow:hidden;
+  transition:opacity .1s,transform .1s,background .15s;
+  box-shadow:var(--shadow);
+  letter-spacing:normal;
+  text-transform:none;
 }
-.btn:hover{
-  letter-spacing:1.5px;
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
-  box-shadow:0 7px 24px rgba(254,104,7,.45);
-}
-.btn:active{
-  letter-spacing:1.5px;
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
-  box-shadow:0 0 0 rgba(254,104,7,.4);
-  transform:translateY(4px);
-  transition:all .1s;
-}
+.btn:hover{background:var(--surface)}
+.btn:active{opacity:.6;transform:scale(.97);transition:opacity .05s,transform .05s}
 .btn-primary{
   background:var(--accent);
   color:#fff;
-  border-color:var(--accent);
-  box-shadow:0 4px 16px rgba(254,104,7,.4);
+  border-color:transparent;
+  box-shadow:0 2px 12px rgba(181,80,47,.35);
 }
-.btn-primary:hover{
-  background:#e55a00;
-  border-color:#e55a00;
-  box-shadow:0 7px 28px rgba(254,104,7,.6);
-}
+.btn-primary:hover{background:var(--accent)}
 .btn-danger{
-  background:rgba(239,68,68,.15);
-  color:#ef4444;
-  border-color:rgba(239,68,68,.3);
-}
-.btn-danger:hover{
-  background:#ef4444;
-  color:#fff;
-  border-color:#ef4444;
-  box-shadow:0 7px 24px rgba(239,68,68,.5);
+  background:rgba(255,59,48,.1);
+  color:var(--danger);
+  border-color:rgba(255,59,48,.2);
 }
 .btn-success{
-  background:rgba(34,197,94,.15);
-  color:#22c55e;
-  border-color:rgba(34,197,94,.3);
-}
-.btn-success:hover{
-  background:#22c55e;
-  color:#fff;
-  border-color:#22c55e;
-  box-shadow:0 7px 24px rgba(34,197,94,.5);
+  background:rgba(52,199,89,.1);
+  color:var(--success);
+  border-color:rgba(52,199,89,.2);
 }
 .btn-info{
-  background:rgba(59,130,246,.15);
-  color:#3b82f6;
-  border-color:rgba(59,130,246,.3);
+  background:rgba(157,191,158,.1);
+  color:var(--info);
+  border-color:rgba(157,191,158,.2);
 }
-.btn-info:hover{
-  background:#3b82f6;
-  color:#fff;
-  border-color:#3b82f6;
-  box-shadow:0 7px 24px rgba(59,130,246,.5);
-}
-.btn-sm{
-  padding:7px 14px;
-  font-size:11px;
-  letter-spacing:.4px;
-}
-.btn-full{width:100%;}
-.btn-xs{
-  padding:4px 10px;
-  font-size:10px;
-  letter-spacing:.3px;
-}
-.btn:active{transform:scale(.96);opacity:.85;transition:all .1s}
-
-
-
-
-
-
-
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-full{width:100%}
+.btn-xs{padding:5px 10px;font-size:12px}
 .btn-icon{background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px}
-input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+
+/* ─── FORM INPUTS ─── */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield}
-input[type=text]{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:15px;color:var(--text);width:100%}
+input[type=text]{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:11px 14px;
+  font-size:17px;
+  color:var(--text);
+  width:100%;
+  font-family:inherit;
+}
 input[type=text]:focus{outline:none;border-color:var(--accent)}
 input[type=text]::placeholder{color:var(--muted)}
-select{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;color:var(--text)}
-.segment{display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
-.segment button{flex:1;background:transparent;border:none;padding:8px 6px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .15s;touch-action:manipulation}
-.segment button.active{background:var(--accent);color:#fff}
-/* Segment buttons override pill style */
+select{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:9px 11px;
+  font-size:15px;
+  color:var(--text);
+  font-family:inherit;
+}
+
+/* ─── SEGMENT CONTROL ─── */
+.segment{
+  display:flex;
+  background:rgba(120,120,128,.12);
+  border:none;
+  border-radius:9px;
+  overflow:visible;
+  padding:2px;
+  gap:0;
+}
 .segment button{
-  border-radius:0 !important;
+  flex:1;
+  background:transparent !important;
+  border:none !important;
+  border-radius:7px !important;
+  padding:7px 4px !important;
+  font-size:13px !important;
+  font-weight:500;
+  color:var(--muted) !important;
+  cursor:pointer;
+  transition:background .12s,color .12s !important;
+  touch-action:manipulation;
   letter-spacing:0 !important;
   text-transform:none !important;
-  padding:8px 6px !important;
-  font-size:12px !important;
   box-shadow:none !important;
   transform:none !important;
-  transition:background .15s,color .15s !important;
 }
-.segment button:hover{
-  letter-spacing:0 !important;
+.segment button.active{
   background:var(--surface) !important;
-  box-shadow:none !important;
   color:var(--text) !important;
-  border-color:transparent !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.2),0 1px 2px rgba(0,0,0,.12) !important;
+  font-weight:600;
 }
-.segment button.active:hover{
-  background:var(--accent) !important;
-  color:#fff !important;
-}
-.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.segment button:hover:not(.active){color:var(--text) !important}
+
+/* ─── GAME GRID ─── */
+.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .game-btn{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px 16px;
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:14px;
+  padding:18px 16px;
   text-align:left;
   cursor:pointer;
   touch-action:manipulation;
-  transition:all .4s ease;
-  box-shadow:0 2px 8px rgba(0,0,0,.25);
-  position:relative;
-  overflow:hidden;
+  transition:transform .15s,background .15s;
+  box-shadow:var(--shadow);
+  min-height:72px;
 }
-.game-btn:hover{
-  border-color:var(--accent);
-  background:rgba(254,104,7,.12);
-  box-shadow:0 6px 20px rgba(254,104,7,.3);
-  transform:translateY(-2px);
-}
-.game-btn:active{
-  transform:translateY(1px);
-  box-shadow:0 2px 8px rgba(254,104,7,.2);
-  transition:all .1s;
-}
-.game-btn:active{opacity:.8}
-.game-btn .name{font-size:14px;font-weight:800;color:var(--text);letter-spacing:.3px}
-.game-btn .sub{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.2px}
-.game-btn.selected{border-color:var(--accent);background:rgba(254,104,7,.18);box-shadow:0 4px 16px rgba(254,104,7,.35)}
+.game-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);background:var(--card)}
+.game-btn:active{transform:scale(.96);opacity:.8;transition:transform .06s}
+.game-btn .name{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.2px}
+.game-btn .sub{font-size:13px;color:var(--muted);margin-top:4px}
+.game-btn.selected{border-color:var(--accent);background:rgba(181,80,47,.08)}
 .game-btn.selected .name{color:var(--accent)}
-.chip{display:inline-block;background:var(--card);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;border:1px solid var(--border);touch-action:manipulation}
-.player-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
-.player-card.active{border-color:var(--accent);background:rgba(233,69,96,.1)}
-.player-card.halved{border-color:var(--danger);background:rgba(231,76,60,.1)}
+
+/* ─── CHIPS ─── */
+.chip{
+  display:inline-block;
+  background:var(--card);
+  border-radius:20px;
+  padding:5px 12px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+  cursor:pointer;
+  border:0.5px solid var(--border);
+  touch-action:manipulation;
+}
+
+/* ─── PLAYER CARDS ─── */
+.player-card{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.player-card.active{border-color:var(--accent);background:rgba(181,80,47,.06)}
+.player-card.halved{border-color:var(--danger);background:rgba(255,59,48,.06)}
 .player-card .pname{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .player-card.active .pname{color:var(--accent)}
-.player-card .score-big{font-size:30px;font-weight:800;color:var(--text);line-height:1}
+.player-card .score-big{font-size:32px;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.5px}
 .player-card.active .score-big{color:var(--accent)}
 .player-card .sub-info{font-size:11px;color:var(--muted);margin-top:2px}
-.turn-bar{background:var(--card);border-radius:var(--radius-sm);padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center;font-size:13px}
+
+/* ─── TURN BAR ─── */
+.turn-bar{
+  background:var(--surface);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:12px;
+  align-items:center;
+  font-size:14px;
+  border:0.5px solid var(--border);
+  box-shadow:var(--shadow);
+}
 .turn-bar strong{color:var(--text)}
 .turn-bar .ti{color:var(--muted)}
+
+/* ─── NUMPAD ─── */
 .numpad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.numpad .btn{font-size:16px;font-weight:700;padding:13px 0}
+.numpad .btn{font-size:19px;font-weight:700;padding:15px 0;border-radius:var(--radius)}
+
+/* ─── LAYOUTS ─── */
 .mult-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-.history-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.history-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--separator);font-size:14px}
 .history-row:last-child{border-bottom:none}
-.badge{display:inline-block;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700}
-.badge-success{background:rgba(46,204,113,.2);color:var(--success)}
-.badge-danger{background:rgba(231,76,60,.2);color:var(--danger)}
-.badge-warning{background:rgba(243,156,18,.2);color:var(--warning)}
-.badge-info{background:rgba(52,152,219,.2);color:var(--info)}
-.badge-accent{background:rgba(233,69,96,.2);color:var(--accent)}
-.stat-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px}
+
+/* ─── BADGES ─── */
+.badge{display:inline-block;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:600}
+.badge-success{background:rgba(52,199,89,.14);color:var(--success)}
+.badge-danger{background:rgba(255,59,48,.14);color:var(--danger)}
+.badge-warning{background:rgba(181,80,47,.14);color:var(--warning)}
+.badge-info{background:rgba(157,191,158,.14);color:var(--info)}
+.badge-accent{background:rgba(181,80,47,.14);color:var(--accent)}
+
+/* ─── STAT ROWS ─── */
+.stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--separator);font-size:14px}
 .stat-row:last-child{border-bottom:none}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
-.metric{background:var(--card);border-radius:var(--radius-sm);padding:10px 8px;text-align:center}
-.metric .val{font-size:20px;font-weight:800;color:var(--text)}
-.metric .lbl{font-size:10px;color:var(--muted);margin-top:2px}
-.win-icon{font-size:56px;text-align:center;margin:20px 0 8px}
-.win-title{font-size:26px;font-weight:800;text-align:center;margin-bottom:6px}
-.win-sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:20px}
-.home-title{font-size:28px;font-weight:800;margin-bottom:4px}
-.home-sub{color:var(--muted);font-size:14px;margin-bottom:24px}
-.empty{color:var(--muted);font-size:13px;text-align:center;padding:20px}
+
+/* ─── METRICS ─── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.metric{background:var(--surface);border-radius:var(--radius-sm);padding:10px 8px;text-align:center;border:0.5px solid var(--border);box-shadow:var(--shadow)}
+.metric .val{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.metric .lbl{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500}
+
+/* ─── WIN SCREEN ─── */
+.win-icon{font-size:64px;text-align:center;margin:24px 0 8px}
+.win-title{font-size:28px;font-weight:700;text-align:center;margin-bottom:6px;letter-spacing:-.5px}
+.win-sub{text-align:center;color:var(--muted);font-size:15px;margin-bottom:20px}
+
+/* ─── HOME ─── */
+.home-title{font-size:34px;font-weight:700;margin-bottom:6px;letter-spacing:-.6px}
+.home-sub{color:var(--muted);font-size:16px;margin-bottom:28px}
+.home-section-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;margin-top:4px}
+
+/* ─── MISC ─── */
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:24px}
 .error{color:var(--danger);font-size:13px;margin-top:6px}
 .gap8{display:flex;gap:8px}
 .gap6{display:flex;gap:6px;flex-wrap:wrap}
 .mt8{margin-top:8px}
 .mt12{margin-top:12px}
 .players-grid{display:grid;gap:8px;margin-bottom:12px}
-.divider{height:1px;background:var(--border);margin:10px 0}
+.divider{height:0.5px;background:var(--separator);margin:10px 0}
 
-/* Tournament specific */
-.trn-match{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+/* ─── TOURNAMENT ─── */
+.trn-match{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;box-shadow:var(--shadow)}
 .trn-match.current{border-color:var(--accent)}
-.trn-match.done{opacity:.7}
-.trn-match-header{padding:6px 12px;background:var(--card);font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.trn-match.current .trn-match-header{background:rgba(233,69,96,.2);color:var(--accent)}
-.trn-player-row{display:flex;align-items:center;padding:10px 12px;gap:8px}
-.trn-player-row+.trn-player-row{border-top:1px solid var(--border)}
-.trn-player-name{flex:1;font-size:14px;font-weight:600}
-.trn-player-wins{font-size:18px;font-weight:800;min-width:24px;text-align:right}
+.trn-match.done{opacity:.6}
+.trn-match-header{padding:7px 14px;background:var(--card);font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.trn-match.current .trn-match-header{background:rgba(181,80,47,.1);color:var(--accent)}
+.trn-player-row{display:flex;align-items:center;padding:11px 14px;gap:8px}
+.trn-player-row+.trn-player-row{border-top:0.5px solid var(--separator)}
+.trn-player-name{flex:1;font-size:15px;font-weight:600}
+.trn-player-wins{font-size:18px;font-weight:700;min-width:24px;text-align:right}
 .trn-player-row.winner .trn-player-name{color:var(--success)}
 .trn-player-row.winner .trn-player-wins{color:var(--success)}
-.trn-player-row.loser{opacity:.5}
+.trn-player-row.loser{opacity:.45}
 .trn-player-row.current-turn .trn-player-name{color:var(--accent)}
-.standing-row{display:flex;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);gap:8px;font-size:14px}
+.standing-row{display:flex;align-items:center;padding:9px 14px;border-bottom:0.5px solid var(--separator);gap:8px;font-size:14px}
 .standing-row:last-child{border-bottom:none}
-.standing-pos{font-size:12px;font-weight:700;color:var(--muted);min-width:20px}
+.standing-pos{font-size:13px;font-weight:700;color:var(--muted);min-width:20px}
 .standing-name{flex:1;font-weight:600}
-.standing-pts{font-weight:800;color:var(--accent)}
+.standing-pts{font-weight:700;color:var(--accent)}
 .bracket-round{margin-bottom:16px}
-.bracket-round-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.bracket-round-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
 .leg-dot{width:8px;height:8px;border-radius:50%;background:var(--card);display:inline-block;margin:0 2px}
 .leg-dot.won{background:var(--success)}
 .leg-dot.lost{background:var(--danger)}
-.opt-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.opt-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--separator)}
 .opt-row:last-child{border-bottom:none}
-.opt-label{font-size:14px;font-weight:600}
-.opt-sub{font-size:12px;color:var(--muted)}
+.opt-label{font-size:15px;font-weight:600}
+.opt-sub{font-size:13px;color:var(--muted)}
 
-/* ── HALVE IT TARGET SIZES — identical on all devices ── */
+/* ─── HALVE IT TARGET ─── */
 .hi-target-text[data-size='lg']{font-size:72px}
 .hi-target-text[data-size='md']{font-size:48px}
 .hi-target-text[data-size='sm']{font-size:32px}
 .hi-target-text[data-size='xs']{font-size:26px}
 
-/* ── HOMEPAGE TILE BUTTONS ── */
+/* ─── HOME TILES ─── */
 .home-tile{
   border:none;
-  border-radius:var(--radius);
-  padding:22px 12px;
+  border-radius:16px;
+  padding:32px 16px 28px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  touch-action:manipulation;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),filter .15s;
+  min-height:130px;
+  justify-content:center;
+}
+.home-tile:hover{transform:translateY(-3px) scale(1.01);filter:brightness(1.07)}
+.home-tile:active{transform:scale(.96);opacity:.88;transition:transform .08s,opacity .08s}
+.home-tile-primary{
+  background:linear-gradient(145deg,#C5603F,#B5502F);
+  box-shadow:0 6px 24px rgba(181,80,47,.45),0 2px 6px rgba(181,80,47,.3);
+}
+.home-tile-secondary{
+  background:linear-gradient(145deg,#AECFAF,#9DBF9E,#7DAF7E);
+  box-shadow:0 6px 24px rgba(157,191,158,.4),0 2px 6px rgba(157,191,158,.25);
+}
+.home-nav-tile{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:14px;
+  padding:20px 10px 18px;
   cursor:pointer;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:6px;
   touch-action:manipulation;
-  transition:all .4s ease;
-  position:relative;
-  overflow:hidden;
+  transition:transform .15s,background .15s;
+  box-shadow:var(--shadow);
+  min-height:88px;
+  justify-content:center;
 }
-.home-tile:hover{
-  transform:translateY(-3px);
-  filter:brightness(1.1);
-  box-shadow:0 12px 32px rgba(0,0,0,.4) !important;
-}
-.home-tile:active{
-  transform:translateY(1px);
-  filter:brightness(.95);
-  transition:all .1s;
-}
-.home-tile-primary{
-  background:var(--accent);
-  box-shadow:0 4px 18px rgba(254,104,7,.5);
-}
-.home-tile-secondary{
-  background:linear-gradient(135deg,#0677FE,#0450cc);
-  box-shadow:0 4px 18px rgba(6,119,254,.45);
-}
-/* Secondary nav tiles */
-.home-nav-tile{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:16px 8px;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  touch-action:manipulation;
-  transition:all .4s ease;
-  box-shadow:0 2px 8px rgba(0,0,0,.2);
-}
-.home-nav-tile:hover{
-  border-color:#FE6807;
-  background:rgba(254,104,7,.1);
-  box-shadow:0 6px 20px rgba(254,104,7,.25);
-  transform:translateY(-2px);
-}
-.home-nav-tile:active{
-  transform:translateY(1px);
-  transition:all .1s;
-}
-/* Quick start tiles */
+.home-nav-tile:hover{transform:translateY(-2px);background:var(--card);box-shadow:var(--shadow-lg)}
+.home-nav-tile:active{transform:scale(.96);opacity:.8;transition:transform .06s}
 .home-quick-tile{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px 12px;
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:14px;
+  padding:18px 18px;
   cursor:pointer;
   text-align:left;
   touch-action:manipulation;
-  transition:all .4s ease;
-  box-shadow:0 2px 8px rgba(0,0,0,.2);
+  transition:transform .15s,background .15s;
+  box-shadow:var(--shadow);
+  min-height:72px;
 }
-.home-quick-tile:hover{
-  border-color:#FE6807;
-  background:rgba(254,104,7,.1);
-  box-shadow:0 6px 20px rgba(254,104,7,.25);
-  transform:translateY(-2px);
-}
-.home-quick-tile:active{
-  transform:translateY(1px);
-  transition:all .1s;
-}
-/* ── MOBILE TOUCH OPTIMISATION ── */
-/* Removed: phone and PC use identical layout */
+.home-quick-tile:hover{transform:translateY(-2px);background:var(--card);box-shadow:var(--shadow-lg)}
+.home-quick-tile:active{transform:scale(.97);opacity:.8;transition:transform .06s}
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"><style>body,input,select,button{font-family:'Nunito', sans-serif !important}</style><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
@@ -372,7 +460,7 @@ select{background:var(--card);border:1px solid var(--border);border-radius:var(-
 <style>
 #boot-overlay {
   --bg:#050608;--fg:#f5f1e8;--muted:#8a8276;
-  --accent:#FE6807;
+  --accent:#B5502F;
   --board-cream:#f5e6c8;--board-red:oklch(0.58 0.19 25);--board-green:oklch(0.55 0.13 155);
 }
 @font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;
@@ -755,7 +843,11 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAESUlEQVR4nO2aS2tkRRTH/6cet6pfJnHCbWySOAPBASGIZCmYpb0TkSwUhuDCD+DWL+DOtUs3PsjGhSB+AVezcOEDmZ2LERySGPLq9L236rjoe9NtZzrpmKRrHOsHh37drvqff1WdulAXiEQikUgkEvmfQqEFXAMCIHA+B1/Gc81lAzf1wP4XZ4AA4Dudzp3Dk8M3uODUk58HJAHYqRvzw87OziMMcuMQAmksbhIJAMvLyx1Ts79qk7A2CSujWRnN2iScWHO0uLj4CoZL5MYYT6zqQJXCLups9Ho5EuoKoQEgTdN2Ys1PKtGsEp2pROcj0VOJZlu3n5b9qhvL/jKICESEKrnt7W1ZfTca1yFN07ap2Z/L5F35ei60Sf5YX1/XlbQLdU/T8erq6gv7+/uN6jMzkzdeZsfZfZfzutbybr+f3wf4jnfeMBhKKTBzASAHkIG5YOZTIeUpmHtK6ROVyB997rmX9TIpNLSUEErQ0dGRUFqRVgZCQGZZMWe03j3N++96598EcIzJo+uJSNbq9oODvw6+wmBA3KTcLpsiBICLonip2Wy+7IgYzCQByrIsOS2yd7x3bzlHC8y+xgBIEAgE59zZiDMziiwHAAjpIKSEzzP0M34AHtSpPO8jY4ZUCsbY3/M8zzPOvCRS3rm5XNCfkmTKxE8IRABPGDxyIEj2tMbMXxPRhYXw2kWKiHDv3r10d3d3Kfe+ba1tAg69Xi9TSjnvqU/ez52cnHzpvRcAmIiIB4mPiisAJEqpbe/9e977s/aBgYn1Vn0r6+efT6GpaDWad/f29h6j3DWunWfZ0HjIaRuw1j4oR6PAIPHR8BhM3aNGo7FW9ifxz51EAkC9Xt9KrOGy6GUq0cVInKpE58ba78o/3eguMIlK5HhlH632CQBorT8rEx43oQDASZJ8VLY5vjQrEzQA1Jv1D5VJJhVArjWbb09oJxgCgEjTtC2EOMDwdvVsBggheGVl5VUMZ9ckFADUW60tW7PfJ9Y8NNb8Zqx9lFjzsNZofLKxsaHwDN7kSQCQUn6BQdI5xgzodDqvl9deNnXPficiMDNtbm7Kf7PNznKKEADSWn/rnHsfTx+haW9dPQaGMjNzWVschrVq4rY3zkyKRIkHwLVa7RchBHCFAjoBh+EyqupQZcTUzNIAAECr1XLXvSN8CtVSujIzN+BZIxoQWkBoogGhBYQmGhBaQGiiAaEFhCYaEFpAaKIBoQWEJhoQWkBoogGhBYQmGhBaQGiiAaEFhCYaEFpAaGZpAAEQzJPO9YfXYIbnerM8GnMA4JwrRp4NqBJlAFQURXXa8/zR7XbNwsLCmlJqG4OD0X75evZeKfXN/Pz8a91u14TUepMQACwtLb2olHoshBh/MOJcCCFYKfWk3W6no23cFre9BBgArLXH3vuPvffVA0uTDkZdeQ1rrQ9vWVsEmO1TFFedbcWtqIhEIpFIJBKJDPgbXIyDhaArvAEAAAAASUVORK5CYII=" style="width:32px;height:32px;object-fit:contain;flex-shrink:0" alt="logo">
     <h1 id="header-title">Darts</h1>
   </div>
-  <div style="display:flex;align-items:center;gap:8px"><span id="cloud-status-dot" title="" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:none;flex-shrink:0"></span></div>  <div id="header-right" style="display:flex;gap:6px"></div>
+  <div style="display:flex;align-items:center;gap:6px">
+    <span id="cloud-status-dot" title="" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:none;flex-shrink:0"></span>
+    <button id="fs-btn" onclick="_toggleFullscreen()" title="Volledig scherm" style="background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:var(--radius-sm)">⛶</button>
+    <div id="header-right" style="display:flex;gap:6px"></div>
+  </div>
 </div>
 <!-- ═══════ DUBBEL SELECTIE MODAL ═══════ -->
 <div id="trn-start-modal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.88);flex-direction:column;align-items:center;justify-content:center;padding:24px">
@@ -1141,7 +1233,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <div class="screen" id="screen-game" style="display:none;flex-direction:column;height:100%">
 
   <!-- Format indicator (tournament only) -->
-  <div id="trn-leg-bar" style="display:none;text-align:center;padding:5px 16px;background:rgba(233,69,96,.15);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;flex-shrink:0"></div>
+  <div id="trn-leg-bar" style="display:none;text-align:center;padding:5px 16px;background:rgba(181,80,47,.15);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;flex-shrink:0"></div>
 
   <!-- Scoreboard: rendered dynamically by renderGame() -->
   <div id="sb-players" style="display:grid;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0"></div>
@@ -1706,7 +1798,7 @@ function calcPlayerAvgStats(name){
   var db=getDB();var p=db[name];if(!p)return null;
   var x01games=p.gameHistory.filter(function(g){return g.detailedStats});
   if(!x01games.length)return null;
-  var totalScore=0,totalTurns=0,tot180=0,tot140=0,tot100=0,totHigh=0;
+  var totalScore=0,totalTurns=0,tot180=0,tot160=0,tot140=0,tot120=0,tot100=0,tot80=0,tot60=0,tot0=0,totHigh=0,totHighFinish=0;
   var totCoAttempts=0,totCoHits=0;
   var n=x01games.length;
   x01games.forEach(function(g){
@@ -1714,16 +1806,25 @@ function calcPlayerAvgStats(name){
     totalScore+=Math.round((s.avg3||0)*(s.turns||0));
     totalTurns+=(s.turns||0);
     tot180+=s.count180||0;
+    tot160+=s.count160||0;
     tot140+=s.count140||0;
+    tot120+=s.count120||0;
     tot100+=s.count100||0;
+    tot80 +=s.count80||0;
+    tot60 +=s.count60||0;
+    tot0  +=s.count0||0;
     if((s.highTurn||0)>totHigh)totHigh=s.highTurn;
+    if((s.highFinish||0)>totHighFinish)totHighFinish=s.highFinish;
     totCoAttempts+=(s.checkoutAttempts||0);
     totCoHits+=(s.checkoutHits||0);
   });
+  var avg3=totalTurns>0?Math.round(totalScore/totalTurns*10)/10:0;
   return{
-    avg3:totalTurns>0?Math.round(totalScore/totalTurns*10)/10:0,
-    count180:tot180,count140:tot140,count100:tot100,
-    highTurn:totHigh,turns:totalTurns,gamesX01:n,
+    avg3:avg3,
+    avg1:totalTurns>0?Math.round(totalScore/totalTurns/3*100)/100:0,
+    count180:tot180,count160:tot160,count140:tot140,count120:tot120,
+    count100:tot100,count80:tot80,count60:tot60,count0:tot0,
+    highTurn:totHigh,highFinish:totHighFinish,turns:totalTurns,gamesX01:n,
     checkoutAttempts:totCoAttempts,
     checkoutHits:totCoHits,
     checkoutPct:totCoAttempts>0?Math.round(totCoHits/totCoAttempts*100):null
@@ -2994,17 +3095,23 @@ function renderGame(){
   // Helpers
   function buildStats(pi){
     var src=(state.allHistory&&state.allHistory.length)?state.allHistory:state.history;
-    var allScored=src.filter(function(h){return h.player===pi&&!h.bust});
-    var totalScore=allScored.reduce(function(s,h){return s+h.score},0);
-    var cnt=allScored.length;
+    var scored=src.filter(function(h){return h.player===pi&&!h.bust});
+    var totalScore=scored.reduce(function(s,h){return s+h.score},0);
+    var cnt=scored.length;
     var avg3=cnt>0?Math.round(totalScore/cnt*10)/10:0;
-    var hi180=allScored.filter(function(h){return h.score===180}).length;
-    var hi140=allScored.filter(function(h){return h.score>=140&&h.score<180}).length;
-    var hi100=allScored.filter(function(h){return h.score>=100&&h.score<140}).length;
-    return '<div style="display:flex;justify-content:space-between"><span>Gem</span><span style="color:var(--text);font-weight:700">'+avg3+'</span></div>'+
-           '<div style="display:flex;justify-content:space-between"><span>180\'s</span><span style="color:var(--text);font-weight:700">'+hi180+'</span></div>'+
-           '<div style="display:flex;justify-content:space-between"><span>140+</span><span style="color:var(--text);font-weight:700">'+hi140+'</span></div>'+
-           '<div style="display:flex;justify-content:space-between"><span>100+</span><span style="color:var(--text);font-weight:700">'+hi100+'</span></div>';
+    var hi180=scored.filter(function(h){return h.score===180}).length;
+    var hi140=scored.filter(function(h){return h.score>=140&&h.score<180}).length;
+    var hi100=scored.filter(function(h){return h.score>=100&&h.score<140}).length;
+    function r(l,v,hi){
+      var c=hi?'var(--accent)':'var(--text)';
+      return'<div style="display:flex;justify-content:space-between;align-items:center;padding:1px 0">'+
+        '<span style="color:var(--muted)">'+l+'</span>'+
+        '<span style="color:'+c+';font-weight:700">'+v+'</span></div>';
+    }
+    return r('Gem',avg3>0?avg3:'—',false)+
+           r('180\'s',hi180,hi180>0)+
+           r('140+',hi140,hi140>0)+
+           r('100+',hi100,hi100>0);
   }
 
   function avg3str(pi){
@@ -3071,9 +3178,10 @@ function renderGame(){
   statsGrid.innerHTML='';
   state.players.forEach(function(name,pi){
     var div=document.createElement('div');
-    div.style.cssText='background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border);padding:8px 10px';
-    div.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+name+'</div>'+
-      '<div style="font-size:11px;line-height:1.9;color:var(--muted)">'+buildStats(pi)+'</div>';
+    var isActive=pi===cur;
+    div.style.cssText='background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid '+(isActive?'var(--accent)':'var(--border)')+';padding:10px 12px';
+    div.innerHTML='<div style="font-size:11px;font-weight:700;color:'+(isActive?'var(--accent)':'var(--muted)')+';text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+name+'</div>'+
+      '<div style="font-size:12px;line-height:1.8;color:var(--muted)">'+buildStats(pi)+'</div>';
     statsGrid.appendChild(div);
   });
 
@@ -3587,18 +3695,25 @@ function calcDetailedStats(playerIdx){
   var totalScore=turns.reduce(function(s,h){return s+h.score},0);
   var n=turns.length;
   var avg3=n>0?Math.round(totalScore/n*10)/10:0;
+  var avg1=n>0?Math.round(totalScore/n/3*100)/100:0;
   var high=turns.reduce(function(m,h){return h.score>m?h.score:m},0);
-  // Checkout stats: attempts = all turns where player was on checkout, hits = won turns
   var allTurns=(state.allHistory||state.history).filter(function(h){return h.player===playerIdx});
   var checkoutAttempts=allTurns.filter(function(h){return h.checkoutAttempt}).length;
   var checkoutHits=allTurns.filter(function(h){return h.checkoutHit}).length;
   var checkoutPct=checkoutAttempts>0?Math.round(checkoutHits/checkoutAttempts*100):null;
+  var fins=allTurns.filter(function(h){return h.won&&h.score>0});
+  var highFinish=fins.length?Math.max.apply(null,fins.map(function(h){return h.score;})):0;
   return{
-    avg3:avg3,
+    avg3:avg3,avg1:avg1,
     count180:turns.filter(function(h){return h.score===180}).length,
-    count140:turns.filter(function(h){return h.score>=140&&h.score<180}).length,
-    count100:turns.filter(function(h){return h.score>=100&&h.score<140}).length,
-    highTurn:high,turns:n,
+    count160:turns.filter(function(h){return h.score>=160&&h.score<180}).length,
+    count140:turns.filter(function(h){return h.score>=140&&h.score<160}).length,
+    count120:turns.filter(function(h){return h.score>=120&&h.score<140}).length,
+    count100:turns.filter(function(h){return h.score>=100&&h.score<120}).length,
+    count80 :turns.filter(function(h){return h.score>=80 &&h.score<100}).length,
+    count60 :turns.filter(function(h){return h.score>=60 &&h.score<80 }).length,
+    count0  :turns.filter(function(h){return h.score<60}).length,
+    highTurn:high,highFinish:highFinish,turns:n,
     checkoutAttempts:checkoutAttempts,
     checkoutHits:checkoutHits,
     checkoutPct:checkoutPct
@@ -4127,7 +4242,7 @@ function renderHiInputArea(item){
   } else if(item.type==='custom'){
     // Free score entry with numpad-style input
     el.innerHTML=
-      '<div style="background:rgba(233,69,96,.1);border:1px solid rgba(233,69,96,.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--accent)">'+item.label+'</div>'+
+      '<div style="background:rgba(181,80,47,.1);border:1px solid rgba(181,80,47,.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--accent)">'+item.label+'</div>'+
       '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">'+
         '<input type="number" id="hi-custom-score" min="0" max="180" placeholder="Score…"'+
         ' style="flex:1;font-size:20px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--text)"'+
@@ -4394,23 +4509,45 @@ function renderStats(){
       if(avg){
         var coPctStr=avg.checkoutPct!==null?avg.checkoutPct+'%':'—';
         var coStr=avg.checkoutAttempts>0?(avg.checkoutHits+'/'+avg.checkoutAttempts):'—';
+        function srow2(lbl,val,hi){
+          var c=hi?'var(--accent)':'var(--text)';var w=hi?'800':'700';
+          return'<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:0.5px solid var(--separator)">'+
+            '<span style="font-size:13px;color:var(--muted)">'+lbl+'</span>'+
+            '<span style="font-size:13px;font-weight:'+w+';color:'+c+'">'+val+'</span></div>';
+        }
         avgBlock=
           '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">501/301 — over '+avg.gamesX01+' wedstr.</div>'+
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
-            '<div style="background:rgba(233,69,96,.08);border:1px solid rgba(233,69,96,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
+            '<div style="background:rgba(181,80,47,.08);border:1px solid rgba(181,80,47,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
               '<div style="font-size:28px;font-weight:900;color:var(--accent)">'+avg.avg3+'</div>'+
               '<div style="font-size:10px;color:var(--muted);margin-top:2px">3-pijl gemiddelde</div>'+
             '</div>'+
-            '<div style="background:rgba(15,155,142,.08);border:1px solid rgba(15,155,142,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
+            '<div style="background:rgba(157,191,158,.08);border:1px solid rgba(157,191,158,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
+              '<div style="font-size:28px;font-weight:900;color:var(--accent2)">'+avg.avg1+'</div>'+
+              '<div style="font-size:10px;color:var(--muted);margin-top:2px">1-pijl gemiddelde</div>'+
+            '</div>'+
+          '</div>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
+            '<div style="background:rgba(157,191,158,.08);border:1px solid rgba(157,191,158,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
               '<div style="font-size:28px;font-weight:900;color:var(--accent2)">'+coPctStr+'</div>'+
               '<div style="font-size:10px;color:var(--muted);margin-top:2px">Dubbel % ('+coStr+')</div>'+
             '</div>'+
+            '<div style="background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
+              '<div style="font-size:28px;font-weight:900;color:var(--success)">'+(avg.highFinish>0?avg.highFinish:'—')+'</div>'+
+              '<div style="font-size:10px;color:var(--muted);margin-top:2px">Hoogste finish</div>'+
+            '</div>'+
           '</div>'+
-          '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px">'+
-            '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--text)">'+avg.highTurn+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">Hoogste</div></div>'+
-            '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--warning)">'+avg.count180+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">180\'s</div></div>'+
-            '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--text)">'+avg.count140+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">140+</div></div>'+
-            '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--text)">'+avg.count100+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">100+</div></div>'+
+          '<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px">'+
+            srow2('180\'s',avg.count180,avg.count180>0)+
+            srow2('160 – 179',avg.count160,avg.count160>0)+
+            srow2('140 – 159',avg.count140,avg.count140>0)+
+            srow2('120 – 139',avg.count120,avg.count120>0)+
+            srow2('100 – 119',avg.count100,avg.count100>0)+
+            srow2('80 – 99',avg.count80,false)+
+            srow2('60 – 79',avg.count60,false)+
+            '<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0">'+
+              '<span style="font-size:13px;color:var(--muted)">0 – 59</span>'+
+              '<span style="font-size:13px;font-weight:700;color:var(--text)">'+avg.count0+'</span></div>'+
           '</div>';
       }
     }
@@ -4423,7 +4560,7 @@ function renderStats(){
         var labelMap={atc:'Hoogste segment',shanghai7:'Hoogste score',shanghai20:'Hoogste score',halveit:'Hoogste score',checkout121:'Meeste checkouts'};
         otherBlock=
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
-            '<div style="background:rgba(233,69,96,.08);border:1px solid rgba(233,69,96,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
+            '<div style="background:rgba(181,80,47,.08);border:1px solid rgba(181,80,47,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
               '<div style="font-size:28px;font-weight:900;color:var(--accent)">'+gs.highScore+'</div>'+
               '<div style="font-size:10px;color:var(--muted);margin-top:2px">'+(labelMap[activeFilter]||'Beste score')+'</div>'+
             '</div>'+
@@ -5064,7 +5201,7 @@ function buildAvgGraph(name){
     var labelY=p[1]-8;
     var labelAnchor=i===0?'start':i===avgs.length-1?'end':'middle';
     return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5"/>'+
-      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="Nunito,sans-serif">'+avgs[i]+'</text>';
+      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="-apple-system,sans-serif">'+avgs[i]+'</text>';
   }).join('');
   return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Gemiddelde over tijd</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px">'+
@@ -5490,6 +5627,27 @@ document.addEventListener('visibilitychange',function(){
   if(document.visibilityState==='visible')_requestWakeLock();
 });
 window.addEventListener('load',_requestWakeLock);
+
+// Fullscreen toggle
+function _toggleFullscreen(){
+  if(!document.fullscreenElement&&!document.webkitFullscreenElement){
+    var el=document.documentElement;
+    if(el.requestFullscreen)el.requestFullscreen();
+    else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+  } else {
+    if(document.exitFullscreen)document.exitFullscreen();
+    else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+  }
+}
+function _updateFsBtn(){
+  var btn=document.getElementById('fs-btn');
+  if(!btn)return;
+  var isFs=!!(document.fullscreenElement||document.webkitFullscreenElement);
+  btn.textContent=isFs?'⊠':'⛶';
+  btn.title=isFs?'Verlaat volledig scherm':'Volledig scherm';
+}
+document.addEventListener('fullscreenchange',_updateFsBtn);
+document.addEventListener('webkitfullscreenchange',_updateFsBtn);
 </script>
 </body>
 </html>
