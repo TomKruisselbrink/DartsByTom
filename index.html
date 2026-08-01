@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a1a2e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -61,7 +61,7 @@
 @keyframes winPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 @keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes coinSpin{0%{transform:scaleX(1);background:#FF3B30}25%{transform:scaleX(0)}50%{transform:scaleX(1);background:#9DBF9E}75%{transform:scaleX(0)}100%{transform:scaleX(1);background:#FF3B30}}
+@keyframes coinSpin{0%{transform:scaleX(1)}25%{transform:scaleX(0)}50%{transform:scaleX(1)}75%{transform:scaleX(0)}100%{transform:scaleX(1)}}
 
 .score-animate{animation:scoreFlip .25s ease-out,scorePulse .3s ease-out}
 .score-bust{animation:bustShake .4s ease-out}
@@ -116,19 +116,10 @@ body::before{
 #app-header h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
 
 /* ─── CONTENT AREA ─── */
-#app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%;position:relative}
+#app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%}
 #app-content>.screen.active{flex:1}
 #app-content:has(#screen-game.active){padding:0;overflow:hidden;max-width:100%}
 .screen{display:none}.screen.active{display:block}
-
-/* ─── TAB BAR ─── */
-#tab-bar{display:flex;flex-shrink:0;background:var(--header-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--separator);padding:6px 4px calc(4px + env(safe-area-inset-bottom,0px));position:relative;z-index:2}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;border:none;padding:5px 2px 3px;cursor:pointer;touch-action:manipulation;color:var(--muted)}
-.tab-item svg{stroke:var(--muted);transition:stroke .15s}
-.tab-item span{font-size:10px;font-weight:600;letter-spacing:-.1px;transition:color .15s}
-.tab-item.active{color:var(--accent)}
-.tab-item.active svg{stroke:var(--accent)}
-.tab-item:active{opacity:.5;transition:opacity .05s}
 
 /* ─── TYPOGRAPHY ─── */
 h2{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.3px}
@@ -252,27 +243,6 @@ select{
 }
 .segment button:hover:not(.active){color:var(--text) !important}
 
-/* ─── SETUP SCREEN RETOUCH ─── */
-.setup-section-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:18px 2px 8px}
-.setup-section-label:first-of-type{margin-top:4px}
-.game-btn-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:8px;align-self:center}
-.setup-player-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--separator)}
-.setup-player-row:last-child{border-bottom:none}
-.setup-player-avatar{width:30px;height:30px;border-radius:50%;background:rgba(181,80,47,.16);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.setup-sticky-cta{position:sticky;left:0;right:0;bottom:0;margin:16px -20px -20px;padding:10px 20px calc(10px + env(safe-area-inset-bottom,0px));background:var(--header-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--separator);z-index:3}
-/* iOS-style toggle switch */
-.ios-switch{position:relative;display:inline-block;width:46px;height:28px;flex-shrink:0}
-.ios-switch input{opacity:0;width:0;height:0;position:absolute}
-.ios-switch-track{position:absolute;inset:0;background:rgba(120,120,128,.32);border-radius:16px;transition:background .2s;cursor:pointer}
-.ios-switch-track::before{content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
-.ios-switch input:checked+.ios-switch-track{background:var(--success)}
-.ios-switch input:checked+.ios-switch-track::before{transform:translateX(18px)}
-/* Sliding thumb for segmented controls */
-.segment{position:relative}
-.segment-thumb{position:absolute;top:2px;bottom:2px;background:var(--surface);border-radius:7px;box-shadow:0 1px 3px rgba(0,0,0,.2),0 1px 2px rgba(0,0,0,.12);transition:left .22s cubic-bezier(.34,1.2,.64,1),width .22s cubic-bezier(.34,1.2,.64,1);z-index:0;pointer-events:none}
-.segment button{position:relative;z-index:1}
-.segment button.active{background:transparent !important;box-shadow:none !important}
-
 /* ─── GAME GRID ─── */
 .game-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .game-btn{
@@ -280,15 +250,12 @@ select{
   border:0.5px solid var(--border);
   border-radius:14px;
   padding:18px 16px;
-  text-align:center;
+  text-align:left;
   cursor:pointer;
   touch-action:manipulation;
   transition:transform .15s,background .15s;
   box-shadow:var(--shadow);
   min-height:72px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
 }
 .game-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);background:var(--card)}
 .game-btn:active{transform:scale(.96);opacity:.8;transition:transform .06s}
@@ -894,7 +861,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <button id="trn-start-p2" onclick="trnChooseStart(1)" style="padding:14px 8px;background:#0677FE;border:none;border-radius:var(--radius-sm);color:#fff;font-size:14px;font-weight:800;cursor:pointer;border:3px solid transparent"></button>
     </div>
     <div style="text-align:center;margin-bottom:14px">
-      <div id="trn-start-coin" style="width:52px;height:52px;border-radius:50%;background:#888;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5)">?</div>
+      <div id="trn-start-coin" style="width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2px solid #9A6E0A;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 2px rgba(255,255,255,.4);overflow:hidden">?</div>
       <button onclick="trnFlipCoin()" class="btn btn-sm" style="background:var(--card);border:1px solid var(--border);color:var(--text)">&#x1FA99; Muntje gooien</button>
     </div>
     <div id="trn-start-result" style="text-align:center;font-size:13px;font-weight:700;min-height:20px;margin-bottom:12px"></div>
@@ -1021,7 +988,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <!-- SETUP vrij spel -->
 <div class="screen" id="screen-setup">
   <h2 style="margin-bottom:12px">Spel instellen</h2>
-  <div class="setup-section-label">Speltype</div>
   <div class="card">
     <h3>Speltype</h3>
     <div class="game-grid" id="game-btn-grid"></div>
@@ -1134,7 +1100,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <div id="sh-halve-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Normaal: 3 misses = 0 punten</div>
     </div>
   </div>
-  <div class="setup-section-label">Spelers</div>
   <div class="card">
     <div id="player-list" style="margin-bottom:10px"></div>
     <div class="gap8">
@@ -1143,14 +1108,10 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </div>
     <div id="known-names" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
   </div>
-  <div class="setup-section-label" id="bot-section-label" style="display:none">Tegenstander</div>
   <div class="card" id="bot-card" style="display:none">
     <h3>Bot tegenstander</h3>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <label class="ios-switch">
-        <input type="checkbox" id="bot-enabled" onchange="onBotToggle(this.checked)">
-        <span class="ios-switch-track"></span>
-      </label>
+      <input type="checkbox" id="bot-enabled" onchange="onBotToggle(this.checked)" style="width:18px;height:18px;cursor:pointer">
       <label for="bot-enabled" style="font-size:14px;font-weight:600;cursor:pointer">Speel tegen een bot</label>
     </div>
     <div id="bot-auto-info" style="font-size:12px;color:var(--muted);margin-bottom:8px;padding:6px 10px;background:var(--card);border-radius:var(--radius-sm)"></div>
@@ -1177,7 +1138,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       </div>
     </div>
   </div>
-  <div class="setup-section-label" id="start-player-section-label" style="display:none">Beginnende speler</div>
   <div class="card" id="start-player-card" style="display:none">
     <h3>Wie begint?</h3>
     <div class="segment" style="margin-bottom:10px">
@@ -1187,7 +1147,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </div>
     <div id="sp-pick-grid" style="display:none"></div>
     <div id="sp-coin-area" style="display:none;text-align:center;padding:8px 0">
-      <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:#888;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.5)">?</div>
+      <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2.5px solid #9A6E0A;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.4);overflow:hidden">?</div>
       <div id="wheel-wrap" style="display:none;position:relative;margin:0 auto 10px;width:224px">
         <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:22px;line-height:1;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">&#9660;</div>
         <canvas id="spin-wheel" width="224" height="224" style="display:block;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.5)"></canvas>
@@ -1196,10 +1156,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <button id="coin-spin-btn" class="btn btn-sm btn-primary" onclick="flipCoin()">Gooi het muntje</button>
     </div>
   </div>
-  <div class="setup-sticky-cta">
-    <div class="error" id="setup-error"></div>
-    <button class="btn btn-primary btn-full" onclick="startGame()">Spel starten →</button>
-  </div>
+  <button class="btn btn-primary btn-full" onclick="startGame()">Spel starten →</button>
+  <div class="error" id="setup-error"></div>
 </div>
 
 <!-- TOURNAMENT SETUP -->
@@ -1481,6 +1439,22 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   </div>
 </div>
 
+<!-- CRICKET -->
+<div class="screen" id="screen-cricket">
+  <div id="cricket-board" style="margin-bottom:12px"></div>
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div>
+        <div id="cricket-turn-name" style="font-size:16px;font-weight:700;color:var(--accent)"></div>
+        <div id="cricket-darts-left" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+      </div>
+      <div style="display:flex;gap:6px" id="cricket-mult-btns"></div>
+    </div>
+    <div id="cricket-seg-btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px"></div>
+    <button class="btn" style="width:100%;color:var(--muted);font-size:14px;padding:12px" onclick="cricketMiss()">✕ Mis</button>
+  </div>
+</div>
+
 <!-- WIN (vrij spel) -->
 <div class="screen" id="screen-win" style="position:relative;overflow:hidden">
   <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
@@ -1496,7 +1470,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <button class="btn btn-full" style="display:inline-flex;align-items:center;justify-content:center;gap:6px" onclick="stopConfetti();showScreen('screen-leaderboard')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</button>
         <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-stats')">Statistieken</button>
       </div>
-      <button class="btn btn-full" style="color:var(--muted);font-size:13px" onclick="stopConfetti();showScreen('screen-home','pop')">Home</button>
+      <button class="btn btn-full" style="color:var(--muted);font-size:13px" onclick="stopConfetti();showScreen('screen-home')">Home</button>
     </div>
   </div>
 </div>
@@ -1535,36 +1509,19 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 </div>
 
 </div><!-- app-content -->
-<div id="tab-bar">
-  <button class="tab-item active" id="tab-home" onclick="showScreen('screen-home','tab')">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5l9-8 9 8"/><path d="M5.5 10v10h13V10"/><path d="M9.5 20v-6.5h5V20"/></svg>
-    <span>Home</span>
-  </button>
-  <button class="tab-item" id="tab-leaderboard" onclick="showScreen('screen-leaderboard','tab')">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg>
-    <span>Ranglijst</span>
-  </button>
-  <button class="tab-item" id="tab-stats" onclick="showScreen('screen-stats','tab')">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span>Statistieken</span>
-  </button>
-  <button class="tab-item" id="tab-history" onclick="showScreen('screen-history','tab')">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-    <span>Geschiedenis</span>
-  </button>
-</div>
 <script>
 // ═══════════════════════════════════════════
 // DATA & STATE
 // ═══════════════════════════════════════════
 var GAMES=[
-  {id:'501',label:'501',sub:'Double/Straight out',icon:'🎯',color:'181,80,47'},
-  {id:'301',label:'301',sub:'Double/Straight out',icon:'🎯',color:'181,80,47'},
-  {id:'atc',label:'Around the Clock',sub:'Raak 1 t/m 20',icon:'🕐',color:'157,191,158'},
-  {id:'shanghai7',label:'Shanghai 1–7',sub:'7 rondes',icon:'🔀',color:'157,191,158'},
-  {id:'shanghai20',label:'Shanghai 1–20',sub:'20 rondes',icon:'🔀',color:'157,191,158'},
-  {id:'halveit',label:'Halve It',sub:'Miss = gehalveerd',icon:'✂️',color:'255,159,10'},
-  {id:'checkout121',label:'121 Checkout',sub:'Train je uitgooi',icon:'✅',color:'52,199,89'}
+  {id:'501',label:'501',sub:'Double/Straight out'},
+  {id:'301',label:'301',sub:'Double/Straight out'},
+  {id:'atc',label:'Around the Clock',sub:'Raak 1 t/m 20'},
+  {id:'shanghai7',label:'Shanghai 1–7',sub:'7 rondes'},
+  {id:'shanghai20',label:'Shanghai 1–20',sub:'20 rondes'},
+  {id:'halveit',label:'Halve It',sub:'Miss = gehalveerd'},
+  {id:'checkout121',label:'121 Checkout',sub:'Train je uitgooi'},
+  {id:'cricket',label:'Cricket',sub:'20–15 & Bull sluiten'}
 ];
 var DEFAULT_SEQ=[
   {type:'num',val:20,label:'20'},
@@ -1894,64 +1851,21 @@ function calcPlayerAvgStats(name){
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
-function showScreen(id,direction){
-  var content=document.getElementById('app-content');
-  var current=document.querySelector('.screen.active');
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
   var el=document.getElementById(id);
-  var animate=current&&current!==el&&(direction==='push'||direction==='pop'||direction==='tab')&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(animate){
-    var disp=(id==='screen-game')?'flex':'block';
-    el.style.position='absolute';el.style.top='0';el.style.left='0';el.style.right='0';
-    current.style.position='absolute';current.style.top='0';current.style.left='0';current.style.right='0';
-    content.style.overflow='hidden';
-    el.classList.add('active');el.style.display=disp;
-    if(direction==='tab'){
-      el.style.opacity='0';current.style.opacity='1';
-    } else if(direction==='pop'){
-      el.style.transform='translateX(-28%)';el.style.opacity='.7';current.style.transform='translateX(0)';current.style.opacity='1';
-    } else {
-      el.style.transform='translateX(100%)';current.style.transform='translateX(0)';
-    }
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        el.style.transition='transform .32s cubic-bezier(.32,.72,0,1),opacity .32s';
-        current.style.transition='transform .32s cubic-bezier(.32,.72,0,1),opacity .32s';
-        if(direction==='tab'){
-          el.style.opacity='1';current.style.opacity='0';
-        } else if(direction==='pop'){
-          el.style.transform='translateX(0)';el.style.opacity='1';current.style.transform='translateX(100%)';current.style.opacity='.7';
-        } else {
-          el.style.transform='translateX(-28%)';el.style.opacity='.7';current.style.transform='translateX(0)';current.style.opacity='1';
-        }
-      });
-    });
-    setTimeout(function(){
-      current.classList.remove('active');
-      ['position','top','left','right','transform','transition','opacity','display'].forEach(function(p){current.style[p]='';});
-      ['position','top','left','right','transform','transition','opacity'].forEach(function(p){el.style[p]='';});
-      content.style.overflow='';
-      content.scrollTop=0;
-    },340);
-  } else {
-    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
-    el.classList.add('active');
-    el.style.display=(id==='screen-game')?'flex':'block';
-    content.scrollTop=0;
-  }
-  var tabIds={'screen-home':'tab-home','screen-leaderboard':'tab-leaderboard','screen-stats':'tab-stats','screen-history':'tab-history'};
-  document.querySelectorAll('.tab-item').forEach(function(t){t.classList.remove('active')});
-  if(tabIds[id])document.getElementById(tabIds[id]).classList.add('active');
-  var tabBar=document.getElementById('tab-bar');
-  tabBar.style.display=tabIds[id]?'flex':'none';
+  el.classList.add('active');
+  el.style.display=(id==='screen-game')?'flex':'block';
+  document.getElementById('app-content').scrollTop=0;
   var titles={'screen-home':'Darts','screen-setup':'Nieuw spel','screen-game':state.gameType||'Spel',
     'screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It',
-    'screen-checkout121':'121 Checkout',
+    'screen-checkout121':'121 Checkout','screen-cricket':'Cricket',
     'screen-win':'Gewonnen!','screen-stats':'Statistieken',
     'screen-leaderboard':'Ranglijst','screen-history':'Geschiedenis',
     'screen-trn-setup':'Toernooi','screen-trn-overview':'Toernooi','screen-trn-standings':'Stand'};
   document.getElementById('header-title').textContent=titles[id]||'Darts';
   var hr=document.getElementById('header-right');hr.innerHTML='';
-  var inGame=['screen-game','screen-atc','screen-shanghai','screen-halveit','screen-checkout121'].indexOf(id)>=0;
+  var inGame=['screen-game','screen-atc','screen-shanghai','screen-halveit','screen-checkout121','screen-cricket'].indexOf(id)>=0;
   if(inGame){
     var undoBtn=document.createElement('button');undoBtn.className='btn btn-sm';undoBtn.textContent='↩';
     var endBtn=document.createElement('button');endBtn.className='btn btn-sm btn-danger';endBtn.textContent='Stop';
@@ -1961,12 +1875,13 @@ function showScreen(id,direction){
       else if(id==='screen-shanghai')shUndo();
       else if(id==='screen-halveit')hiUndo();
       else if(id==='screen-checkout121')co121Undo();
+      else if(id==='screen-cricket')cricketUndo();
     };
     endBtn.onclick=confirmEndGame;
     hr.appendChild(undoBtn);hr.appendChild(endBtn);
   } else if(['screen-trn-overview','screen-trn-standings'].indexOf(id)>=0){
     var homeBtn=document.createElement('button');homeBtn.className='btn btn-sm';homeBtn.textContent='Home';
-    homeBtn.onclick=function(){if(confirm('Toernooi verlaten?'))showScreen('screen-home','pop')};
+    homeBtn.onclick=function(){if(confirm('Toernooi verlaten?'))showScreen('screen-home')};
     hr.appendChild(homeBtn);
     if(id==='screen-trn-overview'&&(trn.format==='roundrobin'||(trn.format==='group'&&trn.phase==='group'))){
       var stBtn=document.createElement('button');stBtn.className='btn btn-sm btn-info';stBtn.textContent='Stand';
@@ -1975,12 +1890,12 @@ function showScreen(id,direction){
     }
     if(id==='screen-trn-standings'){
       var backBtn2=document.createElement('button');backBtn2.className='btn btn-sm';backBtn2.textContent='← Bracket';
-      backBtn2.onclick=function(){renderTrnOverview();showScreen('screen-trn-overview','pop')};
+      backBtn2.onclick=function(){renderTrnOverview();showScreen('screen-trn-overview')};
       hr.appendChild(backBtn2);
     }
   } else if(id!=='screen-home'){
     var backBtn=document.createElement('button');backBtn.className='btn btn-sm';backBtn.textContent='← Terug';
-    backBtn.onclick=function(){showScreen('screen-home','pop')};
+    backBtn.onclick=function(){showScreen('screen-home')};
     hr.appendChild(backBtn);
   }
   if(id==='screen-stats')renderStats();
@@ -2079,6 +1994,40 @@ function renderStartPickGrid(){
     el.appendChild(btn);
   });
 }
+// ── Vatican 50 cent coin faces ──
+var _COIN_KOP='<svg viewBox="0 0 56 56" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">'+
+  '<circle cx="28" cy="4.5" r="1.3" fill="#7A5C0A"/><circle cx="46" cy="12" r="1.3" fill="#7A5C0A"/><circle cx="52" cy="28" r="1.3" fill="#7A5C0A"/><circle cx="46" cy="44" r="1.3" fill="#7A5C0A"/><circle cx="28" cy="51.5" r="1.3" fill="#7A5C0A"/><circle cx="10" cy="44" r="1.3" fill="#7A5C0A"/><circle cx="4" cy="28" r="1.3" fill="#7A5C0A"/><circle cx="10" cy="12" r="1.3" fill="#7A5C0A"/>'+
+  '<ellipse cx="28" cy="9" rx="3" ry="1.8" fill="#7A5C0A"/><ellipse cx="28" cy="12.5" rx="4.5" ry="1.8" fill="#7A5C0A"/><ellipse cx="28" cy="16" rx="6.5" ry="2.5" fill="#7A5C0A"/>'+
+  '<line x1="28" y1="5" x2="28" y2="9" stroke="#7A5C0A" stroke-width="1.5"/><line x1="25.5" y1="7" x2="30.5" y2="7" stroke="#7A5C0A" stroke-width="1.5"/>'+
+  '<path d="M19,19 L19,31 Q19,38 28,42 Q37,38 37,31 L37,19 Z" fill="rgba(122,92,10,0.12)" stroke="#7A5C0A" stroke-width="1.5"/>'+
+  '<line x1="22" y1="20" x2="34" y2="32" stroke="#7A5C0A" stroke-width="1.5"/><line x1="34" y1="20" x2="22" y2="32" stroke="#7A5C0A" stroke-width="1.5"/>'+
+  '<circle cx="22" cy="20" r="2.2" fill="#D4A820" stroke="#7A5C0A" stroke-width="1"/><circle cx="34" cy="20" r="2.2" fill="#D4A820" stroke="#7A5C0A" stroke-width="1"/>'+
+  '<text x="28" y="53" text-anchor="middle" font-size="5" font-weight="900" fill="#5D4207" letter-spacing="2.5" font-family="sans-serif">KOP</text>'+
+  '</svg>';
+
+var _COIN_MUNT='<svg viewBox="0 0 56 56" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">'+
+  '<circle cx="28" cy="4.5" r="1.3" fill="#7A5C0A"/><circle cx="46" cy="12" r="1.3" fill="#7A5C0A"/><circle cx="52" cy="28" r="1.3" fill="#7A5C0A"/><circle cx="4" cy="28" r="1.3" fill="#7A5C0A"/><circle cx="10" cy="12" r="1.3" fill="#7A5C0A"/><circle cx="10" cy="44" r="1.3" fill="#7A5C0A"/>'+
+  '<path d="M8,19 Q10,13 15,16 Q17,11 20,14 Q22,10 25,13 L25,29 Q21,31 17,30 Q13,33 8,29 Z" fill="rgba(122,92,10,0.18)" stroke="#9A7020" stroke-width="0.8"/>'+
+  '<text x="39" y="34" text-anchor="middle" font-size="21" font-weight="900" fill="#5D4207" font-family="sans-serif">50</text>'+
+  '<text x="39" y="41.5" text-anchor="middle" font-size="5" font-weight="700" fill="#7A5C0A" letter-spacing="0.5" font-family="sans-serif">EURO</text>'+
+  '<text x="39" y="47.5" text-anchor="middle" font-size="5" font-weight="700" fill="#7A5C0A" letter-spacing="0.5" font-family="sans-serif">CENT</text>'+
+  '<text x="28" y="53" text-anchor="middle" font-size="5" font-weight="900" fill="#5D4207" letter-spacing="2" font-family="sans-serif">MUNT</text>'+
+  '</svg>';
+
+var _COIN_GOLD='linear-gradient(145deg,#C8961A,#F0C040,#C8961A)';
+var _COIN_GOLD_BORDER='2.5px solid #9A6E0A';
+var _COIN_SHADOW='0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.4)';
+
+function _applyCoinFace(el,side){
+  el.style.background=_COIN_GOLD;el.style.boxShadow=_COIN_SHADOW;
+  el.style.animation='none';el.style.transform='scaleX(1)';
+  el.innerHTML=side==='kop'?_COIN_KOP:_COIN_MUNT;
+}
+function _startCoinSpin(el){
+  el.innerHTML='';el.style.background='#B8940A';el.style.boxShadow='0 3px 10px rgba(0,0,0,.5)';
+  el.style.animation='coinSpin .2s linear infinite';
+}
+
 function flipCoin(){
   if(setupPlayers.length>=3){spinWheel();return;}
   if(_coinFlipping||setupPlayers.length<2)return;
@@ -2087,21 +2036,13 @@ function flipCoin(){
   var coin=document.getElementById('coin-emoji');
   if(result)result.textContent='';
   var winner=Math.floor(Math.random()*setupPlayers.length);
-  var winColor=winner%2===0?'#e53e3e':'#0677FE';
-  if(coin){
-    coin.textContent='';
-    coin.style.animation='coinSpin .25s linear infinite';
-    coin.style.background='#888';
-    coin.style.transform='';
-  }
+  // Kop = player 0, Munt = player 1
+  var side=winner===0?'kop':'munt';
+  if(coin)_startCoinSpin(coin);
   setTimeout(function(){
-    if(coin){
-      coin.style.animation='none';
-      coin.style.background=winColor;
-      coin.style.transform='scaleX(1)';
-      coin.textContent=winner%2===0?'R':'B';
-    }
+    if(coin)_applyCoinFace(coin,side);
     setupStartPlayer=winner;
+    var winColor=winner===0?'#e53e3e':'#0677FE';
     if(result)result.innerHTML='<strong style="color:'+winColor+'">'+setupPlayers[winner]+'</strong> begint!';
     _coinFlipping=false;
   },1400);
@@ -2111,7 +2052,6 @@ function renderStartPlayerCard(){
   if(!card)return;
   var show=setupPlayers.length>=2;
   card.style.display=show?'block':'none';
-  var lbl=document.getElementById('start-player-section-label');if(lbl)lbl.style.display=show?'block':'none';
   if(setupStartPlayer>=setupPlayers.length)setupStartPlayer=0;
   if(show&&startMode==='pick')renderStartPickGrid();
   var useWheel=setupPlayers.length>=3;
@@ -2169,56 +2109,19 @@ function renderGameBtns(){
   GAMES.forEach(function(g){
     var btn=document.createElement('button');
     btn.className='game-btn'+(g.id===selectedGame?' selected':'');
-    btn.innerHTML='<div class="game-btn-icon" style="background:rgba('+g.color+',.16);color:rgb('+g.color+')">'+g.icon+'</div><div class="name">'+g.label+'</div><div class="sub">'+g.sub+'</div>';
+    btn.innerHTML='<div class="name">'+g.label+'</div><div class="sub">'+g.sub+'</div>';
     btn.onclick=function(){selectGame(g.id)};grid.appendChild(btn);
   });
 }
-function initSegmentThumbs(){
-  document.querySelectorAll('.segment').forEach(function(seg){
-    if(seg._thumbInit)return;seg._thumbInit=true;
-    var thumb=document.createElement('div');thumb.className='segment-thumb';seg.insertBefore(thumb,seg.firstChild);
-    var position=function(){
-      var active=seg.querySelector('button.active');
-      if(!active){thumb.style.opacity='0';return}
-      thumb.style.opacity='1';
-      thumb.style.left=active.offsetLeft+'px';thumb.style.width=active.offsetWidth+'px';
-    };
-    seg._positionThumb=position;
-    new MutationObserver(position).observe(seg,{attributes:true,attributeFilter:['class'],subtree:true});
-    window.addEventListener('resize',position);
-    requestAnimationFrame(position);
-  });
-}
-setInterval(function(){document.querySelectorAll('.segment').forEach(function(s){if(!s._thumbInit)initSegmentThumbs()})},400);
 function selectGame(g){
   selectedGame=g;
-  showOptPanel('gt-opts-x01',g==='501'||g==='301');
-  showOptPanel('gt-opts-halveit',g==='halveit');
-  showOptPanel('gt-opts-co121',g==='checkout121');
-  showOptPanel('gt-opts-atc',g==='atc');
-  showOptPanel('gt-opts-shanghai',g==='shanghai7'||g==='shanghai20');
+  document.getElementById('gt-opts-x01').style.display=(g==='501'||g==='301')?'block':'none';
+  document.getElementById('gt-opts-halveit').style.display=(g==='halveit')?'block':'none';
+  document.getElementById('gt-opts-co121').style.display=(g==='checkout121')?'block':'none';
+  document.getElementById('gt-opts-atc').style.display=(g==='atc')?'block':'none';
+  document.getElementById('gt-opts-shanghai').style.display=(g==='shanghai7'||g==='shanghai20')?'block':'none';
   document.getElementById('bot-card').style.display=(g==='501'||g==='301')?'block':'none';
-  document.getElementById('bot-section-label').style.display=(g==='501'||g==='301')?'block':'none';
   renderGameBtns();
-}
-function showOptPanel(id,show){
-  var el=document.getElementById(id);
-  if(!el)return;
-  if(show){
-    el.style.display='block';el.style.overflow='hidden';el.style.maxHeight='0px';el.style.opacity='0';
-    requestAnimationFrame(function(){
-      el.style.transition='max-height .28s ease,opacity .22s ease';
-      el.style.maxHeight=el.scrollHeight+'px';el.style.opacity='1';
-    });
-    setTimeout(function(){el.style.maxHeight='';el.style.overflow='';},300);
-  } else if(el.style.display!=='none'){
-    el.style.overflow='hidden';el.style.maxHeight=el.scrollHeight+'px';el.style.opacity='1';
-    requestAnimationFrame(function(){
-      el.style.transition='max-height .22s ease,opacity .18s ease';
-      el.style.maxHeight='0px';el.style.opacity='0';
-    });
-    setTimeout(function(){el.style.display='none';el.style.maxHeight='';el.style.overflow='';},230);
-  }
 }
 function setAtcMode(m){
   atcMode=m;
@@ -2326,9 +2229,8 @@ function renderSetupPlayers(){
   var el=document.getElementById('player-list');el.innerHTML='';
   setupPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.className='setup-player-row';
-    var initial=(n.trim()[0]||'?').toUpperCase();
-    row.innerHTML='<span class="setup-player-avatar">'+initial+'</span><span style="font-size:15px;font-weight:600;flex:1">'+n+'</span><button class="btn btn-xs btn-danger" onclick="removePlayer('+i+')">✕</button>';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)';
+    row.innerHTML='<span style="font-size:14px;font-weight:600">'+n+'</span><button class="btn btn-xs btn-danger" onclick="removePlayer('+i+')">✕</button>';
     el.appendChild(row);
   });
   renderStartPlayerCard();
@@ -2802,7 +2704,7 @@ function showTrnStartModal(match,onWin){
   var go=document.getElementById('trn-start-go');
   if(p1btn){p1btn.textContent=match.p1;p1btn.style.borderColor='transparent';}
   if(p2btn){p2btn.textContent=match.p2;p2btn.style.borderColor='transparent';}
-  if(coin){coin.textContent='?';coin.style.background='#888';coin.style.animation='';}
+  if(coin){coin.innerHTML='?';coin.style.background=_COIN_GOLD||'linear-gradient(145deg,#C8961A,#F0C040,#C8961A)';coin.style.animation='';}
   if(res)res.textContent='';
   if(go){go.style.opacity='.4';go.style.pointerEvents='none';}
   document.getElementById('trn-start-modal').style.display='flex';
@@ -2818,7 +2720,7 @@ function trnChooseStart(idx){
   var name=idx===0?_trnStartMatch.p1:_trnStartMatch.p2;
   if(p1btn)p1btn.style.borderColor=idx===0?'#fff':'transparent';
   if(p2btn)p2btn.style.borderColor=idx===1?'#fff':'transparent';
-  if(coin){coin.textContent=idx===0?'R':'B';coin.style.background=col;coin.style.animation='';}
+  if(coin){_applyCoinFace(coin,idx===0?'kop':'munt');}
   if(res)res.innerHTML='<strong style="color:'+col+'">'+name+'</strong> begint!';
   if(go){go.style.opacity='1';go.style.pointerEvents='auto';}
 }
@@ -2830,7 +2732,7 @@ function trnFlipCoin(){
   var go=document.getElementById('trn-start-go');
   if(res)res.textContent='';
   if(go){go.disabled=true;go.style.opacity='.4';}
-  if(coin){coin.textContent='';coin.style.animation='coinSpin .25s linear infinite';coin.style.background='#888';}
+  if(coin){_startCoinSpin(coin);}
   var winner=Math.floor(Math.random()*2);
   setTimeout(function(){
     _trnCoinFlipping=false;
@@ -2902,6 +2804,8 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     setTimeout(saveRematchConfig,0);renderHalveIt();showScreen('screen-halveit');
   } else if(gameType==='checkout121'){
     launchCo121(players);setTimeout(saveRematchConfig,0);
+  } else if(gameType==='cricket'){
+    launchCricket(players);setTimeout(saveRematchConfig,0);
   }
 }
 
@@ -3985,7 +3889,7 @@ function confirmEndGame(){
     // Save stats for any active game
     if(state.gameType==='checkout121')saveCo121Stats();
     if(state.trnMode){state.trnMode=false;state.trnMatchCallback=null;renderTrnOverview();showScreen('screen-trn-overview');}
-    else showScreen('screen-home','pop');
+    else showScreen('screen-home');
   };
 }
 
@@ -4074,6 +3978,167 @@ function atcUndo(){
   if(!state.atcHistory.length)return;
   var last=state.atcHistory.pop();state.currentPlayer=last.player;state.atcDarts=last.darts;
   if(last.hit)state.atcTarget[last.player]=last.target;renderATC();
+}
+
+// ═══════════════════════════════════════════
+// GAME: CRICKET
+// ═══════════════════════════════════════════
+var CR_SEGS=[20,19,18,17,16,15,25];
+
+function launchCricket(players){
+  state.crSegs=CR_SEGS.slice();
+  state.crMarks=players.map(function(){return[0,0,0,0,0,0,0];});
+  state.crScores=players.map(function(){return 0;});
+  state.crDarts=0;state.crMult=1;
+  state.crHistory=[];
+  state.crDartCount=players.map(function(){return 0;});
+  renderCricket();showScreen('screen-cricket');
+}
+
+function crMarkStr(m){
+  if(m<=0)return'';if(m===1)return'/';if(m===2)return'X';return'⊙';
+}
+
+function renderCricket(){
+  var n=state.players.length;
+  var board=document.getElementById('cricket-board');board.innerHTML='';
+  var card=document.createElement('div');card.className='card';card.style.padding='10px 12px';
+
+  // Header: player names + scores
+  var hdrHtml='';
+  if(n===2){
+    hdrHtml='<div style="display:grid;grid-template-columns:1fr 44px 1fr;align-items:center;margin-bottom:8px">'+
+      '<div><div style="font-size:11px;font-weight:700;color:'+(state.currentPlayer===0?'var(--accent)':'var(--muted)')+'">'+state.players[0]+'</div>'+
+        '<div style="font-size:24px;font-weight:900;color:var(--text)">'+state.crScores[0]+'</div></div>'+
+      '<div></div>'+
+      '<div style="text-align:right"><div style="font-size:11px;font-weight:700;color:'+(state.currentPlayer===1?'var(--accent)':'var(--muted)')+'">'+state.players[1]+'</div>'+
+        '<div style="font-size:24px;font-weight:900;color:var(--text)">'+state.crScores[1]+'</div></div>'+
+    '</div>';
+  } else {
+    var cols='44px'+' 1fr'.repeat(n);
+    hdrHtml='<div style="display:grid;grid-template-columns:'+cols+';gap:4px;align-items:center;margin-bottom:8px"><div></div>';
+    state.players.forEach(function(name,i){
+      hdrHtml+='<div style="text-align:center"><div style="font-size:10px;font-weight:700;color:'+(i===state.currentPlayer?'var(--accent)':'var(--muted)')+'">'+name+'</div>'+
+        '<div style="font-size:18px;font-weight:900;color:var(--text)">'+state.crScores[i]+'</div></div>';
+    });
+    hdrHtml+='</div>';
+  }
+
+  // Segment rows
+  var segHtml='';
+  CR_SEGS.forEach(function(seg,si){
+    var lbl=seg===25?'Bull':String(seg);
+    var allClosed=state.crMarks.every(function(pm){return pm[si]>=3;});
+    if(n===2){
+      var m0=state.crMarks[0][si],m1=state.crMarks[1][si];
+      segHtml+='<div style="display:grid;grid-template-columns:1fr 44px 1fr;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--separator)">'+
+        '<div style="font-size:18px;font-weight:800;color:'+(allClosed?'var(--muted)':m0>=3?'var(--success)':'var(--text)')+'">'+crMarkStr(m0)+'</div>'+
+        '<div style="text-align:center;font-size:14px;font-weight:700;color:'+(allClosed?'var(--muted)':'var(--text)')+'">'+lbl+'</div>'+
+        '<div style="text-align:right;font-size:18px;font-weight:800;color:'+(allClosed?'var(--muted)':m1>=3?'var(--success)':'var(--text)')+'">'+crMarkStr(m1)+'</div>'+
+      '</div>';
+    } else {
+      var cols2='44px'+' 1fr'.repeat(n);
+      segHtml+='<div style="display:grid;grid-template-columns:'+cols2+';gap:4px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--separator)">'+
+        '<div style="text-align:center;font-size:13px;font-weight:700;color:'+(allClosed?'var(--muted)':'var(--text)')+'">'+lbl+'</div>';
+      state.crMarks.forEach(function(pm,i){
+        var m=pm[si];
+        segHtml+='<div style="text-align:center;font-size:18px;font-weight:800;color:'+(allClosed?'var(--muted)':m>=3?'var(--success)':'var(--text)')+'">'+crMarkStr(m)+'</div>';
+      });
+      segHtml+='</div>';
+    }
+  });
+
+  card.innerHTML=hdrHtml+segHtml;
+  board.appendChild(card);
+
+  // Turn info
+  document.getElementById('cricket-turn-name').textContent=state.players[state.currentPlayer];
+  document.getElementById('cricket-darts-left').textContent='Pijl '+(state.crDarts+1)+' van 3';
+
+  // Multiplier buttons
+  var multEl=document.getElementById('cricket-mult-btns');multEl.innerHTML='';
+  [1,2,3].forEach(function(m){
+    var b=document.createElement('button');
+    b.className='btn btn-sm'+(state.crMult===m?' btn-primary':'');
+    b.textContent=['×1','×2','×3'][m-1];
+    b.onclick=(function(mv){return function(){state.crMult=mv;renderCricket();};})(m);
+    multEl.appendChild(b);
+  });
+
+  // Segment buttons
+  var segEl=document.getElementById('cricket-seg-btns');segEl.innerHTML='';
+  CR_SEGS.forEach(function(seg,si){
+    var lbl=seg===25?'Bull':String(seg);
+    var m=state.crMarks[state.currentPlayer][si];
+    var b=document.createElement('button');
+    b.className='btn';
+    b.style.cssText='padding:14px 4px;font-size:15px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:2px';
+    if(m>=3){b.style.borderColor='var(--success)';b.style.color='var(--success)';}
+    b.innerHTML='<span>'+lbl+'</span>'+(m>0?'<span style="font-size:12px;color:'+(m>=3?'var(--success)':'var(--accent)')+'">'+crMarkStr(m)+'</span>':'');
+    b.onclick=(function(idx){return function(){cricketHit(idx);};})(si);
+    segEl.appendChild(b);
+  });
+}
+
+function cricketHit(segIdx){
+  if(state.crDarts>=3)return;
+  var pi=state.currentPlayer;var mult=state.crMult;
+  var prevMarks=state.crMarks[pi][segIdx];
+  var newRaw=prevMarks+mult;
+  state.crMarks[pi][segIdx]=Math.min(newRaw,3);
+
+  // Scoring: marks exceeding 3
+  var extra=newRaw-3;if(extra<0)extra=0;
+  var scoreAdded=0;
+  if(extra>0){
+    var anyOpen=state.players.some(function(_,i){return i!==pi&&state.crMarks[i][segIdx]<3;});
+    if(anyOpen){scoreAdded=CR_SEGS[segIdx]*extra;state.crScores[pi]+=scoreAdded;}
+  }
+
+  state.crHistory.push({pi:pi,seg:segIdx,prevMarks:prevMarks,scoreAdded:scoreAdded,dart:state.crDarts,mult:mult});
+  state.crDarts++;
+
+  var winner=cricketCheckWin();
+  if(winner>=0){
+    var tot=state.crDartCount.slice();tot[pi]+=state.crDarts;
+    state.players.forEach(function(name,i){
+      updatePlayerStat(name,'cricket',{won:i===winner,darts:tot[i],score:state.crScores[i]});
+    });
+    showWin(state.players[winner],'Cricket','Segmenten 15–20 & Bull gesloten!');return;
+  }
+  if(state.crDarts>=3)cricketEndTurn();else renderCricket();
+}
+
+function cricketMiss(){
+  if(state.crDarts>=3)return;
+  state.crHistory.push({pi:state.currentPlayer,seg:-1,prevMarks:0,scoreAdded:0,dart:state.crDarts,mult:state.crMult});
+  state.crDarts++;
+  if(state.crDarts>=3)cricketEndTurn();else renderCricket();
+}
+
+function cricketEndTurn(){
+  state.crDartCount[state.currentPlayer]=(state.crDartCount[state.currentPlayer]||0)+3;
+  state.crDarts=0;state.crMult=1;
+  state.currentPlayer=(state.currentPlayer+1)%state.players.length;
+  if(state.currentPlayer===state.firstPlayer)state.round++;
+  renderCricket();
+}
+
+function cricketUndo(){
+  if(!state.crHistory.length)return;
+  var last=state.crHistory.pop();
+  state.currentPlayer=last.pi;state.crDarts=last.dart;state.crMult=last.mult;
+  if(last.seg>=0){state.crMarks[last.pi][last.seg]=last.prevMarks;state.crScores[last.pi]-=last.scoreAdded;}
+  renderCricket();
+}
+
+function cricketCheckWin(){
+  for(var pi=0;pi<state.players.length;pi++){
+    if(!state.crMarks[pi].every(function(m){return m>=3;}))continue;
+    var myScore=state.crScores[pi];
+    if(state.players.every(function(_,i){return i===pi||state.crScores[i]<=myScore;}))return pi;
+  }
+  return -1;
 }
 
 // ═══════════════════════════════════════════
@@ -4585,7 +4650,7 @@ function renderStats(){
 
     // Collect all game types this player has played
     var allTypes=['alle'];
-    var typeLabels={'alle':'Alle','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501'};
+    var typeLabels={'alle':'Alle','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket'};
     (p.gameHistory||[]).forEach(function(g){if(allTypes.indexOf(g.gameType)<0)allTypes.push(g.gameType);});
 
     var activeFilter=statsGameFilter[name]||'alle';
@@ -4757,6 +4822,7 @@ function renderStats(){
       (activeFilter==='alle'?buildPersonalRecords(name)+buildAvgGraph(name)+buildDoubleStats(name):'')+
       avgBlock+
       otherBlock+
+      buildH2HBlock(filtered)+
       '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Recente wedstrijden</div>'+
       (histRows||'<div class="empty">Geen wedstrijden gevonden</div>');
     el.appendChild(card);
@@ -5293,6 +5359,41 @@ function renderHistory(){
 function selectHistoryPlayer(name){
   historySelectedPlayer=name;
   renderHistory();
+}
+
+// ═══════════════════════════════════════════
+// HEAD-TO-HEAD STATISTIEKEN
+// ═══════════════════════════════════════════
+function buildH2HBlock(filteredGames){
+  var h2h={};
+  filteredGames.forEach(function(g){
+    if(!g.opponents||!g.opponents.length)return;
+    g.opponents.forEach(function(opp){
+      if(!h2h[opp])h2h[opp]={played:0,won:0,totalAvg:0,avgCount:0};
+      h2h[opp].played++;
+      if(g.won)h2h[opp].won++;
+      if(g.detailedStats&&g.detailedStats.avg3>0){h2h[opp].totalAvg+=g.detailedStats.avg3;h2h[opp].avgCount++;}
+    });
+  });
+  var opps=Object.keys(h2h);
+  if(!opps.length)return'';
+
+  var rows=opps.map(function(opp){
+    var d=h2h[opp];
+    var losses=d.played-d.won;
+    var pct=Math.round(d.won/d.played*100);
+    var avgStr=d.avgCount>0?(Math.round(d.totalAvg/d.avgCount*10)/10)+'':'';
+    return'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--separator);gap:8px">'+
+      '<div style="flex:1;font-size:13px;font-weight:600;color:var(--text)">'+opp+'</div>'+
+      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--success)">'+d.won+'</div><div style="font-size:9px;color:var(--muted)">W</div></div>'+
+      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--danger)">'+losses+'</div><div style="font-size:9px;color:var(--muted)">L</div></div>'+
+      '<div style="text-align:center;min-width:40px"><div style="font-size:13px;font-weight:800;color:'+(pct>=50?'var(--success)':'var(--danger)')+'">'+pct+'%</div><div style="font-size:9px;color:var(--muted)">Win%</div></div>'+
+      (avgStr?'<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--accent)">'+avgStr+'</div><div style="font-size:9px;color:var(--muted)">Gem.</div></div>':'<div style="min-width:36px"></div>')+
+    '</div>';
+  }).join('');
+
+  return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Head-to-Head</div>'+
+    '<div style="background:var(--card);border-radius:var(--radius-sm);padding:2px 10px;margin-bottom:10px">'+rows+'</div>';
 }
 
 // ═══════════════════════════════════════════
