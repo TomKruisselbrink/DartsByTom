@@ -4888,15 +4888,44 @@ function hiUndo(){
 }
 function renderHiHistory(){
   var el=document.getElementById('hi-history');el.innerHTML='';
-  var recent=state.hiHistory.slice(-6).reverse();
-  if(!recent.length){el.innerHTML='<div class="empty">Nog geen rondes</div>';return;}
-  recent.forEach(function(h){
-    var row=document.createElement('div');row.className='history-row';
-    var name=state.players[h.player];var tgt=hiSeqLabel(state.hiSeq[h.round]);
-    if(h.halved)row.innerHTML='<span>'+name+' — '+tgt+'</span><span class="badge badge-danger">Gehalveerd → '+h.newScore+'</span>';
-    else row.innerHTML='<span>'+name+' — '+tgt+'</span><span class="badge badge-success">+'+h.pts+' → '+h.newScore+'</span>';
-    el.appendChild(row);
+  if(!state.hiHistory.length){el.innerHTML='<div class="empty">Nog geen rondes</div>';return;}
+  var nP=state.players.length;
+  // Solo: gewone lijst
+  if(nP===1){
+    var recent=state.hiHistory.slice(-8).reverse();
+    recent.forEach(function(h){
+      var row=document.createElement('div');row.className='history-row';
+      var tgt=hiSeqLabel(state.hiSeq[h.round]);
+      if(h.halved)row.innerHTML='<span>'+tgt+'</span><span class="badge badge-danger">Gehalveerd → '+h.newScore+'</span>';
+      else row.innerHTML='<span>'+tgt+'</span><span class="badge badge-success">+'+h.pts+' → '+h.newScore+'</span>';
+      el.appendChild(row);
+    });
+    return;
+  }
+  // Meerdere spelers: tabel (ronde per rij, speler per kolom)
+  var roundMap={};
+  state.hiHistory.forEach(function(h){
+    if(!roundMap[h.round])roundMap[h.round]={};
+    roundMap[h.round][h.player]=h;
   });
+  var rounds=Object.keys(roundMap).map(Number).sort(function(a,b){return b-a;});
+  var html='<table style="width:100%;border-collapse:collapse;font-size:12px">';
+  html+='<tr><th style="text-align:left;padding:3px 5px;color:var(--muted);font-size:10px;font-weight:700">Doel</th>';
+  state.players.forEach(function(p){html+='<th style="text-align:right;padding:3px 5px;color:var(--muted);font-size:10px;font-weight:700;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p+'</th>';});
+  html+='</tr>';
+  rounds.slice(0,8).forEach(function(r){
+    html+='<tr style="border-top:1px solid var(--separator)">';
+    html+='<td style="padding:4px 5px;font-weight:700;color:var(--text)">'+hiSeqLabel(state.hiSeq[r])+'</td>';
+    state.players.forEach(function(p,pi){
+      var e=roundMap[r][pi];
+      if(!e){html+='<td style="padding:4px 5px;text-align:right;color:var(--muted)">—</td>';}
+      else if(e.halved){html+='<td style="padding:4px 5px;text-align:right;color:var(--danger);font-weight:700">½→'+e.newScore+'</td>';}
+      else{html+='<td style="padding:4px 5px;text-align:right;font-weight:700;color:'+(e.pts>0?'var(--accent2)':'var(--muted)')+'">+'+(e.pts||0)+'</td>';}
+    });
+    html+='</tr>';
+  });
+  html+='</table>';
+  el.innerHTML=html;
 }
 
 // ═══════════════════════════════════════════
@@ -6184,6 +6213,94 @@ function _updateFsBtn(){
 }
 document.addEventListener('fullscreenchange',_updateFsBtn);
 document.addEventListener('webkitfullscreenchange',_updateFsBtn);
+
+// ─── Autodarts Bridge ────────────────────────────────────────────────────────
+(function(){
+  var BRIDGE_PORT = 8079;
+  var _ws = null;
+  var _indicator = null;
+  var _reconnectTimer = null;
+  var _lastTurnDone = 0; // debounce: ignore duplicate turn-done within 2s
+
+  function createIndicator(){
+    var el = document.createElement('div');
+    el.id = 'autodarts-indicator';
+    el.style.cssText = [
+      'position:fixed','bottom:12px','left:12px','z-index:9999',
+      'display:flex','align-items:center','gap:6px',
+      'background:var(--card)','border:1px solid var(--border)',
+      'border-radius:20px','padding:5px 10px 5px 8px',
+      'font-size:11px','color:var(--muted)','pointer-events:none',
+      'transition:opacity .3s'
+    ].join(';');
+    el.innerHTML = '<span id="ad-dot" style="width:8px;height:8px;border-radius:50%;background:#888;display:inline-block;flex-shrink:0"></span>'
+                 + '<span id="ad-label">Autodarts</span>';
+    document.body.appendChild(el);
+    return el;
+  }
+
+  function setStatus(color, label){
+    if(!_indicator) _indicator = createIndicator();
+    document.getElementById('ad-dot').style.background = color;
+    document.getElementById('ad-label').textContent = label;
+  }
+
+  function connect(){
+    if(_reconnectTimer){ clearTimeout(_reconnectTimer); _reconnectTimer=null; }
+    var host = window.location.hostname || '192.168.178.236';
+    var url = 'ws://' + host + ':' + BRIDGE_PORT;
+    setStatus('#888','Autodarts verbinden…');
+
+    _ws = new WebSocket(url);
+
+    _ws.onopen = function(){
+      setStatus('#4cd964','Autodarts ✓');
+      console.log('[Autodarts] Bridge verbonden op', url);
+    };
+
+    _ws.onmessage = function(e){
+      var msg;
+      try{ msg = JSON.parse(e.data); }catch(){ return; }
+
+      if(msg.event === 'dart-thrown'){
+        // Individuele dart gegooid — toon even de score
+        var seg = msg.dart && msg.dart.segment;
+        if(seg) console.log('[Autodarts] Dart ' + msg.numThrows + ': ' + seg.name + ' = ' + msg.dart.score);
+      }
+
+      if(msg.event === 'turn-done'){
+        var now = Date.now();
+        if(now - _lastTurnDone < 2000) return; // debounce
+        _lastTurnDone = now;
+
+        var score = msg.totalScore;
+        console.log('[Autodarts] Beurt klaar, score:', score);
+
+        // Alleen in 501/301 modus en als het spel actief is
+        if(typeof state !== 'undefined'
+           && document.getElementById('screen-game').classList.contains('active')
+           && (state.gameType === '501' || state.gameType === '301')
+           && typeof quickScore === 'function'){
+          quickScore(score);
+        }
+      }
+    };
+
+    _ws.onerror = function(){
+      setStatus('#ff3b30','Autodarts ✗');
+    };
+
+    _ws.onclose = function(){
+      setStatus('#888','Autodarts…');
+      _ws = null;
+      _reconnectTimer = setTimeout(connect, 4000);
+    };
+  }
+
+  // Start na 1 seconde zodat de app volledig geladen is
+  setTimeout(connect, 1000);
+})();
+// ─── Einde Autodarts Bridge ──────────────────────────────────────────────────
 </script>
 </body>
 </html>
