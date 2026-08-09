@@ -1,4 +1,4 @@
-const CACHE = 'darts-v91-20260809';
+const CACHE = 'darts-v92-20260809';
 const FILES = ['/DartsByTom/', '/DartsByTom/index.html', '/DartsByTom/manifest.json'];
 
 self.addEventListener('install', function(e) {

@@ -4918,8 +4918,8 @@ function renderHiHistory(){
     html+='<td style="padding:4px 5px;font-weight:700;color:var(--text)">'+hiSeqLabel(state.hiSeq[r])+'</td>';
     state.players.forEach(function(p,pi){
       var e=roundMap[r][pi];
-      if(!e){html+='<td style="padding:4px 5px;text-align:right;color:var(--muted)">—</td>';}
-      else if(e.halved){html+='<td style="padding:4px 5px;text-align:right;color:var(--danger);font-weight:700">½→'+e.newScore+'</td>';}
+      if(!e){html+='<td style="padding:4px 5px;text-align:right;color:var(--muted)">-</td>';}
+      else if(e.halved){html+='<td style="padding:4px 5px;text-align:right;color:var(--danger);font-weight:700">x2 '+e.newScore+'</td>';}
       else{html+='<td style="padding:4px 5px;text-align:right;font-weight:700;color:'+(e.pts>0?'var(--accent2)':'var(--muted)')+'">+'+(e.pts||0)+'</td>';}
     });
     html+='</tr>';
@@ -6260,7 +6260,7 @@ document.addEventListener('webkitfullscreenchange',_updateFsBtn);
 
     _ws.onmessage = function(e){
       var msg;
-      try{ msg = JSON.parse(e.data); }catch(){ return; }
+      try{ msg = JSON.parse(e.data); }catch(e2){ return; }
 
       if(msg.event === 'dart-thrown'){
         // Individuele dart gegooid — toon even de score
