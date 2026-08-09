@@ -273,24 +273,19 @@ select{
 /* ─── SEGMENT CONTROL ─── */
 .segment{
   display:flex;
-  background:rgba(120,120,128,.12);
-  border:none;
-  border-radius:9px;
-  overflow:visible;
-  padding:2px;
-  gap:0;
+  gap:8px;
 }
 .segment button{
   flex:1;
-  background:transparent !important;
-  border:none !important;
-  border-radius:7px !important;
-  padding:7px 4px !important;
-  font-size:13px !important;
-  font-weight:500;
-  color:var(--muted) !important;
+  background:var(--surface) !important;
+  border:1.5px solid var(--border) !important;
+  border-radius:14px !important;
+  padding:12px 6px !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  color:var(--text) !important;
   cursor:pointer;
-  transition:background .12s,color .12s !important;
+  transition:all .15s !important;
   touch-action:manipulation;
   letter-spacing:0 !important;
   text-transform:none !important;
@@ -298,12 +293,12 @@ select{
   transform:none !important;
 }
 .segment button.active{
-  background:var(--surface) !important;
-  color:var(--text) !important;
-  box-shadow:0 1px 3px rgba(0,0,0,.2),0 1px 2px rgba(0,0,0,.12) !important;
-  font-weight:600;
+  background:var(--accent) !important;
+  color:#fff !important;
+  border-color:var(--accent) !important;
+  box-shadow:0 4px 14px rgba(181,80,47,.35) !important;
 }
-.segment button:hover:not(.active){color:var(--text) !important}
+.segment button:active{transform:scale(.97) !important}
 
 /* ─── GAME GRID ─── */
 .game-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -1115,8 +1110,21 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <div class="setup-card-title" id="setup-rules-title">Spelregels</div>
         <div class="setup-card-sub" id="setup-rules-sub">Uitgooi, format en aantal legs</div>
 
-        <!-- x01 opties (501/301) -->
+        <!-- x01 opties -->
         <div id="gt-opts-x01" style="display:none">
+          <div class="card" style="margin-bottom:12px">
+            <div class="label">Startscore</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+              <div class="segment">
+                <button class="active" id="x01-score-501" onclick="setX01Score(501)">501</button>
+                <button id="x01-score-301" onclick="setX01Score(301)">301</button>
+                <button id="x01-score-custom" onclick="setX01ScoreCustom()">Eigen</button>
+              </div>
+              <input type="number" id="x01-score-custom-val" min="101" max="9999" value="1001"
+                style="display:none;width:80px;font-size:14px;font-weight:700;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text)"
+                oninput="x01CustomScore=parseInt(this.value)||1001">
+            </div>
+          </div>
           <div class="card" style="margin-bottom:12px">
             <div class="label">Uitgooi</div>
             <div class="segment" style="margin-bottom:14px">
@@ -1706,8 +1714,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 // DATA & STATE
 // ═══════════════════════════════════════════
 var GAMES=[
-  {id:'501',label:'501',sub:'Double/Straight out'},
-  {id:'301',label:'301',sub:'Double/Straight out'},
+  {id:'x01',label:'X01',sub:'501 · 301 · eigen getal'},
   {id:'atc',label:'Around the Clock',sub:'Raak 1 t/m 20'},
   {id:'shanghai7',label:'Shanghai 1–7',sub:'7 rondes'},
   {id:'shanghai20',label:'Shanghai 1–20',sub:'20 rondes'},
@@ -1750,7 +1757,9 @@ function generateRandomHiSeq(length){
   return pool.slice(0,Math.min(length,pool.length));
 }
 var setupPlayers=[];
-var selectedGame='501';
+var selectedGame='x01';
+var x01StartScore=501;
+var x01CustomScore=1001;
 var doubleOut=true;
 var matchFormat='firstto'; // 'firstto' or 'bestof'
 var matchN=2;             // legs to win/play
@@ -2103,7 +2112,9 @@ function showScreen(id){
 // ═══════════════════════════════════════════
 function quickStart(gameId){
   showScreen('screen-setup');  // calls renderSetup() → goToSetupCard(0)
-  selectGame(gameId);          // override game + renderGameBtns
+  if(gameId==='501'){selectGame('x01');setX01Score(501);}
+  else if(gameId==='301'){selectGame('x01');setX01Score(301);}
+  else selectGame(gameId);
   goToSetupCard(1);            // skip card 1 (speltype), jump to spelregels
 }
 
@@ -2288,7 +2299,8 @@ function _updateOptiesEmpty(){
 }
 
 function renderSetup(){
-  selectedGame='501';doubleOut=true;setupPlayers=[];
+  selectedGame='x01';doubleOut=true;setupPlayers=[];
+  x01StartScore=501;x01CustomScore=1001;
   matchFormat='firstto';matchN=2;matchSets=1;
   setupStartPlayer=0;startMode='first';
   botEnabled=false;botLevelMode='auto';botManualLevel='medium';
@@ -2298,7 +2310,8 @@ function renderSetup(){
     var last=JSON.parse(localStorage.getItem('darts_last_players')||'[]');
     if(last.length)setupPlayers=last.slice();
   }catch(e){}
-  var lastGame=localStorage.getItem('darts_last_game')||'501';
+  var lastGame=localStorage.getItem('darts_last_game')||'x01';
+  if(lastGame==='501'||lastGame==='301')lastGame='x01'; // migrate old saves
   selectedGame=lastGame;
   renderSetupPlayers();renderKnownNames('#known-names');renderSeqEditor();
   selectGame(selectedGame); // syncs all card-2 visibility + bot + labels
@@ -2315,6 +2328,7 @@ function renderSetup(){
   document.getElementById('player-error').textContent='';
   document.getElementById('dout-yes').className='active';
   document.getElementById('dout-no').className='';
+  setX01Score(501);
   document.getElementById('fmt-firstto').className='active';
   document.getElementById('fmt-bestof').className='';
   document.getElementById('fmt-label-n').textContent='First to (legs):';
@@ -2332,6 +2346,7 @@ function renderGameBtns(){
   });
 }
 var _RULES_LABELS={
+  'x01':['Spelregels','Startscore, uitgooi, format en aantal legs'],
   '501':['Spelregels','Uitgooi, format en aantal legs'],
   '301':['Spelregels','Uitgooi, format en aantal legs'],
   'halveit':['Doelvolgorde','Stel de volgorde van doelen in'],
@@ -2343,7 +2358,7 @@ var _RULES_LABELS={
 };
 function selectGame(g){
   selectedGame=g;
-  var isX01=(g==='501'||g==='301');
+  var isX01=(g==='x01'||g==='501'||g==='301');
   var hasOpts=isX01||g==='halveit'||g==='checkout121'||g==='atc'||g==='shanghai7'||g==='shanghai20';
   document.getElementById('gt-opts-x01').style.display=isX01?'block':'none';
   document.getElementById('gt-opts-halveit').style.display=(g==='halveit')?'block':'none';
@@ -2385,6 +2400,24 @@ function setMatchN(n){
 function setMatchSets(n){
   matchSets=n;
   [1,2,3].forEach(function(v){var el=document.getElementById('fmt-s'+v);if(el)el.className='setup-big-num'+(v===n?' active':'')});
+}
+function setX01Score(v){
+  x01StartScore=v;
+  ['501','301','custom'].forEach(function(k){
+    var el=document.getElementById('x01-score-'+k);
+    if(el)el.className=(k===(v===501?'501':v===301?'301':'custom')?'active':'');
+  });
+  var inp=document.getElementById('x01-score-custom-val');
+  if(inp)inp.style.display='none';
+}
+function setX01ScoreCustom(){
+  x01StartScore=null;
+  ['501','301','custom'].forEach(function(k){
+    var el=document.getElementById('x01-score-'+k);
+    if(el)el.className=(k==='custom'?'active':'');
+  });
+  var inp=document.getElementById('x01-score-custom-val');
+  if(inp){inp.style.display='block';inp.focus();}
 }
 function setDoubleOut(v){
   doubleOut=v;
@@ -2560,7 +2593,7 @@ function startGame(){
 
   // Add bot if enabled and game is 501/301
   var players=setupPlayers.slice();
-  if(botEnabled&&(selectedGame==='501'||selectedGame==='301')){
+  if(botEnabled&&(selectedGame==='x01'||selectedGame==='501'||selectedGame==='301')){
     var bname=document.getElementById('bot-name').value.trim()||'Bot';
     state.botPlayerIndex=players.length;
     players.push(bname);
@@ -2568,7 +2601,11 @@ function startGame(){
     state.botPlayerIndex=-1;
   }
 
-  launchGame(selectedGame,players,doubleOut,matchFormat,matchN,matchSets,undefined,setupStartPlayer);
+  var _x01Score=undefined;
+  if(selectedGame==='x01'){
+    _x01Score=x01StartScore!==null?x01StartScore:(parseInt((document.getElementById('x01-score-custom-val')||{}).value)||x01CustomScore);
+  }
+  launchGame(selectedGame,players,doubleOut,matchFormat,matchN,matchSets,_x01Score,setupStartPlayer);
 }
 
 // ═══════════════════════════════════════════
@@ -3093,8 +3130,8 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
   state.currentSet=1;state.currentLeg=1;
   state.legsInSet=players.map(function(){return 0});
 
-  if(gameType==='501'||gameType==='301'){
-    var start=startScore||(gameType==='501'?501:301);
+  if(gameType==='x01'||gameType==='501'||gameType==='301'){
+    var start=startScore||(gameType==='301'?301:501);
     state.scores=players.map(function(){return start});
     state.x01Start=start;  // remember for leg resets
     state.history=[];
@@ -4170,7 +4207,7 @@ function finishEndGame501(winnerName){
     else sub='Klaar in ronde '+state.round;
     showWin(winnerName,sub,'');
   } else {
-    var start=state.x01Start||(state.gameType==='501'?501:301);
+    var start=state.x01Start||501;
     state.scores=state.players.map(function(){return start});
     state.history=[];state.round=1;
     state.dartCount=state.players.map(function(){return 0});
@@ -4699,8 +4736,19 @@ function renderHiInputArea(item){
     var phase=state.hiColorPhase||'number';
     var selNum=state.hiColorSelectedNum;
     // Color stroke / bg helpers
-    var cStroke={creme:'#F5F2EB',zwart:'#999',rood:'#D9232D',groen:'#1E7E34'};
-    var cBg={creme:'rgba(245,242,235,.12)',zwart:'rgba(100,100,100,.14)',rood:'rgba(217,35,45,.12)',groen:'rgba(30,126,52,.12)'};
+    var _dark=hiIsDark();
+    var cStroke={
+      creme:_dark?'#F5F2EB':'#8B7B5E',
+      zwart:_dark?'#aaa':'#444',
+      rood:'#D9232D',
+      groen:'#1E7E34'
+    };
+    var cBg={
+      creme:_dark?'rgba(245,242,235,.12)':'rgba(160,140,100,.1)',
+      zwart:_dark?'rgba(100,100,100,.14)':'rgba(60,60,60,.08)',
+      rood:'rgba(217,35,45,.12)',
+      groen:'rgba(30,126,52,.12)'
+    };
     var cLbl={creme:'Crème',zwart:'Zwart',rood:'Rood',groen:'Groen'};
     // Dart indicator boxes
     var dartInd=[0,1,2].map(function(i){
@@ -4740,10 +4788,12 @@ function renderHiInputArea(item){
         nums.map(function(n){
           var pos=HI_BOARD_ORDER.indexOf(n);
           var isEvenPos=(pos%2===0);
-          // Even-pos = black single + red D/T → show in red; odd-pos = cream single + green D/T → show in cream
+          // Even-pos = black single + red D/T → red; odd-pos = cream single + green D/T → cream (adapted per theme)
           var btnStyle=isEvenPos
             ?'padding:8px 2px;border-radius:8px;border:1px solid #D9232D;background:rgba(217,35,45,.08);font-size:18px;font-weight:900;color:#D9232D;cursor:pointer'
-            :'padding:8px 2px;border-radius:8px;border:1px solid rgba(245,242,235,.35);background:rgba(245,242,235,.06);font-size:18px;font-weight:900;color:#F5F2EB;cursor:pointer';
+            :_dark
+              ?'padding:8px 2px;border-radius:8px;border:1px solid rgba(245,242,235,.35);background:rgba(245,242,235,.06);font-size:18px;font-weight:900;color:#F5F2EB;cursor:pointer'
+              :'padding:8px 2px;border-radius:8px;border:1px solid rgba(140,120,80,.45);background:rgba(160,140,100,.08);font-size:18px;font-weight:900;color:#8B7B5E;cursor:pointer';
           return '<button onclick="hiSegSelectNum('+n+')" style="'+btnStyle+'">'+n+'</button>';
         }).join('')+
         '</div>'+
@@ -4813,6 +4863,12 @@ function hiAddPts(pts){
 
 // ─── Halve It segment-grid helpers ───────────────────────────────────────────
 var HI_BOARD_ORDER=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
+function hiIsDark(){
+  var t=document.documentElement.getAttribute('data-theme');
+  if(t==='dark')return true;
+  if(t==='light')return false;
+  return window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
+}
 function hiSegColor(number,multiplier){
   // Even-pos on real board = black single + red D/T (20,18,13,10,2,3,7,8,14,12)
   // Odd-pos on real board  = cream single + green D/T (1,4,6,15,17,19,16,11,9,5)
@@ -5021,7 +5077,7 @@ function renderStats(){
 
     // Collect all game types this player has played
     var allTypes=['alle'];
-    var typeLabels={'alle':'Alle','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket'};
+    var typeLabels={'alle':'Alle','x01':'X01','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket'};
     (p.gameHistory||[]).forEach(function(g){if(allTypes.indexOf(g.gameType)<0)allTypes.push(g.gameType);});
 
     var activeFilter=statsGameFilter[name]||'alle';
@@ -5082,7 +5138,7 @@ function renderStats(){
 
     // x01 avg block — only when filter is 501, 301, or alle
     var avgBlock='';
-    if(activeFilter==='alle'||activeFilter==='501'||activeFilter==='301'){
+    if(activeFilter==='alle'||activeFilter==='x01'||activeFilter==='501'||activeFilter==='301'){
       var avg=calcPlayerAvgStats(name);
       if(avg){
         var coPctStr=avg.checkoutPct!==null?avg.checkoutPct+'%':'—';
@@ -6459,7 +6515,7 @@ else initSettings();
         // Alleen in 501/301 modus en als het spel actief is
         if(typeof state !== 'undefined'
            && document.getElementById('screen-game').classList.contains('active')
-           && (state.gameType === '501' || state.gameType === '301')
+           && (state.gameType === 'x01' || state.gameType === '501' || state.gameType === '301')
            && typeof quickScore === 'function'){
           quickScore(score);
         }
