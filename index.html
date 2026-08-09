@@ -53,7 +53,8 @@
 
 /* ─── ANIMATIONS ─── */
 @keyframes scoreFlip{0%{transform:translateY(-8px);opacity:0}100%{transform:translateY(0);opacity:1}}
-@keyframes scorePulse{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes scorePulse{0%{transform:scale(1)}40%{transform:scale(1.18) rotate(-2deg)}100%{transform:scale(1)}}
+@keyframes winPopIn{0%{transform:scale(0) rotate(-15deg);opacity:0}60%{transform:scale(1.15) rotate(4deg);opacity:1}80%{transform:scale(0.93) rotate(-2deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
 @keyframes bustShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes dartThrow{0%{transform:translateX(30px);opacity:0}60%{transform:translateX(-3px);opacity:1}100%{transform:translateX(0);opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -185,6 +186,7 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
   border-color:rgba(157,191,158,.2);
 }
 .btn-sm{padding:8px 14px;font-size:13px}
+.btn.active{background:rgba(181,80,47,.12);color:var(--accent);border-color:rgba(181,80,47,.3)}
 .btn-full{width:100%}
 .btn-xs{padding:5px 10px;font-size:12px}
 .btn-icon{background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px}
@@ -223,7 +225,7 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
 /* ─── SETUP SWIPE CARDS ─── */
 #screen-setup.active{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden;}
 #app-content:has(#screen-setup.active){padding:0;overflow:hidden;}
-.setup-swipe-header{padding:16px 20px 0;flex-shrink:0;}
+.setup-swipe-header{padding:16px 20px 0;flex-shrink:0;text-align:center;}
 .setup-swipe-header h2{margin-bottom:10px;}
 .setup-dots-row{display:flex;gap:5px;justify-content:center;padding-bottom:14px;}
 .setup-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .25s ease;}
@@ -501,7 +503,7 @@ select{
   border-radius:14px;
   padding:18px 18px;
   cursor:pointer;
-  text-align:left;
+  text-align:center;
   touch-action:manipulation;
   transition:transform .15s,background .15s;
   box-shadow:var(--shadow);
@@ -1029,6 +1031,12 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <button class="seg-btn" data-theme-val="dark" onclick="applyTheme('dark')" id="set-lbl-dark">Donker</button>
     </div>
   </div>
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <label for="sound-enabled" style="font-size:14px;font-weight:700;color:var(--text);cursor:pointer" id="set-lbl-sound">Geluid</label>
+      <input type="checkbox" id="sound-enabled" class="ios-toggle" checked onchange="setSoundEnabled(this.checked)">
+    </div>
+  </div>
   <div class="card">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px" id="set-lbl-lang">Taal</div>
     <div style="display:flex;gap:8px" id="lang-seg">
@@ -1046,7 +1054,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- LEADERBOARD -->
 <div class="screen" id="screen-leaderboard">
-  <h2 style="margin-bottom:8px;display:flex;align-items:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</h2>
+  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
+  <h2 style="margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</h2>
   <!-- Tab groups -->
   <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">501 / 301</div>
   <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
@@ -1069,7 +1078,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- WEDSTRIJDGESCHIEDENIS -->
 <div class="screen" id="screen-history">
-  <h2 style="margin-bottom:12px;display:flex;align-items:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Wedstrijdgeschiedenis</h2>
+  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
+  <h2 style="margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Wedstrijdgeschiedenis</h2>
   <div id="history-content"></div>
 </div>
 
@@ -1096,7 +1106,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
           <div class="game-grid" id="game-btn-grid"></div>
         </div>
         <div class="setup-card-nav">
-          <button class="setup-nav-arrow" disabled>← Vorige</button>
+          <button class="setup-nav-arrow" onclick="showScreen('screen-home')">← Home</button>
           <span class="setup-nav-counter">1 / 4 — Speltype</span>
           <button class="setup-nav-arrow" onclick="goToSetupCard(1)">Volgende →</button>
         </div>
@@ -1659,7 +1669,10 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <div class="screen" id="screen-win" style="position:relative;overflow:hidden">
   <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
   <div style="position:relative;z-index:1;text-align:center;padding:2rem 1rem">
-    <div class="win-icon" style="animation:winPulse 1s ease-in-out infinite;display:flex;justify-content:center;align-items:center;padding:8px 0"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(254,104,7,0.6))"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+    <div id="win-gif-wrap" style="display:none;margin:0 auto 12px;max-width:300px;border-radius:18px;overflow:hidden;line-height:0">
+      <img id="win-gif-img" style="width:100%;border-radius:18px;display:block" alt="">
+    </div>
+    <div class="win-icon" id="win-icon-anim" style="animation:winPopIn .55s cubic-bezier(.34,1.56,.64,1) forwards;display:flex;justify-content:center;align-items:center;padding:8px 0"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(254,104,7,0.6))"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
     <div class="win-title" id="win-title" style="font-size:28px;font-weight:900;margin:12px 0 6px;text-shadow:0 0 30px rgba(254,104,7,0.6)"></div>
     <div class="win-sub" id="win-sub" style="color:var(--muted);font-size:14px;margin-bottom:20px"></div>
     <div id="win-stats" style="margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto"></div>
@@ -1677,7 +1690,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- STATS -->
 <div class="screen" id="screen-stats">
-  <h2 style="margin-bottom:12px">Statistieken</h2>
+  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
+  <h2 style="margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Statistieken</h2>
 
   <!-- Export / Import bar -->
   <div class="card" style="margin-bottom:12px">
@@ -1760,6 +1774,8 @@ var setupPlayers=[];
 var selectedGame='x01';
 var x01StartScore=501;
 var x01CustomScore=1001;
+var soundEnabled=(localStorage.getItem('darts_sound')!=='0');
+function setSoundEnabled(v){soundEnabled=v;localStorage.setItem('darts_sound',v?'1':'0');}
 var doubleOut=true;
 var matchFormat='firstto'; // 'firstto' or 'bestof'
 var matchN=2;             // legs to win/play
@@ -2008,6 +2024,8 @@ function updatePlayerStat(name,gameType,data){
   if(data.setResult)entry.setResult=data.setResult;     // e.g. "2–1"
   if(data.matchFormat)entry.matchFormat=data.matchFormat;
   if(data.highScore!=null)entry.highScore=data.highScore;
+  if(data.hiStats)entry.hiStats=data.hiStats;
+  if(data.hiRoundHistory)entry.hiRoundHistory=data.hiRoundHistory;
   p.gameHistory.unshift(entry);
   if(p.gameHistory.length>50)p.gameHistory=p.gameHistory.slice(0,50);
   db[name]=p;saveDB(db);
@@ -2055,6 +2073,8 @@ function calcPlayerAvgStats(name){
 // ═══════════════════════════════════════════
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
+  var _noHdr=['screen-home','screen-setup','screen-leaderboard','screen-stats','screen-history'];
+  var hdr=document.getElementById('app-header');if(hdr)hdr.style.display=(_noHdr.indexOf(id)>=0)?'none':'flex';
   var el=document.getElementById(id);
   el.classList.add('active');
   el.style.display=(id==='screen-game')?'flex':'block';
@@ -2100,6 +2120,7 @@ function showScreen(id){
     backBtn.onclick=function(){showScreen('screen-home')};
     hr.appendChild(backBtn);
   }
+  if(id==='screen-settings'){var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;}
   if(id==='screen-stats')renderStats();
   if(id==='screen-leaderboard'){renderLeaderboard('avg');}
   if(id==='screen-history')renderHistory();
@@ -4967,12 +4988,16 @@ function hiEndTurn(scored){
         var misses=state.hiMisses?state.hiMisses[i]:0;
         var total=hits+misses;
         var pct=total>0?Math.round(hits/total*100):0;
+        var roundHistory=state.hiHistory.filter(function(h){return h.player===i;}).map(function(h){
+          return{round:h.round,label:hiSeqLabel(state.hiSeq[h.round]),pts:h.pts,halved:h.halved,newScore:h.newScore};
+        });
         updatePlayerStat(name,'halveit',{
           won:i===winIdx,
           darts:state.dartCount[i]||0,
           score:state.hiScores[i]||0,
           highScore:state.hiScores[i]||0,
-          hiStats:{hits:hits,misses:misses,pct:pct,rounds:total}
+          hiStats:{hits:hits,misses:misses,pct:pct,rounds:total},
+          hiRoundHistory:roundHistory
         });
       });
       var statsHtml=state.players.map(function(n,i){
@@ -5036,6 +5061,26 @@ function renderHiHistory(){
 // ═══════════════════════════════════════════
 // WIN & STATS
 // ═══════════════════════════════════════════
+function loadWinGif(){
+  var wrap=document.getElementById('win-gif-wrap');
+  var img=document.getElementById('win-gif-img');
+  if(!wrap||!img)return;
+  wrap.style.display='none';img.src='';
+  var tags=['darts','darts+bullseye','dart+throw'];
+  var tag=tags[Math.floor(Math.random()*tags.length)];
+  fetch('https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag='+tag+'&rating=g',{mode:'cors'})
+    .then(function(r){return r.ok?r.json():Promise.reject('err');})
+    .then(function(j){
+      var src=j&&j.data&&j.data.images&&j.data.images.fixed_height&&j.data.images.fixed_height.url;
+      if(!src)src=j&&j.data&&j.data.images&&j.data.images.original&&j.data.images.original.url;
+      if(src){
+        img.onload=function(){wrap.style.display='block';};
+        img.onerror=function(){wrap.style.display='none';};
+        img.src=src;
+      }
+    })
+    .catch(function(){/* offline of rate-limited: gewoon geen gif */});
+}
 function showWin(winner,sub,extra){
   var isSoloEnd=(state.players&&state.players.length<=1)||winner==='Eindstand';
   document.getElementById('win-title').innerHTML=isSoloEnd?
@@ -5048,6 +5093,16 @@ function showWin(winner,sub,extra){
   showScreen('screen-win');
   playSound('win');
   startConfetti();
+  loadWinGif();
+  // Win icon: pop-in entrance then continuous pulse
+  var wicon=document.getElementById('win-icon-anim');
+  if(wicon){
+    wicon.style.animation='winPopIn .55s cubic-bezier(.34,1.56,.64,1) forwards';
+    wicon.addEventListener('animationend',function onWinPopEnd(){
+      wicon.removeEventListener('animationend',onWinPopEnd);
+      wicon.style.animation='winPulse 1s ease-in-out infinite';
+    });
+  }
 }
 var statsGameFilter={};  // per player: welk gametype geselecteerd
 var statsVsFilter={};
@@ -5400,6 +5455,7 @@ function playTone(freq,type,dur,vol,delay){
 }
 
 function playSound(name){
+  if(!soundEnabled)return;
   try{
     if(name==='score'){
       playTone(440,'sine',0.08,0.15);
@@ -5510,6 +5566,7 @@ var _origNextPlayer=nextPlayer501;
 nextPlayer501=function(){
   var h=state.history[state.history.length-1];
   if(h){
+    animateScore('numpad-display',h.bust);
     if(h.bust){
       playSound('bust');
       // Flash the player's cell red
@@ -5706,6 +5763,7 @@ function renderHistory(){
       if(ds.checkoutPct!==null&&ds.checkoutAttempts>0)info.push('dubbel '+ds.checkoutPct+'%');
       if(ds.count180)info.push(ds.count180+'×180');
     }
+    if(g.hiStats)info.push(g.hiStats.hits+'/'+(g.hiStats.hits+g.hiStats.misses)+' raak ('+g.hiStats.pct+'%)');
     if(g.matchFormat)info.push(g.matchFormat);
     var legHtml='';
     if(g.legBreakdown&&g.legBreakdown.length){
@@ -5730,10 +5788,38 @@ function renderHistory(){
       '</div>'+
       '<button id="'+lid+'-btn" onclick="toggleLegDetail('+JSON.stringify(lid)+')" style="font-size:11px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
     }
-    return'<div style="padding:10px 0;border-bottom:1px solid var(--border)'+(i===0?';border-top:1px solid var(--border)':'')+'" class="fade-in">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:'+(info.length||legHtml?'5':'0')+'px">'+
+    var detailId='gd-'+historySelectedPlayer.replace(/[^a-z0-9]/gi,'')+'-'+i;
+    // Halve It specific detail
+    var hiDetailHtml='';
+    if(g.hiStats){
+      var hs=g.hiStats;
+      hiDetailHtml+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;background:var(--card);border-radius:var(--radius-sm)">'
+        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+hs.pct+'%</div><div style="font-size:9px;color:var(--muted)">raak</div></div>'
+        +'<div style="font-size:12px;color:var(--muted)">'+hs.hits+' / '+(hs.hits+hs.misses)+' rondes geraakt</div>'
+        +'<div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:900;color:var(--text)">'+g.score+'</div><div style="font-size:9px;color:var(--muted)">eindscore</div></div>'
+        +'</div>';
+      if(g.hiRoundHistory&&g.hiRoundHistory.length){
+        hiDetailHtml+='<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Rondes</div>';
+        hiDetailHtml+=g.hiRoundHistory.map(function(r){
+          return'<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--separator)">'
+            +'<span style="font-size:12px;color:var(--text)">'+r.label+'</span>'
+            +(r.halved
+              ?'<span style="font-size:11px;font-weight:700;color:var(--danger)">Gehalveerd → '+r.newScore+'</span>'
+              :'<span style="font-size:11px;font-weight:700;color:var(--success)">+'+r.pts+' → '+r.newScore+'</span>')
+            +'</div>';
+        }).join('');
+      }
+    }
+    var detailHtml=
+      hiDetailHtml+
+      (info.length&&!g.hiStats?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'+
+        info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--muted)">'+t+'</span>';}).join('')+
+      '</div>':'')+
+      legHtml;
+    return'<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;overflow:hidden" class="fade-in">'+
+      '<div onclick="toggleHistoryDetail(\''+detailId+'\')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
-          (!g.opponents||!g.opponents.length?'':'<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
+          (!g.opponents||!g.opponents.length?'':'<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:3px 7px;font-size:11px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
             (g.won?'Win':'Verlies')+
           '</div>')+
           '<div>'+
@@ -5741,15 +5827,17 @@ function renderHistory(){
             '<div style="font-size:11px;color:var(--muted)">'+g.date+'</div>'+
           '</div>'+
         '</div>'+
-        '<div style="display:flex;align-items:center;gap:8px">'+
+        '<div style="display:flex;align-items:center;gap:10px">'+
           (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+ds.avg3+'</div><div style="font-size:9px;color:var(--muted)">gem</div></div>':'')+
-          ('<button onclick="deleteMatchEntry('+JSON.stringify(historySelectedPlayer).replace(/"/g,"'")+','+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;color:var(--danger);font-size:14px;line-height:1;display:inline-flex;align-items:center" title="Wedstrijd verwijderen"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--danger)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>')+
+          '<span id="'+detailId+'-arrow" style="font-size:12px;color:var(--muted);transition:transform .2s">▼</span>'+
         '</div>'+
       '</div>'+
-      (info.length?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px">'+
-        info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--muted)">'+t+'</span>';}).join('')+
-      '</div>':'')+
-      legHtml+
+      '<div id="'+detailId+'" style="display:none;padding:0 14px 12px;border-top:1px solid var(--separator)">'+
+        (detailHtml||'<div style="font-size:12px;color:var(--muted);padding-top:8px">Geen extra details beschikbaar</div>')+
+        '<div style="margin-top:10px;text-align:right">'+
+          '<button onclick="event.stopPropagation();deleteMatchEntry('+JSON.stringify(historySelectedPlayer).replace(/"/g,"'")+','+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--danger);font-size:12px;font-weight:600">Verwijderen</button>'+
+        '</div>'+
+      '</div>'+
     '</div>';
   }).join(''):'<div class="empty">Nog geen wedstrijden voor deze speler</div>';
 
@@ -6241,6 +6329,14 @@ function buildDoubleStats(name){
 // ═══════════════════════════════════════════
 // WEDSTRIJD VERWIJDEREN
 // ═══════════════════════════════════════════
+function toggleHistoryDetail(did){
+  var el=document.getElementById(did);
+  var arrow=document.getElementById(did+'-arrow');
+  if(!el)return;
+  var open=el.style.display!=='none';
+  el.style.display=open?'none':'block';
+  if(arrow)arrow.style.transform=open?'':'rotate(180deg)';
+}
 function toggleLegDetail(lid){
   var e=document.getElementById(lid);
   if(!e)return;
@@ -6266,6 +6362,8 @@ function deleteMatchEntry(playerName, index){
 // APP INITIALISATIE MET FIREBASE
 // ═══════════════════════════════════════════
 (function initApp(){
+  // Hide header on home screen (shown on all other screens via showScreen)
+  var _hdr=document.getElementById('app-header');if(_hdr)_hdr.style.display='none';
   // Load local stats backup immediately (before Firebase)
   var localBackup=_loadLocalDB();
   if(localBackup&&Object.keys(localBackup).length>0)dbCache=localBackup;
@@ -6322,7 +6420,7 @@ document.addEventListener('webkitfullscreenchange',_updateFsBtn);
 // ─── INSTELLINGEN ────────────────────────────────────────────────────────────
 var TRANS_EN={
   // Settings
-  'Weergave':'Appearance','Thema':'Theme','Automatisch':'Automatic','Licht':'Light','Donker':'Dark','Taal':'Language','Instellingen':'Settings',
+  'Weergave':'Appearance','Thema':'Theme','Automatisch':'Automatic','Licht':'Light','Donker':'Dark','Taal':'Language','Instellingen':'Settings','Geluid':'Sound',
   // Home
   'Nieuw spel':'New game','Kies je speltype':'Choose your game type','Toernooi':'Tournament','Competitie spelen':'Play competition',
   'Ranglijst':'Leaderboard','Statistieken':'Statistics','Geschiedenis':'History',
@@ -6429,7 +6527,7 @@ function applyLang(lang){
   // Settings screen labels (static IDs)
   var smap={'set-lbl-appearance':['Weergave','Appearance'],'set-lbl-theme':['Thema','Theme'],
     'set-lbl-auto':['Automatisch','Automatic'],'set-lbl-light':['Licht','Light'],
-    'set-lbl-dark':['Donker','Dark'],'set-lbl-lang':['Taal','Language']};
+    'set-lbl-dark':['Donker','Dark'],'set-lbl-lang':['Taal','Language'],'set-lbl-sound':['Geluid','Sound']};
   Object.keys(smap).forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.textContent=lang==='nl'?smap[id][0]:smap[id][1];
