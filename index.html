@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#e8b89e" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Darts">
@@ -41,6 +42,7 @@
   :root:not([data-theme="light"]) body{background:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)}
 }
 @media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){background:#e8b89e}
   :root:not([data-theme="dark"]) body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}
 }
 @media (prefers-color-scheme:light){
@@ -79,7 +81,7 @@
 
 /* ─── RESET & BASE ─── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
+html{height:100%;overflow:hidden;background:#000000}body{height:100%;overflow:hidden}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;
   background:var(--bg);
@@ -111,7 +113,7 @@ body::before{
 /* ─── FORCED THEME OVERRIDES ─── */
 [data-theme="dark"]{--bg:#000000;--surface:#1C1C1E;--card:#2C2C2E;--text:#FFFFFF;--muted:#98989F;--border:rgba(255,255,255,0.1);--separator:rgba(255,255,255,0.06);--shadow:0 2px 8px rgba(0,0,0,0.45);--shadow-lg:0 8px 32px rgba(0,0,0,0.5);--header-bg:rgba(28,28,30,0.85);color-scheme:dark}
 [data-theme="dark"] body{background:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)}
-[data-theme="light"] body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}
+[data-theme="light"]{background:#e8b89e}[data-theme="light"] body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}
 [data-theme="light"]{--bg:#F2F2F7;--surface:#FFFFFF;--card:#EFEFF4;--text:#000000;--muted:#6E6E73;--border:rgba(0,0,0,0.12);--separator:rgba(0,0,0,0.06);--shadow:0 1px 4px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.05);--shadow-lg:0 4px 24px rgba(0,0,0,0.12);--header-bg:rgba(242,242,247,0.9);color-scheme:light}
 /* Settings segment control */
 .seg-ctrl{display:flex;background:var(--surface);border-radius:var(--radius-sm);padding:3px;gap:3px}
