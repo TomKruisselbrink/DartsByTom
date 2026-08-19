@@ -28,21 +28,21 @@
   --radius-sm:10px;
   /* Dark defaults */
   --bg:#000000;
-  --surface:#1C1C1E;
-  --card:#2C2C2E;
+  --surface:rgba(28,28,30,0.72);
+  --card:rgba(44,44,46,0.75);
   --text:#FFFFFF;
   --muted:#98989F;
   --border:rgba(255,255,255,0.1);
   --separator:rgba(255,255,255,0.06);
-  --shadow:0 2px 8px rgba(0,0,0,0.45);
-  --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
-  --header-bg:rgba(28,28,30,0.85);
+  --shadow:0 2px 12px rgba(0,0,0,0.35),0 1px 3px rgba(0,0,0,0.2);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.4);
+  --header-bg:rgba(20,20,20,0.82);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]) body{background:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)}
 }
 @media (prefers-color-scheme:light){
-  :root:not([data-theme="dark"]){background:#e8b89e}
+  :root:not([data-theme="dark"]){background:#e8b89e;--surface:rgba(255,255,255,0.75);--card:rgba(239,239,244,0.72);--border:rgba(0,0,0,0.1);--shadow:0 1px 8px rgba(0,0,0,0.07),0 2px 12px rgba(0,0,0,0.05);--text:#000000;--muted:#6E6E73}
   :root:not([data-theme="dark"]) body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}
 }
 @media (prefers-color-scheme:light){
@@ -114,7 +114,7 @@ body::before{
 [data-theme="dark"]{--bg:#000000;--surface:#1C1C1E;--card:#2C2C2E;--text:#FFFFFF;--muted:#98989F;--border:rgba(255,255,255,0.1);--separator:rgba(255,255,255,0.06);--shadow:0 2px 8px rgba(0,0,0,0.45);--shadow-lg:0 8px 32px rgba(0,0,0,0.5);--header-bg:rgba(28,28,30,0.85);color-scheme:dark}
 [data-theme="dark"] body{background:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)}
 [data-theme="light"]{background:#e8b89e}[data-theme="light"] body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}
-[data-theme="light"]{--bg:#F2F2F7;--surface:#FFFFFF;--card:#EFEFF4;--text:#000000;--muted:#6E6E73;--border:rgba(0,0,0,0.12);--separator:rgba(0,0,0,0.06);--shadow:0 1px 4px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.05);--shadow-lg:0 4px 24px rgba(0,0,0,0.12);--header-bg:rgba(242,242,247,0.9);color-scheme:light}
+[data-theme="light"]{--bg:#F2F2F7;--surface:rgba(255,255,255,0.75);--card:rgba(239,239,244,0.72);--text:#000000;--muted:#6E6E73;--border:rgba(0,0,0,0.12);--separator:rgba(0,0,0,0.06);--shadow:0 1px 8px rgba(0,0,0,0.07),0 2px 12px rgba(0,0,0,0.05);--shadow-lg:0 4px 24px rgba(0,0,0,0.1);--header-bg:rgba(255,255,255,0.75);color-scheme:light}
 /* Settings segment control */
 .seg-ctrl{display:flex;background:var(--surface);border-radius:var(--radius-sm);padding:3px;gap:3px}
 .seg-btn{flex:1;padding:8px 4px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted);background:transparent;transition:all .2s}
@@ -245,6 +245,7 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
 /* ─── CARD ─── */
 .card{
   background:var(--surface);
+  backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
   border-radius:var(--radius);
   padding:14px 16px;
   border:0.5px solid var(--border);
@@ -651,6 +652,30 @@ select{
   transition:transform 30ms ease-out!important,opacity 30ms ease-out!important;
 }
 .home-tile.pressed{transform:scale(.96)!important;opacity:.85!important}
+
+/* ─── GLASS CARDS: light mode border shimmer ─── */
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .card{
+    border-color:rgba(255,255,255,0.6);
+  }
+}
+[data-theme="light"] .card{border-color:rgba(255,255,255,0.6)}
+
+/* drag lift moved to .seq-item-cont.seq-row-dragging */
+
+/* ─── SEQUENCE EDITOR ITEMS ─── */
+:root { --seq-item-bg: #2C2C2E; --seq-pill-bg: rgba(181,80,47,.2); --seq-num-color: #636366; }
+[data-theme="light"] { --seq-item-bg: #F2F2F7; --seq-pill-bg: rgba(181,80,47,.12); --seq-num-color: #8E8E93; }
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) { --seq-item-bg: #F2F2F7; --seq-pill-bg: rgba(181,80,47,.12); --seq-num-color: #8E8E93; }
+}
+.seq-item-cont.seq-row-dragging {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.18) !important;
+  transform: scale(1.03) !important;
+  border-radius: 10px !important;
+  z-index: 100 !important;
+  background: var(--seq-item-bg) !important;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -2651,14 +2676,14 @@ function renderSeqEditor(){
     // Content layer
     var cont=document.createElement('div');
     var borderB=i<hiSequence.length-1?'border-bottom:0.5px solid var(--separator);':'';
-    cont.style.cssText='position:relative;z-index:1;display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--card);touch-action:pan-y;user-select:none;'+borderB;
+    cont.style.cssText='position:relative;z-index:1;display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--seq-item-bg);touch-action:pan-y;user-select:none;transition:box-shadow 150ms ease,transform 150ms ease;'+borderB;cont.className='seq-item-cont';
     // Number
     var num=document.createElement('span');
-    num.style.cssText='font-size:11px;color:var(--muted);min-width:16px;';
+    num.style.cssText='font-size:11px;color:var(--seq-num-color);min-width:16px;font-weight:600;';
     num.textContent=i+1;
     // Label pill
     var pill=document.createElement('span');
-    pill.style.cssText='background:rgba(181,80,47,.18);color:#B5502F;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;flex:1;';
+    pill.style.cssText='background:var(--seq-pill-bg);color:var(--accent);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;flex:1;';
     pill.textContent=seqLabel(item);
     // Drag grip
     var grip=document.createElement('span');
@@ -2712,6 +2737,9 @@ function resetSeq(){hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign(
 var _seqDragIdx=-1,_seqDragLastY=0;
 function _seqDragStart(e,idx){
   _seqDragIdx=idx;_seqDragLastY=e.clientY;
+  // Add lift class to the content layer of this row
+  var rows=document.querySelectorAll('.seq-item-cont');
+  if(rows[idx])rows[idx].classList.add('seq-row-dragging');
   document.addEventListener('pointermove',_seqDragMove);
   document.addEventListener('pointerup',_seqDragEnd,{once:true});
 }
@@ -2726,9 +2754,12 @@ function _seqDragMove(e){
     var t=hiSequence[_seqDragIdx];hiSequence[_seqDragIdx]=hiSequence[ni];hiSequence[ni]=t;
     _seqDragIdx=ni;_seqDragLastY=e.clientY;
     renderSeqEditor();
+    // Re-apply lift after re-render
+    var rows=document.querySelectorAll('.seq-item-cont');
+    if(rows[_seqDragIdx])rows[_seqDragIdx].classList.add('seq-row-dragging');
   }
 }
-function _seqDragEnd(){_seqDragIdx=-1;document.removeEventListener('pointermove',_seqDragMove);}
+function _seqDragEnd(){document.querySelectorAll('.seq-row-dragging').forEach(function(el){el.classList.remove('seq-row-dragging');});_seqDragIdx=-1;document.removeEventListener('pointermove',_seqDragMove);}
 // ─── Seq swipe-to-delete ───
 var _seqSwipeCont=null,_seqSwipeIdx=-1,_seqSwipeX0=0,_seqSwipeY0=0,_seqSwipeDir=null;
 function _seqSwipeStart(e,cont,idx){
@@ -4922,9 +4953,9 @@ function renderHiInputArea(item){
   if(item.type==='num'){
     el.innerHTML=dartBar+
       '<div class="gap8">'+
-      '<button class="btn" style="flex:1" onclick="hiAddPts('+item.val+')">Enkel<br><span class="muted">'+item.val+'</span></button>'+
-      '<button class="btn" style="flex:1" onclick="hiAddPts('+(item.val*2)+')">Dubbel<br><span class="muted">'+(item.val*2)+'</span></button>'+
-      '<button class="btn" style="flex:1" onclick="hiAddPts('+(item.val*3)+')">3x<br><span class="muted">'+(item.val*3)+'</span></button>'+
+      '<button class="btn" style="flex:1;flex-direction:column;gap:2px;padding:12px 8px" onclick="hiAddPts('+item.val+')"><span style="font-size:13px;font-weight:700;letter-spacing:.2px">ENKEL</span><span style="font-size:20px;font-weight:800;letter-spacing:-1px;line-height:1">'+item.val+'</span></button>'+
+      '<button class="btn" style="flex:1;flex-direction:column;gap:2px;padding:12px 8px" onclick="hiAddPts('+(item.val*2)+')"><span style="font-size:13px;font-weight:700;letter-spacing:.2px">DUBBEL</span><span style="font-size:20px;font-weight:800;letter-spacing:-1px;line-height:1">'+(item.val*2)+'</span></button>'+
+      '<button class="btn" style="flex:1;flex-direction:column;gap:2px;padding:12px 8px" onclick="hiAddPts('+(item.val*3)+')"><span style="font-size:13px;font-weight:700;letter-spacing:.2px">3×</span><span style="font-size:20px;font-weight:800;letter-spacing:-1px;line-height:1">'+(item.val*3)+'</span></button>'+
       '<button class="btn" style="color:var(--muted)" onclick="hiAddPts(0)">Mis</button></div>'+
       '<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">3 pijlen op het '+item.val+' — 0 punten = score gehalveerd</div>';
   } else if(item.type==='double'){
