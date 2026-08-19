@@ -123,10 +123,11 @@ body::before{
 
 /* ─── HEADER ─── */
 #app-header{display:none!important}
+#game-bar{display:none!important}
 #game-bar{
   display:none;flex-shrink:0;
   background:rgba(0,0,0,0.65);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border-bottom:0.5px solid rgba(255,255,255,0.08);
   padding:calc(env(safe-area-inset-top) + 8px) 14px 8px;
   align-items:center;justify-content:space-between;gap:8px;
@@ -143,7 +144,7 @@ body::before{
   border-radius:16px;padding:14px 16px;
   box-shadow:0 8px 32px rgba(0,0,0,0.18);
   display:none;align-items:center;gap:12px;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
 }
 #install-banner.show{display:flex}
 #install-banner-icon{font-size:28px;flex-shrink:0}
@@ -170,6 +171,65 @@ body::before{
 #ios-install-card .ios-step-text{font-size:14px;color:var(--text);padding-top:3px}
 #ios-install-card .ios-step-text span{color:var(--muted);font-size:12px;display:block;margin-top:2px}
 
+
+/* ─── FLOATING GAME CONTROLS ─── */
+#game-controls{
+  position:fixed;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
+  left:50%;transform:translateX(-50%);
+  z-index:9970;
+  display:none;
+  align-items:center;
+  gap:8px;
+  background:rgba(30,30,30,0.72);
+  backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:0.5px solid rgba(255,255,255,0.12);
+  border-radius:30px;
+  padding:8px 12px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+}
+[data-theme="light"] #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}
+@media(prefers-color-scheme:light){#game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}}
+#game-controls.show{display:flex}
+.gc-btn{
+  background:transparent;border:none;cursor:pointer;
+  padding:6px 14px;border-radius:20px;
+  font-size:13px;font-weight:700;
+  min-height:36px;display:flex;align-items:center;gap:6px;
+  touch-action:manipulation;
+  transition:background .12s,opacity .1s;
+}
+.gc-btn:active{opacity:.6}
+.gc-undo{color:var(--text)}
+.gc-undo:hover{background:var(--card)}
+.gc-stop{color:#FF3B30}
+.gc-stop:hover{background:rgba(255,59,48,.12)}
+.gc-sep{width:0.5px;height:20px;background:rgba(128,128,128,0.35);flex-shrink:0}
+
+
+/* ─── KNOWN NAME PILLS ─── */
+.known-name-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;
+  border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  font-size:14px;font-weight:600;
+  cursor:pointer;
+  min-height:36px;
+  touch-action:manipulation;
+  transition:background .12s,border-color .12s,transform .08s;
+}
+.known-name-btn:active{transform:scale(.95);opacity:.8}
+.known-name-btn.known-name-active{
+  background:rgba(181,80,47,.12);
+  border-color:rgba(181,80,47,.35);
+  color:var(--accent);
+  cursor:default;
+}
+.kn-check{font-size:12px;color:var(--accent)}
+
 /* ─── CONTENT AREA ─── */
 #app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%}
 #app-content>.screen.active{flex:1}
@@ -177,7 +237,7 @@ body::before{
 .screen{display:none}.screen.active{display:block}
 
 /* ─── TYPOGRAPHY ─── */
-h2{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.3px}
+h2{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.5px;line-height:1.1}
 h3{font-size:17px;font-weight:600;margin-bottom:8px}
 .muted{color:var(--muted);font-size:13px}
 .label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:4px}
@@ -203,13 +263,16 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
   color:var(--text);
   cursor:pointer;
   touch-action:manipulation;
-  transition:opacity .1s,transform .1s,background .15s;
+  transition:opacity 200ms ease,transform 220ms cubic-bezier(0.34,1.4,0.64,1),background 150ms ease;
   box-shadow:var(--shadow);
   letter-spacing:normal;
   text-transform:none;
+  min-height:44px;
+  display:inline-flex;align-items:center;justify-content:center;
 }
 .btn:hover{background:var(--surface)}
-.btn:active{opacity:.6;transform:scale(.97);transition:opacity .05s,transform .05s}
+.btn:active{opacity:.78;transform:scale(.94);transition:opacity 30ms ease-out,transform 30ms ease-out}
+.btn{-webkit-tap-highlight-color:transparent;will-change:transform}
 .btn-primary{
   background:var(--accent);
   color:#fff;
@@ -517,7 +580,7 @@ select{
   justify-content:center;
 }
 .home-tile:hover{transform:translateY(-3px) scale(1.01);filter:brightness(1.07)}
-.home-tile:active{transform:scale(.96);opacity:.88;transition:transform .08s,opacity .08s}
+.home-tile:active{transform:scale(.92);opacity:.82;transition:transform 30ms ease-out,opacity 30ms ease-out,filter 30ms}
 .home-tile-primary{
   background:linear-gradient(145deg,#C5603F,#B5502F);
   box-shadow:0 6px 24px rgba(181,80,47,.45),0 2px 6px rgba(181,80,47,.3);
@@ -543,7 +606,7 @@ select{
   justify-content:center;
 }
 .home-nav-tile:hover{transform:translateY(-2px);background:var(--card);box-shadow:var(--shadow-lg)}
-.home-nav-tile:active{transform:scale(.96);opacity:.8;transition:transform .06s}
+.home-nav-tile:active{transform:scale(.92);opacity:.82;transition:transform 30ms ease-out,opacity 30ms ease-out}
 .home-quick-tile{
   background:var(--surface);
   border:0.5px solid var(--border);
@@ -558,6 +621,36 @@ select{
 }
 .home-quick-tile:hover{transform:translateY(-2px);background:var(--card);box-shadow:var(--shadow-lg)}
 .home-quick-tile:active{transform:scale(.97);opacity:.8;transition:transform .06s}
+
+/* ─── SPRING SCREEN TRANSITIONS ─── */
+@keyframes screenSpringIn{
+  0%{opacity:0;transform:translateY(10px) scale(0.985)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.screen.active{
+  animation:screenSpringIn 0.32s cubic-bezier(0.25,1,0.5,1) both;
+}
+#screen-game.active{animation:none}
+@media(prefers-reduced-motion:reduce){
+  .screen.active{animation:opacity-in .15s ease both}
+  @keyframes opacity-in{from{opacity:0}to{opacity:1}}
+}
+
+/* ─── REDUCED MOTION ─── */
+@media(prefers-reduced-motion:reduce){
+  .btn:not(:active){transition:background 150ms ease!important}
+  .btn:active{transform:scale(.98)!important;transition:transform 50ms ease-out!important}
+  .home-nav-tile:active{transform:scale(.98)!important}
+  .home-nav-tile{transition:transform 150ms ease,opacity 150ms ease,box-shadow 150ms ease!important}
+}
+
+/* ─── INSTANT PRESS FEEDBACK ─── */
+.btn.pressed,.home-nav-tile.pressed{
+  transform:scale(.94)!important;
+  opacity:.78!important;
+  transition:transform 30ms ease-out!important,opacity 30ms ease-out!important;
+}
+.home-tile.pressed{transform:scale(.96)!important;opacity:.85!important}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -944,6 +1037,19 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <div id="fb-loading" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(13,13,13,.92);flex-direction:column;align-items:center;justify-content:center;gap:16px">
   <div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite"></div>
   <div style="color:var(--muted);font-size:14px">Verbinden met cloud...</div>
+</div>
+
+<!-- Floating game controls -->
+<div id="game-controls">
+  <button class="gc-btn gc-undo" onclick="gameBarUndo()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+    Ongedaan
+  </button>
+  <div class="gc-sep"></div>
+  <button class="gc-btn gc-stop" onclick="confirmEndGame()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>
+    Stop
+  </button>
 </div>
 
 <!-- Install banner -->
@@ -1382,9 +1488,9 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <div class="setup-card-sub">Voeg spelersnamen toe</div>
         <div class="card" style="margin-bottom:12px">
           <div id="player-list" style="margin-bottom:10px"></div>
-          <div class="gap8">
-            <input type="text" id="player-name-input" placeholder="Naam…" onkeydown="if(event.key==='Enter')addPlayer()">
-            <button class="btn btn-sm" onclick="addPlayer()">+</button>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="player-name-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')addPlayer()" style="flex:1;min-height:44px;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text)">
+            <button onclick="addPlayer()" style="min-height:44px;min-width:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;font-size:22px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 14px;flex-shrink:0">+</button>
           </div>
           <div id="player-error" class="error" style="font-size:12px;min-height:16px;margin-top:2px"></div>
           <div id="known-names" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px"></div>
@@ -2180,15 +2286,15 @@ function calcPlayerAvgStats(name){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
   var el=document.getElementById(id);
-  el.classList.add('active');
   el.style.display=(id==='screen-game')?'flex':'block';
+  el.classList.remove('active');void el.offsetWidth;el.classList.add('active');
   document.getElementById('app-content').scrollTop=0;
   // Show/hide game action bar
   var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-halveit','screen-checkout121','screen-cricket'];
   var _inGame=_gameScreens.indexOf(id)>=0;
-  var gb=document.getElementById('game-bar');
+  var gb=document.getElementById('game-controls');
   if(gb){
-    gb.style.display=_inGame?'flex':'none';
+    if(_inGame)gb.classList.add('show');else gb.classList.remove('show');
     var _gTitles={'screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket'};
     var gbt=document.getElementById('game-bar-title');if(gbt)gbt.textContent=_gTitles[id]||'';
   }
@@ -2651,10 +2757,19 @@ function _seqSwipeEnd(e){
 }
 function renderKnownNames(sel){
   var db=getDB();var el=document.querySelector(sel);if(!el)return;el.innerHTML='';
+  var inputId=sel==='#known-names'?'player-name-input':'trn-player-input';
+  var addFn=sel==='#known-names'?addPlayer:addTrnPlayer;
+  var players=sel==='#known-names'?setupPlayers:(trnSetup&&trnSetup.players?trnSetup.players:[]);
   Object.keys(db).forEach(function(n){
-    var c=document.createElement('span');c.className='chip';c.textContent=n;
-    var inputId=sel==='#known-names'?'player-name-input':'trn-player-input';
-    c.onclick=function(){document.getElementById(inputId).value=n};
+    var already=players.indexOf(n)>=0;
+    var c=document.createElement('button');
+    c.className='known-name-btn'+(already?' known-name-active':'');
+    c.innerHTML=(already?'<span class="kn-check">✓</span> ':'')+n;
+    c.onclick=function(){
+      if(already)return;
+      document.getElementById(inputId).value=n;
+      addFn();
+    };
     el.appendChild(c);
   });
 }
@@ -2672,11 +2787,12 @@ function renderSetupPlayers(){
   var el=document.getElementById('player-list');el.innerHTML='';
   setupPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)';
-    row.innerHTML='<span style="font-size:14px;font-weight:600">'+n+'</span><button class="btn btn-xs btn-danger" onclick="removePlayer('+i+')">✕</button>';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600">'+n+'</span></div><button style="background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
     el.appendChild(row);
   });
   renderStartPlayerCard();
+  renderKnownNames('#known-names');
 }
 function startGame(){
   var err=document.getElementById('setup-error');
@@ -2989,7 +3105,7 @@ function renderTrnPlayers(){
   var el=document.getElementById('trn-player-list');el.innerHTML='';
   trnPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)';
     row.innerHTML='<span style="font-size:14px;font-weight:600">'+n+'</span><button class="btn btn-xs btn-danger" onclick="trnRemovePlayer('+i+')">✕</button>';
     el.appendChild(row);
   });
@@ -6774,6 +6890,40 @@ window.addEventListener('appinstalled',function(){_dismissInstall();});
 if(_isIOS&&!_isStandalone){
   setTimeout(_showInstallBanner,1500);
 }
+
+
+// ─── APPLE INSTANT TOUCH FEEDBACK ───
+(function(){
+  var _addTF=function(el){
+    if(el._tf)return;el._tf=1;
+    el.addEventListener('touchstart',function(e){
+      this.classList.add('pressed');
+    },{passive:true});
+    el.addEventListener('touchend',function(){
+      var s=this;
+      requestAnimationFrame(function(){
+        setTimeout(function(){s.classList.remove('pressed');},120);
+      });
+    },{passive:true});
+    el.addEventListener('touchcancel',function(){
+      this.classList.remove('pressed');
+    },{passive:true});
+  };
+  function _initTF(){
+    document.querySelectorAll('.btn,.home-nav-tile,.home-tile').forEach(_addTF);
+  }
+  // Re-run after DOM mutations (dynamic content)
+  var _obs=new MutationObserver(function(){
+    document.querySelectorAll('.btn:not([data-tf]),.home-nav-tile:not([data-tf])').forEach(function(el){
+      el.setAttribute('data-tf','1');_addTF(el);
+    });
+  });
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){_initTF();_obs.observe(document.body,{childList:true,subtree:true});});
+  } else {
+    _initTF();_obs.observe(document.body,{childList:true,subtree:true});
+  }
+})();
 
 </script>
 </body>
