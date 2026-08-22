@@ -1309,6 +1309,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <button class="btn btn-sm" id="lb-tab-atc" onclick="showLbTab('atc')">Around the Clock</button>
     <button class="btn btn-sm" id="lb-tab-hi" onclick="showLbTab('hi')">Halve It</button>
     <button class="btn btn-sm" id="lb-tab-co121" onclick="showLbTab('co121')">121 Checkout</button>
+    <button class="btn btn-sm" id="lb-tab-afg" onclick="showLbTab('afg')">Afgooien</button>
   </div>
   <div id="leaderboard-content"></div>
 </div>
@@ -1920,10 +1921,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <div id="afg-actions" style="padding:12px 16px;flex-shrink:0"></div>
   <!-- History per player -->
   <div style="flex:1;overflow-y:auto;padding:12px 16px 80px">
-    <div class="card" style="margin-bottom:0">
-      <h3 style="margin-bottom:10px">Geschiedenis</h3>
-      <div id="afg-history"></div>
-    </div>
+    <div id="afg-history"></div>
   </div>
 </div>
 
@@ -5875,7 +5873,7 @@ var lbCurrentTab='avg';
 
 function showLbTab(tab){
   lbCurrentTab=tab;
-  var allTabs=['avg','180','co','wins','high','sh7','sh20','atc','hi','co121'];
+  var allTabs=['avg','180','co','wins','high','sh7','sh20','atc','hi','co121','afg'];
   allTabs.forEach(function(t){
     var el=document.getElementById('lb-tab-'+t);
     if(el)el.className='btn btn-sm'+(t===tab?' active':'');
@@ -5905,6 +5903,32 @@ function renderLeaderboard(tab){
   if(!names.length){el.innerHTML='<div class="empty">Nog geen statistieken</div>';return;}
 
   var medals=['🥇','🥈','🥉'];
+
+  // Afgooien tab — wins ranking
+  if(tab==='afg'){
+    var rows=names.map(function(name){
+      var s=calcGameStats(name,'afgooien');
+      return{name:name, wins:s?s.wins:0, games:s?s.games:0};
+    }).filter(function(r){return r.games>0;});
+    if(!rows.length){el.innerHTML='<div class="empty">Nog niemand heeft Afgooien gespeeld</div>';return;}
+    rows.sort(function(a,b){
+      if(b.wins!==a.wins) return b.wins-a.wins;
+      return (b.games>0?b.wins/b.games:0)-(a.games>0?a.wins/a.games:0);
+    });
+    el.innerHTML='<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Afgooien — meeste overwinningen</div>'+
+      rows.map(function(r,i){
+        var pct=r.games>0?Math.round(r.wins/r.games*100):0;
+        return'<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:'+(i===0?'rgba(239,68,68,0.1)':'var(--surface)')+';border:1px solid '+(i===0?'rgba(239,68,68,0.3)':'var(--border)')+';border-radius:var(--radius-sm);margin-bottom:6px">'+
+          '<div style="font-size:20px;min-width:28px;text-align:center">'+(medals[i]||'<span style="font-size:13px;color:var(--muted)">'+(i+1)+'</span>')+'</div>'+
+          '<div style="flex:1">'+
+            '<div style="font-size:14px;font-weight:700">'+r.name+'</div>'+
+            '<div style="font-size:11px;color:var(--muted)">'+r.games+' gespeeld · '+pct+'% winrate</div>'+
+          '</div>'+
+          '<div style="font-size:22px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+r.wins+'</div>'+
+        '</div>';
+      }).join('');
+    return;
+  }
 
   // Other game tabs
   if(tab==='sh7'||tab==='sh20'||tab==='atc'||tab==='hi'||tab==='co121'){
@@ -7037,7 +7061,9 @@ function _afgBullValue(hit){
 
 function startAfgooien(){
   _afg.players = setupPlayers.map(function(n){ return {name:n,number:null,score:0,eliminated:false}; });
-  _afg.bullHits = {}; _afg.bullIdx = 0; _afg.history = [];
+  _afg.bullHits = {}; _afg.bullIdx = 0; _afg.history = []; _afg.snapshots = [];
+  _afgTiePlayers = []; _afgTieResolved = [];
+  _afgBullReRound = false; _afgBullRePlayers = [];
   renderAfgBull();
   showScreen('screen-afgooien-bull');
 }
@@ -7414,7 +7440,7 @@ function renderAfgooien(){
     }
   }
 
-  // HISTORY PER PLAYER
+  // HISTORY PER PLAYER — side-by-side columns
   var histEl = document.getElementById('afg-history');
   if(histEl){
     if(_afg.history.length===0){
@@ -7423,19 +7449,26 @@ function renderAfgooien(){
       var byPlayer = {};
       _afg.players.forEach(function(q){ byPlayer[q.name] = []; });
       _afg.history.forEach(function(h){ if(byPlayer[h.player]) byPlayer[h.player].push(h); });
+      var n = _afg.players.length;
+      var gridCols = n <= 2 ? '1fr 1fr' : n <= 3 ? 'repeat(3,1fr)' : 'repeat('+n+',1fr)';
+      histEl.style.display = 'grid';
+      histEl.style.gridTemplateColumns = gridCols;
+      histEl.style.gap = '8px';
       histEl.innerHTML = _afg.players.map(function(q){
         var entries = byPlayer[q.name];
-        if(!entries.length) return '';
-        return '<div style="margin-bottom:14px">'+
-          '<div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">'+q.name+'</div>'+
-          entries.slice().reverse().map(function(h){
-            return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--separator);font-size:13px">'+
-              '<span style="color:var(--muted)">'+h.desc+'</span>'+
-              '<span style="font-weight:700;color:'+(h.delta>0?'var(--success)':h.delta<0?'var(--danger)':'var(--muted)')+'">'+
-                (h.delta>0?'+'+h.delta:h.delta<0?h.delta:'mis')+
-              '</span>'+
-            '</div>';
-          }).join('')+
+        var rows = entries.length === 0
+          ? '<p style="color:var(--muted);font-size:12px;margin:0">–</p>'
+          : entries.slice().reverse().map(function(h){
+              return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--separator);font-size:12px">'+
+                '<span style="color:var(--muted)">'+h.desc+'</span>'+
+                '<span style="font-weight:700;color:'+(h.delta>0?'var(--success)':h.delta<0?'var(--danger)':'var(--muted)')+'">'+
+                  (h.delta>0?'+'+h.delta:h.delta<0?h.delta:'mis')+
+                '</span>'+
+              '</div>';
+            }).join('');
+        return '<div class="card" style="min-width:0;padding:10px 10px">'+
+          '<div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">'+q.name+'</div>'+
+          rows+
         '</div>';
       }).join('');
     }
