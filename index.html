@@ -1912,16 +1912,16 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 </div>
 
 <div class="screen" id="screen-afgooien" style="display:none;flex-direction:column;height:100%">
+  <!-- Player score bar -->
+  <div id="afg-scores" style="background:var(--card);border-bottom:0.5px solid var(--border);padding:10px 16px;flex-shrink:0"></div>
   <!-- Top: current target card -->
   <div id="afg-top" style="background:var(--surface);border-bottom:0.5px solid var(--border);padding:16px;flex-shrink:0"></div>
   <!-- Dart buttons -->
   <div id="afg-actions" style="padding:12px 16px;flex-shrink:0"></div>
-  <!-- Player scores -->
-  <div id="afg-players" style="padding:0 16px;flex-shrink:0"></div>
-  <!-- History -->
+  <!-- History per player -->
   <div style="flex:1;overflow-y:auto;padding:12px 16px 80px">
     <div class="card" style="margin-bottom:0">
-      <h3 style="margin-bottom:6px">Geschiedenis</h3>
+      <h3 style="margin-bottom:10px">Geschiedenis</h3>
       <div id="afg-history"></div>
     </div>
   </div>
@@ -5403,7 +5403,7 @@ function renderStats(){
 
     // Collect all game types this player has played
     var allTypes=['alle'];
-    var typeLabels={'alle':'Alle','x01':'X01','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket'};
+    var typeLabels={'alle':'Alle','x01':'X01','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien'};
     (p.gameHistory||[]).forEach(function(g){if(allTypes.indexOf(g.gameType)<0)allTypes.push(g.gameType);});
 
     var activeFilter=statsGameFilter[name]||'alle';
@@ -7042,11 +7042,19 @@ function startAfgooien(){
   showScreen('screen-afgooien-bull');
 }
 
+var _afgBullReRound = false;   // true during a bull re-throw
+var _afgBullRePlayers = [];    // players re-throwing
+
 function renderAfgBull(){
   var el = document.getElementById('afg-bull-content');
   if(!el) return;
-  var p = _afg.players[_afg.bullIdx];
-  if(!p){ afgooienStartGame(); return; }
+  var activePlayers = _afgBullReRound ? _afgBullRePlayers : _afg.players;
+  var p = activePlayers[_afg.bullIdx];
+  if(!p){
+    _afgBullReRound = false;
+    afgooienStartGame();
+    return;
+  }
 
   var segs = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
   var segGrid = '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">';
@@ -7055,11 +7063,19 @@ function renderAfgBull(){
   });
   segGrid += '</div>';
 
+  var title = _afgBullReRound
+    ? '<h2 style="text-align:center;margin-bottom:4px">Gelijkspel — opnieuw!</h2>'
+    : '<h2 style="text-align:center;margin-bottom:4px">Bullronde</h2>';
+  var subtitle = _afgBullReRound
+    ? '<p style="text-align:center;color:var(--accent);font-size:14px;font-weight:700;margin-bottom:16px">'+
+        'Beide bull — gooi opnieuw op de bull'+
+      '</p>'
+    : '<p style="text-align:center;color:var(--muted);font-size:14px;margin-bottom:16px">'+
+        (_afg.bullIdx+1)+' / '+activePlayers.length+' — Gooi op de bull'+
+      '</p>';
+
   el.innerHTML =
-    '<h2 style="text-align:center;margin-bottom:4px">Bullronde</h2>'+
-    '<p style="text-align:center;color:var(--muted);font-size:14px;margin-bottom:16px">'+
-      (_afg.bullIdx+1)+' / '+_afg.players.length+' — Gooi op de bull'+
-    '</p>'+
+    title + subtitle +
     '<div class="card" style="text-align:center">'+
       '<div style="font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">Speler</div>'+
       '<div style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:16px">'+p.name+'</div>'+
@@ -7076,7 +7092,6 @@ function renderAfgBull(){
     '</div>'+
     (_afg.bullIdx > 0 ? '<button class="btn" id="afg-bull-back" style="width:100%;color:var(--muted);margin-top:8px;font-size:13px">← Vorige</button>' : '');
 
-  // Attach events
   el.querySelectorAll('[data-bull-type]').forEach(function(btn){
     btn.addEventListener('click', function(){
       _afgBullHit(btn.getAttribute('data-bull-type'), parseInt(btn.getAttribute('data-bull-val')));
@@ -7092,7 +7107,8 @@ function renderAfgBull(){
 }
 
 function _afgBullHit(type, val){
-  var p = _afg.players[_afg.bullIdx];
+  var activePlayers = _afgBullReRound ? _afgBullRePlayers : _afg.players;
+  var p = activePlayers[_afg.bullIdx];
   _afg.bullHits[p.name] = {type:type, val:val};
   p.number = (type==='bull2'||type==='bull1') ? 'bull' : (type==='miss' ? null : val);
   _afg.bullIdx++;
@@ -7102,7 +7118,8 @@ function _afgBullHit(type, val){
 function _afgBullBack(){
   if(_afg.bullIdx > 0){
     _afg.bullIdx--;
-    var p = _afg.players[_afg.bullIdx];
+    var activePlayers = _afgBullReRound ? _afgBullRePlayers : _afg.players;
+    var p = activePlayers[_afg.bullIdx];
     delete _afg.bullHits[p.name];
     p.number = null;
     renderAfgBull();
@@ -7124,18 +7141,33 @@ function afgooienStartGame(){
   });
   _afg.players = sorted;
 
-  // Players who didn't hit bull and didn't get a number yet → need ordering
-  // They all hit a segment (or missed), so their "closeness" is equal (val=1 or 0).
-  // We ask who was actually closest among them.
+  // Detect bull tie: top players all hit the same bull type (bull1 or bull2)
+  var topVal = _afgBullValue(_afg.bullHits[sorted[0].name]);
+  if(topVal >= 25){
+    var tiedBull = sorted.filter(function(q){
+      return _afgBullValue(_afg.bullHits[q.name]) === topVal;
+    });
+    if(tiedBull.length >= 2){
+      // Re-throw the bull for tied players
+      _afgBullReRound = true;
+      _afgBullRePlayers = tiedBull;
+      _afg.bullIdx = 0;
+      tiedBull.forEach(function(q){ delete _afg.bullHits[q.name]; q.number = null; });
+      renderAfgBull();
+      showScreen('screen-afgooien-bull');
+      return;
+    }
+  }
+
+  // Players who didn't hit bull → need manual ordering (drag screen)
   var needOrder = _afg.players.filter(function(p){
     var h = _afg.bullHits[p.name];
     return !h || h.type === 'miss' || h.type === 'num';
   });
 
   if(needOrder.length >= 2){
-    // Show tie-break screen before assigning numbers
     _afgTiePlayers = needOrder.slice();
-    _afgTieResolved = needOrder.slice(); // default order = bull order; user can drag
+    _afgTieResolved = needOrder.slice();
     renderAfgTieBreak();
     return;
   }
@@ -7261,27 +7293,56 @@ function renderAfgooien(){
   if(!p) return;
   var isAfgooien = p.score >= 5;
 
-  // TOP
+  // SCORE BAR (all players, top) — X01 style grid
+  var scoresEl = document.getElementById('afg-scores');
+  if(scoresEl){
+    var n = _afg.players.length;
+    var cols = n===2 ? '1fr 36px 1fr' : _afg.players.map(function(){ return '1fr'; }).join(' ');
+    var cardPad = n<=2 ? '12px 10px' : n<=4 ? '8px 6px' : '6px 4px';
+    var scoreFontSize = n<=2 ? '52px' : n<=3 ? '44px' : n<=4 ? '36px' : '28px';
+    scoresEl.style.display = 'grid';
+    scoresEl.style.gridTemplateColumns = cols;
+    scoresEl.style.background = 'var(--surface)';
+    scoresEl.style.borderBottom = '1px solid var(--border)';
+    scoresEl.style.padding = '0';
+    scoresEl.innerHTML = '';
+    _afg.players.forEach(function(q, qi){
+      var isMe = q.name === p.name;
+      var dots = ''; for(var i=0;i<5;i++) dots += '<span style="width:10px;height:10px;border-radius:50%;display:inline-block;background:'+(i<q.score?'var(--accent)':'var(--border)')+'"></span>';
+      var cell = document.createElement('div');
+      cell.style.cssText = 'padding:'+cardPad+';text-align:center;'+(qi>0&&!(n===2&&qi===1)?'border-left:1px solid var(--border);':'')+
+        (isMe?'background:rgba(254,104,7,0.07);':'')+
+        (q.eliminated?'opacity:.45;':'');
+      cell.innerHTML =
+        '<div style="font-size:10px;font-weight:700;color:'+(isMe?'var(--accent)':'var(--muted)')+';letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px'+(q.eliminated?';text-decoration:line-through':'')+'">'+q.name+'</div>'+
+        '<div style="font-size:'+scoreFontSize+';font-weight:900;line-height:1.05;color:'+(isMe?'var(--accent)':'var(--text)')+'">'+q.score+'</div>'+
+        '<div style="display:flex;justify-content:center;gap:3px;margin-top:4px">'+dots+'</div>';
+      scoresEl.appendChild(cell);
+      // middle dart-dot divider for 2 players
+      if(n===2 && qi===0){
+        var mid = document.createElement('div');
+        mid.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-left:1px solid var(--border);border-right:1px solid var(--border)';
+        mid.innerHTML = '<div style="width:8px;height:8px;border-radius:50%;background:var(--card)"></div>'.repeat(3);
+        scoresEl.appendChild(mid);
+      }
+    });
+  }
+
+  // TOP (current player)
   var topEl = document.getElementById('afg-top');
   if(topEl){
     var numLabel = p.number==='bull' ? 'Bull' : String(p.number);
-    var dots = ''; for(var i=0;i<5;i++) dots += '<span style="width:12px;height:12px;border-radius:50%;display:inline-block;background:'+(i<p.score?'var(--accent)':'var(--border)')+'"></span>';
     var dDots = ''; for(var d=1;d<=3;d++) dDots += '<span style="width:10px;height:10px;border-radius:50%;display:inline-block;background:'+(d<=_afg.dartsLeft?'var(--text)':'var(--border)')+'"></span>';
     topEl.innerHTML =
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
         '<div>'+
           '<div style="font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin-bottom:2px">'+(isAfgooien?'Afgooien!':'Beurt')+'</div>'+
           '<div style="font-size:22px;font-weight:800;letter-spacing:-.5px">'+p.name+'</div>'+
           '<div style="font-size:13px;color:var(--muted);margin-top:2px">'+(isAfgooien?'Gooi op iemand anders':'Gooi op: <strong style="color:var(--accent)">'+numLabel+'</strong>')+'</div>'+
         '</div>'+
-        '<div style="text-align:right">'+
-          '<div style="font-size:12px;color:var(--muted);margin-bottom:4px">Punten</div>'+
-          '<div style="display:flex;gap:4px;justify-content:flex-end">'+dots+'</div>'+
-          '<div style="font-size:11px;color:var(--muted);margin-top:2px">'+p.score+'/5</div>'+
+        '<div style="display:flex;gap:4px;align-items:center">'+
+          '<span style="font-size:12px;color:var(--muted);margin-right:4px">Pijls:</span>'+dDots+
         '</div>'+
-      '</div>'+
-      '<div style="display:flex;gap:4px;margin-top:10px;align-items:center">'+
-        '<span style="font-size:12px;color:var(--muted);margin-right:4px">Pijls over:</span>'+dDots+
       '</div>';
   }
 
@@ -7353,34 +7414,31 @@ function renderAfgooien(){
     }
   }
 
-  // PLAYER SCORES
-  var plEl = document.getElementById('afg-players');
-  if(plEl){
-    plEl.innerHTML = '<div style="margin:8px 0">'+_afg.players.map(function(q){
-      var isMe = q.name===p.name;
-      var dots3=''; for(var i=0;i<5;i++) dots3+='<span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:'+(i<q.score?'var(--accent)':'var(--border)')+'"></span>';
-      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;'+
-        'background:'+(q.eliminated?'rgba(255,59,48,.06)':isMe?'rgba(181,80,47,.1)':'var(--surface)')+';'+
-        'border-radius:10px;margin-bottom:5px;border:0.5px solid '+(isMe?'rgba(181,80,47,.3)':'var(--border)')+';'+
-        'opacity:'+(q.eliminated?'.5':'1')+'">'+
-        '<span style="font-weight:700;font-size:15px'+(q.eliminated?';text-decoration:line-through':'')+'">'+(isMe?'▶ ':'')+q.name+' <span style="font-size:12px;font-weight:400;color:var(--muted)">'+(q.number==='bull'?'Bull':q.number)+'</span></span>'+
-        '<span style="display:flex;gap:3px">'+dots3+(q.eliminated?'<span style="font-size:11px;color:var(--danger);margin-left:6px">af</span>':'')+'</span>'+
-      '</div>';
-    }).join('')+'</div>';
-  }
-
-  // HISTORY
+  // HISTORY PER PLAYER
   var histEl = document.getElementById('afg-history');
   if(histEl){
-    histEl.innerHTML = _afg.history.length===0 ?
-      '<p style="color:var(--muted);font-size:14px;text-align:center;padding:8px 0">Nog geen beurten</p>' :
-      _afg.history.slice().reverse().map(function(h){
-        return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--separator);font-size:14px">'+
-          '<span style="font-weight:600">'+h.player+'</span>'+
-          '<span style="color:'+(h.delta>0?'var(--success)':h.delta<0?'var(--danger)':'var(--muted)')+'">'+
-            (h.delta>0?'+'+h.delta:h.delta<0?h.delta:'mis')+' '+h.desc+'</span>'+
+    if(_afg.history.length===0){
+      histEl.innerHTML = '<p style="color:var(--muted);font-size:14px;text-align:center;padding:8px 0">Nog geen beurten</p>';
+    } else {
+      var byPlayer = {};
+      _afg.players.forEach(function(q){ byPlayer[q.name] = []; });
+      _afg.history.forEach(function(h){ if(byPlayer[h.player]) byPlayer[h.player].push(h); });
+      histEl.innerHTML = _afg.players.map(function(q){
+        var entries = byPlayer[q.name];
+        if(!entries.length) return '';
+        return '<div style="margin-bottom:14px">'+
+          '<div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">'+q.name+'</div>'+
+          entries.slice().reverse().map(function(h){
+            return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--separator);font-size:13px">'+
+              '<span style="color:var(--muted)">'+h.desc+'</span>'+
+              '<span style="font-weight:700;color:'+(h.delta>0?'var(--success)':h.delta<0?'var(--danger)':'var(--muted)')+'">'+
+                (h.delta>0?'+'+h.delta:h.delta<0?h.delta:'mis')+
+              '</span>'+
+            '</div>';
+          }).join('')+
         '</div>';
       }).join('');
+    }
   }
 }
 
@@ -7395,7 +7453,7 @@ function afgScore(pts){
     _afg.history.push({player:p.name, delta:0, desc:'mis'});
   }
   _afg.dartsLeft--;
-  if(_afg.dartsLeft<=0 || p.score>=5) _afgNextTurn();
+  if(_afg.dartsLeft<=0) _afgNextTurn();
   else renderAfgooien();
 }
 
@@ -7427,6 +7485,27 @@ function _afgNextTurn(){
 function _afgWin(winner){
   _inGame=false;
   var gb=document.getElementById('game-controls'); if(gb) gb.classList.remove('show');
+  // Save stats for all players
+  var allNames = _afg.players.map(function(q){ return q.name; });
+  _afg.players.forEach(function(q){
+    var db=getDB();
+    if(!db[q.name])db[q.name]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
+    var pr=db[q.name];
+    pr.games++;
+    var won=q.name===winner.name;
+    if(won)pr.wins++;
+    if(!pr.gameHistory)pr.gameHistory=[];
+    pr.gameHistory.unshift({
+      date:new Date().toLocaleDateString('nl-NL'),
+      gameType:'afgooien',
+      won:won,
+      opponents:allNames.filter(function(n){return n!==q.name;}),
+      afgScore:q.score,
+      players:allNames.length
+    });
+    if(pr.gameHistory.length>50)pr.gameHistory=pr.gameHistory.slice(0,50);
+    db[q.name]=pr; saveDB(db);
+  });
   showScreen('screen-home');
   setTimeout(function(){
     var overlay=document.createElement('div');
