@@ -6600,10 +6600,10 @@ function buildDoubleStats(name){
 // WEDSTRIJD VERWIJDEREN
 // ═══════════════════════════════════════════
 function gameBarUndo(){
-  if(gameType==='afgooien'){afgooienUndo();return;}
   var active=document.querySelector('.screen.active');
   if(!active)return;
   var sid=active.id;
+  if(sid==='screen-afgooien'){afgooienUndo();return;}
   if(sid==='screen-game')undoThrow();
   else if(sid==='screen-atc')atcUndo();
   else if(sid==='screen-shanghai')shUndo();
@@ -7001,8 +7001,28 @@ var _afg = {
   bullIdx:  0,
   currentIdx: 0,
   dartsLeft: 3,
-  history:  []
+  history:  [],
+  snapshots: []
 };
+
+function _afgSnapshot(){
+  _afg.snapshots.push(JSON.stringify({
+    players: _afg.players,
+    currentIdx: _afg.currentIdx,
+    dartsLeft: _afg.dartsLeft,
+    history: _afg.history
+  }));
+}
+
+function afgooienUndo(){
+  if(!_afg.snapshots.length) return;
+  var snap = JSON.parse(_afg.snapshots.pop());
+  _afg.players    = snap.players;
+  _afg.currentIdx = snap.currentIdx;
+  _afg.dartsLeft  = snap.dartsLeft;
+  _afg.history    = snap.history;
+  renderAfgooien();
+}
 
 function _afgBullValue(hit){
   if(!hit) return -1;
@@ -7139,7 +7159,7 @@ function _afgFinalizeOrder(){
   var avail = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].filter(function(n){ return used.indexOf(n) < 0; });
   _afg.players.forEach(function(p){ if(p.number === null){ p.number = avail.shift() || 20; } });
 
-  _afg.currentIdx = 0; _afg.dartsLeft = 3; _afg.history = [];
+  _afg.currentIdx = 0; _afg.dartsLeft = 3; _afg.history = []; _afg.snapshots = [];
   _inGame = true;
   renderAfgooien();
   showScreen('screen-afgooien');
@@ -7364,6 +7384,7 @@ function renderAfgooien(){
 }
 
 function afgScore(pts){
+  _afgSnapshot();
   var p = _afgCurrentPlayer(); if(!p) return;
   var gained = Math.min(pts, Math.max(0, 5 - p.score));
   if(pts > 0 && gained > 0){
@@ -7378,6 +7399,7 @@ function afgScore(pts){
 }
 
 function afgAttack(targetName, pts){
+  _afgSnapshot();
   var p = _afgCurrentPlayer();
   var t = null;
   for(var i=0;i<_afg.players.length;i++){ if(_afg.players[i].name===targetName){ t=_afg.players[i]; break; } }
