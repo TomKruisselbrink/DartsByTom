@@ -3345,7 +3345,7 @@ function trnChooseStart(idx){
   if(p2btn)p2btn.style.borderColor=idx===1?'#fff':'transparent';
   if(coin){_applyCoinFace(coin,idx===0?'kop':'munt');}
   if(res)res.innerHTML='<strong style="color:'+col+'">'+name+'</strong> begint!';
-  if(go){go.style.opacity='1';go.style.pointerEvents='auto';}
+  if(go){go.style.opacity='1';go.style.pointerEvents='auto';go.disabled=false;}
 }
 function trnFlipCoin(){
   if(_trnCoinFlipping)return;
@@ -3376,6 +3376,7 @@ function launchTrnMatchWithStart(match,onWin,startIdx){
   trn.currentMatch=match;
   state.trnMode=true;
   state.trnMatchCallback=onWin;
+  state.botPlayerIndex=-1;
   var score=trn.gameScore||501;
   var gameType=score===301?'301':'501';
   var players=startIdx===1?[match.p2,match.p1]:[match.p1,match.p2];
@@ -7441,9 +7442,7 @@ function _afgWin(winner){
   }, 300);
 }
 
-function afgooienUndo(){
-  alert('Ongedaan maken is nog niet beschikbaar voor Afgooien.');
-}
+// afgooienUndo defined above in afgooien section
 
 
 
