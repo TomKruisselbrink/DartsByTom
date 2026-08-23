@@ -72,6 +72,7 @@
 @keyframes checkoutSlide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 @keyframes coinSpin{0%{transform:scaleX(1)}25%{transform:scaleX(0)}50%{transform:scaleX(1)}75%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@keyframes afgNumBounce{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 
 .score-animate{animation:scoreFlip .25s ease-out,scorePulse .3s ease-out}
 .score-bust{animation:bustShake .4s ease-out}
@@ -1912,17 +1913,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <div id="afg-bull-content" style="padding:16px;max-width:480px;margin:0 auto"></div>
 </div>
 
-<div class="screen" id="screen-afgooien" style="display:none;flex-direction:column;height:100%">
-  <!-- Player score bar -->
-  <div id="afg-scores" style="background:var(--card);border-bottom:0.5px solid var(--border);padding:10px 16px;flex-shrink:0"></div>
-  <!-- Top: current target card -->
-  <div id="afg-top" style="background:var(--surface);border-bottom:0.5px solid var(--border);padding:16px;flex-shrink:0"></div>
-  <!-- Dart buttons -->
-  <div id="afg-actions" style="padding:12px 16px;flex-shrink:0"></div>
-  <!-- History per player -->
-  <div style="flex:1;overflow-y:auto;padding:12px 16px 80px">
-    <div id="afg-history"></div>
-  </div>
+<div class="screen" id="screen-afgooien" style="display:none;flex-direction:column;height:100%;overflow:hidden">
+  <div id="afg-root" style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden"></div>
 </div>
 
 <!-- WIN (vrij spel) -->
@@ -7027,6 +7019,10 @@ var _afg = {
   currentIdx: 0,
   dartsLeft: 3,
   history:  [],
+  turns:    [],
+  currentThrows: [],
+  currentTurnYield: 0,
+  turnNum:  0,
   snapshots: []
 };
 
@@ -7035,17 +7031,25 @@ function _afgSnapshot(){
     players: _afg.players,
     currentIdx: _afg.currentIdx,
     dartsLeft: _afg.dartsLeft,
-    history: _afg.history
+    history: _afg.history,
+    turns: _afg.turns,
+    currentThrows: _afg.currentThrows,
+    currentTurnYield: _afg.currentTurnYield,
+    turnNum: _afg.turnNum
   }));
 }
 
 function afgooienUndo(){
   if(!_afg.snapshots.length) return;
   var snap = JSON.parse(_afg.snapshots.pop());
-  _afg.players    = snap.players;
-  _afg.currentIdx = snap.currentIdx;
-  _afg.dartsLeft  = snap.dartsLeft;
-  _afg.history    = snap.history;
+  _afg.players          = snap.players;
+  _afg.currentIdx       = snap.currentIdx;
+  _afg.dartsLeft        = snap.dartsLeft;
+  _afg.history          = snap.history;
+  _afg.turns            = snap.turns || [];
+  _afg.currentThrows    = snap.currentThrows || [];
+  _afg.currentTurnYield = snap.currentTurnYield || 0;
+  _afg.turnNum          = snap.turnNum || 0;
   renderAfgooien();
 }
 
@@ -7219,11 +7223,11 @@ function _afgFinalizeOrder(){
   _afg.players.forEach(function(p){ if(p.number === null){ p.number = avail.shift() || 20; } });
 
   _afg.currentIdx = 0; _afg.dartsLeft = 3; _afg.history = []; _afg.snapshots = [];
+  _afg.turns = []; _afg.currentThrows = []; _afg.currentTurnYield = 0; _afg.turnNum = 0;
   _inGame = true;
   renderAfgooien();
   showScreen('screen-afgooien');
-  var gb = document.getElementById('game-controls');
-  if(gb) gb.classList.add('show');
+  // eigen actiebalk — geen game-controls nodig
 }
 
 // ── TIE-BREAK DRAG SCREEN ────────────────────────────────────
@@ -7315,172 +7319,230 @@ function _afgActive(){ return _afg.players.filter(function(p){ return !p.elimina
 function _afgCurrentPlayer(){ return _afg.players[_afg.currentIdx]; }
 
 function renderAfgooien(){
+  var root = document.getElementById('afg-root');
+  if(!root) return;
   var p = _afgCurrentPlayer();
   if(!p) return;
-  var isAfgooien = p.score >= 5;
+  var isAfg = p.score >= 5;
+  var numLabel = p.number==='bull' ? 'Bull' : String(p.number);
 
-  // SCORE BAR (all players, top) — X01 style grid
-  var scoresEl = document.getElementById('afg-scores');
-  if(scoresEl){
-    var n = _afg.players.length;
-    var cols = n===2 ? '1fr 36px 1fr' : _afg.players.map(function(){ return '1fr'; }).join(' ');
-    var cardPad = n<=2 ? '12px 10px' : n<=4 ? '8px 6px' : '6px 4px';
-    var scoreFontSize = n<=2 ? '52px' : n<=3 ? '44px' : n<=4 ? '36px' : '28px';
-    scoresEl.style.display = 'grid';
-    scoresEl.style.gridTemplateColumns = cols;
-    scoresEl.style.background = 'var(--surface)';
-    scoresEl.style.borderBottom = '1px solid var(--border)';
-    scoresEl.style.padding = '0';
-    scoresEl.innerHTML = '';
-    _afg.players.forEach(function(q, qi){
-      var isMe = q.name === p.name;
-      var dots = ''; for(var i=0;i<5;i++) dots += '<span style="width:10px;height:10px;border-radius:50%;display:inline-block;background:'+(i<q.score?'var(--accent)':'var(--border)')+'"></span>';
-      var cell = document.createElement('div');
-      cell.style.cssText = 'padding:'+cardPad+';text-align:center;'+(qi>0&&!(n===2&&qi===1)?'border-left:1px solid var(--border);':'')+
-        (isMe?'background:rgba(254,104,7,0.07);':'')+
-        (q.eliminated?'opacity:.45;':'');
-      cell.innerHTML =
-        '<div style="font-size:10px;font-weight:700;color:'+(isMe?'var(--accent)':'var(--muted)')+';letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px'+(q.eliminated?';text-decoration:line-through':'')+'">'+q.name+'</div>'+
-        '<div style="font-size:'+scoreFontSize+';font-weight:900;line-height:1.05;color:'+(isMe?'var(--accent)':'var(--text)')+'">'+q.score+'</div>'+
-        '<div style="display:flex;justify-content:center;gap:3px;margin-top:4px">'+dots+'</div>';
-      scoresEl.appendChild(cell);
-      // middle dart-dot divider for 2 players
-      if(n===2 && qi===0){
-        var mid = document.createElement('div');
-        mid.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-left:1px solid var(--border);border-right:1px solid var(--border)';
-        mid.innerHTML = '<div style="width:8px;height:8px;border-radius:50%;background:var(--card)"></div>'.repeat(3);
-        scoresEl.appendChild(mid);
-      }
+  root.innerHTML = '';
+  root.style.cssText = 'position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)';
+
+  // ── Glow overlay ──
+  var glow = document.createElement('div');
+  glow.style.cssText = 'position:absolute;top:0;left:0;right:0;height:260px;pointer-events:none;z-index:0;'+
+    'background:radial-gradient(120% 100% at 50% 0%, rgba(181,80,47,.28), transparent 70%)';
+  root.appendChild(glow);
+
+  // ── Scrollable content (above action bar) ──
+  var content = document.createElement('div');
+  content.style.cssText = 'flex:1;min-height:0;display:flex;flex-direction:column;position:relative;z-index:1;overflow-y:auto;padding-top:12px';
+  root.appendChild(content);
+
+  // ── 1. PLAYER CARDS ──
+  var playerGrid = document.createElement('div');
+  var np = _afg.players.length;
+  playerGrid.style.cssText = 'display:grid;grid-template-columns:'+(_afg.players.map(function(){return'1fr';}).join(' '))+';gap:8px;padding:0 16px 12px;flex-shrink:0';
+  _afg.players.forEach(function(q){
+    var isMe = q.name===p.name;
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--surface);border-radius:14px;padding:10px 12px;'+
+      'border:'+(isMe?'1.5px solid var(--accent)':'1px solid rgba(255,255,255,.08)')+';'+
+      (q.eliminated?'opacity:.4;':(!isMe?'opacity:.6;':''));
+    var dotColor = isMe?'var(--accent)':'rgba(255,255,255,.2)';
+    var scoreColor = isMe?'var(--accent)':'var(--text)';
+    card.innerHTML=
+      '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'+
+        '<div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:'+dotColor+'"></div>'+
+        '<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'+(q.eliminated?'text-decoration:line-through':'')+'">'+q.name+'</div>'+
+      '</div>'+
+      '<div style="display:flex;align-items:baseline;gap:5px">'+
+        '<div style="font-size:30px;font-weight:900;line-height:1;color:'+scoreColor+'">'+q.score+'</div>'+
+        '<div style="font-size:11px;color:var(--muted);font-weight:600">van 5</div>'+
+      '</div>';
+    playerGrid.appendChild(card);
+  });
+  content.appendChild(playerGrid);
+
+  // ── 2. TARGET CARD (scoring) or ATTACK CARD ──
+  if(!isAfg){
+    var targetCard = document.createElement('div');
+    targetCard.style.cssText = 'margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);'+
+      'border-radius:20px;padding:20px 16px 16px;text-align:center;flex-shrink:0';
+    var dDots=''; for(var d=1;d<=3;d++) dDots+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d<=_afg.dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
+    targetCard.innerHTML=
+      '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+p.name+' gooit op</div>'+
+      '<div style="font-size:96px;font-weight:900;color:var(--accent);line-height:1;letter-spacing:-4px;'+
+           'text-shadow:0 0 40px rgba(181,80,47,.45);margin:2px 0 6px;animation:afgNumBounce .35s cubic-bezier(.34,1.4,.64,1) both">'+numLabel+'</div>'+
+      '<div style="display:flex;align-items:center;justify-content:center;gap:8px">'+
+        '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
+        '<div style="display:flex;gap:5px">'+dDots+'</div>'+
+      '</div>';
+    content.appendChild(targetCard);
+
+    // ── 3. SCORE BUTTONS ──
+    var isBull = p.number==='bull';
+    var opts = isBull
+      ? [{label:'Bull buiten',val:'25',pts:1},{label:'Bull',val:'50',pts:2}]
+      : [{label:'Enkel',val:p.number,pts:1},{label:'Dubbel',val:p.number*2,pts:2},{label:'Triple',val:p.number*3,pts:3}];
+    var btnArea = document.createElement('div');
+    btnArea.style.cssText = 'padding:0 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0';
+    var grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:'+opts.map(function(){return'1fr';}).join(' ')+';gap:8px';
+    opts.forEach(function(opt){
+      var btn = document.createElement('button');
+      btn.style.cssText = 'background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;'+
+        'padding:14px 4px;min-height:62px;cursor:pointer;text-align:center;color:var(--text)';
+      btn.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+opt.label+'</div>'+
+        '<div style="font-size:26px;font-weight:900;line-height:1.15">'+opt.val+'</div>';
+      btn.addEventListener('click',(function(pts){return function(){afgScore(pts);};})(opt.pts));
+      grid.appendChild(btn);
+    });
+    btnArea.appendChild(grid);
+    var misBtn = document.createElement('button');
+    misBtn.style.cssText = 'border:1px dashed rgba(255,255,255,.16);background:none;border-radius:14px;padding:11px;'+
+      'font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.3px;cursor:pointer;min-height:44px;width:100%';
+    misBtn.textContent='Mis';
+    misBtn.addEventListener('click',function(){afgScore(0);});
+    btnArea.appendChild(misBtn);
+    content.appendChild(btnArea);
+
+  } else {
+    // Attack mode
+    var atkCard = document.createElement('div');
+    atkCard.style.cssText = 'margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);'+
+      'border-radius:20px;padding:16px;flex-shrink:0';
+    var dDots2=''; for(var d2=1;d2<=3;d2++) dDots2+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d2<=_afg.dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
+    var hdr=document.createElement('div');
+    hdr.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px';
+    hdr.innerHTML='<div style="font-size:16px;font-weight:800">🎯 Afgooien!</div>'+
+      '<div style="display:flex;align-items:center;gap:6px">'+
+        '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
+        '<div style="display:flex;gap:5px">'+dDots2+'</div>'+
+      '</div>';
+    atkCard.appendChild(hdr);
+    var active = _afgActive().filter(function(q){return q.name!==p.name;});
+    active.forEach(function(t){
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--separator)';
+      var scoreDots=''; for(var i=0;i<5;i++) scoreDots+='<span style="width:7px;height:7px;border-radius:50%;display:inline-block;background:'+(i<t.score?'var(--accent)':'var(--border)')+'"></span>';
+      var left=document.createElement('div');
+      left.innerHTML='<div style="font-size:13px;font-weight:700">'+t.name+' <span style="color:var(--muted);font-size:11px">('+( t.number==='bull'?'Bull':t.number)+')</span></div>'+
+        '<div style="display:flex;gap:2px;margin-top:3px">'+scoreDots+'</div>';
+      var btns=document.createElement('div');
+      btns.style.cssText='display:flex;gap:6px';
+      [-1,-2,-3].forEach(function(delta){
+        var b=document.createElement('button');
+        b.className='btn gc-btn';
+        b.style.cssText='font-size:13px;min-height:36px';
+        b.textContent=delta;
+        b.addEventListener('click',(function(n,d){return function(){afgAttack(n,Math.abs(d));};})(t.name,delta));
+        btns.appendChild(b);
+      });
+      row.appendChild(left);row.appendChild(btns);
+      atkCard.appendChild(row);
+    });
+    var misBtn2=document.createElement('button');
+    misBtn2.style.cssText='border:1px dashed rgba(255,255,255,.16);background:none;border-radius:14px;padding:11px;'+
+      'font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.3px;cursor:pointer;min-height:44px;width:100%;margin-top:10px';
+    misBtn2.textContent='Mis — volgende pijl';
+    misBtn2.addEventListener('click',function(){afgScore(0);});
+    atkCard.appendChild(misBtn2);
+    content.appendChild(atkCard);
+  }
+
+  // ── 4. TURN HISTORY ──
+  var histWrap=document.createElement('div');
+  histWrap.style.cssText='flex:1;min-height:60px;margin:14px 16px 0;display:flex;flex-direction:column;gap:6px';
+  var histLbl=document.createElement('div');
+  histLbl.style.cssText='font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:0 2px;flex-shrink:0';
+  histLbl.textContent='Beurten';
+  histWrap.appendChild(histLbl);
+  var histList=document.createElement('div');
+  histList.style.cssText='display:flex;flex-direction:column;gap:5px';
+
+  var allTurns=_afg.turns.slice().reverse();
+  var hasContent=allTurns.length>0||_afg.currentThrows.length>0;
+
+  if(!hasContent){
+    var empty=document.createElement('div');
+    empty.style.cssText='font-size:13px;color:var(--muted);padding:2px 0';
+    empty.textContent='Nog geen beurten';
+    histList.appendChild(empty);
+  } else {
+    // Current partial turn
+    if(_afg.currentThrows.length>0){
+      var curRow=document.createElement('div');
+      curRow.style.cssText='background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:10px 12px;'+
+        'display:flex;align-items:center;justify-content:space-between';
+      curRow.innerHTML='<div style="display:flex;align-items:center;gap:9px">'+
+        '<div style="font-size:10px;font-weight:800;color:var(--accent);width:14px">✦</div>'+
+        '<div style="font-size:13px;font-weight:700;color:var(--accent)">'+p.name+'</div>'+
+        '<div style="font-size:11px;color:var(--muted)">op '+numLabel+'</div>'+
+        '</div>'+
+        '<div style="font-size:11px;color:var(--muted)">'+_afg.currentThrows.join(' · ')+'</div>';
+      histList.appendChild(curRow);
+    }
+    // Completed turns
+    allTurns.forEach(function(turn,idx){
+      var row=document.createElement('div');
+      var isOld=idx>=3;
+      row.style.cssText='background:var(--surface);border-radius:12px;padding:10px 12px;'+
+        'display:flex;align-items:center;justify-content:space-between;'+(isOld?'opacity:.55':'');
+      var tNumLabel=turn.target==='bull'?'Bull':String(turn.target);
+      var throwStr=turn.throws.join(' · ');
+      var yieldColor=turn.yield>0?'var(--accent2)':'var(--muted)';
+      var yieldStr=turn.yield>0?'+'+turn.yield:'0';
+      row.innerHTML='<div style="display:flex;align-items:center;gap:9px">'+
+        '<div style="font-size:10px;font-weight:800;color:var(--muted);min-width:16px;text-align:center">'+turn.turnNum+'</div>'+
+        '<div style="font-size:13px;font-weight:700">'+turn.player+'</div>'+
+        '<div style="font-size:11px;color:var(--muted)">op '+tNumLabel+'</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:8px">'+
+          '<div style="font-size:11px;color:var(--muted)">'+throwStr+'</div>'+
+          '<div style="font-size:14px;font-weight:900;color:'+yieldColor+'">'+yieldStr+'</div>'+
+        '</div>';
+      histList.appendChild(row);
     });
   }
+  histWrap.appendChild(histList);
+  content.appendChild(histWrap);
 
-  // TOP (current player)
-  var topEl = document.getElementById('afg-top');
-  if(topEl){
-    var numLabel = p.number==='bull' ? 'Bull' : String(p.number);
-    var dDots = ''; for(var d=1;d<=3;d++) dDots += '<span style="width:10px;height:10px;border-radius:50%;display:inline-block;background:'+(d<=_afg.dartsLeft?'var(--text)':'var(--border)')+'"></span>';
-    topEl.innerHTML =
-      '<div style="display:flex;justify-content:space-between;align-items:center">'+
-        '<div>'+
-          '<div style="font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin-bottom:2px">'+(isAfgooien?'Afgooien!':'Beurt')+'</div>'+
-          '<div style="font-size:22px;font-weight:800;letter-spacing:-.5px">'+p.name+'</div>'+
-          '<div style="font-size:13px;color:var(--muted);margin-top:2px">'+(isAfgooien?'Gooi op iemand anders':'Gooi op: <strong style="color:var(--accent)">'+numLabel+'</strong>')+'</div>'+
-        '</div>'+
-        '<div style="display:flex;gap:4px;align-items:center">'+
-          '<span style="font-size:12px;color:var(--muted);margin-right:4px">Pijls:</span>'+dDots+
-        '</div>'+
-      '</div>';
-  }
-
-  // ACTIONS
-  var actEl = document.getElementById('afg-actions');
-  if(actEl){
-    actEl.innerHTML = '';
-    if(!isAfgooien){
-      var rem = 5 - p.score;
-      var n = p.number==='bull' ? 'Bull' : String(p.number);
-      var isBull = p.number === 'bull';
-      var opts = isBull
-        ? [
-            {label:'BULL BUITEN', val:25, pts:1},
-            {label:'BULL', val:50, pts:2},
-            {label:'MIS', val:'✕', pts:0}
-          ]
-        : [
-            {label:'ENKEL', val:p.number, pts:1},
-            {label:'DUBBEL', val:p.number*2, pts:2},
-            {label:'TRIPLE', val:p.number*3, pts:3},
-            {label:'MIS', val:'✕', pts:0}
-          ];
-      var grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat('+opts.length+',1fr);gap:8px';
-      opts.forEach(function(opt){
-        var btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.style.cssText = 'flex-direction:column;gap:2px;padding:12px 4px';
-        btn.innerHTML = '<span style="font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--muted)">'+opt.label+'</span>'+
-          '<span style="font-size:20px;font-weight:800;letter-spacing:-1px;line-height:1">'+opt.val+'</span>';
-        btn.addEventListener('click', (function(pts){ return function(){ afgScore(pts); }; })(opt.pts));
-        grid.appendChild(btn);
-      });
-      actEl.appendChild(grid);
-    } else {
-      // Afgooien targets
-      var active = _afgActive().filter(function(q){ return q.name!==p.name; });
-      var lbl = document.createElement('div');
-      lbl.style.cssText = 'margin-bottom:8px;font-size:13px;color:var(--muted);font-weight:600';
-      lbl.textContent = 'Kies wie je afgooit:';
-      actEl.appendChild(lbl);
-      active.forEach(function(t){
-        var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--separator)';
-        var info = '<strong>'+t.name+'</strong> <span style="font-size:12px;color:var(--muted)">('+( t.number==='bull'?'Bull':t.number)+')</span>';
-        var dots2=''; for(var i=0;i<5;i++) dots2+='<span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:'+(i<t.score?'var(--accent)':'var(--border)')+'"></span>';
-        var left = document.createElement('div');
-        left.innerHTML = info + ' <span style="display:inline-flex;gap:2px;margin-left:4px">'+dots2+'</span>';
-        var btns = document.createElement('div');
-        btns.style.cssText = 'display:flex;gap:6px';
-        [-1,-2,-3].forEach(function(delta){
-          var b = document.createElement('button');
-          b.className = 'btn gc-btn';
-          b.style.cssText = 'font-size:13px;min-height:36px';
-          b.textContent = delta;
-          b.addEventListener('click', (function(name, d){ return function(){ afgAttack(name, Math.abs(d)); }; })(t.name, delta));
-          btns.appendChild(b);
-        });
-        row.appendChild(left); row.appendChild(btns);
-        actEl.appendChild(row);
-      });
-      var misBtn = document.createElement('button');
-      misBtn.className = 'btn';
-      misBtn.style.cssText = 'width:100%;color:var(--muted);margin-top:10px';
-      misBtn.textContent = 'Mis — volgende pijl';
-      misBtn.addEventListener('click', function(){ afgScore(0); });
-      actEl.appendChild(misBtn);
-    }
-  }
-
-  // HISTORY PER PLAYER — side-by-side columns
-  var histEl = document.getElementById('afg-history');
-  if(histEl){
-    if(_afg.history.length===0){
-      histEl.innerHTML = '<p style="color:var(--muted);font-size:14px;text-align:center;padding:8px 0">Nog geen beurten</p>';
-    } else {
-      var byPlayer = {};
-      _afg.players.forEach(function(q){ byPlayer[q.name] = []; });
-      _afg.history.forEach(function(h){ if(byPlayer[h.player]) byPlayer[h.player].push(h); });
-      var n = _afg.players.length;
-      var gridCols = n <= 2 ? '1fr 1fr' : n <= 3 ? 'repeat(3,1fr)' : 'repeat('+n+',1fr)';
-      histEl.style.display = 'grid';
-      histEl.style.gridTemplateColumns = gridCols;
-      histEl.style.gap = '8px';
-      histEl.innerHTML = _afg.players.map(function(q){
-        var entries = byPlayer[q.name];
-        var rows = entries.length === 0
-          ? '<p style="color:var(--muted);font-size:12px;margin:0">–</p>'
-          : entries.slice().reverse().map(function(h){
-              return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--separator);font-size:12px">'+
-                '<span style="color:var(--muted)">'+h.desc+'</span>'+
-                '<span style="font-weight:700;color:'+(h.delta>0?'var(--success)':h.delta<0?'var(--danger)':'var(--muted)')+'">'+
-                  (h.delta>0?'+'+h.delta:h.delta<0?h.delta:'mis')+
-                '</span>'+
-              '</div>';
-            }).join('');
-        return '<div class="card" style="min-width:0;padding:10px 10px">'+
-          '<div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">'+q.name+'</div>'+
-          rows+
-        '</div>';
-      }).join('');
-    }
-  }
+  // ── 5. ACTION BAR ──
+  var actionBar=document.createElement('div');
+  actionBar.style.cssText='flex-shrink:0;padding:12px 16px 26px;display:flex;gap:8px;'+
+    'background:linear-gradient(to top,var(--bg) 60%,transparent);position:relative;z-index:1';
+  var undoBtn=document.createElement('button');
+  undoBtn.style.cssText='flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;'+
+    'padding:13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text)';
+  undoBtn.textContent='↩ Ongedaan';
+  undoBtn.addEventListener('click',afgooienUndo);
+  var stopBtn=document.createElement('button');
+  stopBtn.style.cssText='flex:1;background:rgba(181,80,47,.14);border:1px solid rgba(181,80,47,.4);'+
+    'border-radius:14px;padding:13px;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer';
+  stopBtn.textContent='■ Stop';
+  stopBtn.addEventListener('click',function(){
+    _inGame=false;
+    showScreen('screen-home');
+  });
+  actionBar.appendChild(undoBtn);
+  actionBar.appendChild(stopBtn);
+  root.appendChild(actionBar);
 }
 
 function afgScore(pts){
   _afgSnapshot();
   var p = _afgCurrentPlayer(); if(!p) return;
   var gained = Math.min(pts, Math.max(0, 5 - p.score));
+  var throwLabel;
+  if(pts===0){ throwLabel='M'; }
+  else if(p.number==='bull'){ throwLabel=pts===1?'BB':'B'; }
+  else { throwLabel=pts===1?'E':pts===2?'D':'T'; }
+  _afg.currentThrows.push(throwLabel);
   if(pts > 0 && gained > 0){
     p.score += gained;
+    _afg.currentTurnYield += gained;
     _afg.history.push({player:p.name, delta:gained, desc:'op '+(p.number==='bull'?'Bull':p.number)});
   } else {
     _afg.history.push({player:p.name, delta:0, desc:'mis'});
@@ -7496,6 +7558,8 @@ function afgAttack(targetName, pts){
   var t = null;
   for(var i=0;i<_afg.players.length;i++){ if(_afg.players[i].name===targetName){ t=_afg.players[i]; break; } }
   if(!p||!t) return;
+  _afg.currentThrows.push('-'+pts);
+  _afg.currentTurnYield += pts;
   t.score = Math.max(0, t.score - pts);
   _afg.history.push({player:p.name, delta:-pts, desc:'op '+t.name});
   if(t.score===0 && !t.eliminated){
@@ -7509,6 +7573,19 @@ function afgAttack(targetName, pts){
 }
 
 function _afgNextTurn(){
+  var p = _afgCurrentPlayer();
+  if(p){
+    _afg.turnNum++;
+    _afg.turns.push({
+      turnNum: _afg.turnNum,
+      player: p.name,
+      target: p.number,
+      isAfg: p.score >= 5,
+      throws: _afg.currentThrows.slice(),
+      yield: _afg.currentTurnYield
+    });
+  }
+  _afg.currentThrows = []; _afg.currentTurnYield = 0;
   var start = _afg.currentIdx;
   do{ _afg.currentIdx=(_afg.currentIdx+1)%_afg.players.length; }
   while(_afg.players[_afg.currentIdx].eliminated && _afg.currentIdx!==start);
