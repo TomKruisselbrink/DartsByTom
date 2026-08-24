@@ -4878,7 +4878,10 @@ function renderHalveIt(){
   });
   strip.appendChild(chips);
   content.appendChild(strip);
-  setTimeout(function(){var ac=chips.querySelector('[data-active]');if(ac)ac.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});},60);
+  setTimeout(function(){
+    var ac=chips.querySelector('[data-active]');
+    if(ac) chips.scrollLeft=ac.offsetLeft-(chips.offsetWidth-ac.offsetWidth)/2;
+  },0);
 
   if(!item){
     var doneMsg=document.createElement('div');
