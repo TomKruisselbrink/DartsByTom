@@ -234,7 +234,7 @@ body::before{
 /* ─── CONTENT AREA ─── */
 #app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%}
 #app-content>.screen.active{flex:1}
-#app-content:has(#screen-game.active){padding:0;overflow:hidden;max-width:100%}
+#app-content:has(#screen-game.active),#app-content:has(#screen-halveit.active){padding:0;overflow:hidden;max-width:100%}
 .screen{display:none}.screen.active{display:block}
 
 /* ─── TYPOGRAPHY ─── */
@@ -1792,45 +1792,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 </div>
 
 <!-- HALVE IT -->
-<div class="screen" id="screen-halveit">
-
-  <!-- BIG TARGET — fullwidth, always first -->
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;text-align:center">
-    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Gooi nu — ronde <span id="hi-round-num">1</span>/<span id="hi-total-rounds">12</span></div>
-    <div id="hi-big-target" class="hi-target-text" data-size="lg" style="font-weight:900;line-height:1.1;color:var(--accent);text-shadow:0 0 24px rgba(254,104,7,.4);padding:0 8px">—</div>
-    <div id="hi-big-sub" style="font-size:13px;color:var(--muted);margin-top:6px;min-height:18px"></div>
-    <!-- Info row -->
-    <div style="display:flex;justify-content:center;gap:0;margin-top:10px;border-top:1px solid var(--border);padding-top:10px">
-      <div style="flex:1;text-align:center;padding:0 4px">
-        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Beurt</div>
-        <div id="hi-turn-name" style="font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
-      </div>
-      <div style="width:1px;background:var(--border);flex-shrink:0"></div>
-      <div style="flex:1;text-align:center;padding:0 4px">
-        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Score</div>
-        <div id="hi-cur-score" style="font-size:16px;font-weight:900;color:var(--text)">0</div>
-      </div>
-      <div style="width:1px;background:var(--border);flex-shrink:0"></div>
-      <div style="flex:1;text-align:center;padding:0 4px">
-        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Deze beurt</div>
-        <div id="hi-turn-pts" style="font-size:16px;font-weight:900;color:var(--accent2)">0</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INPUT AREA — direct below target -->
-  <div class="card" style="margin-bottom:10px">
-    <div id="hi-input-area"></div>
-  </div>
-
-  <!-- PLAYERS — compact, below input -->
-  <div id="hi-players" style="display:grid;gap:6px;margin-bottom:8px"></div>
-
-  <!-- HISTORY -->
-  <div class="card" style="margin-bottom:0">
-    <h3 style="margin-bottom:6px">Geschiedenis</h3>
-    <div id="hi-history"></div>
-  </div>
+<div class="screen" id="screen-halveit" style="display:none;flex-direction:column;height:100%;overflow:hidden">
+  <div id="hi-root" style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden"></div>
 </div>
 
 <!-- 121 CHECKOUT -->
@@ -2327,11 +2290,11 @@ function calcPlayerAvgStats(name){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
   var el=document.getElementById(id);
-  el.style.display=(id==='screen-game'||id==='screen-afgooien')?'flex':'block';
+  el.style.display=(id==='screen-game'||id==='screen-afgooien'||id==='screen-halveit')?'flex':'block';
   el.classList.remove('active');void el.offsetWidth;el.classList.add('active');
   document.getElementById('app-content').scrollTop=0;
   // Show/hide game action bar
-  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-halveit','screen-checkout121','screen-cricket'];
+  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket'];
   var _inGame=_gameScreens.indexOf(id)>=0;
   var gb=document.getElementById('game-controls');
   if(gb){
@@ -4863,7 +4826,7 @@ function hiSeqLabel(item){if(!item)return'—';if(item.type==='spec_double')retu
 function hiCurItem(){return state.hiSeq[state.hiRound];}
 function renderHalveIt(){
   var item=hiCurItem();
-  // Safety: if all rounds done, trigger end screen
+  // Safety: all rounds done
   if(!item&&state.hiSeq&&state.hiSeq.length>0&&state.hiRound>=state.hiSeq.length){
     var _ms=Math.max.apply(null,state.hiScores);var _wi=state.hiScores.indexOf(_ms);
     var _sh=state.players.map(function(n,i){
@@ -4874,85 +4837,219 @@ function renderHalveIt(){
     }).join('');
     showWin(state.players.length===1?'Eindstand':state.players[_wi],'Halve It eindstand',_sh);return;
   }
-  document.getElementById('hi-round-num').textContent=state.hiRound+1;
-  document.getElementById('hi-total-rounds').textContent=state.hiSeq.length;
-  document.getElementById('hi-turn-name').textContent=state.players[state.currentPlayer];
-  document.getElementById('hi-cur-score').textContent=state.hiScores[state.currentPlayer];
-  document.getElementById('hi-turn-pts').textContent=state.hiTurnPts;
+  var root=document.getElementById('hi-root');
+  if(!root)return;
+  root.innerHTML='';
+  root.style.cssText='position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)';
 
-  // Big target display
-  var bigTarget=document.getElementById('hi-big-target');
-  var bigSub=document.getElementById('hi-big-sub');
-  if(item){
-    var labelMap={
-      'num':function(it){return it.val;},
-      'double':function(){return 'Double';},
-      'treble':function(){return 'Triple';},
-      'bull':function(){return 'Bull';},
-      'same_color':function(){return '3 dezelfde kleuren';},
-      'diff_color':function(){return '3 verschillende kleuren';},
-      'random3':function(){return 'Random getal';},
-      'spec_double':function(it){return 'D'+it.val;},
-      'spec_treble':function(it){return 'T'+it.val;}
-    };
-    var subMap={
-      'num':function(it){return 'Gooi het getal '+it.val;},
-      'double':function(){return 'Gooi een willekeurige double';},
-      'treble':function(){return 'Gooi een willekeurige triple';},
-      'bull':function(){return 'Gooi de bull (25 of 50)';},
-      'same_color':function(){return '3 pijlen dezelfde kleur';},
-      'diff_color':function(){return '3 pijlen 3 verschillende kleuren';},
-      'random3':function(){return '1 van 3 getallen gooien';},
-      'spec_double':function(it){return it.val*2+' pts per raak — mis = halveer';},
-      'spec_treble':function(it){return it.val*3+' pts per raak — mis = halveer';}
-    };
-    var lFn=labelMap[item.type];
-    var sFn=subMap[item.type];
-    var labelText=lFn?lFn(item):'?';
-    bigTarget.textContent=labelText;
-    // Set font size via class based on label length — CSS handles responsive scaling
-    bigTarget.className='hi-target-text';
-    if(labelText.length>15)     bigTarget.setAttribute('data-size','xs');
-    else if(labelText.length>10) bigTarget.setAttribute('data-size','sm');
-    else if(labelText.length>4)  bigTarget.setAttribute('data-size','md');
-    else                          bigTarget.setAttribute('data-size','lg');
-    bigSub.textContent=sFn?sFn(item):'';
-    // Color accent based on type
-    var colorMap={num:'var(--accent)',double:'var(--accent)',treble:'#f59e0b',bull:'#a855f7',same_color:'#3b82f6',diff_color:'#22c55e',random3:'#9c27b0',spec_double:'var(--accent)',spec_treble:'#f59e0b'};
-    bigTarget.style.color=colorMap[item.type]||'var(--accent)';
-  } else {
-    bigTarget.textContent='✓';bigSub.textContent='Alle rondes gespeeld';
+  // ── Glow ──
+  var glow=document.createElement('div');
+  glow.style.cssText='position:absolute;top:0;left:0;right:0;height:260px;pointer-events:none;z-index:0;'+
+    'background:radial-gradient(120% 100% at 50% 0%, rgba(181,80,47,.28), transparent 70%)';
+  root.appendChild(glow);
+
+  // ── Scrollable content ──
+  var content=document.createElement('div');
+  content.style.cssText='flex:1;min-height:0;display:flex;flex-direction:column;position:relative;z-index:1;overflow-y:auto;padding-top:12px';
+  root.appendChild(content);
+
+  // ── 1. RONDESTRIP ──
+  var strip=document.createElement('div');
+  strip.style.cssText='padding:0 16px 12px;flex-shrink:0';
+  var stripHdr=document.createElement('div');
+  stripHdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:7px';
+  stripHdr.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)">Halve It</div>'+
+    '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.3)">Ronde '+(state.hiRound+1)+' / '+state.hiSeq.length+'</div>';
+  strip.appendChild(stripHdr);
+  var chips=document.createElement('div');
+  chips.style.cssText='display:flex;gap:4px;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none';
+  var remaining=state.hiSeq.length-state.hiRound-1;
+  state.hiSeq.forEach(function(it,i){
+    var isActive=i===state.hiRound,isDone=i<state.hiRound;
+    var chip=document.createElement('div');
+    chip.style.cssText='flex-shrink:0;padding:5px 9px;border-radius:8px;font-size:12px;font-weight:'+(isActive?'900':'700')+';'+
+      'background:'+(isActive?'var(--accent)':'var(--surface)')+';'+
+      'color:'+(isActive?'#fff':isDone?'rgba(255,255,255,.3)':'var(--muted)')+';'+
+      'border:'+(isActive?'none':'1px solid rgba(255,255,255,.06)')+';'+
+      (isDone?'opacity:.45;':'');
+    chip.textContent=hiSeqLabel(it);
+    if(isActive)chip.dataset.active='1';
+    chips.appendChild(chip);
+  });
+  strip.appendChild(chips);
+  content.appendChild(strip);
+  setTimeout(function(){var ac=chips.querySelector('[data-active]');if(ac)ac.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});},60);
+
+  if(!item){
+    var doneMsg=document.createElement('div');
+    doneMsg.style.cssText='padding:32px 16px;text-align:center;color:var(--muted);font-size:14px';
+    doneMsg.textContent='Alle rondes gespeeld';
+    content.appendChild(doneMsg);
+    _buildHiActionBar(root);return;
   }
 
-  var pg=document.getElementById('hi-players');
-  pg.innerHTML='';
-  // Compact horizontal player scores
-  var playersHtml=state.players.map(function(name,i){
-    var score=state.hiScores[i];
-    var isActive=i===state.currentPlayer;
-    var lastRound=state.hiRoundScores[i][state.hiRoundScores[i].length-1];
-    var wasHalved=lastRound&&lastRound.halved;
-    var border=isActive?'2px solid var(--accent)':'1px solid var(--border)';
-    var bg=isActive?'rgba(254,104,7,.08)':'var(--surface)';
-    var indicator=wasHalved?'<span style="font-size:10px;color:var(--danger);margin-left:4px">½</span>':
-                  (lastRound&&!lastRound.halved&&lastRound.pts>0?'<span style="font-size:10px;color:var(--success);margin-left:4px">+'+lastRound.pts+'</span>':'');
-    return'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:'+bg+';border:'+border+';border-radius:var(--radius-sm)">'+
-      '<span style="font-size:13px;font-weight:'+(isActive?'800':'600')+';color:'+(isActive?'var(--accent)':'var(--text)')+'">'+name+'</span>'+
-      '<span style="font-size:20px;font-weight:900;color:'+(isActive?'var(--accent)':'var(--text)')+'">'+score+indicator+'</span>'+
+  var thrown=state.hiDartsThrown||0;
+  var dartsLeft=3-thrown;
+
+  // ── 2. DOELGETAL KAART ──
+  var labelMap2={num:function(it){return String(it.val);},double:function(){return 'Double';},treble:function(){return 'Triple';},
+    bull:function(){return 'Bull';},same_color:function(){return '3 dezelfde kleuren';},diff_color:function(){return '3 verschillende kleuren';},
+    random3:function(){return 'Random getal';},spec_double:function(it){return 'D'+it.val;},spec_treble:function(it){return 'T'+it.val;}};
+  var colorMap2={num:'var(--accent)',double:'var(--accent)',treble:'#f59e0b',bull:'#a855f7',
+    same_color:'#3b82f6',diff_color:'#22c55e',random3:'#9c27b0',spec_double:'var(--accent)',spec_treble:'#f59e0b'};
+  var lFn2=labelMap2[item.type];
+  var labelText2=lFn2?lFn2(item):'?';
+  var targetColor=colorMap2[item.type]||'var(--accent)';
+  var curName=state.players[state.currentPlayer];
+  var fSize=labelText2.length>14?'32px':labelText2.length>8?'54px':labelText2.length>4?'80px':'92px';
+  var dDots2='';
+  for(var d=1;d<=3;d++) dDots2+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d<=dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
+  var targetCard=document.createElement('div');
+  targetCard.style.cssText='margin:0 16px 8px;background:var(--surface);border:1px solid var(--border);'+
+    'border-radius:20px;padding:18px 16px 14px;text-align:center;flex-shrink:0';
+  targetCard.innerHTML=
+    '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+curName+' gooit op</div>'+
+    '<div style="font-size:'+fSize+';font-weight:900;color:'+targetColor+';line-height:1;letter-spacing:-3px;'+
+         'text-shadow:0 0 40px rgba(181,80,47,.45);margin:2px 0 6px">'+labelText2+'</div>'+
+    '<div style="display:flex;align-items:center;justify-content:center;gap:8px">'+
+      '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
+      '<div style="display:flex;gap:5px">'+dDots2+'</div>'+
     '</div>';
-  }).join('');
-  pg.innerHTML=playersHtml;
-  var sv=document.getElementById('hi-sequence-view');
-  if(sv){sv.innerHTML='';
-  state.hiSeq.forEach(function(it,i){
-    var active=i===state.hiRound;
-    var done=i<state.hiRound;
-    var style=active?'background:var(--accent);color:#fff;font-size:12px;padding:3px 10px;border-radius:20px;font-weight:700'
-              :done?'opacity:.35;font-size:11px;padding:2px 7px;border-radius:20px;background:var(--card);font-weight:600'
-              :'font-size:11px;padding:2px 7px;border-radius:20px;background:var(--card);font-weight:600;color:var(--muted)';
-    sv.innerHTML+='<span style="'+style+'">'+hiSeqLabel(it)+'</span>';
-  });}
-  renderHiInputArea(item);renderHiHistory();
+  content.appendChild(targetCard);
+
+  // ── 3. HALVERINGSBANNERS (num + bull type) ──
+  var showBanner=(item.type==='num'||item.type==='bull')&&state.hiTurnPts===0&&dartsLeft>0;
+  if(showBanner){
+    var bTarget=item.type==='bull'?'de bull':item.val;
+    var bannerText=dartsLeft===3?'Raak '+bTarget+' minstens één keer':
+      dartsLeft===1?'Laatste pijl — anders halveren':
+      'Nog '+dartsLeft+' pijlen om halveren te voorkomen';
+    var banner=document.createElement('div');
+    banner.style.cssText='margin:0 16px 10px;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.28);'+
+      'border-radius:12px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0';
+    banner.innerHTML='<div style="font-size:12px;font-weight:700;color:#FF9F0A">'+bannerText+'</div>'+
+      '<div style="font-size:11px;font-weight:800;color:rgba(255,159,10,.6)">−50%</div>';
+    content.appendChild(banner);
+  }
+
+  // ── 4. SCOREKNOPPEN ──
+  var inputWrap=document.createElement('div');
+  inputWrap.style.cssText='padding:0 16px;flex-shrink:0';
+
+  if(item.type==='num'){
+    var numGrid=document.createElement('div');
+    numGrid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px';
+    [{label:'Enkel',val:item.val},{label:'Dubbel',val:item.val*2},{label:'Triple',val:item.val*3}].forEach(function(opt){
+      var btn=document.createElement('button');
+      btn.style.cssText='background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 4px;min-height:60px;cursor:pointer;text-align:center;color:var(--text)';
+      btn.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+opt.label+'</div>'+
+        '<div style="font-size:25px;font-weight:900;line-height:1.15">'+opt.val+'</div>';
+      btn.addEventListener('click',(function(v){return function(){hiAddPts(v);};})(opt.val));
+      numGrid.appendChild(btn);
+    });
+    inputWrap.appendChild(numGrid);
+    var misBtn=document.createElement('button');
+    misBtn.style.cssText='border:1px dashed rgba(255,255,255,.16);background:none;border-radius:14px;padding:11px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;min-height:44px;width:100%';
+    misBtn.textContent='Mis';
+    misBtn.addEventListener('click',function(){hiAddPts(0);});
+    inputWrap.appendChild(misBtn);
+    content.appendChild(inputWrap);
+  } else {
+    // Legacy types via renderHiInputArea
+    var legacyArea=document.createElement('div');
+    legacyArea.id='hi-input-area';
+    inputWrap.appendChild(legacyArea);
+    content.appendChild(inputWrap);
+    renderHiInputArea(item);
+  }
+
+  // ── 5. SPELERS + RONDES ──
+  _buildHiPlayersAndHistory(content);
+
+  // ── ACTION BAR ──
+  _buildHiActionBar(root);
+}
+
+function _buildHiPlayersAndHistory(content){
+  // SPELERS
+  var playersWrap=document.createElement('div');
+  playersWrap.style.cssText='padding:12px 16px 0;display:flex;flex-direction:column;gap:6px;flex-shrink:0';
+  state.players.forEach(function(name,i){
+    var isActive=i===state.currentPlayer;
+    var card=document.createElement('div');
+    card.style.cssText='background:var(--surface);border-radius:12px;padding:10px 12px;'+
+      'display:flex;align-items:center;justify-content:space-between;'+
+      'border:'+(isActive?'1.5px solid var(--accent)':'1px solid rgba(255,255,255,.08)')+';'+
+      (!isActive?'opacity:.6':'');
+    var left=document.createElement('div');
+    left.style.cssText='display:flex;align-items:center;gap:8px;min-width:0';
+    left.innerHTML='<div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:'+(isActive?'var(--accent)':'rgba(255,255,255,.2)')+'"></div>'+
+      '<div style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+name+'</div>'+
+      (isActive&&state.hiTurnPts>0?'<div style="font-size:11px;color:var(--muted);flex-shrink:0">deze beurt +'+state.hiTurnPts+'</div>':'');
+    var right=document.createElement('div');
+    right.style.cssText='font-size:20px;font-weight:900;flex-shrink:0';
+    right.textContent=state.hiScores[i];
+    card.appendChild(left);card.appendChild(right);
+    playersWrap.appendChild(card);
+  });
+  content.appendChild(playersWrap);
+
+  // RONDES HISTORY
+  var histWrap=document.createElement('div');
+  histWrap.style.cssText='flex:1;min-height:60px;margin:14px 16px 0;display:flex;flex-direction:column;gap:6px';
+  var histLbl=document.createElement('div');
+  histLbl.style.cssText='font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:0 2px;flex-shrink:0';
+  histLbl.textContent='Rondes';
+  histWrap.appendChild(histLbl);
+  var histList=document.createElement('div');
+  histList.style.cssText='display:flex;flex-direction:column;gap:5px';
+  if(!state.hiHistory||!state.hiHistory.length){
+    var emp=document.createElement('div');
+    emp.style.cssText='font-size:13px;color:var(--muted);padding:2px 0';
+    emp.textContent='Nog geen rondes';
+    histList.appendChild(emp);
+  } else {
+    state.hiHistory.slice().reverse().forEach(function(h,idx){
+      var roundItem=state.hiSeq[h.round];
+      var roundLabel=hiSeqLabel(roundItem);
+      var playerName=state.players[h.player];
+      var throwStr=h.throws&&h.throws.length?h.throws.join(' · '):'';
+      var row=document.createElement('div');
+      row.style.cssText=(h.halved
+        ?'background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2)'
+        :'background:var(--surface)')+
+        ';border-radius:12px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;'+
+        (idx>=6?'opacity:.55':'');
+      var lft=document.createElement('div');
+      lft.style.cssText='display:flex;align-items:center;gap:8px;min-width:0';
+      lft.innerHTML='<div style="font-size:11px;font-weight:800;color:var(--muted);min-width:28px;flex-shrink:0">'+roundLabel+'</div>'+
+        (state.players.length>1?'<div style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+playerName+'</div>':'')+
+        (throwStr?'<div style="font-size:11px;color:var(--muted);flex-shrink:0">'+throwStr+'</div>':'');
+      var rht=document.createElement('div');
+      rht.style.cssText='font-size:14px;font-weight:900;flex-shrink:0;color:'+(h.halved?'#FF9F0A':'var(--accent2)');
+      rht.textContent=h.halved?'gehalveerd':'+'+h.pts;
+      row.appendChild(lft);row.appendChild(rht);
+      histList.appendChild(row);
+    });
+  }
+  histWrap.appendChild(histList);
+  content.appendChild(histWrap);
+}
+
+function _buildHiActionBar(root){
+  var bar=document.createElement('div');
+  bar.style.cssText='flex-shrink:0;padding:12px 16px 26px;display:flex;gap:8px;'+
+    'background:linear-gradient(to top,var(--bg) 60%,transparent);position:relative;z-index:1';
+  var undoBtn=document.createElement('button');
+  undoBtn.style.cssText='flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text)';
+  undoBtn.textContent='↩ Ongedaan';
+  undoBtn.addEventListener('click',hiUndo);
+  var stopBtn=document.createElement('button');
+  stopBtn.style.cssText='flex:1;background:rgba(181,80,47,.14);border:1px solid rgba(181,80,47,.4);border-radius:14px;padding:13px;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer';
+  stopBtn.textContent='■ Stop';
+  stopBtn.addEventListener('click',function(){_inGame=false;showScreen('screen-home');});
+  bar.appendChild(undoBtn);bar.appendChild(stopBtn);
+  root.appendChild(bar);
 }
 function renderHiInputArea(item){
   var el=document.getElementById('hi-input-area');el.innerHTML='';
@@ -5133,10 +5230,18 @@ function renderHiInputArea(item){
   }
 }
 function hiAddPts(pts){
+  if(!state.hiTurnThrows) state.hiTurnThrows=[];
+  var _hi=hiCurItem();
+  var _tl='M';
+  if(pts>0){
+    if(_hi&&_hi.type==='num'){_tl=pts===_hi.val?'E':pts===_hi.val*2?'D':'T';}
+    else if(_hi&&_hi.type==='bull'){_tl=pts===25?'Bull':'D-Bull';}
+    else{_tl=String(pts);}
+  }
+  state.hiTurnThrows.push(_tl);
   state.hiTurnPts+=pts;
   state.hiDartsThrown=(state.hiDartsThrown||0)+1;
   if(state.hiDartsThrown>=3){
-    // Als totale score 0 is na 3 pijlen → gehalveerd, anders telt de score
     hiEndTurn(state.hiTurnPts>0);
   } else {
     renderHalveIt();
@@ -5232,7 +5337,8 @@ function hiEndTurn(scored){
     entry={round:state.hiRound,pts:0,halved:true};
   }
   state.hiRoundScores[cur].push(entry);
-  state.hiHistory.push({player:cur,round:state.hiRound,prevScore:prev,pts:state.hiTurnPts,halved:entry.halved,newScore:state.hiScores[cur]});
+  state.hiHistory.push({player:cur,round:state.hiRound,prevScore:prev,pts:state.hiTurnPts,halved:entry.halved,newScore:state.hiScores[cur],throws:(state.hiTurnThrows||[]).slice()});
+  state.hiTurnThrows=[];
   // Track hits/misses per player
   if(!state.hiHits)state.hiHits=state.players.map(function(){return 0;});
   if(!state.hiMisses)state.hiMisses=state.players.map(function(){return 0;});
@@ -5279,7 +5385,7 @@ function hiUndo(){
   state.hiRound=last.round;state.hiScores[last.player]=last.prevScore;
   state.hiRoundScores[last.player].pop();
   state.dartCount[last.player]=Math.max(0,(state.dartCount[last.player]||0)-3);
-  state.currentPlayer=last.player;state.hiTurnPts=0;state.hiDartsThrown=0;renderHalveIt();
+  state.currentPlayer=last.player;state.hiTurnPts=0;state.hiDartsThrown=0;state.hiTurnThrows=[];renderHalveIt();
 }
 function renderHiHistory(){
   var el=document.getElementById('hi-history');el.innerHTML='';
