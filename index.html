@@ -4804,6 +4804,7 @@ function atcHit(){atcHitMult(1);}
 function atcHitMult(mult){
   if(state.atcDarts>=3)return;
   var cur=state.currentPlayer;
+  playSound('score');
   state.atcHistory.push({player:cur,target:state.atcTarget[cur],hit:true,mult:mult,darts:state.atcDarts});
   state.atcTarget[cur]+=mult;state.atcDarts++;
   if(state.atcTarget[cur]>atcMaxTarget()){
@@ -4944,6 +4945,7 @@ function cricketHit(segIdx){
     if(anyOpen){scoreAdded=CR_SEGS[segIdx]*extra;state.crScores[pi]+=scoreAdded;}
   }
 
+  playSound(scoreAdded>=100?'high':scoreAdded>0?'score':'score');
   state.crHistory.push({pi:pi,seg:segIdx,prevMarks:prevMarks,scoreAdded:scoreAdded,dart:state.crDarts,mult:mult});
   state.crDarts++;
 
@@ -5031,6 +5033,7 @@ function renderShanghai(){
 function shScore(mult){
   if(state.shDarts>=3)return;
   var pts=state.shTarget*mult;
+  playSound(pts>=100?'high':'score');
   state.shHistory.push({player:state.currentPlayer,pts:pts,target:state.shTarget,darts:state.shDarts});
   state.shScores[state.currentPlayer]+=pts;state.shTurnPts+=pts;state.shDarts++;
   if(state.shDarts>=3)shEndTurn();else renderShanghai();
@@ -5047,6 +5050,7 @@ function shEndTurn(){
     var origScore=state.shScores[halvPlayer];
     state.shScores[halvPlayer]=Math.floor(origScore/2);
     state.shHistory.push({player:halvPlayer,pts:0,target:state.shTarget,darts:3,halved:true,halvFrom:origScore});
+    playSound('bust');
   }
   state.dartCount[state.currentPlayer]=(state.dartCount[state.currentPlayer]||0)+3;
   state.shDarts=0;state.shTurnPts=0;
@@ -5574,11 +5578,15 @@ function hiEndTurn(scored){
   if(scored){
     state.hiScores[cur]+=_hiPts;
     entry={round:state.hiRound,pts:_hiPts,halved:false};
-    if(_hiPts>0)setTimeout(function(){showToast('+'+_hiPts+' punten ✓','success');},120);
+    if(_hiPts>0){
+      playSound(_hiPts>=100?'high':'score');
+      setTimeout(function(){showToast('+'+_hiPts+' punten ✓','success');},120);
+    }
   } else {
     var _prevHi=state.hiScores[cur];
     state.hiScores[cur]=Math.floor(state.hiScores[cur]/2);
     entry={round:state.hiRound,pts:0,halved:true};
+    playSound('bust');
     setTimeout(function(){showToast('Score gehalveerd ✂️  '+_prevHi+' → '+Math.floor(_prevHi/2),'error');},120);
   }
   state.hiRoundScores[cur].push(entry);
@@ -8013,6 +8021,7 @@ function afgScore(pts){
   _afg.currentThrows.push(throwLabel);
   if(pts > 0 && gained > 0){
     p.score += gained;
+    playSound('score');
     _afg.currentTurnYield += gained;
     _afg.history.push({player:p.name, delta:gained, desc:'op '+(p.number==='bull'?'Bull':p.number)});
   } else {
@@ -8035,7 +8044,10 @@ function afgAttack(targetName, pts){
   _afg.history.push({player:p.name, delta:-pts, desc:'op '+t.name});
   if(t.score===0 && !t.eliminated){
     t.eliminated = true;
+    playSound('checkout');
     _afg.history.push({player:t.name, delta:0, desc:'af!'});
+  } else {
+    playSound('score');
   }
   var active = _afgActive();
   if(active.length===1){ _afgWin(active[0]); return; }
