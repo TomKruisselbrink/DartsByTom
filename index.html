@@ -1779,12 +1779,12 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
   <!-- SCORE BUTTONS -->
   <div class="card" style="margin-bottom:10px">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
-      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(1)">Single</button>
-      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(2)">Double</button>
-      <button class="btn" style="padding:14px 8px;font-size:15px;font-weight:800" onclick="shScore(3)">Triple</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
+      <button class="btn" style="padding:22px 8px;font-size:18px;font-weight:800;min-height:70px" onclick="shScore(1)">Single</button>
+      <button class="btn" style="padding:22px 8px;font-size:18px;font-weight:800;min-height:70px" onclick="shScore(2)">Double</button>
+      <button class="btn" style="padding:22px 8px;font-size:18px;font-weight:800;min-height:70px" onclick="shScore(3)">Triple</button>
     </div>
-    <button class="btn" style="width:100%;padding:12px;color:var(--muted);font-size:14px" onclick="shMiss()">✕ Mis — geen punt op dit getal</button>
+    <button class="btn" style="width:100%;padding:16px;color:var(--muted);font-size:15px;font-weight:700" onclick="shMiss()">✕ Mis — geen punt op dit getal</button>
   </div>
 
   <!-- PLAYERS GRID -->
@@ -2573,7 +2573,7 @@ function selectGame(g){
   document.getElementById('gt-opts-atc').style.display=(g==='atc')?'block':'none';
   document.getElementById('gt-opts-shanghai').style.display=(g==='shanghai7'||g==='shanghai20')?'block':'none';
   document.getElementById('setup-rules-empty').style.display=hasOpts?'none':'block';
-  document.getElementById('bot-card').style.display=isX01?'block':'none';
+  document.getElementById('bot-card').style.display=(isX01||g==='halveit'||g==='afgooien')?'block':'none';
   var lbl=_RULES_LABELS[g]||['Spelregels',''];
   var rt=document.getElementById('setup-rules-title');var rs=document.getElementById('setup-rules-sub');
   if(rt)rt.textContent=lbl[0];if(rs)rs.textContent=lbl[1];
@@ -2816,7 +2816,7 @@ function startGame(){
 
   // Add bot if enabled and game is 501/301
   var players=setupPlayers.slice();
-  if(botEnabled&&(selectedGame==='x01'||selectedGame==='501'||selectedGame==='301')){
+  if(botEnabled&&(selectedGame==='x01'||selectedGame==='501'||selectedGame==='301'||selectedGame==='halveit'||selectedGame==='afgooien')){
     var bname=document.getElementById('bot-name').value.trim()||'Bot';
     state.botPlayerIndex=players.length;
     players.push(bname);
@@ -2941,6 +2941,89 @@ function getBotCheckoutRate(){
     if(a&&a.checkoutPct!==null)return Math.min(0.95,a.checkoutPct/100);
   }
   return 0.28;
+}
+
+// ─── Halve It Bot ────────────────────────────────────────────────────────────
+function _hiIsBot(){
+  return state.botPlayerIndex>=0&&state.currentPlayer===state.botPlayerIndex;
+}
+function triggerHiBotTurn(){
+  if(!_hiIsBot())return;
+  var item=hiCurItem();if(!item)return;
+  var avg=getBotAvg();
+  var hp=Math.max(0.15,Math.min(0.82,(avg-20)/100));
+  var pts=0;
+  if(item.type==='num'){
+    for(var i=0;i<3;i++){if(Math.random()<hp){var r=Math.random();pts+=item.val*(r<0.55?1:r<0.85?2:3);}}
+  } else if(item.type==='double'){
+    var dh=hp*0.5;for(var i=0;i<3;i++){if(Math.random()<dh)pts+=(Math.floor(Math.random()*20)+1)*2;}
+  } else if(item.type==='treble'){
+    var th=hp*0.35;for(var i=0;i<3;i++){if(Math.random()<th)pts+=(Math.floor(Math.random()*20)+1)*3;}
+  } else if(item.type==='bull'){
+    var bh=hp*0.4;for(var i=0;i<3;i++){if(Math.random()<bh)pts+=Math.random()<0.4?50:25;}
+  } else if(item.type==='spec_double'){
+    var sdh=hp*0.45;for(var i=0;i<3;i++){if(Math.random()<sdh)pts+=item.val*2;}
+  } else if(item.type==='spec_treble'){
+    var sth=hp*0.3;for(var i=0;i<3;i++){if(Math.random()<sth)pts+=item.val*3;}
+  } else if(item.type==='same_color'||item.type==='diff_color'){
+    var ch=hp*(item.type==='same_color'?0.5:0.42);
+    if(Math.random()<ch)pts=Math.floor(Math.random()*120)+30;
+  } else if(item.type==='random3'){
+    if(!state.hiRandom3Options){
+      var opts=[],imp=[169,168,166,165,163,162,159,179,178,176,175,173,172];
+      while(opts.length<3){var rn=26+Math.floor(Math.random()*155);if(imp.indexOf(rn)<0&&opts.indexOf(rn)<0)opts.push(rn);}
+      opts.sort(function(a,b){return a-b;});
+      state.hiRandom3Options=opts;state.hiRandom3Round=state.hiRound;
+    }
+    if(Math.random()<hp*0.65)pts=state.hiRandom3Options[Math.floor(Math.random()*state.hiRandom3Options.length)];
+  } else if(item.type==='custom'){
+    if(Math.random()<hp*0.7)pts=Math.floor(avg*0.8*Math.random());
+  }
+  state.hiTurnPts=pts;state.hiDartsThrown=3;
+  hiEndTurn(pts>0);
+}
+
+// ─── Afgooien Bot ─────────────────────────────────────────────────────────────
+var _afgBotThinking=false;
+function _afgIsBot(){
+  if(state.botPlayerIndex<0||!_afg||!_afg.players)return false;
+  var p=_afgCurrentPlayer();
+  return !!(p&&state.players[state.botPlayerIndex]&&p.name===state.players[state.botPlayerIndex]);
+}
+function triggerAfgBotDart(){
+  _afgBotThinking=false;
+  if(!_afgIsBot())return;
+  var p=_afgCurrentPlayer();if(!p)return;
+  var avg=getBotAvg();
+  var hp=Math.max(0.2,Math.min(0.85,(avg-20)/100));
+  if(p.score<5){
+    afgScore(Math.random()<hp?1:0);
+  } else {
+    var active=_afgActive().filter(function(q){return q.name!==p.name;});
+    if(!active.length){afgScore(0);return;}
+    active.sort(function(a,b){return b.score-a.score;});
+    var target=active[0];
+    if(Math.random()<hp){
+      var pts=Math.min(Math.ceil(Math.random()*3),target.score);
+      if(pts>0){afgAttack(target.name,pts);}else{afgScore(0);}
+    } else {
+      afgScore(0);
+    }
+  }
+}
+function triggerAfgBullBot(){
+  if(state.botPlayerIndex<0)return;
+  var activePlayers=_afgBullReRound?_afgBullRePlayers:_afg.players;
+  var p=activePlayers[_afg.bullIdx];
+  if(!p||!state.players[state.botPlayerIndex]||p.name!==state.players[state.botPlayerIndex])return;
+  var avg=getBotAvg();
+  var hp=Math.max(0.15,Math.min(0.82,(avg-20)/100));
+  var r=Math.random();
+  var type,val;
+  if(r<hp*0.35){type='bull2';val=50;}
+  else if(r<hp*0.7){type='bull1';val=25;}
+  else{type='num';val=Math.floor(Math.random()*20)+1;}
+  _afgBullHit(type,val);
 }
 
 // Generate a realistic bot score for one turn given remaining score and target avg
@@ -3380,9 +3463,14 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.hiHistory=[];state.hiTurnPts=0;state.hiDartsThrown=0;
     state.hiHits=players.map(function(){return 0;});
     state.hiMisses=players.map(function(){return 0;});
+    state.hiDoubleHits=players.map(function(){return 0;});
+    state.hiDoubleMisses=players.map(function(){return 0;});
+    state.hiTrebleHits=players.map(function(){return 0;});
+    state.hiTrebleMisses=players.map(function(){return 0;});
     state.hiColorPijlen=[];state.hiColorDarts=[];state.hiColorPhase='number';state.hiColorSelectedNum=null;
     state.hiRandom3Options=null;state.hiRandom3Round=-1;
     setTimeout(saveRematchConfig,0);renderHalveIt();showScreen('screen-halveit');
+    if(state.botPlayerIndex===state.firstPlayer){setTimeout(triggerHiBotTurn,1000);}
   } else if(gameType==='checkout121'){
     launchCo121(players);setTimeout(saveRematchConfig,0);
   } else if(gameType==='cricket'){
@@ -4904,6 +4992,7 @@ function renderHalveIt(){
   var labelText2=lFn2?lFn2(item):'?';
   var targetColor=colorMap2[item.type]||'var(--accent)';
   var curName=state.players[state.currentPlayer];
+  var curIsBot=(_hiIsBot&&_hiIsBot());
   var fSize=labelText2.length>14?'32px':labelText2.length>8?'54px':labelText2.length>4?'80px':'92px';
   var emojiDarts='';
   for(var d=0;d<3;d++) emojiDarts+='<span style="font-size:20px">'+(d<thrown?'🎯':'⚪')+'</span>';
@@ -4911,7 +5000,7 @@ function renderHalveIt(){
   targetCard.style.cssText='margin:0 16px 8px;background:var(--surface);border:1px solid var(--border);'+
     'border-radius:20px;padding:18px 16px 14px;text-align:center;flex-shrink:0';
   targetCard.innerHTML=
-    '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+curName+' gooit op</div>'+
+    '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+(curIsBot?'🤖 ':'')+curName+' gooit op</div>'+
     '<div style="font-size:'+fSize+';font-weight:900;color:'+targetColor+';line-height:1;letter-spacing:-3px;'+
          'text-shadow:0 0 40px rgba(181,80,47,.45);margin:2px 0 8px">'+labelText2+'</div>'+
     '<div style="display:flex;align-items:center;justify-content:center;gap:6px">'+
@@ -4929,7 +5018,7 @@ function renderHalveIt(){
     numGrid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px';
     [{label:'Enkel',val:item.val},{label:'Dubbel',val:item.val*2},{label:'Triple',val:item.val*3}].forEach(function(opt){
       var btn=document.createElement('button');
-      btn.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 4px;min-height:60px;cursor:pointer;text-align:center;color:var(--text);transition:transform .08s';
+      btn.style.cssText='background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 4px;min-height:60px;cursor:pointer;text-align:center;color:var(--text);transition:transform .08s;box-shadow:var(--shadow)';
       btn.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+opt.label+'</div>'+
         '<div style="font-size:25px;font-weight:900;line-height:1.15">'+opt.val+'</div>';
       btn.addEventListener('click',(function(v){return function(){hiAddPts(v);};})(opt.val));
@@ -4941,7 +5030,7 @@ function renderHalveIt(){
     });
     inputWrap.appendChild(numGrid);
     var misBtn=document.createElement('button');
-    misBtn.style.cssText='border:1px solid var(--border);background:var(--card);border-radius:14px;padding:12px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;min-height:46px;width:100%;transition:transform .08s';
+    misBtn.style.cssText='border:1.5px solid var(--border);background:var(--surface);border-radius:14px;padding:12px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;min-height:46px;width:100%;transition:transform .08s;box-shadow:var(--shadow)';
     misBtn.textContent='Mis';
     misBtn.addEventListener('click',function(){hiAddPts(0);});
     misBtn.addEventListener('pointerdown',function(){this.style.transform='scale(.97)';});
@@ -5329,7 +5418,14 @@ function hiEndTurn(scored){
   // Track hits/misses per player
   if(!state.hiHits)state.hiHits=state.players.map(function(){return 0;});
   if(!state.hiMisses)state.hiMisses=state.players.map(function(){return 0;});
+  if(!state.hiDoubleHits)state.hiDoubleHits=state.players.map(function(){return 0;});
+  if(!state.hiDoubleMisses)state.hiDoubleMisses=state.players.map(function(){return 0;});
+  if(!state.hiTrebleHits)state.hiTrebleHits=state.players.map(function(){return 0;});
+  if(!state.hiTrebleMisses)state.hiTrebleMisses=state.players.map(function(){return 0;});
   if(scored)state.hiHits[cur]++;else state.hiMisses[cur]++;
+  var _hiCurType=(state.hiSeq&&state.hiSeq[state.hiRound])?state.hiSeq[state.hiRound].type:'';
+  if(_hiCurType==='double'||_hiCurType==='spec_double'){if(scored)state.hiDoubleHits[cur]++;else state.hiDoubleMisses[cur]++;}
+  if(_hiCurType==='treble'||_hiCurType==='spec_treble'){if(scored)state.hiTrebleHits[cur]++;else state.hiTrebleMisses[cur]++;}
   state.dartCount[cur]=(state.dartCount[cur]||0)+3;state.hiTurnPts=0;state.hiDartsThrown=0;
   state.currentPlayer=(state.currentPlayer+1)%state.players.length;
   var _hiRoundDone=(state.players.length<=1)||(state.currentPlayer===state.firstPlayer);
@@ -5342,6 +5438,12 @@ function hiEndTurn(scored){
         var misses=state.hiMisses?state.hiMisses[i]:0;
         var total=hits+misses;
         var pct=total>0?Math.round(hits/total*100):0;
+        var dh=state.hiDoubleHits?state.hiDoubleHits[i]:0;
+        var dm=state.hiDoubleMisses?state.hiDoubleMisses[i]:0;
+        var th=state.hiTrebleHits?state.hiTrebleHits[i]:0;
+        var tm=state.hiTrebleMisses?state.hiTrebleMisses[i]:0;
+        var dpct=(dh+dm>0)?Math.round(dh/(dh+dm)*100):null;
+        var tpct=(th+tm>0)?Math.round(th/(th+tm)*100):null;
         var roundHistory=state.hiHistory.filter(function(h){return h.player===i;}).map(function(h){
           return{round:h.round,label:hiSeqLabel(state.hiSeq[h.round]),pts:h.pts,halved:h.halved,newScore:h.newScore};
         });
@@ -5350,7 +5452,7 @@ function hiEndTurn(scored){
           darts:state.dartCount[i]||0,
           score:state.hiScores[i]||0,
           highScore:state.hiScores[i]||0,
-          hiStats:{hits:hits,misses:misses,pct:pct,rounds:total},
+          hiStats:{hits:hits,misses:misses,pct:pct,rounds:total,doubleHits:dh,doubleMisses:dm,doublePct:dpct,trebleHits:th,trebleMisses:tm,treblePct:tpct},
           hiRoundHistory:roundHistory
         });
       });
@@ -5358,13 +5460,21 @@ function hiEndTurn(scored){
         var hits=state.hiHits?state.hiHits[i]:0;
         var misses=state.hiMisses?state.hiMisses[i]:0;
         var pct=hits+misses>0?Math.round(hits/(hits+misses)*100):0;
+        var dh=state.hiDoubleHits?state.hiDoubleHits[i]:0,dm=state.hiDoubleMisses?state.hiDoubleMisses[i]:0;
+        var th=state.hiTrebleHits?state.hiTrebleHits[i]:0,tm=state.hiTrebleMisses?state.hiTrebleMisses[i]:0;
+        var dpct=(dh+dm>0)?Math.round(dh/(dh+dm)*100):null;
+        var tpct=(th+tm>0)?Math.round(th/(th+tm)*100):null;
+        var extras='';
+        if(dpct!==null)extras+='<span style="color:var(--accent2);font-size:11px;margin-left:6px">D:'+dh+'/'+(dh+dm)+' ('+dpct+'%)</span>';
+        if(tpct!==null)extras+='<span style="color:#f59e0b;font-size:11px;margin-left:6px">T:'+th+'/'+(th+tm)+' ('+tpct+'%)</span>';
         return'<div class="stat-row"><span>'+n+'</span><strong>'+state.hiScores[i]+'</strong>'+
-          '<span style="color:var(--muted);font-size:11px;margin-left:8px">'+hits+'/'+(hits+misses)+' raak ('+pct+'%)</span></div>';
+          '<span style="color:var(--muted);font-size:11px;margin-left:8px">'+pct+'% raak</span>'+extras+'</div>';
       }).join('');
       showWin(state.players[winIdx],'Halve It eindstand',statsHtml);return;
     }
   }
   renderHalveIt();
+  if(_hiIsBot()){setTimeout(triggerHiBotTurn,1000);}
 }
 function hiUndo(){
   var item=hiCurItem();
@@ -6189,9 +6299,12 @@ function renderHistory(){
     var hiDetailHtml='';
     if(g.hiStats){
       var hs=g.hiStats;
+      var _dext='',_text2='';
+      if(hs.doublePct!==null&&hs.doublePct!==undefined)_dext='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:var(--accent2)">'+hs.doublePct+'%</div><div style="font-size:9px;color:var(--muted)">double</div><div style="font-size:9px;color:var(--muted)">'+hs.doubleHits+'/'+(hs.doubleHits+hs.doubleMisses)+'</div></div>';
+      if(hs.treblePct!==null&&hs.treblePct!==undefined)_text2='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:#f59e0b">'+hs.treblePct+'%</div><div style="font-size:9px;color:var(--muted)">triple</div><div style="font-size:9px;color:var(--muted)">'+hs.trebleHits+'/'+(hs.trebleHits+hs.trebleMisses)+'</div></div>';
       hiDetailHtml+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;background:var(--card);border-radius:var(--radius-sm)">'
-        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+hs.pct+'%</div><div style="font-size:9px;color:var(--muted)">raak</div></div>'
-        +'<div style="font-size:12px;color:var(--muted)">'+hs.hits+' / '+(hs.hits+hs.misses)+' rondes geraakt</div>'
+        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+hs.pct+'%</div><div style="font-size:9px;color:var(--muted)">raak</div><div style="font-size:9px;color:var(--muted)">'+hs.hits+'/'+(hs.hits+hs.misses)+'</div></div>'
+        +_dext+_text2
         +'<div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:900;color:var(--text)">'+g.score+'</div><div style="font-size:9px;color:var(--muted)">eindscore</div></div>'
         +'</div>';
       if(g.hiRoundHistory&&g.hiRoundHistory.length){
@@ -7243,6 +7356,12 @@ function renderAfgBull(){
   });
   var backBtn = el.querySelector('#afg-bull-back');
   if(backBtn) backBtn.addEventListener('click', _afgBullBack);
+  // Auto-play bot in bull round
+  var _bullActivePlayers=_afgBullReRound?_afgBullRePlayers:_afg.players;
+  var _bullCurP=_bullActivePlayers[_afg.bullIdx];
+  if(_bullCurP&&state.botPlayerIndex>=0&&state.players[state.botPlayerIndex]&&_bullCurP.name===state.players[state.botPlayerIndex]){
+    setTimeout(triggerAfgBullBot,1000);
+  }
 }
 
 function _afgBullHit(type, val){
@@ -7337,6 +7456,7 @@ function _afgFinalizeOrder(){
   renderAfgooien();
   showScreen('screen-afgooien');
   // eigen actiebalk — geen game-controls nodig
+  if(_afgIsBot()){_afgBotThinking=true;setTimeout(triggerAfgBotDart,1000);}
 }
 
 // ── TIE-BREAK DRAG SCREEN ────────────────────────────────────
@@ -7699,6 +7819,7 @@ function _afgNextTurn(){
   do{ _afg.currentIdx=(_afg.currentIdx+1)%_afg.players.length; }
   while(_afg.players[_afg.currentIdx].eliminated && _afg.currentIdx!==start);
   _afg.dartsLeft=3; renderAfgooien();
+  if(!_afgBotThinking&&_afgIsBot()){_afgBotThinking=true;setTimeout(triggerAfgBotDart,900);}
 }
 
 function _afgWin(winner){
