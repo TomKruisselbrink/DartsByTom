@@ -4057,27 +4057,6 @@ function renderGame(){
     }
   });
 
-  // Trigger score delta overlays (after DOM is built)
-  (function(){
-    var _src=(state.allHistory&&state.allHistory.length)?state.allHistory:state.history;
-    state.players.forEach(function(nm,pi){
-      var _old=_prevScores['_pre_'+pi];
-      var _cur=state.scores[pi];
-      var _entries=_src.filter(function(h){return h.player===pi;});
-      var _len=_entries.length;
-      var _prevLen=_prevScores['_len_'+pi]||0;
-      _prevScores['_len_'+pi]=_len;
-      if(_old!==undefined){
-        if(_old!==_cur){
-          _animScoreDelta(pi,Math.abs(_old-_cur),false);
-        } else if(_len>_prevLen){
-          // Score unchanged but new entry = bust
-          _animScoreDelta(pi,0,true);
-        }
-      }
-      _prevScores['_pre_'+pi]=_cur;
-    });
-  })();
 
   // Stats grid — one card per player
   var statsCols=n<=2?'1fr 1fr':n<=3?'1fr 1fr 1fr':n<=4?'repeat(4,1fr)':'repeat('+n+',1fr)';
