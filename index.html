@@ -1539,15 +1539,32 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
         <!-- Eliminatie opties -->
         <div id="gt-opts-eliminatie" style="display:none">
-          <div class="card">
+          <div class="card" style="margin-bottom:8px">
             <div class="label">Doelscore</div>
             <div class="segment" style="margin-bottom:8px">
               <button id="eli-125" onclick="setEliTarget(125)">125</button>
-              <button id="eli-175" onclick="setEliTarget(175)">175</button>
+              <button id="eli-170" onclick="setEliTarget(170)">170</button>
               <button class="active" id="eli-301" onclick="setEliTarget(301)">301</button>
               <button id="eli-501" onclick="setEliTarget(501)">501</button>
+              <button id="eli-custom-btn" onclick="setEliTargetCustom()">Eigen</button>
             </div>
-            <div id="eli-target-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Eerste speler die exact 301 gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!</div>
+            <div id="eli-custom-row" style="display:none;margin-bottom:8px">
+              <div style="display:flex;gap:6px;align-items:center">
+                <input type="number" id="eli-custom-input" min="10" max="9999" placeholder="Eigen getal…"
+                  style="flex:1;font-size:15px;font-weight:700;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text)"
+                  oninput="eliApplyCustomTarget(this.value)">
+                <span style="font-size:12px;color:var(--muted)">punten</span>
+              </div>
+            </div>
+            <div id="eli-target-hint" style="font-size:11px;color:var(--muted)">Eerste speler die exact 301 gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!</div>
+          </div>
+          <div class="card">
+            <div class="label">Uitgooi</div>
+            <div class="segment">
+              <button class="active" id="eli-out-single" onclick="setEliOut('single')">Single out</button>
+              <button id="eli-out-double" onclick="setEliOut('double')">Double out</button>
+            </div>
+            <div id="eli-out-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Elke worp telt om het spel te winnen</div>
           </div>
         </div>
 
@@ -2359,12 +2376,12 @@ function showScreen(id){
   el.classList.remove('active');void el.offsetWidth;el.classList.add('active');
   document.getElementById('app-content').scrollTop=0;
   // Show/hide game action bar
-  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket'];
+  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie'];
   var _inGame=_gameScreens.indexOf(id)>=0;
   var gb=document.getElementById('game-controls');
   if(gb){
     if(_inGame)gb.classList.add('show');else gb.classList.remove('show');
-    var _gTitles={'screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket'};
+    var _gTitles={'screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie'};
     var gbt=document.getElementById('game-bar-title');if(gbt)gbt.textContent=_gTitles[id]||'';
   }
   // Tournament nav rendered inline in renderTrnOverview/renderStandings
@@ -2723,13 +2740,37 @@ function setShHalve(v){
   var hint=document.getElementById('sh-halve-hint');
   if(hint)hint.textContent=v?'Bij 3 misses: score gehalveerd':'Normaal: 3 misses = 0 punten';
 }
+var eliDoubleOut=false;
 function setEliTarget(v){
   eliTarget=v;
-  [125,175,301,501].forEach(function(n){
+  [125,170,301,501].forEach(function(n){
     var b=document.getElementById('eli-'+n);if(b)b.className=(n===v?'active':'');
   });
+  var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='';
+  var cr=document.getElementById('eli-custom-row');if(cr)cr.style.display='none';
   var hint=document.getElementById('eli-target-hint');
   if(hint)hint.textContent='Eerste speler die exact '+v+' gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!';
+}
+function setEliTargetCustom(){
+  [125,170,301,501].forEach(function(n){var b=document.getElementById('eli-'+n);if(b)b.className='';});
+  var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='active';
+  var cr=document.getElementById('eli-custom-row');if(cr)cr.style.display='block';
+}
+function eliApplyCustomTarget(val){
+  var v=parseInt(val,10);
+  if(v>=10&&v<=9999){
+    eliTarget=v;
+    var hint=document.getElementById('eli-target-hint');
+    if(hint)hint.textContent='Eerste speler die exact '+v+' gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!';
+  }
+}
+function setEliOut(mode){
+  eliDoubleOut=(mode==='double');
+  var bs=document.getElementById('eli-out-single');var bd=document.getElementById('eli-out-double');
+  if(bs)bs.className=!eliDoubleOut?'active':'';
+  if(bd)bd.className=eliDoubleOut?'active':'';
+  var hint=document.getElementById('eli-out-hint');
+  if(hint)hint.textContent=eliDoubleOut?'Je moet de doelscore op een double gooien om te winnen':'Elke worp telt om het spel te winnen';
 }
 function setMatchFormat(f){
   matchFormat=f;
@@ -3664,6 +3705,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.eliScores=players.map(function(){return 0;});
     state.eliTurns=players.map(function(){return 0;});
     state.eliHistory=[];state.eliRound=1;state.eliTarget=eliTarget;
+    state.eliDoubleOut=eliDoubleOut;state.eliSnapshots=[];
     _eliNumVal='';
     setTimeout(saveRematchConfig,0);renderEliminatie();showScreen('screen-eliminatie');
   }
@@ -4441,22 +4483,25 @@ function numpadPress(key){
 
 // ─── Physical keyboard → numpad (PC/laptop support) ──────
 document.addEventListener('keydown', function(e){
-  // Only active during 501/301 game screen
+  // Only active during 501/301 game screen or eliminatie
   var active = document.querySelector('.screen.active');
-  if(!active || active.id !== 'screen-game') return;
+  if(!active) return;
+  var _isX01 = active.id === 'screen-game';
+  var _isEli = active.id === 'screen-eliminatie';
+  if(!_isX01 && !_isEli) return;
   // Don't intercept while an input/textarea has focus
   var tag = document.activeElement ? document.activeElement.tagName : '';
   if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
   var k = e.key;
   if(k >= '0' && k <= '9'){
     e.preventDefault();
-    numpadPress(k);
+    if(_isEli) eliNumPress(k); else numpadPress(k);
   } else if(k === 'Backspace' || k === 'Delete'){
     e.preventDefault();
-    numpadPress('del');
+    if(_isEli) eliNumPress('del'); else numpadPress('del');
   } else if(k === 'Enter'){
     e.preventDefault();
-    numpadPress('enter');
+    if(_isEli) eliNumPress('enter'); else numpadPress('enter');
   }
 });
 
@@ -7137,6 +7182,7 @@ function gameBarUndo(){
   else if(sid==='screen-halveit')hiUndo();
   else if(sid==='screen-checkout121')co121Undo();
   else if(sid==='screen-cricket')cricketUndo();
+  else if(sid==='screen-eliminatie')eliUndo();
 }
 function toggleHistoryDetail(did){
   var el=document.getElementById(did);
@@ -7626,7 +7672,7 @@ function renderEliminatie(){
     '<button onclick="if(confirm(\'Spel verlaten?\'))showScreen(\'screen-home\')" class="setup-nav-arrow" style="padding:5px 10px;font-size:12px">← Home</button>'+
     '<div style="text-align:center">'+
       '<div style="font-size:14px;font-weight:900;color:var(--text)">Eliminatie</div>'+
-      '<div style="font-size:11px;color:var(--muted)">Doel: '+target+' punten</div>'+
+      '<div style="font-size:11px;color:var(--muted)">Doel: '+target+(state.eliDoubleOut?' · Double out':'')+'</div>'+
     '</div>'+
     '<div style="font-size:12px;font-weight:700;color:var(--muted);text-align:right">Ronde<br><span style="font-size:18px;color:var(--text)">'+state.eliRound+'</span></div>';
   topWrap.appendChild(hdr);
@@ -7757,6 +7803,15 @@ function eliSubmit(){
   var target=state.eliTarget;
   var players=state.players;
 
+  // Save snapshot for undo
+  state.eliSnapshots.push({
+    scores:state.eliScores.slice(),
+    turns:state.eliTurns.slice(),
+    currentPlayer:cur,
+    round:state.eliRound,
+    histLen:state.eliHistory.length
+  });
+
   state.eliTurns[cur]=(state.eliTurns[cur]||0)+1;
 
   // Bust: score would exceed target
@@ -7771,14 +7826,14 @@ function eliSubmit(){
   // Apply score
   state.eliScores[cur]=newScore;
 
-  // Win check
+  // Win check — with optional double-out confirmation
   if(newScore===target){
-    var totalRounds=state.eliRound;
-    state.eliHistory.push({round:totalRounds,player:cur,scored:val,result:'win',score:newScore});
-    var statsHtml=players.map(function(n,i){
-      return '<div class="stat-row"><span>'+n+'</span><strong>'+state.eliScores[i]+' <span style="color:var(--muted);font-size:11px;font-weight:600">('+state.eliTurns[i]+' beurten)</span></strong></div>';
-    }).join('');
-    showWin(players[cur],'Eliminatie – exact '+target+' in ronde '+totalRounds+' 🎯',statsHtml);
+    if(state.eliDoubleOut){
+      // Ask if last dart was a double
+      _eliConfirmDouble(val,newScore);
+      return;
+    }
+    _eliDoWin(val,newScore);
     return;
   }
 
@@ -7803,6 +7858,63 @@ function eliSubmit(){
   }
 
   eliNextPlayer();
+}
+
+function _eliDoWin(val,newScore){
+  var cur=state.currentPlayer;
+  var players=state.players;
+  var totalRounds=state.eliRound;
+  state.eliHistory.push({round:totalRounds,player:cur,scored:val,result:'win',score:newScore});
+  var statsHtml=players.map(function(n,i){
+    return '<div class="stat-row"><span>'+n+'</span><strong>'+state.eliScores[i]+
+      ' <span style="color:var(--muted);font-size:11px;font-weight:600">('+state.eliTurns[i]+' beurt'+(state.eliTurns[i]!==1?'en':'')+')</span></strong></div>';
+  }).join('');
+  showWin(players[cur],'Eliminatie – exact '+state.eliTarget+' in ronde '+totalRounds+' 🎯',statsHtml);
+}
+
+function _eliConfirmDouble(val,newScore){
+  var overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
+  overlay.innerHTML=
+    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:320px;width:100%;text-align:center">'+
+      '<div style="font-size:18px;font-weight:800;margin-bottom:8px">Double-out</div>'+
+      '<div style="font-size:13px;color:var(--muted);margin-bottom:20px">Was de laatste pijl een <strong>double</strong>?</div>'+
+      '<div style="display:flex;gap:10px">'+
+        '<button id="eli-dbl-no" class="btn btn-full" style="color:var(--danger)">Nee — bust</button>'+
+        '<button id="eli-dbl-yes" class="btn btn-primary btn-full">Ja — gewonnen!</button>'+
+      '</div>'+
+    '</div>';
+  document.body.appendChild(overlay);
+  document.getElementById('eli-dbl-yes').onclick=function(){
+    document.body.removeChild(overlay);
+    _eliDoWin(val,newScore);
+  };
+  document.getElementById('eli-dbl-no').onclick=function(){
+    document.body.removeChild(overlay);
+    // Bust: revert score to before this turn
+    var cur=state.currentPlayer;
+    var snap=state.eliSnapshots[state.eliSnapshots.length-1];
+    state.eliScores[cur]=snap.scores[cur];
+    state.eliHistory.push({round:state.eliRound,player:cur,scored:val,result:'bust',score:snap.scores[cur]});
+    playSound('bust');
+    setTimeout(function(){showToast('Geen double — bust! Score blijft '+snap.scores[cur],'error');},80);
+    eliNextPlayer();
+  };
+}
+
+function eliUndo(){
+  if(!state.eliSnapshots||state.eliSnapshots.length===0){
+    showToast('Niets om ongedaan te maken','error');return;
+  }
+  var snap=state.eliSnapshots.pop();
+  state.eliScores=snap.scores.slice();
+  state.eliTurns=snap.turns.slice();
+  state.currentPlayer=snap.currentPlayer;
+  state.eliRound=snap.round;
+  state.eliHistory.splice(snap.histLen);
+  _eliNumVal='';
+  renderEliminatie();
+  showToast('Beurt ongedaan gemaakt','success');
 }
 
 function eliNextPlayer(){
