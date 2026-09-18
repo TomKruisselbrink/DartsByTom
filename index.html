@@ -248,7 +248,7 @@ body::before{
 /* ─── CONTENT AREA ─── */
 #app-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%}
 #app-content>.screen.active{flex:1}
-#app-content:has(#screen-game.active),#app-content:has(#screen-halveit.active){padding:0;overflow:hidden;max-width:100%}
+#app-content:has(#screen-game.active),#app-content:has(#screen-halveit.active),#app-content:has(#screen-eliminatie.active){padding:0;overflow:hidden;max-width:100%}
 .screen{display:none}.screen.active{display:block}
 
 /* ─── TYPOGRAPHY ─── */
@@ -1258,6 +1258,10 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <div style="font-size:16px;font-weight:800;color:var(--text)">Afgooien</div>
       <div style="font-size:11px;color:var(--muted)">Bouw 5 punten, gooi af</div>
     </button>
+    <button onclick="quickStart('eliminatie')" class="home-quick-tile">
+      <div style="font-size:16px;font-weight:800;color:var(--text)">Eliminatie</div>
+      <div style="font-size:11px;color:var(--muted)">Gooi tegenstander op nul</div>
+    </button>
 
   </div>
 
@@ -1534,6 +1538,20 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
               <button id="sh-halve-on" onclick="setShHalve(true)">Halveer bij 3 misses</button>
             </div>
             <div id="sh-halve-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Normaal: 3 misses = 0 punten</div>
+          </div>
+        </div>
+
+        <!-- Eliminatie opties -->
+        <div id="gt-opts-eliminatie" style="display:none">
+          <div class="card">
+            <div class="label">Doelscore</div>
+            <div class="segment" style="margin-bottom:8px">
+              <button id="eli-125" onclick="setEliTarget(125)">125</button>
+              <button id="eli-175" onclick="setEliTarget(175)">175</button>
+              <button class="active" id="eli-301" onclick="setEliTarget(301)">301</button>
+              <button id="eli-501" onclick="setEliTarget(501)">501</button>
+            </div>
+            <div id="eli-target-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Eerste speler die exact 301 gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!</div>
           </div>
         </div>
 
@@ -1924,6 +1942,11 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <div id="afg-root" style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden"></div>
 </div>
 
+<!-- ELIMINATIE -->
+<div class="screen" id="screen-eliminatie" style="display:none;flex-direction:column;height:100%;overflow:hidden">
+  <div id="eli-root" style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden"></div>
+</div>
+
 <!-- WIN (vrij spel) -->
 <div class="screen" id="screen-win" style="position:relative;overflow:hidden">
   <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
@@ -1994,7 +2017,8 @@ var GAMES=[
   {id:'halveit',label:'Halve It',sub:'Miss = gehalveerd'},
   {id:'checkout121',label:'121 Checkout',sub:'Train je uitgooi'},
   {id:'cricket',label:'Cricket',sub:'20–15 & Bull sluiten'},
-  {id:'afgooien',label:'Afgooien',sub:'Bull bepaalt volgorde'}
+  {id:'afgooien',label:'Afgooien',sub:'Bull bepaalt volgorde'},
+  {id:'eliminatie',label:'Eliminatie',sub:'Gooi tegenstander op nul'}
 ];
 var DEFAULT_SEQ=[
   {type:'num',val:20,label:'20'},
@@ -2042,6 +2066,7 @@ var matchN=2;             // legs to win/play
 var matchSets=1;          // sets (1 = no sets)
 var atcMode='basic';      // 'basic' (raak/mis) or 'pts' (enkel/dubbel/triple)
 var shHalveOpt=false;     // halveer bij 3 misses
+var eliTarget=301;        // eliminatie doelscore
 
 var state={
   gameType:null,doubleOut:true,players:[],currentPlayer:0,round:1,
@@ -2334,7 +2359,7 @@ function calcPlayerAvgStats(name){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
   var el=document.getElementById(id);
-  el.style.display=(id==='screen-game'||id==='screen-afgooien'||id==='screen-halveit')?'flex':'block';
+  el.style.display=(id==='screen-game'||id==='screen-afgooien'||id==='screen-halveit'||id==='screen-eliminatie')?'flex':'block';
   el.classList.remove('active');void el.offsetWidth;el.classList.add('active');
   document.getElementById('app-content').scrollTop=0;
   // Show/hide game action bar
@@ -2363,6 +2388,7 @@ function quickStart(gameId){
   if(gameId==='501'){selectGame('x01');setX01Score(501);}
   else if(gameId==='301'){selectGame('x01');setX01Score(301);}
   else if(gameId==='afgooien'){selectGame('afgooien');}
+  else if(gameId==='eliminatie'){selectGame('eliminatie');}
   else selectGame(gameId);
   goToSetupCard(1);            // skip card 1 (speltype), jump to spelregels
 }
@@ -2666,17 +2692,19 @@ var _RULES_LABELS={
   'shanghai7':['Strafoptie','Wat gebeurt er bij 3 misses?'],
   'shanghai20':['Strafoptie','Wat gebeurt er bij 3 misses?'],
   'cricket':['Geen extra regels','Cricket heeft geen extra instellingen'],
-  'afgooien':['Geen extra regels','Volgorde wordt bepaald via bullronde']
+  'afgooien':['Geen extra regels','Volgorde wordt bepaald via bullronde'],
+  'eliminatie':['Doelscore','Bereik de doelscore – raak je een tegenstander? Die gaat naar nul!']
 };
 function selectGame(g){
   selectedGame=g;
   var isX01=(g==='x01'||g==='501'||g==='301');
-  var hasOpts=isX01||g==='halveit'||g==='checkout121'||g==='atc'||g==='shanghai7'||g==='shanghai20';
+  var hasOpts=isX01||g==='halveit'||g==='checkout121'||g==='atc'||g==='shanghai7'||g==='shanghai20'||g==='eliminatie';
   document.getElementById('gt-opts-x01').style.display=isX01?'block':'none';
   document.getElementById('gt-opts-halveit').style.display=(g==='halveit')?'block':'none';
   document.getElementById('gt-opts-co121').style.display=(g==='checkout121')?'block':'none';
   document.getElementById('gt-opts-atc').style.display=(g==='atc')?'block':'none';
   document.getElementById('gt-opts-shanghai').style.display=(g==='shanghai7'||g==='shanghai20')?'block':'none';
+  document.getElementById('gt-opts-eliminatie').style.display=(g==='eliminatie')?'block':'none';
   document.getElementById('setup-rules-empty').style.display=hasOpts?'none':'block';
   document.getElementById('bot-card').style.display=(isX01||g==='halveit'||g==='afgooien')?'block':'none';
   var lbl=_RULES_LABELS[g]||['Spelregels',''];
@@ -2698,6 +2726,14 @@ function setShHalve(v){
   document.getElementById('sh-halve-on').className=v?'active':'';
   var hint=document.getElementById('sh-halve-hint');
   if(hint)hint.textContent=v?'Bij 3 misses: score gehalveerd':'Normaal: 3 misses = 0 punten';
+}
+function setEliTarget(v){
+  eliTarget=v;
+  [125,175,301,501].forEach(function(n){
+    var b=document.getElementById('eli-'+n);if(b)b.className=(n===v?'active':'');
+  });
+  var hint=document.getElementById('eli-target-hint');
+  if(hint)hint.textContent='Eerste speler die exact '+v+' gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!';
 }
 function setMatchFormat(f){
   matchFormat=f;
@@ -3628,6 +3664,10 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     launchCo121(players);setTimeout(saveRematchConfig,0);
   } else if(gameType==='cricket'){
     launchCricket(players);setTimeout(saveRematchConfig,0);
+  } else if(gameType==='eliminatie'){
+    state.eliScores=players.map(function(){return 0;});
+    state.eliHistory=[];state.eliRound=1;state.eliTarget=eliTarget;
+    setTimeout(saveRematchConfig,0);renderEliminatie();showScreen('screen-eliminatie');
   }
 }
 
@@ -7534,6 +7574,162 @@ function _afgBullValue(hit){
 }
 
 // ── BULL ROUND ──
+
+// ═══════════════════════════════════════════
+// ELIMINATIE GAME
+// ═══════════════════════════════════════════
+function renderEliminatie(){
+  var root=document.getElementById('eli-root');
+  if(!root)return;
+  root.innerHTML='';
+  var cur=state.currentPlayer;
+  var players=state.players;
+  var scores=state.eliScores;
+  var target=state.eliTarget;
+
+  // Header
+  var hdr=document.createElement('div');
+  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;flex-shrink:0;';
+  hdr.innerHTML='<button onclick="if(confirm(\'Spel verlaten?\'))showScreen(\'screen-home\')" class="setup-nav-arrow" style="padding:6px 12px;font-size:13px">← Home</button>'+
+    '<div style="text-align:center"><div style="font-size:14px;font-weight:900;color:var(--text)">Eliminatie</div>'+
+    '<div style="font-size:11px;color:var(--muted)">Doel: '+target+' punten</div></div>'+
+    '<div style="font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap">Ronde '+state.eliRound+'</div>';
+  root.appendChild(hdr);
+
+  // Scoreboard
+  var board=document.createElement('div');
+  board.style.cssText='flex-shrink:0;padding:0 12px 8px;display:flex;flex-direction:column;gap:6px;';
+  players.forEach(function(name,pi){
+    var isCur=(pi===cur);
+    var pct=Math.min(100,Math.round((scores[pi]/target)*100));
+    var card=document.createElement('div');
+    card.style.cssText='background:var('+(isCur?'--surface':'--card')+');border:1.5px solid var('+(isCur?'--accent':'--border')+');border-radius:14px;padding:10px 14px;transition:all .2s;';
+    card.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'+
+        '<div style="display:flex;align-items:center;gap:8px">'+
+          (isCur?'<div style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(254,104,7,.5)"></div>':'')+
+          '<div style="font-size:14px;font-weight:700;color:var('+(isCur?'--text':'--muted')+')">'+name+'</div>'+
+        '</div>'+
+        '<div style="font-size:30px;font-weight:900;color:var('+(isCur?'--accent':'--text')+')">'+scores[pi]+'</div>'+
+      '</div>'+
+      '<div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden">'+
+        '<div style="background:var('+(isCur?'--accent':'--muted')+');height:100%;width:'+pct+'%;transition:width .4s;border-radius:4px"></div>'+
+      '</div>';
+    board.appendChild(card);
+  });
+  root.appendChild(board);
+
+  // History - last 3 entries
+  var hist=state.eliHistory;
+  if(hist.length>0){
+    var histDiv=document.createElement('div');
+    histDiv.style.cssText='flex-shrink:0;padding:0 12px 6px;';
+    var rows=hist.slice(-3).reverse();
+    histDiv.innerHTML='<div style="display:flex;flex-direction:column;gap:3px">'+
+      rows.map(function(h){
+        var nm=players[h.player]||'?';
+        var icon=h.result==='bust'?'💥':h.result==='win'?'🏆':h.result==='elim'?'⚡':'✓';
+        var col=h.result==='bust'?'var(--danger)':h.result==='win'?'var(--accent)':h.result==='elim'?'var(--danger)':'var(--muted)';
+        var txt=h.result==='bust'?nm+' bust ('+h.scored+')':h.result==='elim'?nm+' geëlimineerd!':nm+' +'+h.scored+' = '+h.score;
+        return '<div style="font-size:11px;color:'+col+';text-align:right">'+icon+' '+txt+'</div>';
+      }).join('')+
+    '</div>';
+    root.appendChild(histDiv);
+  }
+
+  // Input area (pinned to bottom via flex)
+  var inputArea=document.createElement('div');
+  inputArea.style.cssText='flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 12px 20px;gap:10px;';
+  inputArea.innerHTML=
+    '<div style="font-size:12px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.5px;text-transform:uppercase">'+
+      players[cur]+' · Gooi 3 pijlen'+
+    '</div>'+
+    '<div style="display:flex;gap:8px">'+
+      '<input type="number" id="eli-input" inputmode="numeric" pattern="[0-9]*" min="0" max="180" placeholder="Score 3 pijlen…"'+
+        ' style="flex:1;font-size:24px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--accent);border-radius:var(--radius);color:var(--text)"'+
+        ' onkeydown="if(event.key===\'Enter\')eliSubmit()">'+
+      '<button class="btn btn-primary" style="padding:10px 20px;flex-shrink:0;font-size:18px" onclick="eliSubmit()">✓</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center">'+
+      [0,26,41,45,60,85,100,140,180].map(function(v){
+        return '<button class="btn btn-sm" '+(v===0?'style="color:var(--muted)"':'')+' onclick="eliQuick('+v+')">'+v+'</button>';
+      }).join('')+
+    '</div>';
+  root.appendChild(inputArea);
+
+  // Focus input
+  setTimeout(function(){var inp=document.getElementById('eli-input');if(inp){inp.focus();try{inp.select();}catch(e){}}},150);
+}
+
+function eliQuick(v){
+  var inp=document.getElementById('eli-input');
+  if(inp){inp.value=v;inp.focus();}
+}
+
+function eliSubmit(){
+  var inp=document.getElementById('eli-input');
+  if(!inp)return;
+  var val=parseInt(inp.value,10);
+  if(isNaN(val)||val<0||val>180){showToast('Ongeldige score (0–180)','error');return;}
+
+  var cur=state.currentPlayer;
+  var prev=state.eliScores[cur];
+  var newScore=prev+val;
+  var target=state.eliTarget;
+  var players=state.players;
+
+  // Bust: score would exceed target
+  if(newScore>target){
+    playSound('bust');
+    state.eliHistory.push({round:state.eliRound,player:cur,scored:val,result:'bust',score:prev});
+    setTimeout(function(){showToast('Bust! Score blijft '+prev,'error');},80);
+    eliNextPlayer();
+    return;
+  }
+
+  // Apply score
+  state.eliScores[cur]=newScore;
+
+  // Win check
+  if(newScore===target){
+    var totalRounds=state.eliRound;
+    state.eliHistory.push({round:totalRounds,player:cur,scored:val,result:'win',score:newScore});
+    var statsHtml=players.map(function(n,i){
+      return '<div class="stat-row"><span>'+n+'</span><strong>'+state.eliScores[i]+'</strong></div>';
+    }).join('');
+    showWin(players[cur],'Eliminatie – exact '+target+' in ronde '+totalRounds+' 🎯',statsHtml);
+    return;
+  }
+
+  // Elimination check: if this player's new score matches another player's score, reset theirs
+  var eliminated=[];
+  players.forEach(function(name,pi){
+    if(pi!==cur&&state.eliScores[pi]>0&&state.eliScores[pi]===newScore){
+      state.eliScores[pi]=0;
+      eliminated.push(name);
+      state.eliHistory.push({round:state.eliRound,player:pi,scored:0,result:'elim',score:0});
+    }
+  });
+
+  state.eliHistory.push({round:state.eliRound,player:cur,scored:val,result:'score',score:newScore});
+
+  if(eliminated.length>0){
+    playSound('checkout');
+    setTimeout(function(){showToast(eliminated.join(' & ')+' geëlimineerd! 💥','error');},80);
+  } else if(val>0){
+    playSound(val>=100?'high':'score');
+    if(val>0)setTimeout(function(){showToast('+'+val,'success');},80);
+  }
+
+  eliNextPlayer();
+}
+
+function eliNextPlayer(){
+  var n=state.players.length;
+  state.currentPlayer=(state.currentPlayer+1)%n;
+  if(state.currentPlayer===state.firstPlayer)state.eliRound++;
+  renderEliminatie();
+}
 
 function startAfgooien(){
   _afg.players = setupPlayers.map(function(n){ return {name:n,number:null,score:0,eliminated:false}; });
