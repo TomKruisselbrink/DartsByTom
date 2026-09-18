@@ -1258,10 +1258,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <div style="font-size:16px;font-weight:800;color:var(--text)">Afgooien</div>
       <div style="font-size:11px;color:var(--muted)">Bouw 5 punten, gooi af</div>
     </button>
-    <button onclick="quickStart('eliminatie')" class="home-quick-tile">
-      <div style="font-size:16px;font-weight:800;color:var(--text)">Eliminatie</div>
-      <div style="font-size:11px;color:var(--muted)">Gooi tegenstander op nul</div>
-    </button>
 
   </div>
 
@@ -3666,7 +3662,9 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     launchCricket(players);setTimeout(saveRematchConfig,0);
   } else if(gameType==='eliminatie'){
     state.eliScores=players.map(function(){return 0;});
+    state.eliTurns=players.map(function(){return 0;});
     state.eliHistory=[];state.eliRound=1;state.eliTarget=eliTarget;
+    _eliNumVal='';
     setTimeout(saveRematchConfig,0);renderEliminatie();showScreen('screen-eliminatie');
   }
 }
@@ -7578,6 +7576,35 @@ function _afgBullValue(hit){
 // ═══════════════════════════════════════════
 // ELIMINATIE GAME
 // ═══════════════════════════════════════════
+var _eliNumVal='';
+function eliNumClear(){
+  _eliNumVal='';
+  var d=document.getElementById('eli-display');
+  if(d){d.textContent='—';d.style.color='var(--accent)';}
+}
+function eliNumPress(key){
+  if(key==='del'){
+    _eliNumVal=_eliNumVal.slice(0,-1);
+  } else if(key==='enter'){
+    eliSubmit();return;
+  } else {
+    if(_eliNumVal.length>=3)return;
+    if(_eliNumVal==='0')_eliNumVal='';
+    _eliNumVal+=key;
+  }
+  var v=parseInt(_eliNumVal)||0;
+  var d=document.getElementById('eli-display');
+  if(d){
+    d.textContent=_eliNumVal||'—';
+    d.style.color=_eliNumVal?(v>180?'var(--danger)':'var(--accent)'):'var(--accent)';
+  }
+}
+function eliNumQuick(v){
+  _eliNumVal=String(v);
+  var d=document.getElementById('eli-display');
+  if(d){d.textContent=_eliNumVal;d.style.color=v>180?'var(--danger)':'var(--accent)';}
+}
+
 function renderEliminatie(){
   var root=document.getElementById('eli-root');
   if(!root)return;
@@ -7585,98 +7612,152 @@ function renderEliminatie(){
   var cur=state.currentPlayer;
   var players=state.players;
   var scores=state.eliScores;
+  var turns=state.eliTurns;
   var target=state.eliTarget;
+
+  // ── Top section: header + scoreboard (scrollable) ──
+  var topWrap=document.createElement('div');
+  topWrap.style.cssText='flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;';
 
   // Header
   var hdr=document.createElement('div');
-  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;flex-shrink:0;';
-  hdr.innerHTML='<button onclick="if(confirm(\'Spel verlaten?\'))showScreen(\'screen-home\')" class="setup-nav-arrow" style="padding:6px 12px;font-size:13px">← Home</button>'+
-    '<div style="text-align:center"><div style="font-size:14px;font-weight:900;color:var(--text)">Eliminatie</div>'+
-    '<div style="font-size:11px;color:var(--muted)">Doel: '+target+' punten</div></div>'+
-    '<div style="font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap">Ronde '+state.eliRound+'</div>';
-  root.appendChild(hdr);
+  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;flex-shrink:0;';
+  hdr.innerHTML=
+    '<button onclick="if(confirm(\'Spel verlaten?\'))showScreen(\'screen-home\')" class="setup-nav-arrow" style="padding:5px 10px;font-size:12px">← Home</button>'+
+    '<div style="text-align:center">'+
+      '<div style="font-size:14px;font-weight:900;color:var(--text)">Eliminatie</div>'+
+      '<div style="font-size:11px;color:var(--muted)">Doel: '+target+' punten</div>'+
+    '</div>'+
+    '<div style="font-size:12px;font-weight:700;color:var(--muted);text-align:right">Ronde<br><span style="font-size:18px;color:var(--text)">'+state.eliRound+'</span></div>';
+  topWrap.appendChild(hdr);
 
   // Scoreboard
   var board=document.createElement('div');
-  board.style.cssText='flex-shrink:0;padding:0 12px 8px;display:flex;flex-direction:column;gap:6px;';
+  board.style.cssText='padding:0 12px 8px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;';
   players.forEach(function(name,pi){
     var isCur=(pi===cur);
     var pct=Math.min(100,Math.round((scores[pi]/target)*100));
     var card=document.createElement('div');
-    card.style.cssText='background:var('+(isCur?'--surface':'--card')+');border:1.5px solid var('+(isCur?'--accent':'--border')+');border-radius:14px;padding:10px 14px;transition:all .2s;';
+    card.style.cssText='background:var('+(isCur?'--surface':'--card')+');border:1.5px solid var('+(isCur?'--accent':'--border')+');border-radius:14px;padding:10px 14px;';
     card.innerHTML=
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'+
-        '<div style="display:flex;align-items:center;gap:8px">'+
-          (isCur?'<div style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(254,104,7,.5)"></div>':'')+
-          '<div style="font-size:14px;font-weight:700;color:var('+(isCur?'--text':'--muted')+')">'+name+'</div>'+
+        '<div style="display:flex;align-items:center;gap:7px">'+
+          (isCur?'<div style="width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(254,104,7,.6);flex-shrink:0"></div>':'')+
+          '<div>'+
+            '<div style="font-size:14px;font-weight:700;color:var('+(isCur?'--text':'--muted')+')">'+name+'</div>'+
+            '<div style="font-size:11px;color:var(--muted);margin-top:1px">'+turns[pi]+' beurt'+(turns[pi]!==1?'en':'')+'</div>'+
+          '</div>'+
         '</div>'+
-        '<div style="font-size:30px;font-weight:900;color:var('+(isCur?'--accent':'--text')+')">'+scores[pi]+'</div>'+
+        '<div style="font-size:32px;font-weight:900;color:var('+(isCur?'--accent':'--text')+');line-height:1">'+scores[pi]+'</div>'+
       '</div>'+
       '<div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden">'+
         '<div style="background:var('+(isCur?'--accent':'--muted')+');height:100%;width:'+pct+'%;transition:width .4s;border-radius:4px"></div>'+
       '</div>';
     board.appendChild(card);
   });
-  root.appendChild(board);
+  topWrap.appendChild(board);
 
-  // History - last 3 entries
-  var hist=state.eliHistory;
+  // Recent history
+  var hist=state.eliHistory.filter(function(h){return h.result!=='elim';});
   if(hist.length>0){
-    var histDiv=document.createElement('div');
-    histDiv.style.cssText='flex-shrink:0;padding:0 12px 6px;';
-    var rows=hist.slice(-3).reverse();
-    histDiv.innerHTML='<div style="display:flex;flex-direction:column;gap:3px">'+
+    var histWrap=document.createElement('div');
+    histWrap.style.cssText='padding:0 14px 8px;flex:1;';
+    var rows=state.eliHistory.slice(-4).reverse();
+    histWrap.innerHTML='<div style="display:flex;flex-direction:column;gap:2px">'+
       rows.map(function(h){
         var nm=players[h.player]||'?';
-        var icon=h.result==='bust'?'💥':h.result==='win'?'🏆':h.result==='elim'?'⚡':'✓';
-        var col=h.result==='bust'?'var(--danger)':h.result==='win'?'var(--accent)':h.result==='elim'?'var(--danger)':'var(--muted)';
-        var txt=h.result==='bust'?nm+' bust ('+h.scored+')':h.result==='elim'?nm+' geëlimineerd!':nm+' +'+h.scored+' = '+h.score;
-        return '<div style="font-size:11px;color:'+col+';text-align:right">'+icon+' '+txt+'</div>';
+        var isBust=h.result==='bust',isElim=h.result==='elim',isWin=h.result==='win';
+        var col=isBust||isElim?'var(--danger)':isWin?'var(--accent)':'var(--muted)';
+        var icon=isBust?'💥':isElim?'⚡':isWin?'🏆':'✓';
+        var txt=isBust?nm+' — bust ('+h.scored+' = '+h.score+'+'+h.scored+')':
+                isElim?nm+' → 0 (geëlimineerd)':
+                nm+' +'+h.scored+' → '+h.score;
+        return '<div style="font-size:11px;color:'+col+';display:flex;justify-content:space-between"><span>R'+h.round+'</span><span>'+icon+' '+txt+'</span></div>';
       }).join('')+
     '</div>';
-    root.appendChild(histDiv);
+    topWrap.appendChild(histWrap);
   }
 
-  // Input area (pinned to bottom via flex)
-  var inputArea=document.createElement('div');
-  inputArea.style.cssText='flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 12px 20px;gap:10px;';
-  inputArea.innerHTML=
-    '<div style="font-size:12px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.5px;text-transform:uppercase">'+
-      players[cur]+' · Gooi 3 pijlen'+
-    '</div>'+
-    '<div style="display:flex;gap:8px">'+
-      '<input type="number" id="eli-input" inputmode="numeric" pattern="[0-9]*" min="0" max="180" placeholder="Score 3 pijlen…"'+
-        ' style="flex:1;font-size:24px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--accent);border-radius:var(--radius);color:var(--text)"'+
-        ' onkeydown="if(event.key===\'Enter\')eliSubmit()">'+
-      '<button class="btn btn-primary" style="padding:10px 20px;flex-shrink:0;font-size:18px" onclick="eliSubmit()">✓</button>'+
-    '</div>'+
-    '<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center">'+
-      [0,26,41,45,60,85,100,140,180].map(function(v){
-        return '<button class="btn btn-sm" '+(v===0?'style="color:var(--muted)"':'')+' onclick="eliQuick('+v+')">'+v+'</button>';
-      }).join('')+
-    '</div>';
-  root.appendChild(inputArea);
+  root.appendChild(topWrap);
 
-  // Focus input
-  setTimeout(function(){var inp=document.getElementById('eli-input');if(inp){inp.focus();try{inp.select();}catch(e){}}},150);
-}
+  // ── Bottom section: numpad (pinned, not scrollable) ──
+  var bottom=document.createElement('div');
+  bottom.style.cssText='flex-shrink:0;border-top:1px solid var(--border);background:var(--bg);padding:8px 12px 10px;';
 
-function eliQuick(v){
-  var inp=document.getElementById('eli-input');
-  if(inp){inp.value=v;inp.focus();}
+  // Current player label
+  var lbl=document.createElement('div');
+  lbl.style.cssText='font-size:11px;font-weight:700;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;';
+  lbl.textContent=players[cur]+' · Gooi 3 pijlen';
+  bottom.appendChild(lbl);
+
+  // Score display
+  var disp=document.createElement('div');
+  disp.id='eli-display';
+  disp.style.cssText='font-size:36px;font-weight:900;text-align:center;padding:6px 10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--accent);letter-spacing:3px;margin-bottom:7px;min-height:56px;display:flex;align-items:center;justify-content:center;';
+  disp.textContent=_eliNumVal||'—';
+  bottom.appendChild(disp);
+
+  // Quick scores
+  var quick=document.createElement('div');
+  quick.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:7px;';
+  quick.innerHTML=
+    '<button class="btn btn-sm" onclick="eliNumQuick(0)" style="color:var(--muted);padding:7px 2px;font-size:12px">0</button>'+
+    '<button class="btn btn-sm" onclick="eliNumQuick(26)" style="padding:7px 2px;font-size:12px">26</button>'+
+    '<button class="btn btn-sm" onclick="eliNumQuick(45)" style="padding:7px 2px;font-size:12px">45</button>'+
+    '<button class="btn btn-sm" onclick="eliNumQuick(60)" style="padding:7px 2px;font-size:12px">60</button>'+
+    '<button class="btn btn-sm" onclick="eliNumQuick(100)" style="padding:7px 2px;font-size:12px">100</button>'+
+    '<button class="btn btn-sm" onclick="eliNumQuick(140)" style="padding:7px 2px;font-size:12px">140</button>'+
+    '<button class="btn btn-sm" onclick="eliNumQuick(180)" style="color:var(--warning);font-weight:800;padding:7px 2px;font-size:12px">180</button>';
+  bottom.appendChild(quick);
+
+  // Numpad 3×4
+  var pad=document.createElement('div');
+  pad.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:5px;';
+  var keys=[
+    {k:'1',lbl:'1'},{k:'2',lbl:'2'},{k:'3',lbl:'3'},
+    {k:'4',lbl:'4'},{k:'5',lbl:'5'},{k:'6',lbl:'6'},
+    {k:'7',lbl:'7'},{k:'8',lbl:'8'},{k:'9',lbl:'9'},
+    {k:'del',lbl:'⌫'},{k:'0',lbl:'0'},{k:'enter',lbl:'✓'}
+  ];
+  keys.forEach(function(kd){
+    var b=document.createElement('button');
+    if(kd.k==='enter'){
+      b.className='btn btn-primary';
+      b.style.cssText='font-size:20px;font-weight:700;padding:14px 0;';
+    } else if(kd.k==='del'){
+      b.className='btn';
+      b.style.cssText='font-size:20px;font-weight:700;padding:14px 0;color:var(--muted);';
+    } else {
+      b.className='btn';
+      b.style.cssText='font-size:22px;font-weight:700;padding:14px 0;';
+    }
+    b.textContent=kd.lbl;
+    b.onclick=function(){eliNumPress(kd.k);};
+    pad.appendChild(b);
+  });
+  bottom.appendChild(pad);
+  root.appendChild(bottom);
+
+  // Reset numpad display after render (keep _eliNumVal if mid-entry)
+  var d2=document.getElementById('eli-display');
+  if(d2&&_eliNumVal){
+    var v2=parseInt(_eliNumVal)||0;
+    d2.style.color=v2>180?'var(--danger)':'var(--accent)';
+  }
 }
 
 function eliSubmit(){
-  var inp=document.getElementById('eli-input');
-  if(!inp)return;
-  var val=parseInt(inp.value,10);
+  var val=parseInt(_eliNumVal,10);
   if(isNaN(val)||val<0||val>180){showToast('Ongeldige score (0–180)','error');return;}
+  _eliNumVal='';
 
   var cur=state.currentPlayer;
   var prev=state.eliScores[cur];
   var newScore=prev+val;
   var target=state.eliTarget;
   var players=state.players;
+
+  state.eliTurns[cur]=(state.eliTurns[cur]||0)+1;
 
   // Bust: score would exceed target
   if(newScore>target){
@@ -7695,13 +7776,13 @@ function eliSubmit(){
     var totalRounds=state.eliRound;
     state.eliHistory.push({round:totalRounds,player:cur,scored:val,result:'win',score:newScore});
     var statsHtml=players.map(function(n,i){
-      return '<div class="stat-row"><span>'+n+'</span><strong>'+state.eliScores[i]+'</strong></div>';
+      return '<div class="stat-row"><span>'+n+'</span><strong>'+state.eliScores[i]+' <span style="color:var(--muted);font-size:11px;font-weight:600">('+state.eliTurns[i]+' beurten)</span></strong></div>';
     }).join('');
     showWin(players[cur],'Eliminatie – exact '+target+' in ronde '+totalRounds+' 🎯',statsHtml);
     return;
   }
 
-  // Elimination check: if this player's new score matches another player's score, reset theirs
+  // Elimination check
   var eliminated=[];
   players.forEach(function(name,pi){
     if(pi!==cur&&state.eliScores[pi]>0&&state.eliScores[pi]===newScore){
@@ -7718,7 +7799,7 @@ function eliSubmit(){
     setTimeout(function(){showToast(eliminated.join(' & ')+' geëlimineerd! 💥','error');},80);
   } else if(val>0){
     playSound(val>=100?'high':'score');
-    if(val>0)setTimeout(function(){showToast('+'+val,'success');},80);
+    setTimeout(function(){showToast('+'+val,'success');},80);
   }
 
   eliNextPlayer();
