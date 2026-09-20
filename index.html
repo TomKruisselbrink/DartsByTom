@@ -7703,27 +7703,83 @@ function renderEliminatie(){
   });
   topWrap.appendChild(board);
 
-  // Recent history
-  var hist=state.eliHistory.filter(function(h){return h.result!=='elim';});
-  if(hist.length>0){
+  // Recent history (compact, not flex:1)
+  if(state.eliHistory.length>0){
     var histWrap=document.createElement('div');
-    histWrap.style.cssText='padding:0 14px 8px;flex:1;';
-    var rows=state.eliHistory.slice(-4).reverse();
+    histWrap.style.cssText='padding:0 14px 4px;flex-shrink:0;';
+    var rows=state.eliHistory.slice(-3).reverse();
     histWrap.innerHTML='<div style="display:flex;flex-direction:column;gap:2px">'+
       rows.map(function(h){
         var nm=players[h.player]||'?';
         var isBust=h.result==='bust',isElim=h.result==='elim',isWin=h.result==='win';
         var col=isBust||isElim?'var(--danger)':isWin?'var(--accent)':'var(--muted)';
         var icon=isBust?'💥':isElim?'⚡':isWin?'🏆':'✓';
-        var txt=isBust?nm+' — bust ('+h.scored+' = '+h.score+'+'+h.scored+')':
-                isElim?nm+' → 0 (geëlimineerd)':
-                nm+' +'+h.scored+' → '+h.score;
-        return '<div style="font-size:11px;color:'+col+';display:flex;justify-content:space-between"><span>R'+h.round+'</span><span>'+icon+' '+txt+'</span></div>';
+        var txt=isBust?nm+' — bust':isElim?nm+' → 0 (geëlimineerd)':nm+' +'+h.scored+' → '+h.score;
+        return '<div style="font-size:11px;color:'+col+';display:flex;justify-content:space-between"><span style="opacity:.6">R'+h.round+'</span><span>'+icon+' '+txt+'</span></div>';
       }).join('')+
     '</div>';
     topWrap.appendChild(histWrap);
   }
 
+  // ── Hints panel: uitgooi + eliminatie ──
+  var hintsDiv=document.createElement('div');
+  hintsDiv.style.cssText='flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:10px 16px 6px;gap:12px;';
+
+  var myScore=scores[cur];
+  var need=target-myScore;
+
+  // Finish hint
+  if(need>0&&need<=180){
+    var dblLabel='';
+    if(state.eliDoubleOut){
+      if(need===50)dblLabel='Bull';
+      else if(need===25)dblLabel='Single bull';
+      else if(need<=40&&need%2===0)dblLabel='D'+(need/2);
+    }
+    var finDiv=document.createElement('div');
+    finDiv.style.cssText='text-align:center;';
+    finDiv.innerHTML=
+      '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px">'+
+        (state.eliDoubleOut?'🎯 Uit te gooien (double out)':'🎯 Nog nodig voor winst')+
+      '</div>'+
+      '<div style="font-size:60px;font-weight:900;color:var(--accent);line-height:1;text-shadow:0 0 24px rgba(254,104,7,.35)">'+need+'</div>'+
+      (dblLabel?'<div style="font-size:15px;font-weight:700;color:var(--accent);opacity:.7;margin-top:2px">'+dblLabel+'</div>':'');
+    hintsDiv.appendChild(finDiv);
+  } else if(need>180){
+    // Score too far away — show remaining without big number
+    var farDiv=document.createElement('div');
+    farDiv.style.cssText='text-align:center;';
+    farDiv.innerHTML=
+      '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px">🎯 Nog nodig</div>'+
+      '<div style="font-size:44px;font-weight:900;color:var(--muted);line-height:1">'+need+'</div>';
+    hintsDiv.appendChild(farDiv);
+  }
+
+  // Elimination hints
+  var elimHints=[];
+  players.forEach(function(name,pi){
+    if(pi===cur)return;
+    var en=scores[pi]-myScore;
+    if(en>0&&en<=180)elimHints.push({name:name,need:en});
+  });
+
+  if(elimHints.length>0){
+    var elimSec=document.createElement('div');
+    elimSec.style.cssText='width:100%;';
+    elimSec.innerHTML=
+      '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;text-align:center">⚡ Gooi dit voor eliminatie</div>'+
+      elimHints.map(function(e){
+        return '<div style="display:flex;justify-content:space-between;align-items:center;'+
+          'background:rgba(255,59,48,.07);border:1px solid rgba(255,59,48,.2);border-radius:10px;'+
+          'padding:7px 14px;margin-bottom:5px">'+
+          '<span style="font-size:13px;font-weight:600;color:var(--text)">'+e.name+'</span>'+
+          '<span style="font-size:24px;font-weight:900;color:var(--danger)">'+e.need+'</span>'+
+          '</div>';
+      }).join('');
+    hintsDiv.appendChild(elimSec);
+  }
+
+  topWrap.appendChild(hintsDiv);
   root.appendChild(topWrap);
 
   // ── Bottom section: numpad (pinned, not scrollable) ──
