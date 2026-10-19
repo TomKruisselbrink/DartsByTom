@@ -1343,7 +1343,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </div>
   </div>
   <div style="text-align:center;margin-top:18px;padding-bottom:8px">
-    <span style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px">v179</span>
+    <span style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px">v180</span>
   </div>
 </div>
 
@@ -8597,6 +8597,88 @@ function _afgWin(winner){
 
 
 </script>
+
+<!-- ═══ CONSISTENCY PASS v180 ═══ -->
+<style>
+/* ── 1. Unified card radius: alle card-achtige elementen op 14px ── */
+.card { border-radius:14px !important; }
+.game-btn { border-radius:14px !important; }
+.setup-big-num { border-radius:14px !important; }
+
+/* ── 2. Slide-card-inner: consistent met rest van app ── */
+.slide-card-inner {
+  border-radius:16px 16px 0 0 !important;
+  background:var(--surface) !important;
+  border:0.5px solid var(--border) !important;
+}
+/* Sluit de card netjes af aan de onderkant met de nav-balk */
+.setup-card-nav {
+  border-radius:0 0 16px 16px !important;
+  border:0.5px solid var(--border) !important;
+  border-top:none !important;
+  background:var(--card) !important;
+}
+
+/* ── 3. Segmented controls: active state gebruikt accent ipv kaart-wit ── */
+.seg-btn.active {
+  background:rgba(181,80,47,.15) !important;
+  color:var(--accent) !important;
+  border:0.5px solid rgba(181,80,47,.3) !important;
+  box-shadow:none !important;
+}
+
+/* ── 4. Lang-tiles: zelfde active state als game-btn ── */
+.lang-tile {
+  border-radius:14px !important;
+  transition:border-color .15s, background .15s !important;
+}
+.lang-tile.selected {
+  border-color:var(--accent) !important;
+  border-width:1.5px !important;
+  background:rgba(181,80,47,.15) !important;
+}
+
+/* ── 5. Setup-nav-arrow: consistente stijl voor alle back-knoppen ── */
+.setup-nav-arrow {
+  background:transparent !important;
+  border:0.5px solid rgba(181,80,47,.25) !important;
+  border-radius:10px !important;
+  color:var(--accent) !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  padding:8px 16px !important;
+}
+
+/* ── 6. Screen-titels: consistente typografie ── */
+#screen-settings > h2,
+#screen-leaderboard > h2,
+#screen-history > h2,
+#screen-stats > h2 {
+  font-size:20px !important;
+  font-weight:800 !important;
+  letter-spacing:-.4px !important;
+  margin-bottom:16px !important;
+  text-align:center !important;
+}
+
+/* ── 7. Setup stepper: accent-kleur consistent ── */
+.stepper-circle.act,
+.stepper-circle.done {
+  background:var(--accent) !important;
+  border-color:var(--accent) !important;
+}
+.stepper-line.done { background:var(--accent) !important; }
+.stepper-lbl.act { color:var(--accent) !important; }
+
+/* ── 8. Card labels: consistent uppercase stijl ── */
+.card > div[style*="text-transform:uppercase"],
+.card > div[style*="text-transform: uppercase"] {
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:var(--muted) !important;
+  letter-spacing:.5px !important;
+}
+</style>
 
 <!-- ═══ MOBILE-FIRST VISUAL POLISH v177 ═══ -->
 <style>
