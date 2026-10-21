@@ -347,42 +347,7 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
 .ios-toggle:checked{background:#34C759;}
 .ios-toggle:checked::after{left:22px;}
 
-/* ─── SETUP SWIPE CARDS ─── */
-#screen-setup.active{display:flex;flex-direction:column;min-height:0;overflow:hidden;}
-#app-content:has(#screen-setup.active){padding:0;overflow:hidden;max-width:100%;}
-.setup-swipe-header{padding:14px 20px 0;flex-shrink:0;}
-.setup-swipe-header h2{margin-bottom:12px;text-align:center;}
-.setup-dots-row{display:none;}
-/* ─── STEPPER ─── */
-.setup-stepper{padding:0 20px 12px;}
-@keyframes stepCheck{from{transform:scale(.5) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0deg);opacity:1}}
-.stepper-track{display:flex;align-items:flex-start;}
-.stepper-step{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;}
-.stepper-circle{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:1.5px solid var(--border);color:var(--muted);background:var(--surface);transition:background .25s,border-color .25s,color .25s,box-shadow .25s;}
-.stepper-circle.done{background:var(--accent);border-color:var(--accent);color:#fff;}
-.stepper-circle.done span{display:inline-block;animation:stepCheck .2s cubic-bezier(.34,1.56,.64,1);}
-.stepper-circle.act{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 3px rgba(255,108,0,.18);}
-.stepper-lbl{font-size:10px;font-weight:500;color:var(--muted);transition:color .2s;white-space:nowrap;}
-.stepper-lbl.act{color:var(--accent);font-weight:700;}
-.stepper-line{flex:1;height:2px;background:var(--border);margin:12px 4px 0;transition:background .3s ease;border-radius:1px;}
-.stepper-line.done{background:var(--accent);}
-.setup-swipe-container{overflow:hidden;flex:1;}
-.setup-swipe-track{position:relative;height:100%;}
-.setup-swipe-card{position:absolute;top:0;left:0;right:0;max-height:100%;padding:0 14px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(22px);will-change:opacity,transform;}
-.setup-swipe-card.ss-active{opacity:1;pointer-events:auto;transform:translateX(0);}
-.swipe-card-shadow{display:none;}
-.slide-card-inner{position:relative;z-index:1;background:var(--card);border:0.5px solid var(--border);border-radius:20px 20px 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:17px 15px;box-shadow:0 4px 24px rgba(0,0,0,0.18);flex-shrink:1;min-height:0;}
-.setup-card-nav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:0.5px solid var(--border);border-top:none;border-radius:0;padding:10px 25px 16px;box-shadow:0 4px 24px rgba(0,0,0,0.18);flex-shrink:0;}
-.setup-card-title{font-size:19px;font-weight:700;letter-spacing:-.2px;margin-bottom:3px;}
-.setup-card-sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
-.slide-card-inner .card{background:rgba(28,28,30,0.6);border-color:var(--separator);}
-.setup-card-nav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:0.5px solid var(--border);border-top:none;border-radius:0;padding:10px 25px 16px;box-shadow:0 4px 24px rgba(0,0,0,0.18);}
-.setup-nav-arrow{background:rgba(181,80,47,0.1);border:0.5px solid rgba(181,80,47,0.28);border-radius:var(--radius-sm);padding:7px 16px;font-size:13px;font-weight:600;color:var(--accent);cursor:pointer;transition:opacity .15s;}
-.setup-nav-arrow:disabled{opacity:.25;cursor:default;}
-.setup-nav-counter{font-size:12px;color:var(--muted);font-weight:500;}
-.setup-big-num{flex:1;height:80px;border-radius:16px;font-size:32px;font-weight:800;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;letter-spacing:-1px;}
-.setup-big-num.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 4px 14px rgba(181,80,47,.35);}
-.setup-big-num:active{transform:scale(.92);}
+/* ─── SETUP SCREENS: see new CSS at bottom ─── */
 
 /* ─── FORM INPUTS ─── */
 input[type=number]::-webkit-inner-spin-button,
@@ -703,6 +668,150 @@ select{
   z-index: 100 !important;
   background: var(--seq-item-bg) !important;
 }
+
+/* ═══════════════════════════════════════════
+   NEW SETUP SCREEN STYLES (v187)
+   ═══════════════════════════════════════════ */
+
+/* Game select rows (step 1) */
+.game-select-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(28,26,27,.88);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  color: #F3EDE8;
+  transition: background .15s;
+}
+.game-select-row:hover, .game-select-row:active { background: rgba(50,46,47,.95); }
+.game-select-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.07);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #F3EDE8;
+}
+.game-select-text { flex: 1; min-width: 0; }
+.game-select-name { font-size: 17px; font-weight: 800; margin-bottom: 2px; color: #F3EDE8; }
+.game-select-sub { font-size: 13px; color: #A8A09A; }
+
+/* Section labels */
+.setup-section-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #A8A09A;
+  margin-bottom: 8px;
+}
+
+/* Setup cards */
+.setup-card {
+  background: rgba(28,26,27,.88);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 14px;
+}
+
+/* Seg ctrl - scoped to setup screens to avoid affecting settings */
+#screen-setup .seg-ctrl,
+#screen-trn-setup .seg-ctrl {
+  display: grid !important;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #141314;
+  border: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 10px;
+}
+#screen-setup .seg-btn,
+#screen-trn-setup .seg-btn {
+  height: 46px;
+  border-radius: 10px;
+  background: transparent;
+  color: #D9D1CB;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  line-height: 1.2;
+}
+#screen-setup .seg-btn.active,
+#screen-trn-setup .seg-btn.active {
+  background: var(--setup-accent, #B94E2A) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
+}
+#screen-setup .seg-btn-num,
+#screen-trn-setup .seg-btn-num {
+  height: 54px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* Info blocks */
+.info-block-green {
+  background: rgba(62,123,79,.15);
+  border: 1px solid rgba(62,123,79,.3);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #8FCB9C;
+  margin-top: 10px;
+}
+.info-block-orange {
+  background: rgba(185,78,42,.15);
+  border: 1px solid rgba(185,78,42,.3);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #E07A55;
+  margin-top: 10px;
+}
+
+/* Sticky action bar */
+.setup-action-bar {
+  position: sticky;
+  bottom: calc(80px + env(safe-area-inset-bottom) + 8px);
+  background: rgba(20,19,20,.92);
+  border-radius: 18px;
+  padding: 14px 14px 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 10;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.setup-action-summary { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.setup-action-context { font-size: 12px; color: #A8A09A; }
+.setup-action-main { font-size: 15px; font-weight: 700; color: #F3EDE8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.setup-action-btns { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.setup-btn-back { height: 44px; padding: 0 14px; border-radius: 11px; background: transparent; color: #A8A09A; font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
+.setup-btn-next { height: 52px; padding: 0 20px; border-radius: 13px; background: var(--setup-accent, #B94E2A); color: #fff; font-size: 15px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+
+/* Responsive */
+@media (max-width: 420px) {
+  .setup-two-col { grid-template-columns: 1fr !important; }
+  .setup-card { padding: 16px; border-radius: 14px; }
+  .setup-action-main { font-size: 13px; }
+  .setup-btn-next { font-size: 14px; height: 48px; padding: 0 16px; }
+  .game-select-name { font-size: 15px; }
+}
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -1325,7 +1434,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </div>
   </div>
   <div style="text-align:center;margin-top:18px;padding-bottom:8px">
-    <span style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px">v184</span>
+    <span style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px">v186</span>
   </div>
 </div>
 
@@ -1362,388 +1471,283 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 </div>
 
 <!-- SETUP vrij spel -->
-<div class="screen" id="screen-setup">
-  <div class="setup-swipe-header">
-    <h2>Spel instellen</h2>
-  </div>
-  <div class="setup-stepper">
-    <div class="stepper-track">
-      <div class="stepper-step">
-        <div class="stepper-circle act" id="ss0"><span>1</span></div>
-        <span class="stepper-lbl act" id="sl0">Spel</span>
-      </div>
-      <div class="stepper-line" id="ssl01"></div>
-      <div class="stepper-step">
-        <div class="stepper-circle" id="ss1"><span>2</span></div>
-        <span class="stepper-lbl" id="sl1">Spelers</span>
+<div class="screen" id="screen-setup" style="--setup-accent:#B94E2A;--setup-accent-text:#E07A55">
+  <div style="max-width:720px;margin:0 auto;padding:0 16px 120px;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 0 12px;">
+      <button onclick="showScreen('screen-home')" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div>
+        <div style="font-size:13px;color:#A8A09A;margin-bottom:1px">Nieuw spel</div>
+        <div style="font-size:28px;font-weight:800;line-height:1.1;color:#F3EDE8" id="setup-main-title">Kies een spel</div>
       </div>
     </div>
-  </div>
 
-  <div class="setup-swipe-container" id="setup-swipe-container" ontouchstart="_setupTouchStart(event)" ontouchend="_setupTouchEnd(event)">
-    <div class="setup-swipe-track" id="setup-swipe-track">
+    <!-- Stepper -->
+    <div id="setup-stepper" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;"></div>
 
-      <!-- KAART 1: Speltype -->
-      <div class="setup-swipe-card ss-active">
-        <div class="slide-card-inner">
-          <div class="setup-card-title">Welk spel?</div>
-          <div class="setup-card-sub">Kies het speltype voor deze sessie</div>
-          <div class="game-grid" id="game-btn-grid"></div>
+    <!-- Stap 1: Welk spel? -->
+    <div id="setup-step-1">
+      <div style="margin-bottom:6px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E07A55">Wedstrijd</span>
+      </div>
+      <button onclick="selectGame('x01');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 3l-6.5 6.5M21 3h-5m5 0v5"/><line x1="2" y1="22" x2="14" y2="10"/></svg>
         </div>
-        <div class="setup-card-nav">
-          <button class="setup-nav-arrow" onclick="showScreen('screen-home')">← Home</button>
-          <span class="setup-nav-counter">1 / 2 — Speltype</span>
-          <button class="setup-nav-arrow" onclick="goToSetupCard(1)">Volgende →</button>
+        <div class="game-select-text"><div class="game-select-name">501 / 301</div><div class="game-select-sub">Speel naar nul</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('cricket');goToSetupStep(3);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
         </div>
+        <div class="game-select-text"><div class="game-select-name">Cricket</div><div class="game-select-sub">Sluit getallen af</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('eliminatie');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Eliminatie</div><div class="game-select-sub">Gooi je tegenstander terug</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('afgooien');goToSetupStep(3);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3m9-9h-3M6 12H3"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Afgooien</div><div class="game-select-sub">Bouw 5 punten, gooi af</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+
+      <div style="margin-top:14px;margin-bottom:6px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8FCB9C">Training</span>
+      </div>
+      <button onclick="selectGame('atc');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Around the Clock</div><div class="game-select-sub">Loop alle getallen door</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('shanghai7');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Shanghai</div><div class="game-select-sub">7 of 20 rondes</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('halveit');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Halve It</div><div class="game-select-sub">Voltooi de doelen, of halveer</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('checkout121');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">121 Checkout</div><div class="game-select-sub">Klim omhoog met checkouts</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div><!-- /setup-step-1 -->
+
+    <!-- Stap 2: Regels -->
+    <div id="setup-step-2" style="display:none">
+      <div id="setup-rules-container"></div>
+    </div>
+
+    <!-- Stap 3: Spelers -->
+    <div id="setup-step-3" style="display:none">
+      <!-- Spelers kaart -->
+      <div class="setup-card">
+        <span class="setup-section-label" id="setup-players-label">SPELERS</span>
+        <div id="player-list" style="margin-bottom:10px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <input type="text" id="player-name-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')addPlayer()" style="flex:1;height:52px;font-size:15px;padding:0 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8;">
+          <button onclick="addPlayer()" style="height:52px;min-width:52px;border-radius:14px;background:var(--setup-accent,#B94E2A);color:#fff;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+        </div>
+        <div id="player-error" class="error" style="font-size:12px;min-height:16px;margin-top:2px"></div>
+        <div id="known-names" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
 
-      <!-- KAART 2: Game-specifieke opties (alle game types) -->
-      <div class="setup-swipe-card">
-        <div class="swipe-card-shadow s2"></div>
-        <div class="swipe-card-shadow s1"></div>
-        <div class="slide-card-inner">
-        <div class="setup-card-title" id="setup-rules-title">Spelregels</div>
-        <div class="setup-card-sub" id="setup-rules-sub">Uitgooi, format en aantal legs</div>
-
-        <!-- x01 opties -->
-        <div id="gt-opts-x01" style="display:none">
-          <div class="card" style="margin-bottom:12px">
-            <div class="label">Startscore</div>
-            <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-              <div class="segment">
-                <button class="active" id="x01-score-501" onclick="setX01Score(501)">501</button>
-                <button id="x01-score-301" onclick="setX01Score(301)">301</button>
-                <button id="x01-score-custom" onclick="setX01ScoreCustom()">Eigen</button>
-              </div>
-              <input type="number" id="x01-score-custom-val" min="101" max="9999" value="1001"
-                style="display:none;width:80px;font-size:14px;font-weight:700;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text)"
-                oninput="x01CustomScore=parseInt(this.value)||1001">
+      <!-- Wie begint kaart -->
+      <div class="setup-card" id="start-player-card-wrap">
+        <span class="setup-section-label">WIE BEGINT?</span>
+        <div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:8px">
+          <button class="seg-btn active" id="sp-mode-first" onclick="setStartMode('first')">Volgorde lijst</button>
+          <button class="seg-btn" id="sp-mode-pick" onclick="setStartMode('pick')">Zelf kiezen</button>
+          <button class="seg-btn" id="sp-mode-coin" onclick="setStartMode('coin')">Loting</button>
+        </div>
+        <div id="start-player-card">
+          <div id="sp-pick-grid" style="display:none"></div>
+          <div id="sp-coin-area" style="display:none;text-align:center;padding:8px 0">
+            <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2.5px solid #9A6E0A;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.4);overflow:hidden">?</div>
+            <div id="wheel-wrap" style="display:none;position:relative;margin:0 auto 10px;width:224px">
+              <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:22px;line-height:1;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">&#9660;</div>
+              <canvas id="spin-wheel" width="224" height="224" style="display:block;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.5)"></canvas>
             </div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="label">Uitgooi</div>
-            <div class="segment" style="margin-bottom:14px">
-              <button class="active" id="dout-yes" onclick="setDoubleOut(true)">Double out</button>
-              <button id="dout-no" onclick="setDoubleOut(false)">Straight out</button>
-            </div>
-            <div class="label">Format</div>
-            <div class="segment">
-              <button class="active" id="fmt-firstto" onclick="setMatchFormat('firstto')">First to</button>
-              <button id="fmt-bestof" onclick="setMatchFormat('bestof')">Best of</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="label" id="fmt-label-n" style="margin-bottom:14px">First to (legs):</div>
-            <div style="display:flex;gap:8px;margin-bottom:22px">
-              <button class="setup-big-num" id="fmt-n1" onclick="setMatchN(1)">1</button>
-              <button class="setup-big-num active" id="fmt-n2" onclick="setMatchN(2)">2</button>
-              <button class="setup-big-num" id="fmt-n3" onclick="setMatchN(3)">3</button>
-              <button class="setup-big-num" id="fmt-n4" onclick="setMatchN(4)">4</button>
-              <button class="setup-big-num" id="fmt-n5" onclick="setMatchN(5)">5</button>
-            </div>
-            <div class="label" style="margin-bottom:14px">Sets:</div>
-            <div style="display:flex;gap:8px;margin-bottom:10px">
-              <button class="setup-big-num active" id="fmt-s1" onclick="setMatchSets(1)">1</button>
-              <button class="setup-big-num" id="fmt-s2" onclick="setMatchSets(2)">2</button>
-              <button class="setup-big-num" id="fmt-s3" onclick="setMatchSets(3)">3</button>
-            </div>
-            <div style="font-size:11px;color:var(--muted);text-align:center">(1 set = geen sets)</div>
+            <div id="coin-result" style="font-size:14px;font-weight:700;color:var(--setup-accent,#B94E2A);min-height:22px;margin-bottom:10px"></div>
+            <button id="coin-spin-btn" class="btn btn-sm btn-primary" onclick="flipCoin()">Gooi het muntje</button>
           </div>
         </div>
-
-        <!-- Halve It opties -->
-        <div id="gt-opts-halveit" style="display:none">
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <div class="label" style="margin:0">Doelvolgorde</div>
-              <div style="display:flex;gap:6px;align-items:center">
-                <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer">Willekeurig<input type="checkbox" id="hi-random-order" class="ios-toggle" onchange="hiRandomOrder=this.checked"></label>
-                <button class="btn btn-xs" onclick="resetSeq()">Reset</button>
-              </div>
-            </div>
-            <div id="seq-editor"></div>
-            <div style="display:flex;gap:8px;align-items:center;background:var(--card);border-radius:10px;padding:10px 12px;">
-              <select id="seq-add-select" style="flex:1;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;color:var(--text);">
-                <option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option><option value="15">15</option><option value="14">14</option><option value="13">13</option><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>
-                <option value="D">Double</option><option value="T">Treble</option><option value="B">Bull</option>
-                <option value="SC">3 dezelfde kleuren</option><option value="DC">3 verschillende kleuren</option><option value="R3">1 van 3 getallen</option><option value="custom">Eigen opdracht…</option>
-              </select>
-              <button onclick="addSeqItem()" style="background:none;border:none;color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;padding:4px 0;">+ Voeg doel toe</button>
-            </div>
-            <div id="seq-custom-row" style="display:none;margin-top:8px">
-              <div class="label">Eigen opdrachttekst</div>
-              <div style="display:flex;gap:6px;margin-top:4px">
-                <input type="text" id="seq-custom-input" placeholder="bijv. 3 dezelfde kleuren" style="flex:1;font-size:13px;padding:6px 10px">
-                <button class="btn btn-sm btn-primary" onclick="addCustomSeqItem()">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 121 Checkout opties -->
-        <div id="gt-opts-co121" style="display:none">
-          <div class="card">
-            <div class="label">Startscore</div>
-            <div class="segment" style="margin-bottom:8px">
-              <button class="active" id="co121-start-121" onclick="setCo121Start(121)">121</button>
-              <button id="co121-start-140" onclick="setCo121Start(140)">140</button>
-              <button id="co121-start-160" onclick="setCo121Start(160)">160</button>
-              <button id="co121-start-170" onclick="setCo121Start(170)">170</button>
-            </div>
-            <div class="label">Pijlen per poging</div>
-            <div class="segment" style="margin-bottom:8px">
-              <button id="co121-darts-3" onclick="setCo121Darts(3)">3</button>
-              <button id="co121-darts-6" onclick="setCo121Darts(6)">6</button>
-              <button class="active" id="co121-darts-9" onclick="setCo121Darts(9)">9</button>
-            </div>
-            <div class="label">Stijging per checkout</div>
-            <div class="segment" style="margin-bottom:8px">
-              <button id="co121-step-1" onclick="setCo121Step(1)">+1</button>
-              <button class="active" id="co121-step-5" onclick="setCo121Step(5)">+5</button>
-              <button id="co121-step-10" onclick="setCo121Step(10)">+10</button>
-              <button id="co121-step-25" onclick="setCo121Step(25)">+25</button>
-            </div>
-            <div class="label">Safehouse regel</div>
-            <div class="segment" style="margin-bottom:4px;flex-wrap:wrap">
-              <button id="co121-sh-none" onclick="setCo121Safehouse('none')">Geen</button>
-              <button class="active" id="co121-sh-3dart" onclick="setCo121Safehouse('3dart')">Na 3 pijlen</button>
-              <button id="co121-sh-6dart" onclick="setCo121Safehouse('6dart')">Na 6 pijlen</button>
-              <button id="co121-sh-3row" onclick="setCo121Safehouse('3row')">Na 3 op rij</button>
-              <button id="co121-sh-5row" onclick="setCo121Safehouse('5row')">Na 5 op rij</button>
-              <button id="co121-sh-always" onclick="setCo121Safehouse('always')">Altijd</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Around the Clock opties -->
-        <div id="gt-opts-atc" style="display:none">
-          <div class="card">
-            <div class="label">Scoremodus</div>
-            <div class="segment">
-              <button class="active" id="atc-mode-basic" onclick="setAtcMode('basic')">Standaard</button>
-              <button id="atc-mode-pts" onclick="setAtcMode('pts')">Enkel / Dubbel / Triple</button>
-            </div>
-            <div id="atc-mode-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Standaard: 1 raak = 1 stap vooruit</div>
-          </div>
-        </div>
-
-        <!-- Shanghai opties -->
-        <div id="gt-opts-shanghai" style="display:none">
-          <div class="card">
-            <div class="label">Strafoptie</div>
-            <div class="segment">
-              <button class="active" id="sh-halve-off" onclick="setShHalve(false)">Normaal</button>
-              <button id="sh-halve-on" onclick="setShHalve(true)">Halveer bij 3 misses</button>
-            </div>
-            <div id="sh-halve-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Normaal: 3 misses = 0 punten</div>
-          </div>
-        </div>
-
-        <!-- Eliminatie opties -->
-        <div id="gt-opts-eliminatie" style="display:none">
-          <div class="card" style="margin-bottom:8px">
-            <div class="label">Doelscore</div>
-            <div class="segment" style="margin-bottom:8px">
-              <button id="eli-125" onclick="setEliTarget(125)">125</button>
-              <button id="eli-170" onclick="setEliTarget(170)">170</button>
-              <button class="active" id="eli-301" onclick="setEliTarget(301)">301</button>
-              <button id="eli-501" onclick="setEliTarget(501)">501</button>
-              <button id="eli-custom-btn" onclick="setEliTargetCustom()">Eigen</button>
-            </div>
-            <div id="eli-custom-row" style="display:none;margin-bottom:8px">
-              <div style="display:flex;gap:6px;align-items:center">
-                <input type="number" id="eli-custom-input" min="10" max="9999" placeholder="Eigen getal…"
-                  style="flex:1;font-size:15px;font-weight:700;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text)"
-                  oninput="eliApplyCustomTarget(this.value)">
-                <span style="font-size:12px;color:var(--muted)">punten</span>
-              </div>
-            </div>
-            <div id="eli-target-hint" style="font-size:11px;color:var(--muted)">Eerste speler die exact 301 gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!</div>
-          </div>
-          <div class="card">
-            <div class="label">Uitgooi</div>
-            <div class="segment">
-              <button class="active" id="eli-out-single" onclick="setEliOut('single')">Single out</button>
-              <button id="eli-out-double" onclick="setEliOut('double')">Double out</button>
-            </div>
-            <div id="eli-out-hint" style="font-size:11px;color:var(--muted);margin-top:6px">Elke worp telt om het spel te winnen</div>
-          </div>
-        </div>
-
-        <!-- Cricket / geen opties -->
-        <div id="setup-rules-empty" style="display:none;text-align:center;padding:48px 20px;color:var(--muted)">
-          <div style="font-size:44px;margin-bottom:14px">🎯</div>
-          <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px">Geen extra regels</div>
-          <div style="font-size:13px">Dit spel heeft geen extra instellingen.<br>Ga door naar de volgende stap.</div>
-        </div>
-        </div><!-- /slide-card-inner -->
-        <div class="setup-card-nav">
-          <button class="setup-nav-arrow" onclick="goToSetupCard(0)">← Vorige</button>
-          <span class="setup-nav-counter">1 / 2 — Spelregels</span>
-          <button class="setup-nav-arrow" onclick="goToSetupCard(2)">Volgende →</button>
-        </div>
+        <div style="font-size:13px;color:#A8A09A;margin-top:6px">Loting = muntje bij 2 spelers, rad bij 3+</div>
       </div>
 
-      <!-- KAART 3: Spelers + Bot (voor 501/301) -->
-      <div class="setup-swipe-card">
-        <div class="swipe-card-shadow s2"></div>
-        <div class="swipe-card-shadow s1"></div>
-        <div class="slide-card-inner">
-        <div class="setup-card-title">Wie speelt er mee?</div>
-        <div class="setup-card-sub">Voeg spelersnamen toe</div>
-        <div class="card" style="margin-bottom:12px">
-          <div id="player-list" style="margin-bottom:10px"></div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input type="text" id="player-name-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')addPlayer()" style="flex:1;min-height:44px;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text)">
-            <button onclick="addPlayer()" style="min-height:44px;min-width:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;font-size:22px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 14px;flex-shrink:0">+</button>
-          </div>
-          <div id="player-error" class="error" style="font-size:12px;min-height:16px;margin-top:2px"></div>
-          <div id="known-names" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px"></div>
-        </div>
-        <div id="bot-card" style="display:none">
-          <div class="card">
-            <h3>Bot tegenstander</h3>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <label for="bot-enabled" style="font-size:14px;font-weight:600;cursor:pointer;flex:1">Speel tegen een bot</label>
-              <input type="checkbox" id="bot-enabled" class="ios-toggle" onchange="onBotToggle(this.checked)">
+      <!-- Bot kaart -->
+      <div id="bot-card" style="display:none">
+        <div class="setup-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A"><rect x="7" y="11" width="10" height="8" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="6" r="1"/><circle cx="9" cy="15" r="1"/><circle cx="15" cy="15" r="1"/></svg>
+              <span style="font-size:15px;font-weight:700;color:#F3EDE8">Bot tegenstander</span>
             </div>
-            <div id="bot-auto-info" style="font-size:12px;color:var(--muted);margin-bottom:8px;padding:6px 10px;background:var(--card);border-radius:var(--radius-sm)"></div>
-            <div id="bot-opts" style="display:none">
-              <div class="label">Botnaam</div>
-              <input type="text" id="bot-name" value="Bot" style="margin-bottom:10px">
-              <div class="label">Niveau</div>
-              <div class="segment" style="margin-bottom:6px">
-                <button id="bl-auto" class="active" onclick="setBotLevel('auto')">Op basis van stats</button>
-                <button id="bl-manual" onclick="setBotLevel('manual')">Handmatig</button>
+            <input type="checkbox" id="bot-enabled" class="ios-toggle" onchange="onBotToggle(this.checked)" role="switch">
+          </div>
+          <div id="bot-auto-info" style="font-size:12px;color:#A8A09A;margin-bottom:8px;padding:8px 12px;background:rgba(255,255,255,.05);border-radius:10px"></div>
+          <div id="bot-opts" style="display:none">
+            <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+              <div style="flex:1;min-width:120px">
+                <span class="setup-section-label">NAAM</span>
+                <input type="text" id="bot-name" value="Bot" style="width:100%;height:46px;font-size:14px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8;box-sizing:border-box;">
               </div>
-              <div id="bot-player-pick" style="margin-bottom:8px">
-                <div class="label">Speel op niveau van</div>
-                <select id="bot-player-select" onchange="onBotPlayerSelect(this.value)" style="width:100%;font-size:14px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);margin-top:4px"></select>
-              </div>
-              <div id="bot-manual-opts" style="display:none">
-                <div class="segment">
-                  <button id="bm-beg" onclick="setBotManual('beginner')">Beginner<br><span style="font-size:10px;font-weight:400">~40</span></button>
-                  <button id="bm-mid" class="active" onclick="setBotManual('medium')">Gemiddeld<br><span style="font-size:10px;font-weight:400">~60</span></button>
-                  <button id="bm-adv" onclick="setBotManual('advanced')">Gevorderd<br><span style="font-size:10px;font-weight:400">~80</span></button>
-                  <button id="bm-exp" onclick="setBotManual('expert')">Expert<br><span style="font-size:10px;font-weight:400">~100</span></button>
+              <div style="flex:1;min-width:160px">
+                <span class="setup-section-label">NIVEAU</span>
+                <div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr)">
+                  <button class="seg-btn active" id="bl-auto" onclick="setBotLevel('auto')">Op stats</button>
+                  <button class="seg-btn" id="bl-manual" onclick="setBotLevel('manual')">Handmatig</button>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        </div><!-- /slide-card-inner -->
-        <div class="setup-card-nav">
-          <button class="setup-nav-arrow" onclick="goToSetupCard(1)">← Vorige</button>
-          <span class="setup-nav-counter">2 / 2 — Spelers</span>
-          <button class="setup-nav-arrow" onclick="goToSetupCard(3)">Volgende →</button>
-        </div>
-      </div>
-
-      <!-- KAART 4: Wie begint? + Spel starten -->
-      <div class="setup-swipe-card">
-        <div class="swipe-card-shadow s2"></div>
-        <div class="swipe-card-shadow s1"></div>
-        <div class="slide-card-inner">
-        <div class="setup-card-title">Wie begint?</div>
-        <div class="setup-card-sub">Bepaal de startvolgorde</div>
-        <div id="start-player-card" style="display:none">
-          <div class="card">
-            <div class="segment" style="margin-bottom:10px">
-              <button class="active" id="sp-mode-first" onclick="setStartMode('first')">Automatisch</button>
-              <button id="sp-mode-pick" onclick="setStartMode('pick')">Zelf kiezen</button>
-              <button id="sp-mode-coin" onclick="setStartMode('coin')">🪙 Muntje</button>
+            <div id="bot-player-pick" style="margin-bottom:8px">
+              <span class="setup-section-label">SPEEL OP NIVEAU VAN</span>
+              <select id="bot-player-select" onchange="onBotPlayerSelect(this.value)" style="width:100%;height:46px;font-size:14px;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;"></select>
             </div>
-            <div id="sp-pick-grid" style="display:none"></div>
-            <div id="sp-coin-area" style="display:none;text-align:center;padding:8px 0">
-              <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2.5px solid #9A6E0A;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.4);overflow:hidden">?</div>
-              <div id="wheel-wrap" style="display:none;position:relative;margin:0 auto 10px;width:224px">
-                <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:22px;line-height:1;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">&#9660;</div>
-                <canvas id="spin-wheel" width="224" height="224" style="display:block;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.5)"></canvas>
+            <div id="bot-manual-opts" style="display:none">
+              <div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr)">
+                <button id="bm-beg" onclick="setBotManual('beginner')" class="seg-btn">Beginner<br><span style="font-size:11px;opacity:.7">~40</span></button>
+                <button id="bm-mid" class="seg-btn active" onclick="setBotManual('medium')">Gemiddeld<br><span style="font-size:11px;opacity:.7">~60</span></button>
+                <button id="bm-adv" onclick="setBotManual('advanced')" class="seg-btn">Gevorderd<br><span style="font-size:11px;opacity:.7">~80</span></button>
+                <button id="bm-exp" onclick="setBotManual('expert')" class="seg-btn">Expert<br><span style="font-size:11px;opacity:.7">~100</span></button>
               </div>
-              <div id="coin-result" style="font-size:14px;font-weight:700;color:var(--accent);min-height:22px;margin-bottom:10px"></div>
-              <button id="coin-spin-btn" class="btn btn-sm btn-primary" onclick="flipCoin()">Gooi het muntje</button>
             </div>
           </div>
         </div>
-        <div id="setup-opties-empty" style="text-align:center;padding:40px 20px;color:var(--muted)">
-          <div style="font-size:40px;margin-bottom:12px">✓</div>
-          <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px">Alles klaar!</div>
-          <div style="font-size:13px">Voeg 2+ spelers toe om de startvolgorde te kiezen.</div>
-        </div>
-        </div><!-- /slide-card-inner -->
-        <div class="setup-card-nav" style="flex-direction:column;align-items:stretch;gap:8px;padding:12px 16px 16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <button class="setup-nav-arrow" onclick="goToSetupCard(2)">← Vorige</button>
-            <span class="setup-nav-counter">2 / 2 — Start</span>
-            <button class="setup-nav-arrow" onclick="startGame()" style="background:rgba(181,80,47,0.2);border-color:rgba(181,80,47,0.5);font-weight:700;">Start →</button>
-          </div>
-          <div class="error" id="setup-error" style="text-align:center;font-size:12px;min-height:0"></div>
-        </div>
       </div>
+    </div><!-- /setup-step-3 -->
 
+    <!-- Error + actiebalk -->
+    <div id="setup-error" class="error" style="min-height:18px;font-size:13px;margin-bottom:6px;text-align:center"></div>
+    <div class="setup-action-bar" id="setup-action-bar" style="display:none">
+      <div class="setup-action-summary">
+        <div class="setup-action-context" id="setup-bar-context"></div>
+        <div class="setup-action-main" id="setup-bar-main"></div>
+      </div>
+      <div class="setup-action-btns">
+        <button class="setup-btn-back" id="setup-btn-back" onclick="goToSetupStep(setupStep-1)" style="display:none">Terug</button>
+        <button class="setup-btn-next" id="setup-btn-next" onclick="onSetupNext ? onSetupNext() : null">
+          Spelers
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-
 </div>
 
 <!-- TOURNAMENT SETUP -->
-<div class="screen" id="screen-trn-setup">
-  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
-  <h2 style="margin-bottom:12px;text-align:center">Toernooi instellen</h2>
-  <div class="card">
-    <h3>Formaat</h3>
-    <div style="display:flex;flex-direction:column;gap:8px" id="trn-format-btns"></div>
-  </div>
-  <div class="card">
-    <h3>Spel &amp; regels</h3>
-    <div class="opt-row">
-      <div class="opt-label">Spel</div>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <div class="segment">
-          <button class="active" id="trn-game-501" onclick="setTrnGame(501)">501</button>
-          <button id="trn-game-301" onclick="setTrnGame(301)">301</button>
-          <button id="trn-game-custom" onclick="setTrnGameCustom()">Vrij</button>
+<div class="screen" id="screen-trn-setup" style="--setup-accent:#3E7B4F;--setup-accent-text:#8FCB9C">
+  <div style="max-width:720px;margin:0 auto;padding:0 16px 120px;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 0 12px;">
+      <button onclick="showScreen('screen-home')" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div>
+        <div style="font-size:13px;color:#A8A09A;margin-bottom:1px">Toernooi</div>
+        <div style="font-size:28px;font-weight:800;line-height:1.1;color:#F3EDE8" id="trn-main-title">Formaat</div>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div id="trn-stepper" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;"></div>
+
+    <!-- Stap 1: Formaat -->
+    <div id="trn-step-1">
+      <div id="trn-format-btns"></div>
+      <div id="trn-groups-section" style="display:none;margin-top:14px">
+        <div class="setup-card">
+          <span class="setup-section-label">AANTAL GROEPEN</span>
+          <div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">
+            <button class="seg-btn seg-btn-num" id="trn-groups-2" onclick="setTrnGroups(2)">2</button>
+            <button class="seg-btn seg-btn-num active" id="trn-groups-3" onclick="setTrnGroups(3)">3</button>
+            <button class="seg-btn seg-btn-num" id="trn-groups-4" onclick="setTrnGroups(4)">4</button>
+          </div>
         </div>
-        <input type="number" id="trn-game-custom-val" min="101" max="9999" value="1001"
-          style="display:none;width:90px;font-size:14px;font-weight:700;padding:6px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text)"
-          oninput="trnGameCustom=parseInt(this.value)||1001">
       </div>
     </div>
-    <div class="opt-row">
-      <div class="opt-label">Uitgooi</div>
-      <div class="segment" style="width:180px">
-        <button class="active" id="trn-dout-yes" onclick="setTrnDoubleOut(true)">Double out</button>
-        <button id="trn-dout-no" onclick="setTrnDoubleOut(false)">Straight out</button>
+
+    <!-- Stap 2: Regels -->
+    <div id="trn-step-2" style="display:none">
+      <div class="setup-card">
+        <span class="setup-section-label">SPEL</span>
+        <div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px">
+          <button class="seg-btn seg-btn-num active" id="trn-game-501" onclick="setTrnGame(501)">501</button>
+          <button class="seg-btn seg-btn-num" id="trn-game-301" onclick="setTrnGame(301)">301</button>
+          <button class="seg-btn seg-btn-num" id="trn-game-vrij" onclick="setTrnGameCustom()">Vrij…</button>
+        </div>
+        <div id="trn-custom-game-row" style="display:none;margin-bottom:10px">
+          <input type="number" id="trn-game-custom-val" min="101" max="9999" placeholder="Eigen getal…" style="width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;box-sizing:border-box" oninput="trnGameCustom=parseInt(this.value)||1001">
+        </div>
+        <span class="setup-section-label">UITGOOI</span>
+        <div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:4px">
+          <button class="seg-btn active" id="trn-dout-yes" onclick="setTrnDoubleOut(true)">Double out</button>
+          <button class="seg-btn" id="trn-dout-no" onclick="setTrnDoubleOut(false)">Straight out</button>
+        </div>
+        <div style="font-size:13px;color:#A8A09A;margin-bottom:14px">Gooi exact de score leeg op een dubbel</div>
+        <span class="setup-section-label">PER DUEL</span>
+        <div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:4px">
+          <button class="seg-btn" id="trn-bo-1" onclick="setTrnBO(1)">Best of 1</button>
+          <button class="seg-btn active" id="trn-bo-3" onclick="setTrnBO(3)">Best of 3</button>
+          <button class="seg-btn" id="trn-bo-5" onclick="setTrnBO(5)">Best of 5</button>
+        </div>
+        <div style="font-size:13px;color:#A8A09A">Best of 3: wie het eerst 2 legs wint, gaat door</div>
       </div>
     </div>
-    <div class="opt-row">
-      <div class="opt-label">Duels</div>
-      <div class="segment" style="width:180px">
-        <button class="active" id="trn-bo-1" onclick="setTrnBO(1)">Bo1</button>
-        <button id="trn-bo-3" onclick="setTrnBO(3)">Bo3</button>
-        <button id="trn-bo-5" onclick="setTrnBO(5)">Bo5</button>
+
+    <!-- Stap 3: Deelnemers -->
+    <div id="trn-step-3" style="display:none">
+      <div class="setup-card">
+        <span class="setup-section-label" id="trn-players-label">DEELNEMERS</span>
+        <div id="trn-player-list" style="margin-bottom:10px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <input type="text" id="trn-player-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')trnAddPlayer()" style="flex:1;height:52px;font-size:15px;padding:0 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8;">
+          <button onclick="trnAddPlayer()" style="height:52px;min-width:52px;border-radius:14px;background:#3E7B4F;color:#fff;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+        </div>
+        <div id="trn-player-error" class="error" style="font-size:12px;min-height:16px"></div>
+        <div id="trn-known-names" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
     </div>
-    <div class="opt-row" id="trn-group-opts" style="display:none">
-      <div class="opt-label">Groepen</div>
-      <div class="segment" style="width:180px">
-        <button class="active" id="trn-g2" onclick="setTrnGroups(2)">2</button>
-        <button id="trn-g3" onclick="setTrnGroups(3)">3</button>
-        <button id="trn-g4" onclick="setTrnGroups(4)">4</button>
+
+    <!-- Error + actiebalk -->
+    <div id="trn-setup-error" class="error" style="min-height:18px;font-size:13px;margin-bottom:6px;text-align:center"></div>
+    <div class="setup-action-bar" id="trn-action-bar" style="display:none">
+      <div class="setup-action-summary">
+        <div class="setup-action-context" id="trn-bar-context">Toernooi</div>
+        <div class="setup-action-main" id="trn-bar-main"></div>
+      </div>
+      <div class="setup-action-btns">
+        <button class="setup-btn-back" id="trn-btn-back" onclick="goToTrnStep(trnStep-1)" style="display:none">Terug</button>
+        <button class="setup-btn-next" id="trn-btn-next" style="background:#3E7B4F" onclick="onTrnNext()">
+          Regels
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
       </div>
     </div>
   </div>
-  <div class="card">
-    <h3>Deelnemers</h3>
-    <div id="trn-player-list" style="margin-bottom:10px"></div>
-    <div class="gap8">
-      <input type="text" id="trn-player-input" placeholder="Naam…" onkeydown="if(event.key==='Enter')trnAddPlayer()">
-      <button class="btn btn-sm" onclick="trnAddPlayer()">+</button>
-    </div>
-    <div id="trn-known-names" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
-  </div>
-  <button class="btn btn-info btn-full" onclick="startTournament()">Toernooi starten →</button>
-  <div class="error" id="trn-setup-error"></div>
 </div>
 
 <!-- TOURNAMENT OVERVIEW -->
@@ -2379,14 +2383,14 @@ function showScreen(id){
   var _ac=document.getElementById('app-content');
   _ac.scrollTop=0;
   // Pill nav: show on home/stats/leaderboard/history/settings; update active tab
-  var _pillScreens=['screen-home','screen-stats','screen-leaderboard','screen-history','screen-settings'];
+  var _pillScreens=['screen-home','screen-stats','screen-leaderboard','screen-history','screen-settings','screen-setup','screen-trn-setup'];
   var _pn=document.getElementById('pill-nav');
   if(_pn){
     var _inPill=_pillScreens.indexOf(id)>=0;
     if(_inPill){_pn.classList.remove('hidden');_ac.classList.add('has-pill');}
     else{_pn.classList.add('hidden');_ac.classList.remove('has-pill');}
     // active tab mapping
-    var _tabMap={'screen-home':'pn-home','screen-leaderboard':'pn-leaderboard','screen-stats':'pn-stats','screen-history':'pn-history','screen-settings':'pn-settings'};
+    var _tabMap={'screen-home':'pn-home','screen-leaderboard':'pn-leaderboard','screen-stats':'pn-stats','screen-history':'pn-history','screen-settings':'pn-settings','screen-setup':'pn-home','screen-trn-setup':'pn-home'};
     document.querySelectorAll('.pn-tab').forEach(function(t){t.classList.remove('active');});
     var _at=document.getElementById(_tabMap[id]||'');
     if(_at)_at.classList.add('active');
@@ -2413,13 +2417,13 @@ function showScreen(id){
 // FREE GAME SETUP
 // ═══════════════════════════════════════════
 function quickStart(gameId){
-  showScreen('screen-setup');  // calls renderSetup() → goToSetupCard(0)
+  showScreen('screen-setup');
   if(gameId==='501'){selectGame('x01');setX01Score(501);}
   else if(gameId==='301'){selectGame('x01');setX01Score(301);}
   else if(gameId==='afgooien'){selectGame('afgooien');}
   else if(gameId==='eliminatie'){selectGame('eliminatie');}
   else selectGame(gameId);
-  goToSetupCard(1);            // skip card 1 (speltype), jump to spelregels
+  goToSetupStep(2);
 }
 
 // ─── Start player ────────────────────────────────────────
@@ -2480,7 +2484,7 @@ function setStartMode(mode){
   startMode=mode;
   ['first','pick','coin'].forEach(function(m){
     var btn=document.getElementById('sp-mode-'+m);
-    if(btn)btn.className=(m===mode?'active':'');
+    if(btn)btn.className='seg-btn'+(m===mode?' active':'');
   });
   var pg=document.getElementById('sp-pick-grid');
   var ca=document.getElementById('sp-coin-area');
@@ -2573,20 +2577,22 @@ function renderStartPlayerCard(){
   if(modeBtn)modeBtn.innerHTML=useWheel?'&#x1F3A1; Draai aan het rad':'&#x1FA99; Muntje';
   var res=document.getElementById('coin-result');
   if(res)res.textContent='';
-  _updateOptiesEmpty();
 }
 
 // ═══════════════════════════════════════════
 // SETUP SWIPE CARDS
 // ═══════════════════════════════════════════
+/* LEGACY SWIPE CARD SYSTEM - removed in v187
 var setupSwipeIdx=0;
 var _SETUP_LABELS=['Spel','Spelers'];
 var _SETUP_MAX=3;
 function goToSetupCard(n){
   var prev=setupSwipeIdx;
   setupSwipeIdx=Math.max(0,Math.min(n,_SETUP_MAX));
+  // Kaart 2 (spelers) is samengevoegd in kaart 1 — sla kaart 2 over
+  if(setupSwipeIdx===2){ setupSwipeIdx=(setupSwipeIdx>prev)?3:1; }
   if(prev===setupSwipeIdx)return;
-  var fwd=n>prev;
+  var fwd=setupSwipeIdx>prev;
   var cards=document.querySelectorAll('.setup-swipe-card');
   var oldCard=cards[prev];var newCard=cards[setupSwipeIdx];
   if(oldCard&&newCard){
@@ -2637,11 +2643,7 @@ function _setupTouchEnd(e){
   if(Math.abs(dx)>50){if(dx<0)goToSetupCard(setupSwipeIdx+1);else goToSetupCard(setupSwipeIdx-1);}
 }
 function _updateOptiesEmpty(){
-  var sp=document.getElementById('start-player-card');
-  var em=document.getElementById('setup-opties-empty');
-  if(!em)return;
-  var spVis=sp&&sp.style.display!=='none';
-  em.style.display=spVis?'none':'block';
+  // Legacy function - setup-opties-empty removed in v187
 }
 
 function _fixSetupContainerHeight(){
@@ -2653,66 +2655,37 @@ function _fixSetupContainerHeight(){
     container.style.height=h+'px';
   });
 }
+*/
 function renderSetup(){
-  // Reset card visibility to first card
-  setupSwipeIdx=0;
-  document.querySelectorAll('.setup-swipe-card').forEach(function(c,i){
-    c.classList.toggle('ss-active',i===0);
-    c.style.opacity='';c.style.transform='';c.style.transition='';c.style.pointerEvents='';
-  });
-  goToSetupCard(0);
-  // Reset 2-step stepper to initial state (goToSetupCard may no-op if idx already 0)
-  var _ss0=document.getElementById('ss0');if(_ss0){_ss0.className='stepper-circle act';_ss0.innerHTML='<span>1</span>';}
-  var _sl0=document.getElementById('sl0');if(_sl0)_sl0.className='stepper-lbl act';
-  var _ss1=document.getElementById('ss1');if(_ss1){_ss1.className='stepper-circle';_ss1.innerHTML='<span>2</span>';}
-  var _sl1=document.getElementById('sl1');if(_sl1)_sl1.className='stepper-lbl';
-  var _sline=document.getElementById('ssl01');if(_sline)_sline.className='stepper-line';
-  _fixSetupContainerHeight();
-  selectedGame='x01';doubleOut=true;setupPlayers=[];
+  setupStep=1;
+  selectedGame=localStorage.getItem('darts_last_game')||'x01';
+  if(selectedGame==='501'||selectedGame==='301')selectedGame='x01';
+  doubleOut=true;setupPlayers=[];
   x01StartScore=501;x01CustomScore=1001;
   matchFormat='firstto';matchN=2;matchSets=1;
   setupStartPlayer=0;startMode='first';
   botEnabled=false;botLevelMode='auto';botManualLevel='medium';
   hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign({},s)});
-  // Pre-fill last players
   try{
     var last=JSON.parse(localStorage.getItem('darts_last_players')||'[]');
     if(last.length)setupPlayers=last.slice();
   }catch(e){}
-  var lastGame=localStorage.getItem('darts_last_game')||'x01';
-  if(lastGame==='501'||lastGame==='301')lastGame='x01'; // migrate old saves
-  selectedGame=lastGame;
+  selectGame(selectedGame);
   renderSetupPlayers();renderKnownNames('#known-names');renderSeqEditor();
-  selectGame(selectedGame); // syncs all card-2 visibility + bot + labels
-  _updateOptiesEmpty();
-  document.getElementById('bot-enabled').checked=false;
-  document.getElementById('bot-opts').style.display='none';
-  document.getElementById('bot-name').value='Bot';
-  document.getElementById('bl-auto').className='active';
-  document.getElementById('bl-manual').className='';
-  document.getElementById('bot-manual-opts').style.display='none';
+  var botChk=document.getElementById('bot-enabled');if(botChk)botChk.checked=false;
+  var botOpts=document.getElementById('bot-opts');if(botOpts)botOpts.style.display='none';
+  var botName=document.getElementById('bot-name');if(botName)botName.value='Bot';
+  var blAuto=document.getElementById('bl-auto');if(blAuto)blAuto.className='seg-btn active';
+  var blManual=document.getElementById('bl-manual');if(blManual)blManual.className='seg-btn';
+  var botManualOpts=document.getElementById('bot-manual-opts');if(botManualOpts)botManualOpts.style.display='none';
   updateBotAutoInfo();
-  document.getElementById('player-name-input').value='';
-  document.getElementById('setup-error').textContent='';
-  document.getElementById('player-error').textContent='';
-  document.getElementById('dout-yes').className='active';
-  document.getElementById('dout-no').className='';
-  setX01Score(501);
-  document.getElementById('fmt-firstto').className='active';
-  document.getElementById('fmt-bestof').className='';
-  document.getElementById('fmt-label-n').textContent='First to (legs):';
-  [1,2,3,4,5].forEach(function(v){var el=document.getElementById('fmt-n'+v);if(el)el.className='setup-big-num'+(v===2?' active':'')});
-  [1,2,3].forEach(function(v){var el=document.getElementById('fmt-s'+v);if(el)el.className='setup-big-num'+(v===1?' active':'')});
-  goToSetupCard(0);
+  var pni=document.getElementById('player-name-input');if(pni)pni.value='';
+  var se=document.getElementById('setup-error');if(se)se.textContent='';
+  var pe=document.getElementById('player-error');if(pe)pe.textContent='';
+  goToSetupStep(1);
 }
 function renderGameBtns(){
-  var grid=document.getElementById('game-btn-grid');grid.innerHTML='';
-  GAMES.forEach(function(g){
-    var btn=document.createElement('button');
-    btn.className='game-btn'+(g.id===selectedGame?' selected':'');
-    btn.innerHTML='<div class="name">'+g.label+'</div><div class="sub">'+g.sub+'</div>';
-    btn.onclick=function(){selectGame(g.id)};grid.appendChild(btn);
-  });
+  // Legacy function - game-btn-grid removed in v187
 }
 var _RULES_LABELS={
   'x01':['Spelregels','Startscore, uitgooi, format en aantal legs'],
@@ -2728,35 +2701,442 @@ var _RULES_LABELS={
   'afgooien':['Geen extra regels','Volgorde wordt bepaald via bullronde'],
   'eliminatie':['Doelscore','Bereik de doelscore – raak je een tegenstander? Die gaat naar nul!']
 };
+// --- Config tile systeem ---
+var _CFG_TILES={
+  'x01':        [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  '501':        [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  '301':        [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  'halveit':    [{id:'rules',icon:'🎯',label:'Volgorde'},{id:'players',icon:'👥',label:'Spelers'}],
+  'checkout121':[{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  'atc':        [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  'shanghai7':  [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  'shanghai20': [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  'eliminatie': [{id:'rules',icon:'⚙️',label:'Spelregels'},{id:'players',icon:'👥',label:'Spelers'}],
+  'cricket':    [{id:'players',icon:'👥',label:'Spelers'}],
+  'afgooien':   [{id:'players',icon:'👥',label:'Spelers'}],
+  'bull':       [{id:'players',icon:'👥',label:'Spelers'}]
+};
+var _GAME_NAMES={
+  'x01':'501 / 301','501':'501','301':'301','halveit':'Halve It',
+  'checkout121':'121 Checkout','atc':'Around the Clock',
+  'shanghai7':'Shanghai','shanghai20':'Shanghai 20',
+  'eliminatie':'Eliminatie','cricket':'Cricket',
+  'afgooien':'Afgooien','bull':'Bull'
+};
+// ═══════════════════════════════════════════
+// NEW SETUP STEP SYSTEM
+// ═══════════════════════════════════════════
+var setupStep=1;
+function goToSetupStep(n){
+  var g=selectedGame;
+  var noRules=(g==='cricket'||g==='afgooien');
+  // Steps: 1=game select, 2=rules (skipped for noRules games), 3=players
+  if(noRules){
+    // Only 2 steps: 1=game, 2=players
+    if(n===2)n=3; // map step 2 to step 3 (players)
+    if(n===4)n=3;
+  }
+  setupStep=Math.max(1,Math.min(n,3));
+  renderSetupStep();
+}
+function renderSetupStep(){
+  var s1=document.getElementById('setup-step-1');
+  var s2=document.getElementById('setup-step-2');
+  var s3=document.getElementById('setup-step-3');
+  if(s1)s1.style.display=setupStep===1?'':'none';
+  if(s2)s2.style.display=setupStep===2?'':'none';
+  if(s3)s3.style.display=setupStep===3?'':'none';
+  if(setupStep===2)renderSetupRules();
+  if(setupStep===3){renderSetupPlayers();updateBotAutoInfo();}
+  updateSetupStepper();
+  updateSetupActionBar();
+  // Update title
+  var titleMap={1:'Kies een spel',2:'Spelregels',3:'Spelers'};
+  var titleEl=document.getElementById('setup-main-title');
+  if(titleEl)titleEl.textContent=titleMap[setupStep]||'';
+  // Scroll to top
+  var ac=document.getElementById('app-content');if(ac)ac.scrollTop=0;
+}
+function renderSetupRules(){
+  var g=selectedGame;
+  var container=document.getElementById('setup-rules-container');
+  if(!container)return;
+  var html='';
+  var isX01=(g==='x01'||g==='501'||g==='301');
+  if(isX01){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">STARTSCORE</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">'+
+        '<button class="seg-btn seg-btn-num" id="x01-score-501" onclick="setX01Score(501)">501</button>'+
+        '<button class="seg-btn seg-btn-num" id="x01-score-301" onclick="setX01Score(301)">301</button>'+
+        '<button class="seg-btn seg-btn-num" id="x01-score-custom" onclick="setX01ScoreCustom()">Eigen</button>'+
+      '</div>'+
+      '<input type="number" id="x01-score-custom-val" min="101" max="9999" value="1001" style="display:none;width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;margin-bottom:8px;box-sizing:border-box" oninput="x01CustomScore=parseInt(this.value)||1001">'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="setup-two-col">'+
+      '<div class="setup-card">'+
+        '<span class="setup-section-label">UITGOOI</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr)">'+
+          '<button class="seg-btn" id="dout-yes" onclick="setDoubleOut(true)">Double out</button>'+
+          '<button class="seg-btn" id="dout-no" onclick="setDoubleOut(false)">Straight out</button>'+
+        '</div>'+
+        '<span class="setup-section-label" style="margin-top:12px">FORMAT</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr)">'+
+          '<button class="seg-btn" id="fmt-firstto" onclick="setMatchFormat('firstto')">First to</button>'+
+          '<button class="seg-btn" id="fmt-bestof" onclick="setMatchFormat('bestof')">Best of</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="setup-card">'+
+        '<span class="setup-section-label" id="fmt-label-n">LEGS (FIRST TO)</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(5,1fr);margin-bottom:14px">'+
+          '<button class="seg-btn seg-btn-num" id="fmt-n1" onclick="setMatchN(1)">1</button>'+
+          '<button class="seg-btn seg-btn-num" id="fmt-n2" onclick="setMatchN(2)">2</button>'+
+          '<button class="seg-btn seg-btn-num" id="fmt-n3" onclick="setMatchN(3)">3</button>'+
+          '<button class="seg-btn seg-btn-num" id="fmt-n4" onclick="setMatchN(4)">4</button>'+
+          '<button class="seg-btn seg-btn-num" id="fmt-n5" onclick="setMatchN(5)">5</button>'+
+        '</div>'+
+        '<span class="setup-section-label">SETS</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">'+
+          '<button class="seg-btn seg-btn-num" id="fmt-s1" onclick="setMatchSets(1)">1</button>'+
+          '<button class="seg-btn seg-btn-num" id="fmt-s2" onclick="setMatchSets(2)">2</button>'+
+          '<button class="seg-btn seg-btn-num" id="fmt-s3" onclick="setMatchSets(3)">3</button>'+
+        '</div>'+
+        '<div style="font-size:11px;color:#A8A09A;text-align:center;margin-top:4px">(1 set = geen sets)</div>'+
+      '</div>'+
+    '</div>';
+    setTimeout(function(){
+      var sv=x01StartScore||501;
+      ['501','301','custom'].forEach(function(id){var el=document.getElementById('x01-score-'+id);if(el)el.className='seg-btn seg-btn-num';});
+      var activeId=sv===501?'x01-score-501':sv===301?'x01-score-301':'x01-score-custom';
+      var ael=document.getElementById(activeId);if(ael)ael.classList.add('active');
+      var dy=document.getElementById('dout-yes');if(dy)dy.className='seg-btn'+(doubleOut?' active':'');
+      var dn=document.getElementById('dout-no');if(dn)dn.className='seg-btn'+(!doubleOut?' active':'');
+      var ff=document.getElementById('fmt-firstto');if(ff)ff.className='seg-btn'+(matchFormat==='firstto'?' active':'');
+      var fb=document.getElementById('fmt-bestof');if(fb)fb.className='seg-btn'+(matchFormat==='bestof'?' active':'');
+      [1,2,3,4,5].forEach(function(v){var el=document.getElementById('fmt-n'+v);if(el)el.className='seg-btn seg-btn-num'+(matchN===v?' active':'');});
+      [1,2,3].forEach(function(v){var el=document.getElementById('fmt-s'+v);if(el)el.className='seg-btn seg-btn-num'+(matchSets===v?' active':'');});
+    },0);
+  } else if(g==='halveit'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">VOLGORDE</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px">'+
+        '<button class="seg-btn" id="hi-mode-std" onclick="resetSeq();hiRandomOrder=false;renderSetupRules();">Standaard</button>'+
+        '<button class="seg-btn" id="hi-mode-rand" onclick="hiRandomOrder=true;renderSetupRules();">Willekeurig</button>'+
+        '<button class="seg-btn" id="hi-mode-own" onclick="hiRandomOrder=false;renderSetupRules();">Eigen</button>'+
+      '</div>'+
+      '<input type="checkbox" id="hi-random-order" style="display:none" onchange="hiRandomOrder=this.checked">'+
+      '<div id="seq-editor" style="margin-bottom:10px"></div>'+
+      '<div style="background:rgba(255,255,255,.04);border-radius:12px;padding:10px 12px">'+
+        '<select id="seq-add-select" style="background:transparent;border:none;font-size:13px;color:#F3EDE8;width:calc(100% - 110px)">'+
+          '<option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option><option value="15">15</option><option value="14">14</option><option value="13">13</option><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>'+
+          '<option value="D">Double</option><option value="T">Treble</option><option value="B">Bull</option>'+
+          '<option value="SC">3 dezelfde kleuren</option><option value="DC">3 verschillende kleuren</option><option value="R3">1 van 3 getallen</option><option value="custom">Eigen opdracht…</option>'+
+        '</select>'+
+        '<button onclick="addSeqItem()" style="background:none;border:none;color:var(--setup-accent,#B94E2A);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">+ Voeg doel toe</button>'+
+      '</div>'+
+      '<div id="seq-custom-row" style="display:none;margin-top:8px">'+
+        '<span class="setup-section-label">EIGEN OPDRACHT</span>'+
+        '<div style="display:flex;gap:6px;margin-top:4px">'+
+          '<input type="text" id="seq-custom-input" placeholder="bijv. 3 dezelfde kleuren" style="flex:1;height:44px;font-size:13px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8">'+
+          '<button class="btn btn-sm btn-primary" onclick="addCustomSeqItem()">+</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+    setTimeout(function(){
+      renderSeqEditor();
+      var isRand=hiRandomOrder;
+      var ms=document.getElementById('hi-mode-std');if(ms)ms.className='seg-btn'+(!isRand?' active':'');
+      var mr=document.getElementById('hi-mode-rand');if(mr)mr.className='seg-btn'+(isRand?' active':'');
+      var mo=document.getElementById('hi-mode-own');if(mo)mo.className='seg-btn';
+    },0);
+  } else if(g==='shanghai7'||g==='shanghai20'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">RONDES</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">'+
+        '<button class="seg-btn" id="sh-rounds-7" onclick="selectGame('shanghai7');document.getElementById('sh-rounds-7').classList.add('active');document.getElementById('sh-rounds-20').classList.remove('active')">1–7 (kort)</button>'+
+        '<button class="seg-btn" id="sh-rounds-20" onclick="selectGame('shanghai20');document.getElementById('sh-rounds-20').classList.add('active');document.getElementById('sh-rounds-7').classList.remove('active')">1–20 (volledig)</button>'+
+      '</div>'+
+      '<span class="setup-section-label">BIJ 3 MISSES</span>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
+        '<button id="sh-halve-off" onclick="setShHalve(false)" style="padding:14px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Normaal</div>'+
+          '<div style="font-size:12px;color:#A8A09A">0 punten voor die ronde</div>'+
+        '</button>'+
+        '<button id="sh-halve-on" onclick="setShHalve(true)" style="padding:14px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Halveren</div>'+
+          '<div style="font-size:12px;color:#A8A09A">Totaalscore gehalveerd</div>'+
+        '</button>'+
+      '</div>'+
+      '<div class="info-block-green">Scoor op elk getal. Shanghai (single + dubbel + triple) wint direct het spel.</div>'+
+    '</div>';
+    setTimeout(function(){
+      var s7=document.getElementById('sh-rounds-7');if(s7)s7.className='seg-btn'+(g==='shanghai7'?' active':'');
+      var s20=document.getElementById('sh-rounds-20');if(s20)s20.className='seg-btn'+(g==='shanghai20'?' active':'');
+      var off=document.getElementById('sh-halve-off');if(off)off.style.borderColor=!shHalveOpt?'var(--setup-accent,#B94E2A)':'transparent';
+      var on=document.getElementById('sh-halve-on');if(on)on.style.borderColor=shHalveOpt?'var(--setup-accent,#B94E2A)':'transparent';
+    },0);
+  } else if(g==='atc'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">SCOREMODUS</span>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+        '<button id="atc-mode-basic" onclick="setAtcMode('basic')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Standaard</div>'+
+          '<div style="font-size:12px;color:#A8A09A;margin-bottom:8px">Elke raak = 1 stap vooruit</div>'+
+          '<div style="font-size:11px;color:#8FCB9C;font-family:monospace">5 → 6</div>'+
+        '</button>'+
+        '<button id="atc-mode-pts" onclick="setAtcMode('pts')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Enkel/Dubbel/Triple</div>'+
+          '<div style="font-size:12px;color:#A8A09A;margin-bottom:8px">Dubbel = 2 stappen, triple = 3</div>'+
+          '<div style="font-size:11px;color:#8FCB9C;font-family:monospace">D5 → 7</div>'+
+        '</button>'+
+      '</div>'+
+      '<div id="atc-mode-hint" style="font-size:13px;color:#A8A09A;margin-top:8px"></div>'+
+    '</div>';
+    setTimeout(function(){
+      var basic=document.getElementById('atc-mode-basic');if(basic)basic.style.borderColor=atcMode==='basic'?'var(--setup-accent,#B94E2A)':'transparent';
+      var pts=document.getElementById('atc-mode-pts');if(pts)pts.style.borderColor=atcMode==='pts'?'var(--setup-accent,#B94E2A)':'transparent';
+      setAtcMode(atcMode);
+    },0);
+  } else if(g==='checkout121'){
+    var safeLabels={none:'Geen','3dart':'Uit in ≤ 3 pijlen','6dart':'Uit in ≤ 6 pijlen','3row':'3× op rij uit','5row':'5× op rij uit',always:'Na elke checkout'};
+    var safeVals=['none','3dart','6dart','3row','5row','always'];
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">STARTSCORE</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">'+
+        '<button class="seg-btn seg-btn-num" id="co121-start-121" onclick="setCo121Start(121)">121</button>'+
+        '<button class="seg-btn seg-btn-num" id="co121-start-140" onclick="setCo121Start(140)">140</button>'+
+        '<button class="seg-btn seg-btn-num" id="co121-start-160" onclick="setCo121Start(160)">160</button>'+
+        '<button class="seg-btn seg-btn-num" id="co121-start-170" onclick="setCo121Start(170)">170</button>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" class="setup-two-col">'+
+        '<div><span class="setup-section-label">PIJLEN PER POGING</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">'+
+          '<button class="seg-btn seg-btn-num" id="co121-darts-3" onclick="setCo121Darts(3)">3</button>'+
+          '<button class="seg-btn seg-btn-num" id="co121-darts-6" onclick="setCo121Darts(6)">6</button>'+
+          '<button class="seg-btn seg-btn-num" id="co121-darts-9" onclick="setCo121Darts(9)">9</button>'+
+        '</div></div>'+
+        '<div><span class="setup-section-label">NA EEN CHECKOUT</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(4,1fr)">'+
+          '<button class="seg-btn" id="co121-step-1" onclick="setCo121Step(1)">+1</button>'+
+          '<button class="seg-btn" id="co121-step-5" onclick="setCo121Step(5)">+5</button>'+
+          '<button class="seg-btn" id="co121-step-10" onclick="setCo121Step(10)">+10</button>'+
+          '<button class="seg-btn" id="co121-step-25" onclick="setCo121Step(25)">+25</button>'+
+        '</div></div>'+
+      '</div>'+
+      '<span class="setup-section-label">SAFEHOUSE</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px">'+
+        safeVals.map(function(v){return '<button class="seg-btn" id="co121-sh-'+v+'" onclick="setCo121Safehouse(''+v+'')">'+safeLabels[v]+'</button>';}).join('')+
+      '</div>'+
+      '<div class="info-block-green">Gooi je een checkout uit in ≤ 3 pijlen, dan wordt dat je safehouse.</div>'+
+    '</div>';
+    setTimeout(function(){
+      var sv=typeof co121SetupStart!=='undefined'?co121SetupStart:121;
+      [121,140,160,170].forEach(function(v){var el=document.getElementById('co121-start-'+v);if(el)el.className='seg-btn seg-btn-num'+(sv===v?' active':'');});
+      var dv=typeof co121SetupDarts!=='undefined'?co121SetupDarts:9;
+      [3,6,9].forEach(function(v){var el=document.getElementById('co121-darts-'+v);if(el)el.className='seg-btn seg-btn-num'+(dv===v?' active':'');});
+      var stv=typeof co121SetupStep!=='undefined'?co121SetupStep:5;
+      [1,5,10,25].forEach(function(v){var el=document.getElementById('co121-step-'+v);if(el)el.className='seg-btn'+(stv===v?' active':'');});
+      var shv=typeof co121SetupSafehouse!=='undefined'?co121SetupSafehouse:'3dart';
+      safeVals.forEach(function(v){var el=document.getElementById('co121-sh-'+v);if(el)el.className='seg-btn'+(shv===v?' active':'');});
+    },0);
+  } else if(g==='eliminatie'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">DOELSCORE</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(5,1fr);margin-bottom:10px">'+
+        '<button class="seg-btn seg-btn-num" id="eli-125" onclick="setEliTarget(125)">125</button>'+
+        '<button class="seg-btn seg-btn-num" id="eli-170" onclick="setEliTarget(170)">170</button>'+
+        '<button class="seg-btn seg-btn-num" id="eli-301" onclick="setEliTarget(301)">301</button>'+
+        '<button class="seg-btn seg-btn-num" id="eli-501" onclick="setEliTarget(501)">501</button>'+
+        '<button class="seg-btn seg-btn-num" id="eli-custom-btn" onclick="setEliTargetCustom()">Eigen</button>'+
+      '</div>'+
+      '<div id="eli-custom-row" style="display:none;margin-bottom:10px">'+
+        '<input type="number" id="eli-custom-input" min="10" max="9999" placeholder="Eigen getal…" style="width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;box-sizing:border-box" oninput="eliApplyCustomTarget(this.value)">'+
+      '</div>'+
+      '<span class="setup-section-label">UITGOOI</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:4px">'+
+        '<button class="seg-btn" id="eli-out-single" onclick="setEliOut('single')">Single out</button>'+
+        '<button class="seg-btn" id="eli-out-double" onclick="setEliOut('double')">Double out</button>'+
+      '</div>'+
+      '<div id="eli-out-hint" style="font-size:13px;color:#A8A09A;margin-bottom:12px">Elke worp telt om het spel te winnen</div>'+
+      '<div class="info-block-green">Gooi exact de doelscore.</div>'+
+      '<div class="info-block-orange" style="margin-top:8px">Raak je de score van een tegenstander? Die gaat terug naar nul!</div>'+
+    '</div>';
+    setTimeout(function(){
+      var tv=typeof eliTarget!=='undefined'?eliTarget:301;
+      [125,170,301,501].forEach(function(v){var el=document.getElementById('eli-'+v);if(el)el.className='seg-btn seg-btn-num'+(tv===v?' active':'');});
+      var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='seg-btn seg-btn-num';
+      var dov=typeof eliDoubleOut!=='undefined'?eliDoubleOut:false;
+      var es=document.getElementById('eli-out-single');if(es)es.className='seg-btn'+(!dov?' active':'');
+      var ed=document.getElementById('eli-out-double');if(ed)ed.className='seg-btn'+(dov?' active':'');
+    },0);
+  }
+  container.innerHTML=html;
+}
+
+function updateSetupStepper(){
+  var el=document.getElementById('setup-stepper');
+  if(!el)return;
+  var g=selectedGame;
+  var noRules=(g==='cricket'||g==='afgooien');
+  var steps,stepN;
+  if(noRules){
+    var gn=(_GAME_NAMES&&_GAME_NAMES[g])?_GAME_NAMES[g]:g;
+    steps=[gn,'Spelers'];
+    stepN=(setupStep>=3)?2:1;
+  } else {
+    var gn2=(_GAME_NAMES&&_GAME_NAMES[g])?_GAME_NAMES[g]:g;
+    steps=[gn2,'Regels','Spelers'];
+    stepN=setupStep;
+  }
+  var accent='var(--setup-accent,#B94E2A)';
+  el.style.gridTemplateColumns='repeat('+steps.length+',1fr)';
+  el.innerHTML=steps.map(function(label,i){
+    var idx=i+1;
+    var done=idx<stepN;
+    var active=idx===stepN;
+    var barColor=done?accent:(active?'rgba(185,78,42,.35)':'rgba(255,255,255,.10)');
+    var labelColor=done?'var(--setup-accent-text,#E07A55)':(active?'#fff':'#A8A09A');
+    return '<div style="text-align:center">'+
+      '<div style="height:4px;border-radius:2px;background:'+barColor+';margin-bottom:5px"></div>'+
+      '<div style="font-size:11px;font-weight:700;color:'+labelColor+'">'+idx+' · '+label+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function updateSetupActionBar(){
+  var bar=document.getElementById('setup-action-bar');
+  var btnNext=document.getElementById('setup-btn-next');
+  var btnBack=document.getElementById('setup-btn-back');
+  var ctx=document.getElementById('setup-bar-context');
+  var main=document.getElementById('setup-bar-main');
+  if(!bar)return;
+  var g=selectedGame;
+  var noRules=(g==='cricket'||g==='afgooien');
+  if(setupStep===1){bar.style.display='none';return;}
+  bar.style.display='flex';
+  var gn=(_GAME_NAMES&&_GAME_NAMES[g])?_GAME_NAMES[g]:g;
+  if(btnBack)btnBack.style.display=setupStep>1?'':'none';
+  if(setupStep===2&&!noRules){
+    if(ctx)ctx.textContent='Nieuw spel · '+gn;
+    if(main)main.textContent=buildRulesSummary();
+    if(btnNext){
+      btnNext.innerHTML='Spelers <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+      btnNext.onclick=function(){goToSetupStep(3);};
+    }
+  } else if(setupStep===3||(noRules&&setupStep>=2)){
+    if(ctx)ctx.textContent='Nieuw spel · '+gn;
+    var pCount=setupPlayers.length;
+    if(main)main.textContent=(pCount>0?pCount+' speler'+(pCount!==1?'s':''):'Geen spelers')+' · '+(startMode==='first'?'Volgorde lijst':startMode==='pick'?'Zelf kiezen':'Loting');
+    if(btnNext){
+      btnNext.innerHTML='▶ Start spel';
+      btnNext.onclick=function(){startGame();};
+    }
+  }
+}
+
+function buildRulesSummary(){
+  var g=selectedGame;
+  if(g==='x01'||g==='501'||g==='301'){
+    var sc=(typeof x01StartScore!=='undefined')?x01StartScore:501;
+    var out=(typeof doubleOut!=='undefined'&&doubleOut)?'Double out':'Straight out';
+    var fmt=(typeof matchFormat!=='undefined'&&matchFormat==='firstto')?'First to '+(matchN||2):'Best of '+(matchN||2);
+    return sc+' · '+out+' · '+fmt;
+  } else if(g==='halveit'){return 'Halve It · '+(hiSequence?hiSequence.length:0)+' rondes';}
+  else if(g==='shanghai7'||g==='shanghai20'){return 'Shanghai · '+(g==='shanghai7'?'7':'20')+' rondes';}
+  else if(g==='atc'){return 'ATC · '+(atcMode==='basic'?'Standaard':'Punten');}
+  else if(g==='checkout121'){return '121 Checkout';}
+  else if(g==='eliminatie'){return 'Eliminatie';}
+  return g;
+}
+
+// ─── TOURNAMENT STEP SYSTEM ───────────────────────────────────
+var trnStep=1;
+function goToTrnStep(n){
+  trnStep=Math.max(1,Math.min(n,3));
+  var s1=document.getElementById('trn-step-1');
+  var s2=document.getElementById('trn-step-2');
+  var s3=document.getElementById('trn-step-3');
+  if(s1)s1.style.display=trnStep===1?'':'none';
+  if(s2)s2.style.display=trnStep===2?'':'none';
+  if(s3)s3.style.display=trnStep===3?'':'none';
+  updateTrnStepper();
+  updateTrnActionBar();
+  var titleMap={1:'Formaat',2:'Regels',3:'Deelnemers'};
+  var titleEl=document.getElementById('trn-main-title');
+  if(titleEl)titleEl.textContent=titleMap[trnStep]||'';
+  if(trnStep===3){renderTrnPlayers();renderKnownNames('#trn-known-names');}
+  var ac=document.getElementById('app-content');if(ac)ac.scrollTop=0;
+}
+function updateTrnStepper(){
+  var el=document.getElementById('trn-stepper');
+  if(!el)return;
+  var steps=['Formaat','Regels','Deelnemers'];
+  el.innerHTML=steps.map(function(label,i){
+    var idx=i+1;
+    var done=idx<trnStep;
+    var active=idx===trnStep;
+    var barColor=done?'#3E7B4F':(active?'rgba(62,123,79,.35)':'rgba(255,255,255,.10)');
+    var labelColor=done?'#8FCB9C':(active?'#fff':'#A8A09A');
+    return '<div style="text-align:center">'+
+      '<div style="height:4px;border-radius:2px;background:'+barColor+';margin-bottom:5px"></div>'+
+      '<div style="font-size:11px;font-weight:700;color:'+labelColor+'">'+idx+' · '+label+'</div>'+
+    '</div>';
+  }).join('');
+}
+function updateTrnActionBar(){
+  var bar=document.getElementById('trn-action-bar');
+  var btnNext=document.getElementById('trn-btn-next');
+  var btnBack=document.getElementById('trn-btn-back');
+  var ctx=document.getElementById('trn-bar-context');
+  var main=document.getElementById('trn-bar-main');
+  if(!bar)return;
+  bar.style.display='flex';
+  if(btnBack)btnBack.style.display=trnStep>1?'':'none';
+  if(trnStep===1){
+    if(ctx)ctx.textContent='Toernooi';
+    if(main)main.textContent=trnFormat==='knockout'?'Knock-out':trnFormat==='roundrobin'?'Round Robin':'Groepsfase';
+    if(btnNext){btnNext.innerHTML='Regels →';btnNext.onclick=function(){goToTrnStep(2);};}
+  } else if(trnStep===2){
+    if(ctx)ctx.textContent='Toernooi';
+    if(main)main.textContent=(trnGame||501)+' · '+(trnDoubleOut?'Double out':'Straight out');
+    if(btnNext){btnNext.innerHTML='Deelnemers →';btnNext.onclick=function(){goToTrnStep(3);};}
+  } else {
+    if(ctx)ctx.textContent='Toernooi';
+    var pc=trnPlayers?trnPlayers.length:0;
+    if(main)main.textContent=pc+' deelnemer'+(pc!==1?'s':'');
+    if(btnNext){btnNext.innerHTML='▶ Toernooi starten';btnNext.onclick=function(){startTournament();};}
+  }
+}
+function onTrnNext(){/* handled by button onclick */}
+
+/* Legacy renderCfgTiles removed v187 */
+/* Legacy selectCfgTile removed v187 */
+/* Legacy updateCfgPlayerBadge removed v187 */
+// --- Einde config tile systeem ---
+
 function selectGame(g){
   selectedGame=g;
   var isX01=(g==='x01'||g==='501'||g==='301');
-  var hasOpts=isX01||g==='halveit'||g==='checkout121'||g==='atc'||g==='shanghai7'||g==='shanghai20'||g==='eliminatie';
-  document.getElementById('gt-opts-x01').style.display=isX01?'block':'none';
-  document.getElementById('gt-opts-halveit').style.display=(g==='halveit')?'block':'none';
-  document.getElementById('gt-opts-co121').style.display=(g==='checkout121')?'block':'none';
-  document.getElementById('gt-opts-atc').style.display=(g==='atc')?'block':'none';
-  document.getElementById('gt-opts-shanghai').style.display=(g==='shanghai7'||g==='shanghai20')?'block':'none';
-  document.getElementById('gt-opts-eliminatie').style.display=(g==='eliminatie')?'block':'none';
-  document.getElementById('setup-rules-empty').style.display=hasOpts?'none':'block';
-  document.getElementById('bot-card').style.display=(isX01||g==='halveit'||g==='afgooien')?'block':'none';
-  var lbl=_RULES_LABELS[g]||['Spelregels',''];
-  var rt=document.getElementById('setup-rules-title');var rs=document.getElementById('setup-rules-sub');
-  if(rt)rt.textContent=lbl[0];if(rs)rs.textContent=lbl[1];
-  _updateOptiesEmpty();
-  renderGameBtns();
+  var bot=document.getElementById('bot-card');
+  if(bot)bot.style.display=(isX01||g==='halveit'||g==='afgooien')?'block':'none';
+  var mainTitle=document.getElementById('setup-main-title');
+  if(mainTitle)mainTitle.textContent=_GAME_NAMES[g]||g;
 }
 function setAtcMode(m){
   atcMode=m;
-  document.getElementById('atc-mode-basic').className=m==='basic'?'active':'';
-  document.getElementById('atc-mode-pts').className=m==='pts'?'active':'';
+  var basic=document.getElementById('atc-mode-basic');
+  var pts=document.getElementById('atc-mode-pts');
+  if(basic)basic.style.borderColor=m==='basic'?'var(--setup-accent,#B94E2A)':'transparent';
+  if(pts)pts.style.borderColor=m==='pts'?'var(--setup-accent,#B94E2A)':'transparent';
   var hint=document.getElementById('atc-mode-hint');
   if(hint)hint.textContent=m==='basic'?'Standaard: 1 raak = 1 stap vooruit':'Dubbel = 2 stappen, Triple = 3 stappen';
 }
 function setShHalve(v){
   shHalveOpt=v;
-  document.getElementById('sh-halve-off').className=!v?'active':'';
-  document.getElementById('sh-halve-on').className=v?'active':'';
+  var off=document.getElementById('sh-halve-off');
+  var on=document.getElementById('sh-halve-on');
+  if(off)off.style.borderColor=!v?'var(--setup-accent,#B94E2A)':'transparent';
+  if(on)on.style.borderColor=v?'var(--setup-accent,#B94E2A)':'transparent';
   var hint=document.getElementById('sh-halve-hint');
   if(hint)hint.textContent=v?'Bij 3 misses: score gehalveerd':'Normaal: 3 misses = 0 punten';
 }
@@ -2764,16 +3144,16 @@ var eliDoubleOut=false;
 function setEliTarget(v){
   eliTarget=v;
   [125,170,301,501].forEach(function(n){
-    var b=document.getElementById('eli-'+n);if(b)b.className=(n===v?'active':'');
+    var b=document.getElementById('eli-'+n);if(b)b.className='seg-btn seg-btn-num'+(n===v?' active':'');
   });
-  var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='';
+  var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='seg-btn seg-btn-num';
   var cr=document.getElementById('eli-custom-row');if(cr)cr.style.display='none';
   var hint=document.getElementById('eli-target-hint');
-  if(hint)hint.textContent='Eerste speler die exact '+v+' gooit wint. Raak je de score van een tegenstander? Die gaat terug naar nul!';
+  if(hint)hint.textContent='Eerste speler die exact '+v+' gooit wint.';
 }
 function setEliTargetCustom(){
-  [125,170,301,501].forEach(function(n){var b=document.getElementById('eli-'+n);if(b)b.className='';});
-  var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='active';
+  [125,170,301,501].forEach(function(n){var b=document.getElementById('eli-'+n);if(b)b.className='seg-btn seg-btn-num';});
+  var cb=document.getElementById('eli-custom-btn');if(cb)cb.className='seg-btn seg-btn-num active';
   var cr=document.getElementById('eli-custom-row');if(cr)cr.style.display='block';
 }
 function eliApplyCustomTarget(val){
@@ -2787,47 +3167,51 @@ function eliApplyCustomTarget(val){
 function setEliOut(mode){
   eliDoubleOut=(mode==='double');
   var bs=document.getElementById('eli-out-single');var bd=document.getElementById('eli-out-double');
-  if(bs)bs.className=!eliDoubleOut?'active':'';
-  if(bd)bd.className=eliDoubleOut?'active':'';
+  if(bs)bs.className='seg-btn'+(!eliDoubleOut?' active':'');
+  if(bd)bd.className='seg-btn'+(eliDoubleOut?' active':'');
   var hint=document.getElementById('eli-out-hint');
   if(hint)hint.textContent=eliDoubleOut?'Je moet de doelscore op een double gooien om te winnen':'Elke worp telt om het spel te winnen';
 }
 function setMatchFormat(f){
   matchFormat=f;
-  document.getElementById('fmt-firstto').className=f==='firstto'?'active':'';
-  document.getElementById('fmt-bestof').className=f==='bestof'?'active':'';
-  document.getElementById('fmt-label-n').textContent=f==='firstto'?'First to (legs):':'Best of (legs):';
+  var ff=document.getElementById('fmt-firstto');if(ff)ff.className='seg-btn'+(f==='firstto'?' active':'');
+  var fb=document.getElementById('fmt-bestof');if(fb)fb.className='seg-btn'+(f==='bestof'?' active':'');
+  var lbl=document.getElementById('fmt-label-n');if(lbl)lbl.textContent=f==='firstto'?'LEGS (FIRST TO)':'LEGS (BEST OF)';
+  updateSetupActionBar();
 }
 function setMatchN(n){
   matchN=n;
-  [1,2,3,4,5].forEach(function(v){var el=document.getElementById('fmt-n'+v);if(el)el.className='setup-big-num'+(v===n?' active':'')});
+  [1,2,3,4,5].forEach(function(v){var el=document.getElementById('fmt-n'+v);if(el)el.className='seg-btn seg-btn-num'+(v===n?' active':'');});
+  updateSetupActionBar();
 }
 function setMatchSets(n){
   matchSets=n;
-  [1,2,3].forEach(function(v){var el=document.getElementById('fmt-s'+v);if(el)el.className='setup-big-num'+(v===n?' active':'')});
+  [1,2,3].forEach(function(v){var el=document.getElementById('fmt-s'+v);if(el)el.className='seg-btn seg-btn-num'+(v===n?' active':'');});
 }
 function setX01Score(v){
   x01StartScore=v;
   ['501','301','custom'].forEach(function(k){
     var el=document.getElementById('x01-score-'+k);
-    if(el)el.className=(k===(v===501?'501':v===301?'301':'custom')?'active':'');
+    if(el)el.className='seg-btn seg-btn-num'+(k===(v===501?'501':v===301?'301':'custom')?' active':'');
   });
   var inp=document.getElementById('x01-score-custom-val');
   if(inp)inp.style.display='none';
+  updateSetupActionBar();
 }
 function setX01ScoreCustom(){
   x01StartScore=null;
   ['501','301','custom'].forEach(function(k){
     var el=document.getElementById('x01-score-'+k);
-    if(el)el.className=(k==='custom'?'active':'');
+    if(el)el.className='seg-btn seg-btn-num'+(k==='custom'?' active':'');
   });
   var inp=document.getElementById('x01-score-custom-val');
   if(inp){inp.style.display='block';inp.focus();}
 }
 function setDoubleOut(v){
   doubleOut=v;
-  document.getElementById('dout-yes').className=v?'active':'';
-  document.getElementById('dout-no').className=!v?'active':'';
+  var dy=document.getElementById('dout-yes');if(dy)dy.className='seg-btn'+(v?' active':'');
+  var dn=document.getElementById('dout-no');if(dn)dn.className='seg-btn'+(!v?' active':'');
+  updateSetupActionBar();
 }
 function seqLabel(s){
   if(s.type==='num')return s.val+'';
@@ -2995,15 +3379,20 @@ function addPlayer(){
 }
 function removePlayer(i){setupPlayers.splice(i,1);renderSetupPlayers();}
 function renderSetupPlayers(){
-  var el=document.getElementById('player-list');el.innerHTML='';
+  var el=document.getElementById('player-list');
+  if(!el)return;
+  el.innerHTML='';
   setupPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)';
-    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600">'+n+'</span></div><button style="background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--setup-accent,#B94E2A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:#F3EDE8">'+n+'</span></div><button style="background:transparent;border:none;color:#A8A09A;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
     el.appendChild(row);
   });
+  var lbl=document.getElementById('setup-players-label');
+  if(lbl)lbl.textContent='SPELERS · '+setupPlayers.length;
   renderStartPlayerCard();
   renderKnownNames('#known-names');
+  if(typeof updateSetupActionBar==='function')updateSetupActionBar();
 }
 function startGame(){
   var err=document.getElementById('setup-error');
@@ -3044,10 +3433,10 @@ function onBotToggle(checked){
 }
 function setBotLevel(m){
   botLevelMode=m;
-  document.getElementById('bl-auto').className=m==='auto'?'active':'';
-  document.getElementById('bl-manual').className=m==='manual'?'active':'';
-  document.getElementById('bot-manual-opts').style.display=m==='manual'?'block':'none';
-  document.getElementById('bot-player-pick').style.display=m==='auto'?'block':'none';
+  var ba=document.getElementById('bl-auto');if(ba)ba.className='seg-btn'+(m==='auto'?' active':'');
+  var bm=document.getElementById('bl-manual');if(bm)bm.className='seg-btn'+(m==='manual'?' active':'');
+  var bmo=document.getElementById('bot-manual-opts');if(bmo)bmo.style.display=m==='manual'?'block':'none';
+  var bpp=document.getElementById('bot-player-pick');if(bpp)bpp.style.display=m==='auto'?'block':'none';
   updateBotAutoInfo();
 }
 function onBotPlayerSelect(name){
@@ -3106,7 +3495,8 @@ function updateBotAutoInfo(){
 function setBotManual(l){
   botManualLevel=l;
   ['beg','mid','adv','exp'].forEach(function(k,i){
-    document.getElementById('bm-'+k).className=['beginner','medium','advanced','expert'][i]===l?'active':'';
+    var el=document.getElementById('bm-'+k);
+    if(el)el.className='seg-btn'+(['beginner','medium','advanced','expert'][i]===l?' active':'');
   });
 }
 function botTargetAvg(playerAvg){
@@ -3376,34 +3766,34 @@ var trnGameCustom=1001; // value when 'Vrij' is selected
 
 function setTrnGame(v){
   trnGame=v;
-  ['501','301','custom'].forEach(function(k){
+  var map={501:'501',301:'301'};
+  ['501','301','vrij'].forEach(function(k){
     var el=document.getElementById('trn-game-'+k);
-    if(el)el.className=(k===(v===501?'501':v===301?'301':'custom')?'active':'');
+    if(el)el.className='seg-btn seg-btn-num'+(k===(map[v]||'vrij')?' active':'');
   });
-  document.getElementById('trn-game-custom-val').style.display='none';
+  var cr=document.getElementById('trn-custom-game-row');if(cr)cr.style.display='none';
+  updateTrnActionBar();
 }
 function setTrnGameCustom(){
-  trnGame=null; // will read from input on start
-  ['501','301','custom'].forEach(function(k){
+  trnGame=null;
+  ['501','301','vrij'].forEach(function(k){
     var el=document.getElementById('trn-game-'+k);
-    if(el)el.className=(k==='custom'?'active':'');
+    if(el)el.className='seg-btn seg-btn-num'+(k==='vrij'?' active':'');
   });
+  var cr=document.getElementById('trn-custom-game-row');if(cr)cr.style.display='block';
   var inp=document.getElementById('trn-game-custom-val');
-  inp.style.display='block';
-  inp.focus();
+  if(inp){inp.style.display='block';inp.focus();}
 }
 
 function renderTrnSetup(){
-  trnPlayers=[];trnFormat='knockout';trnDoubleOut=true;trnBO=1;trnGroups=2;
-  renderTrnFormatBtns();renderTrnPlayers();renderKnownNames('#trn-known-names');
-  document.getElementById('trn-player-input').value='';
-  document.getElementById('trn-setup-error').textContent='';
-  document.getElementById('trn-dout-yes').className='active';
-  document.getElementById('trn-dout-no').className='';
-  document.getElementById('trn-bo-1').className='active';
-  document.getElementById('trn-bo-3').className='';
-  document.getElementById('trn-bo-5').className='';
-  document.getElementById('trn-group-opts').style.display='none';
+  trnStep=1;
+  trnPlayers=[];trnFormat='knockout';trnDoubleOut=true;trnBO=3;trnGroups=3;
+  var pi=document.getElementById('trn-player-input');if(pi)pi.value='';
+  var se=document.getElementById('trn-setup-error');if(se)se.textContent='';
+  renderTrnFormatBtns();
+  renderTrnPlayers();
+  renderKnownNames('#trn-known-names');
+  goToTrnStep(1);
 }
 function renderTrnFormatBtns(){
   var formats=[
@@ -3411,28 +3801,42 @@ function renderTrnFormatBtns(){
     {id:'roundrobin',label:'Round Robin',sub:'Iedereen speelt tegen iedereen'},
     {id:'group',label:'Groepsfase + Knock-out',sub:'Groepen → knock-outfase'}
   ];
-  var el=document.getElementById('trn-format-btns');el.innerHTML='';
+  var el=document.getElementById('trn-format-btns');
+  if(!el)return;
+  el.innerHTML='';
   formats.forEach(function(f){
-    var btn=document.createElement('button');
-    btn.className='game-btn'+(f.id===trnFormat?' selected':'');
-    btn.style.cssText='width:100%;display:flex;flex-direction:column;align-items:flex-start';
-    btn.innerHTML='<div class="name">'+f.label+'</div><div class="sub">'+f.sub+'</div>';
-    btn.onclick=function(){trnFormat=f.id;renderTrnFormatBtns();document.getElementById('trn-group-opts').style.display=f.id==='group'?'flex':'none'};
-    el.appendChild(btn);
+    var isActive=f.id===trnFormat;
+    var div=document.createElement('div');
+    div.style.cssText='padding:16px;border-radius:14px;border:2px solid '+(isActive?'#3E7B4F':'rgba(255,255,255,.07)')+';background:rgba(28,26,27,.88);cursor:pointer;margin-bottom:8px;transition:border-color .15s';
+    div.innerHTML='<div style="font-size:16px;font-weight:800;color:#F3EDE8;margin-bottom:4px">'+f.label+'</div><div style="font-size:13px;color:#A8A09A">'+f.sub+'</div>';
+    div.onclick=function(){
+      trnFormat=f.id;
+      renderTrnFormatBtns();
+      var gs=document.getElementById('trn-groups-section');
+      if(gs)gs.style.display=f.id==='group'?'block':'none';
+      updateTrnActionBar();
+    };
+    el.appendChild(div);
   });
 }
 function setTrnDoubleOut(v){
   trnDoubleOut=v;
-  document.getElementById('trn-dout-yes').className=v?'active':'';
-  document.getElementById('trn-dout-no').className=!v?'active':'';
+  var y=document.getElementById('trn-dout-yes');if(y)y.className='seg-btn'+(v?' active':'');
+  var n=document.getElementById('trn-dout-no');if(n)n.className='seg-btn'+(!v?' active':'');
 }
 function setTrnBO(v){
   trnBO=v;
-  [1,3,5].forEach(function(n){document.getElementById('trn-bo-'+n).className=(n===v?'active':'')});
+  [1,3,5].forEach(function(n){
+    var el=document.getElementById('trn-bo-'+n);
+    if(el)el.className='seg-btn'+(n===v?' active':'');
+  });
 }
 function setTrnGroups(v){
   trnGroups=v;
-  [2,3,4].forEach(function(n){document.getElementById('trn-g'+n).className=(n===v?'active':'')});
+  [2,3,4].forEach(function(n){
+    var el=document.getElementById('trn-groups-'+n);
+    if(el)el.className='seg-btn seg-btn-num'+(n===v?' active':'');
+  });
 }
 function trnAddPlayer(){
   var input=document.getElementById('trn-player-input');
@@ -3443,13 +3847,18 @@ function trnAddPlayer(){
 }
 function trnRemovePlayer(i){trnPlayers.splice(i,1);renderTrnPlayers();}
 function renderTrnPlayers(){
-  var el=document.getElementById('trn-player-list');el.innerHTML='';
+  var el=document.getElementById('trn-player-list');
+  if(!el)return;
+  el.innerHTML='';
   trnPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)';
-    row.innerHTML='<span style="font-size:14px;font-weight:600">'+n+'</span><button class="btn btn-xs btn-danger" onclick="trnRemovePlayer('+i+')">✕</button>';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:#3E7B4F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:#F3EDE8">'+n+'</span></div><button style="background:transparent;border:none;color:#A8A09A;font-size:18px;cursor:pointer;padding:4px 8px;min-height:36px" onclick="trnRemovePlayer('+i+')">&#x2715;</button>';
     el.appendChild(row);
   });
+  var lbl=document.getElementById('trn-players-label');
+  if(lbl)lbl.textContent='DEELNEMERS · '+trnPlayers.length;
+  updateTrnActionBar();
 }
 
 function shuffle(arr){
@@ -6876,28 +7285,28 @@ function setCo121Start(v){
   co121SetupStart=v;
   [121,140,160,170].forEach(function(n){
     var el=document.getElementById('co121-start-'+n);
-    if(el)el.className=(n===v?'active':'');
+    if(el)el.className='seg-btn seg-btn-num'+(n===v?' active':'');
   });
 }
 function setCo121Darts(v){
   co121SetupDarts=v;
   [3,6,9].forEach(function(n){
     var el=document.getElementById('co121-darts-'+n);
-    if(el)el.className=(n===v?'active':'');
+    if(el)el.className='seg-btn seg-btn-num'+(n===v?' active':'');
   });
 }
 function setCo121Step(v){
   co121SetupStep=v;
   [1,5,10,25].forEach(function(n){
     var el=document.getElementById('co121-step-'+n);
-    if(el)el.className=(n===v?'active':'');
+    if(el)el.className='seg-btn'+(n===v?' active':'');
   });
 }
 function setCo121Safehouse(v){
   co121SetupSafehouse=v;
   ['none','3dart','6dart','3row','5row','always'].forEach(function(k){
     var el=document.getElementById('co121-sh-'+k);
-    if(el)el.className=(k===v?'active':'');
+    if(el)el.className='seg-btn'+(k===v?' active':'');
   });
 }
 
@@ -8647,20 +9056,10 @@ function _afgWin(winner){
   border:0.5px solid var(--border) !important;
 }
 /* Sluit de card netjes af aan de onderkant met de nav-balk */
-.setup-card-nav {
-  border-radius:0 0 16px 16px !important;
-  border:0.5px solid var(--border) !important;
-  border-top:none !important;
-  background:var(--card) !important;
-}
+/* .setup-card-nav override removed */
 
 /* ── 3. Segmented controls: active state gebruikt accent ipv kaart-wit ── */
-.seg-btn.active {
-  background:rgba(181,80,47,.15) !important;
-  color:var(--accent) !important;
-  border:0.5px solid rgba(181,80,47,.3) !important;
-  box-shadow:none !important;
-}
+/* .seg-btn.active override removed - handled by setup scope below */
 
 /* ── 4. Lang-tiles: zelfde active state als game-btn ── */
 .lang-tile {
@@ -8674,15 +9073,7 @@ function _afgWin(winner){
 }
 
 /* ── 5. Setup-nav-arrow: consistente stijl voor alle back-knoppen ── */
-.setup-nav-arrow {
-  background:transparent !important;
-  border:0.5px solid rgba(181,80,47,.25) !important;
-  border-radius:10px !important;
-  color:var(--accent) !important;
-  font-size:13px !important;
-  font-weight:600 !important;
-  padding:8px 16px !important;
-}
+/* .setup-nav-arrow override removed */
 
 /* ── 6. Screen-titels: consistente typografie ── */
 #screen-settings > h2,
@@ -8696,15 +9087,7 @@ function _afgWin(winner){
   text-align:center !important;
 }
 
-/* ── 7. Setup stepper: accent-kleur consistent ── */
-.stepper-circle.act,
-.stepper-circle.done {
-  background:var(--accent) !important;
-  border-color:var(--accent) !important;
-}
-.stepper-line.done { background:var(--accent) !important; }
-.stepper-lbl.act { color:var(--accent) !important; }
-
+/* setup stepper overrides removed */
 /* ── 8. Card labels: consistent uppercase stijl ── */
 .card > div[style*="text-transform:uppercase"],
 .card > div[style*="text-transform: uppercase"] {
