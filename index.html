@@ -782,7 +782,7 @@ select{
 /* Sticky action bar */
 .setup-action-bar {
   position: sticky;
-  bottom: calc(80px + env(safe-area-inset-bottom) + 8px);
+  bottom: 8px; /* #app-content heeft al 80px padding voor de pill-nav */
   background: rgba(20,19,20,.92);
   border-radius: 18px;
   padding: 14px 14px 14px 22px;
@@ -811,6 +811,52 @@ select{
   .setup-btn-next { font-size: 14px; height: 48px; padding: 0 16px; }
   .game-select-name { font-size: 15px; }
 }
+
+/* ── Mobile actiebalk (v189) ── */
+@media (max-width: 600px) {
+  .setup-action-bar { padding: 10px 10px 10px 16px; gap: 10px; background: rgba(20,19,20,.97); }
+  .setup-action-context { display: none; }
+  .setup-action-main { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 13px; line-height: 1.3; }
+  .setup-btn-back { display: none !important; }
+  .setup-btn-next { height: 48px; padding: 0 18px; font-size: 15px; }
+}
+
+/* ── Halve It: rondetegels (v189) ── */
+.hi-legend { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 2px 0 10px; font-size: 12px; color: #A8A09A; }
+.hi-legend-keys { display: flex; gap: 12px; font-weight: 600; color: #C9BFB8; flex-shrink: 0; }
+.hi-legend-keys span { display: flex; align-items: center; gap: 5px; }
+.hi-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.hi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
+@media (max-width: 600px) { .hi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.hi-tile { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-height: 80px; box-sizing: border-box; padding: 10px 10px 10px 12px; border-radius: 12px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: pan-y; transition: transform .15s ease, box-shadow .15s ease, opacity .15s; }
+.hi-tile-num { background: rgba(224,122,85,.10); border: 1px solid rgba(224,122,85,.28); }
+.hi-tile-task { background: rgba(94,158,110,.12); border: 1px solid rgba(143,203,156,.28); }
+.hi-tile-round { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: #A8A09A; }
+.hi-tile-label { color: #F3EDE8; font-weight: 800; line-height: 1.15; overflow-wrap: normal; word-break: normal; -webkit-hyphens: auto; hyphens: auto; }
+.hi-tile-num .hi-tile-label { font-size: 26px; font-weight: 900; line-height: 1; }
+.hi-tile-task .hi-tile-label { font-size: 13px; }
+@media (max-width: 600px) { .hi-tile-task .hi-tile-label { font-size: 12px; } .hi-tile { padding: 9px 8px 9px 10px; } }
+.hi-tile-round { padding-right: 24px; }
+.hi-tile-del { position: absolute; top: 0; right: 0; width: 40px; height: 40px; border: none; background: transparent; color: #A8A09A; display: flex; align-items: flex-start; justify-content: flex-end; padding: 8px 8px 0 0; cursor: pointer; }
+.hi-tile.hi-dragging { transform: scale(1.06); box-shadow: 0 10px 28px rgba(0,0,0,.55); z-index: 5; opacity: .95; }
+.hi-add-row { display: flex; gap: 8px; align-items: center; }
+.hi-add-row select { flex: 1; min-width: 0; height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.1); background: #141314; color: #F3EDE8; font-size: 14px; }
+.hi-add-row button { height: 46px; padding: 0 16px; border-radius: 12px; border: none; background: var(--setup-accent, #B94E2A); color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+
+/* ── Toernooi formaatkaarten (v189) ── */
+.trn-fmt-card { display: flex; flex-direction: column; gap: 14px; width: 100%; text-align: left; padding: 14px 16px; margin-bottom: 8px; border-radius: 14px; background: rgba(28,26,27,.88); border: 2px solid rgba(255,255,255,.07); color: #F3EDE8; cursor: pointer; font-family: inherit; box-sizing: border-box; }
+.trn-fmt-card.active { background: rgba(62,123,79,.16); border-color: #5E9E6E; }
+.trn-fmt-head { display: flex; align-items: center; gap: 14px; }
+.trn-fmt-icon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(94,158,110,.16); color: #8FCB9C; }
+.trn-fmt-card.active .trn-fmt-icon { background: #3E7B4F; color: #fff; }
+.trn-fmt-text { flex: 1; min-width: 0; }
+.trn-fmt-title { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
+.trn-fmt-sub { font-size: 13px; color: #A8A09A; }
+.trn-fmt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); flex-shrink: 0; box-sizing: border-box; }
+.trn-fmt-card.active .trn-fmt-radio { border: 7px solid #5E9E6E; background: #fff; }
+.trn-fmt-groups { display: flex; flex-direction: column; gap: 8px; }
+.trn-fmt-groups .setup-section-label { margin: 0; }
+#screen-trn-setup .trn-fmt-groups .seg-ctrl { margin-bottom: 0; }
 
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -1472,11 +1518,11 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- SETUP vrij spel -->
 <div class="screen" id="screen-setup" style="--setup-accent:#B94E2A;--setup-accent-text:#E07A55">
-  <div style="max-width:720px;margin:0 auto;padding:0 16px 120px;">
+  <div style="max-width:720px;margin:0 auto;padding:0 0 16px;">
 
     <!-- Header -->
     <div style="display:flex;align-items:center;gap:12px;padding:16px 0 12px;">
-      <button onclick="showScreen('screen-home')" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
+      <button onclick="setupHeaderBack()" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <div>
@@ -1647,7 +1693,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <div class="setup-action-main" id="setup-bar-main"></div>
       </div>
       <div class="setup-action-btns">
-        <button class="setup-btn-back" id="setup-btn-back" onclick="goToSetupStep(setupStep-1)" style="display:none">Terug</button>
+        <button class="setup-btn-back" id="setup-btn-back" onclick="setupHeaderBack()" style="display:none">Terug</button>
         <button class="setup-btn-next" id="setup-btn-next" onclick="onSetupNext ? onSetupNext() : null">
           Spelers
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1659,11 +1705,11 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- TOURNAMENT SETUP -->
 <div class="screen" id="screen-trn-setup" style="--setup-accent:#3E7B4F;--setup-accent-text:#8FCB9C">
-  <div style="max-width:720px;margin:0 auto;padding:0 16px 120px;">
+  <div style="max-width:720px;margin:0 auto;padding:0 0 16px;">
 
     <!-- Header -->
     <div style="display:flex;align-items:center;gap:12px;padding:16px 0 12px;">
-      <button onclick="showScreen('screen-home')" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
+      <button onclick="trnHeaderBack()" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <div>
@@ -1678,16 +1724,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <!-- Stap 1: Formaat -->
     <div id="trn-step-1">
       <div id="trn-format-btns"></div>
-      <div id="trn-groups-section" style="display:none;margin-top:14px">
-        <div class="setup-card">
-          <span class="setup-section-label">AANTAL GROEPEN</span>
-          <div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">
-            <button class="seg-btn seg-btn-num" id="trn-groups-2" onclick="setTrnGroups(2)">2</button>
-            <button class="seg-btn seg-btn-num active" id="trn-groups-3" onclick="setTrnGroups(3)">3</button>
-            <button class="seg-btn seg-btn-num" id="trn-groups-4" onclick="setTrnGroups(4)">4</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Stap 2: Regels -->
@@ -1740,7 +1776,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <div class="setup-action-main" id="trn-bar-main"></div>
       </div>
       <div class="setup-action-btns">
-        <button class="setup-btn-back" id="trn-btn-back" onclick="goToTrnStep(trnStep-1)" style="display:none">Terug</button>
+        <button class="setup-btn-back" id="trn-btn-back" onclick="trnHeaderBack()" style="display:none">Terug</button>
         <button class="setup-btn-next" id="trn-btn-next" style="background:#3E7B4F" onclick="onTrnNext()">
           Regels
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -2727,6 +2763,15 @@ var _GAME_NAMES={
 // NEW SETUP STEP SYSTEM
 // ═══════════════════════════════════════════
 var setupStep=1;
+function setupHeaderBack(){
+  var noRules=(selectedGame==='cricket'||selectedGame==='afgooien');
+  if(setupStep<=1){showScreen('screen-home');return;}
+  goToSetupStep(noRules&&setupStep===3?1:setupStep-1);
+}
+function trnHeaderBack(){
+  if(trnStep<=1){showScreen('screen-home');return;}
+  goToTrnStep(trnStep-1);
+}
 function goToSetupStep(n){
   var g=selectedGame;
   var noRules=(g==='cricket'||g==='afgooien');
@@ -2825,14 +2870,15 @@ function renderSetupRules(){
         '<button class="seg-btn" id="hi-mode-own" onclick="hiRandomOrder=false;renderSetupRules();">Eigen</button>'+
       '</div>'+
       '<input type="checkbox" id="hi-random-order" style="display:none" onchange="hiRandomOrder=this.checked">'+
-      '<div id="seq-editor" style="margin-bottom:10px"></div>'+
-      '<div style="background:rgba(255,255,255,.04);border-radius:12px;padding:10px 12px">'+
-        '<select id="seq-add-select" style="background:transparent;border:none;font-size:13px;color:#F3EDE8;width:calc(100% - 110px)">'+
+      '<div class="hi-legend"><span>Houd een ronde vast en sleep om te verplaatsen</span><span class="hi-legend-keys"><span><i class="hi-dot" style="background:#E07A55"></i>Getal</span><span><i class="hi-dot" style="background:#8FCB9C"></i>Opdracht</span></span></div>'+
+      '<div id="seq-editor"></div>'+
+      '<div class="hi-add-row">'+
+        '<select id="seq-add-select" aria-label="Doel kiezen">'+
           '<option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option><option value="15">15</option><option value="14">14</option><option value="13">13</option><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>'+
-          '<option value="D">Double</option><option value="T">Treble</option><option value="B">Bull</option>'+
+          '<option value="D">Double</option><option value="T">Triple</option><option value="B">Bull</option>'+
           '<option value="SC">3 dezelfde kleuren</option><option value="DC">3 verschillende kleuren</option><option value="R3">1 van 3 getallen</option><option value="custom">Eigen opdracht…</option>'+
         '</select>'+
-        '<button onclick="addSeqItem()" style="background:none;border:none;color:var(--setup-accent,#B94E2A);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">+ Voeg doel toe</button>'+
+        '<button onclick="addSeqItem()">+ Toevoegen</button>'+
       '</div>'+
       '<div id="seq-custom-row" style="display:none;margin-top:8px">'+
         '<span class="setup-section-label">EIGEN OPDRACHT</span>'+
@@ -3094,11 +3140,11 @@ function updateTrnActionBar(){
   if(btnBack)btnBack.style.display=trnStep>1?'':'none';
   if(trnStep===1){
     if(ctx)ctx.textContent='Toernooi';
-    if(main)main.textContent=trnFormat==='knockout'?'Knock-out':trnFormat==='roundrobin'?'Round Robin':'Groepsfase';
+    if(main)main.textContent=trnFormat==='knockout'?'Knock-out':trnFormat==='roundrobin'?'Round Robin':'Groepsfase + knock-out · '+trnGroups+' groepen';
     if(btnNext){btnNext.innerHTML='Regels →';btnNext.onclick=function(){goToTrnStep(2);};}
   } else if(trnStep===2){
     if(ctx)ctx.textContent='Toernooi';
-    if(main)main.textContent=(trnGame||501)+' · '+(trnDoubleOut?'Double out':'Straight out');
+    if(main)main.textContent=(trnGame||501)+' · '+(trnDoubleOut?'Double out':'Straight out')+' · Best of '+(trnBO||3);
     if(btnNext){btnNext.innerHTML='Deelnemers →';btnNext.onclick=function(){goToTrnStep(3);};}
   } else {
     if(ctx)ctx.textContent='Toernooi';
@@ -3216,7 +3262,7 @@ function setDoubleOut(v){
 function seqLabel(s){
   if(s.type==='num')return s.val+'';
   if(s.type==='double')return 'Double';
-  if(s.type==='treble')return 'Treble';
+  if(s.type==='treble')return 'Triple';
   if(s.type==='bull')return 'Bull';
   return s.label||'?';
 }
@@ -3224,50 +3270,41 @@ function renderSeqEditor(){
   var el=document.getElementById('seq-editor');
   if(!el)return; // Halve It-editor bestaat alleen als Halve It-regels getoond worden
   el.innerHTML='';
-  el.style.cssText='border-radius:14px;overflow:hidden;background:var(--card);margin-bottom:8px;';
+  el.className='hi-grid';
+  el.style.cssText='';
   if(hiSequence.length===0){
-    var empty=document.createElement('div');
-    empty.style.cssText='padding:16px;text-align:center;font-size:12px;color:var(--muted);';
-    empty.textContent='Geen doelen. Voeg er hieronder een toe.';
-    el.appendChild(empty);return;
+    el.className='';
+    el.innerHTML='<div style="padding:16px;text-align:center;font-size:13px;color:#A8A09A">Geen doelen. Voeg er hieronder een toe.</div>';
+    return;
   }
   hiSequence.forEach(function(item,i){
-    var row=document.createElement('div');
-    row.style.cssText='position:relative;overflow:hidden;';
-    // Red delete layer behind the content
-    var del=document.createElement('div');
-    del.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:20px;background:#FF3B30;font-size:13px;font-weight:700;color:#fff;letter-spacing:.2px;';
-    del.textContent='Verwijder';
-    // Content layer
-    var cont=document.createElement('div');
-    var borderB=i<hiSequence.length-1?'border-bottom:0.5px solid var(--separator);':'';
-    cont.style.cssText='position:relative;z-index:1;display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--seq-item-bg);touch-action:pan-y;user-select:none;transition:box-shadow 150ms ease,transform 150ms ease;'+borderB;cont.className='seq-item-cont';
-    // Number
-    var num=document.createElement('span');
-    num.style.cssText='font-size:11px;color:var(--seq-num-color);min-width:16px;font-weight:600;';
-    num.textContent=i+1;
-    // Label pill
-    var pill=document.createElement('span');
-    pill.style.cssText='background:var(--seq-pill-bg);color:var(--accent);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;flex:1;';
-    pill.textContent=seqLabel(item);
-    // Drag grip
-    var grip=document.createElement('span');
-    grip.style.cssText='font-size:20px;color:var(--muted);line-height:1;padding:0 4px;cursor:grab;touch-action:none;flex-shrink:0;';
-    grip.innerHTML='&#8801;';
+    var isNum=(item.type==='num'||item.type==='bull');
+    var tile=document.createElement('div');
+    tile.className='hi-tile '+(isNum?'hi-tile-num':'hi-tile-task');
+    tile.setAttribute('data-seq-idx',i);
+    var round=document.createElement('span');
+    round.className='hi-tile-round';
+    round.textContent=(i+1)+'';
+    var lbl=document.createElement('span');
+    lbl.className='hi-tile-label';
+    lbl.textContent=seqLabel(item);
+    if(item.type==='bull')lbl.style.fontSize='22px';
+    var del=document.createElement('button');
+    del.className='hi-tile-del';
+    del.setAttribute('aria-label','Ronde '+(i+1)+' verwijderen');
+    del.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
     (function(idx){
-      grip.addEventListener('pointerdown',function(e){e.stopPropagation();_seqDragStart(e,idx);});
+      del.addEventListener('click',function(e){e.stopPropagation();removeSeq(idx);});
+      del.addEventListener('pointerdown',function(e){e.stopPropagation();});
+      tile.addEventListener('pointerdown',function(e){_seqPressStart(e,idx);});
     })(i);
-    cont.appendChild(num);
-    cont.appendChild(pill);
-    cont.appendChild(grip);
-    // Swipe-to-delete
-    (function(idx,c){
-      c.addEventListener('pointerdown',function(e){_seqSwipeStart(e,c,idx);});
-    })(i,cont);
-    row.appendChild(del);
-    row.appendChild(cont);
-    el.appendChild(row);
+    tile.appendChild(round);tile.appendChild(lbl);tile.appendChild(del);
+    el.appendChild(tile);
   });
+  if(_seqDragIdx>=0){
+    var t=el.querySelector('[data-seq-idx="'+_seqDragIdx+'"]');
+    if(t)t.classList.add('hi-dragging');
+  }
 }
 function addSeqItem(){
   var v=document.getElementById('seq-add-select').value;
@@ -3284,7 +3321,7 @@ function addSeqItem(){
   else if(v==='DC')hiSequence.push({type:'diff_color',val:0,label:'3 verschillende kleuren'});
   else if(v==='R3')hiSequence.push({type:'random3',val:0,label:'1 van 3 getallen'});
   else hiSequence.push({type:'num',val:parseInt(v),label:v});
-  renderSeqEditor();
+  renderSeqEditor();if(typeof updateSetupActionBar==="function")updateSetupActionBar();
 }
 function addCustomSeqItem(){
   var txt=document.getElementById('seq-custom-input').value.trim();
@@ -3293,38 +3330,58 @@ function addCustomSeqItem(){
   document.getElementById('seq-custom-input').value='';
   document.getElementById('seq-custom-row').style.display='none';
   document.getElementById('seq-add-select').value='20';
+  renderSeqEditor();if(typeof updateSetupActionBar==="function")updateSetupActionBar();
+}
+function removeSeq(i){hiSequence.splice(i,1);renderSeqEditor();if(typeof updateSetupActionBar==='function')updateSetupActionBar();}
+function moveSeq(i,dir){var j=i+dir;if(j<0||j>=hiSequence.length)return;var t=hiSequence[i];hiSequence[i]=hiSequence[j];hiSequence[j]=t;renderSeqEditor();}
+function resetSeq(){hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign({},s)});renderSeqEditor();if(typeof updateSetupActionBar==='function')updateSetupActionBar();}
+// ─── Seq drag-to-reorder (lang indrukken, dan slepen; werkt in het raster) ───
+var _seqDragIdx=-1,_seqPressTimer=null,_seqPressX=0,_seqPressY=0;
+function _seqPressStart(e,idx){
+  if(e.button!==undefined&&e.button!==0)return;
+  _seqPressX=e.clientX;_seqPressY=e.clientY;
+  clearTimeout(_seqPressTimer);
+  _seqPressTimer=setTimeout(function(){
+    _seqDragIdx=idx;
+    var t=document.querySelector('#seq-editor [data-seq-idx="'+idx+'"]');
+    if(t)t.classList.add('hi-dragging');
+    if(navigator.vibrate)try{navigator.vibrate(15);}catch(_){}
+  },250);
+  document.addEventListener('pointermove',_seqDragMove);
+  document.addEventListener('pointerup',_seqDragEnd);
+  document.addEventListener('pointercancel',_seqDragEnd);
+}
+function _seqBlockScroll(e){if(_seqDragIdx>=0)e.preventDefault();}
+document.addEventListener('touchmove',_seqBlockScroll,{passive:false});
+function _seqDragMove(e){
+  if(_seqDragIdx<0){
+    // Beweegt de vinger voordat het slepen begint? Dan is het scrollen.
+    if(Math.abs(e.clientX-_seqPressX)>8||Math.abs(e.clientY-_seqPressY)>8){clearTimeout(_seqPressTimer);_seqCleanup();}
+    return;
+  }
+  e.preventDefault();
+  var under=document.elementFromPoint(e.clientX,e.clientY);
+  var tile=under&&under.closest?under.closest('#seq-editor [data-seq-idx]'):null;
+  if(!tile)return;
+  var ni=parseInt(tile.getAttribute('data-seq-idx'),10);
+  if(isNaN(ni)||ni===_seqDragIdx)return;
+  var item=hiSequence.splice(_seqDragIdx,1)[0];
+  hiSequence.splice(ni,0,item);
+  _seqDragIdx=ni;
   renderSeqEditor();
 }
-function removeSeq(i){hiSequence.splice(i,1);renderSeqEditor();}
-function moveSeq(i,dir){var j=i+dir;if(j<0||j>=hiSequence.length)return;var t=hiSequence[i];hiSequence[i]=hiSequence[j];hiSequence[j]=t;renderSeqEditor();}
-function resetSeq(){hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign({},s)});renderSeqEditor();}
-// ─── Seq drag-to-reorder ───
-var _seqDragIdx=-1,_seqDragLastY=0;
-function _seqDragStart(e,idx){
-  _seqDragIdx=idx;_seqDragLastY=e.clientY;
-  // Add lift class to the content layer of this row
-  var rows=document.querySelectorAll('.seq-item-cont');
-  if(rows[idx])rows[idx].classList.add('seq-row-dragging');
-  document.addEventListener('pointermove',_seqDragMove);
-  document.addEventListener('pointerup',_seqDragEnd,{once:true});
+function _seqCleanup(){
+  document.removeEventListener('pointermove',_seqDragMove);
+  document.removeEventListener('pointerup',_seqDragEnd);
+  document.removeEventListener('pointercancel',_seqDragEnd);
 }
-function _seqDragMove(e){
-  if(_seqDragIdx<0)return;
-  var dy=e.clientY-_seqDragLastY;
-  var rowH=44;
-  if(Math.abs(dy)<rowH)return;
-  var dir=dy>0?1:-1;
-  var ni=_seqDragIdx+dir;
-  if(ni>=0&&ni<hiSequence.length){
-    var t=hiSequence[_seqDragIdx];hiSequence[_seqDragIdx]=hiSequence[ni];hiSequence[ni]=t;
-    _seqDragIdx=ni;_seqDragLastY=e.clientY;
-    renderSeqEditor();
-    // Re-apply lift after re-render
-    var rows=document.querySelectorAll('.seq-item-cont');
-    if(rows[_seqDragIdx])rows[_seqDragIdx].classList.add('seq-row-dragging');
-  }
+function _seqDragEnd(){
+  clearTimeout(_seqPressTimer);
+  var wasDragging=_seqDragIdx>=0;
+  _seqDragIdx=-1;
+  _seqCleanup();
+  if(wasDragging){renderSeqEditor();if(typeof updateSetupActionBar==='function')updateSetupActionBar();}
 }
-function _seqDragEnd(){document.querySelectorAll('.seq-row-dragging').forEach(function(el){el.classList.remove('seq-row-dragging');});_seqDragIdx=-1;document.removeEventListener('pointermove',_seqDragMove);}
 // ─── Seq swipe-to-delete ───
 var _seqSwipeCont=null,_seqSwipeIdx=-1,_seqSwipeX0=0,_seqSwipeY0=0,_seqSwipeDir=null;
 function _seqSwipeStart(e,cont,idx){
@@ -3797,33 +3854,51 @@ function renderTrnSetup(){
   goToTrnStep(1);
 }
 function renderTrnFormatBtns(){
+  var icons={
+    knockout:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h5v4H3M3 15h5v4H3M8 7h3v10H8M11 12h5M16 10h5v4h-5z"/></svg>',
+    roundrobin:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>',
+    group:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'
+  };
   var formats=[
     {id:'knockout',label:'Knock-out',sub:'Direct uitgeschakeld bij verlies'},
     {id:'roundrobin',label:'Round Robin',sub:'Iedereen speelt tegen iedereen'},
-    {id:'group',label:'Groepsfase + Knock-out',sub:'Groepen → knock-outfase'}
+    {id:'group',label:'Groepsfase + knock-out',sub:'Groepen, daarna een knock-outfase'}
   ];
   var el=document.getElementById('trn-format-btns');
   if(!el)return;
   el.innerHTML='';
   formats.forEach(function(f){
     var isActive=f.id===trnFormat;
-    var div=document.createElement('div');
-    div.style.cssText='padding:16px;border-radius:14px;border:2px solid '+(isActive?'#3E7B4F':'rgba(255,255,255,.07)')+';background:rgba(28,26,27,.88);cursor:pointer;margin-bottom:8px;transition:border-color .15s';
-    div.innerHTML='<div style="font-size:16px;font-weight:800;color:#F3EDE8;margin-bottom:4px">'+f.label+'</div><div style="font-size:13px;color:#A8A09A">'+f.sub+'</div>';
-    div.onclick=function(){
-      trnFormat=f.id;
-      renderTrnFormatBtns();
-      var gs=document.getElementById('trn-groups-section');
-      if(gs)gs.style.display=f.id==='group'?'block':'none';
-      updateTrnActionBar();
-    };
-    el.appendChild(div);
+    var card=document.createElement('div');
+    card.className='trn-fmt-card'+(isActive?' active':'');
+    var head=document.createElement('button');
+    head.type='button';
+    head.className='trn-fmt-head';
+    head.setAttribute('role','radio');
+    head.setAttribute('aria-checked',isActive?'true':'false');
+    head.style.cssText='background:none;border:none;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;width:100%';
+    head.innerHTML='<span class="trn-fmt-icon">'+icons[f.id]+'</span>'+
+      '<span class="trn-fmt-text"><span class="trn-fmt-title" style="display:block">'+f.label+'</span><span class="trn-fmt-sub" style="display:block">'+f.sub+'</span></span>'+
+      '<span class="trn-fmt-radio" aria-hidden="true"></span>';
+    head.onclick=function(){trnFormat=f.id;renderTrnFormatBtns();updateTrnActionBar();};
+    card.appendChild(head);
+    if(f.id==='group'&&isActive){
+      var g=document.createElement('div');
+      g.className='trn-fmt-groups';
+      g.innerHTML='<span class="setup-section-label">Aantal groepen</span>'+
+        '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">'+
+          [2,3,4].map(function(n){return '<button class="seg-btn seg-btn-num'+(trnGroups===n?' active':'')+'" id="trn-groups-'+n+'" onclick="setTrnGroups('+n+')">'+n+'</button>';}).join('')+
+        '</div>';
+      card.appendChild(g);
+    }
+    el.appendChild(card);
   });
 }
 function setTrnDoubleOut(v){
   trnDoubleOut=v;
   var y=document.getElementById('trn-dout-yes');if(y)y.className='seg-btn'+(v?' active':'');
   var n=document.getElementById('trn-dout-no');if(n)n.className='seg-btn'+(!v?' active':'');
+  updateTrnActionBar();
 }
 function setTrnBO(v){
   trnBO=v;
@@ -3831,6 +3906,7 @@ function setTrnBO(v){
     var el=document.getElementById('trn-bo-'+n);
     if(el)el.className='seg-btn'+(n===v?' active':'');
   });
+  updateTrnActionBar();
 }
 function setTrnGroups(v){
   trnGroups=v;
@@ -3838,6 +3914,7 @@ function setTrnGroups(v){
     var el=document.getElementById('trn-groups-'+n);
     if(el)el.className='seg-btn seg-btn-num'+(n===v?' active':'');
   });
+  updateTrnActionBar();
 }
 function trnAddPlayer(){
   var input=document.getElementById('trn-player-input');
