@@ -225,6 +225,10 @@ body::before{
 .x-sets{font-size:10px;font-weight:800;color:var(--accent);margin-right:2px}
 .x-score{font-weight:900;line-height:1;margin:8px 0 6px;letter-spacing:-.02em;color:var(--text)}
 .x-card:not(.on) .x-score{opacity:.8}
+.x-last{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:7px;font-size:12px;font-weight:800;background:rgba(62,123,79,.22);color:#8FCB9C;vertical-align:1px}
+.x-last.bust{background:rgba(255,90,70,.14);color:#FF8A7A}
+[data-theme="light"] .x-last{color:#1E5631;background:rgba(62,123,79,.16)}[data-theme="light"] .x-last.bust{color:#B3261E;background:rgba(179,38,30,.1)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .x-last{color:#1E5631;background:rgba(62,123,79,.16)}:root:not([data-theme="dark"]) .x-last.bust{color:#B3261E;background:rgba(179,38,30,.1)}}
 .x-meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .np-disp{height:54px;border-radius:14px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:6px;box-sizing:border-box}
 .np-disp span{font-size:12px;font-weight:700;color:var(--muted);min-width:70px}
@@ -4736,6 +4740,13 @@ function renderGame(){
     var setTxt=state.matchSets>1?'<span class="x-sets">S'+(state.setWins[pi]||0)+'</span>':'';
     return '<span class="x-legs">'+setTxt+h+'</span>';
   }
+  function lastChip(pi){
+    var hs=(state.history||[]).filter(function(h){return h.player===pi;});
+    if(!hs.length)return '';
+    var h=hs[hs.length-1];
+    if(h.bust)return ' <span class="x-last bust">bust</span>';
+    return ' <span class="x-last">−'+h.score+'</span>';
+  }
   function lastStr(pi){
     var hs=(state.history||[]).filter(function(h){return h.player===pi;});
     if(!hs.length)return '—';
@@ -4753,10 +4764,10 @@ function renderGame(){
     var _scoreChanged=(_prevScores[pi]!==undefined&&_prevScores[pi]!==rem);
     _prevScores[pi]=rem;
     cell.innerHTML=
-      '<div class="x-top"><span class="x-name">'+(isActive?'● ':'')+name+'</span>'+legDotsFor(pi)+'</div>'+
+      '<div class="x-top"><span class="x-name">'+(isActive?'● ':'')+name+lastChip(pi)+'</span>'+legDotsFor(pi)+'</div>'+
       '<div class="x-score" style="font-size:'+scoreFontSize+';'+(_scoreChanged?'animation:scoreRoll .3s cubic-bezier(.34,1.56,.64,1)':'')+'">'+rem+'</div>'+
       '<div class="co-hint" style="display:flex;flex-wrap:wrap;gap:2px;min-height:0">'+(co&&!isActive?buildCheckoutBadges(co):'')+'</div>'+
-      '<div class="x-meta">'+(imp?'niet uitgooibaar':'gem. '+avg3str(pi)+' · laatst '+lastStr(pi))+'</div>';
+      '<div class="x-meta">'+(imp?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>';
     sbGrid.appendChild(cell);
   });
 
@@ -5271,7 +5282,6 @@ function submitScore(){
   var wasCheckout=!isImpossible(remaining)&&remaining<=170;
   pushEntry({player:cur,score:score,remaining:remaining,newRemaining:newScore,bust:false,
     checkoutAttempt:wasCheckout,checkoutMissed:wasCheckout});
-  showToast('+'+score,'success');
   clearNumpad();
   setTimeout(function(){nextPlayer501()},400);
 }
@@ -5962,7 +5972,7 @@ function _buildHiPlayers(content){
       '';
     var right=document.createElement('div');
     right.style.cssText='display:flex;align-items:center;gap:10px;flex-shrink:0';
-    var _lastTxt=_last?(_last.halved?'<span style="font-size:12px;font-weight:700;color:#FF8A7A">½ gehalveerd</span>':'<span class="g-plus" style="font-size:12px;font-weight:700;margin:0">+'+_last.pts+'</span>'):'';
+    var _lastTxt=_last?(_last.halved?'<span class="x-last bust" style="margin:0">½ gehalveerd</span>':'<span class="x-last" style="margin:0">+'+_last.pts+'</span>'):'';
     right.innerHTML=_lastTxt+'<span style="font-size:22px;font-weight:900;min-width:44px;text-align:right">'+state.hiScores[i]+'</span>';
     card.appendChild(left);card.appendChild(right);
     playersWrap.appendChild(card);
@@ -6308,14 +6318,12 @@ function hiEndTurn(scored){
     entry={round:state.hiRound,pts:_hiPts,halved:false};
     if(_hiPts>0){
       playSound(_hiPts>=100?'high':'score');
-      setTimeout(function(){showToast('+'+_hiPts+' punten ✓','success');},120);
     }
   } else {
     var _prevHi=state.hiScores[cur];
     state.hiScores[cur]=Math.floor(state.hiScores[cur]/2);
     entry={round:state.hiRound,pts:0,halved:true};
     playSound('bust');
-    setTimeout(function(){showToast('Score gehalveerd ✂️  '+_prevHi+' → '+Math.floor(_prevHi/2),'error');},120);
   }
   state.hiRoundScores[cur].push(entry);
   state.hiHistory.push({player:cur,round:state.hiRound,prevScore:prev,pts:state.hiTurnPts,halved:entry.halved,newScore:state.hiScores[cur],throws:(state.hiTurnThrows||[]).slice()});
@@ -7888,7 +7896,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=196;
+var APP_VERSION=197;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -8346,7 +8354,9 @@ function renderEliminatie(){
     var pct=Math.min(100,Math.round((scores[pi]/target)*100));
     var card=document.createElement('div');
     card.className='g-prow'+(isCur?' on':'');
-    card.innerHTML='<div class="g-prow-top"><span class="g-prow-name">'+(isCur?'● ':'')+name+'</span><span class="g-prow-meta">nog '+(target-scores[pi])+' · '+turns[pi]+' beurt'+(turns[pi]!==1?'en':'')+'</span><span class="g-prow-score" style="font-size:26px">'+scores[pi]+'</span></div>'+
+    var _el=null;(state.eliHistory||[]).forEach(function(h){if(h.player===pi)_el=h;});
+    var _elChip=_el?(_el.result==='bust'?' <span class="x-last bust">bust</span>':' <span class="x-last">+'+_el.scored+'</span>'):'';
+    card.innerHTML='<div class="g-prow-top"><span class="g-prow-name">'+(isCur?'● ':'')+name+_elChip+'</span><span class="g-prow-meta">nog '+(target-scores[pi])+' · '+turns[pi]+' beurt'+(turns[pi]!==1?'en':'')+'</span><span class="g-prow-score" style="font-size:26px">'+scores[pi]+'</span></div>'+
       '<div class="g-bar"><i style="width:'+pct+'%"></i></div>';
     board.appendChild(card);
   });
@@ -8469,7 +8479,6 @@ function eliSubmit(){
   if(newScore>target){
     playSound('bust');
     state.eliHistory.push({round:state.eliRound,player:cur,scored:val,result:'bust',score:prev});
-    setTimeout(function(){showToast('Bust! Score blijft '+prev,'error');},80);
     eliNextPlayer();
     return;
   }
@@ -8502,10 +8511,9 @@ function eliSubmit(){
 
   if(eliminated.length>0){
     playSound('checkout');
-    setTimeout(function(){showToast(eliminated.join(' & ')+' geëlimineerd! 💥','error');},80);
+    setTimeout(function(){showToast(eliminated.join(' & ')+' terug naar 0','error');},80);
   } else if(val>0){
     playSound(val>=100?'high':'score');
-    setTimeout(function(){showToast('+'+val,'success');},80);
   }
 
   eliNextPlayer();
@@ -8548,7 +8556,6 @@ function _eliConfirmDouble(val,newScore){
     state.eliScores[cur]=snap.scores[cur];
     state.eliHistory.push({round:state.eliRound,player:cur,scored:val,result:'bust',score:snap.scores[cur]});
     playSound('bust');
-    setTimeout(function(){showToast('Geen double — bust! Score blijft '+snap.scores[cur],'error');},80);
     eliNextPlayer();
   };
 }
