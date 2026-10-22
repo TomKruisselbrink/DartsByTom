@@ -669,6 +669,20 @@ select{
   background: var(--seq-item-bg) !important;
 }
 
+/* ═══ Thema-variabelen voor de setup-schermen (donker = standaard, licht = override) ═══ */
+#screen-setup,#screen-trn-setup{--su-text:#F3EDE8;--su-muted:#A8A09A;--su-soft:#C9BFB8;--su-btn:#D9D1CB;--su-card:rgba(28,26,27,.88);--su-well:#141314;--su-bar:rgba(20,19,20,.95);--su-green-text:#8FCB9C;--su-orange-text:#E07A55;--su-w05:rgba(255,255,255,.05);--su-w06:rgba(255,255,255,.06);--su-w07:rgba(255,255,255,.07);--su-w08:rgba(255,255,255,.08);--su-w1:rgba(255,255,255,.1);--su-w10:rgba(255,255,255,.1);--su-w25:rgba(255,255,255,.25);--su-w4:rgba(255,255,255,.4);}
+[data-theme="light"] #screen-setup,[data-theme="light"] #screen-trn-setup{--su-text:#1C1C1E;--su-muted:#6E6E73;--su-soft:#48484A;--su-btn:#3A3A3C;--su-card:rgba(255,255,255,.8);--su-well:rgba(0,0,0,.06);--su-bar:rgba(255,255,255,.94);--su-green-text:#2F6B40;--su-orange-text:#A8431F;--su-w05:rgba(0,0,0,.04);--su-w06:rgba(0,0,0,.06);--su-w07:rgba(0,0,0,.08);--su-w08:rgba(0,0,0,.08);--su-w1:rgba(0,0,0,.1);--su-w10:rgba(0,0,0,.1);--su-w25:rgba(0,0,0,.25);}
+[data-theme="light"] #screen-setup{--setup-accent-text:#A8431F !important}
+[data-theme="light"] #screen-trn-setup{--setup-accent-text:#2F6B40 !important}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) #screen-setup,:root:not([data-theme="dark"]) #screen-trn-setup{--su-text:#1C1C1E;--su-muted:#6E6E73;--su-soft:#48484A;--su-btn:#3A3A3C;--su-card:rgba(255,255,255,.8);--su-well:rgba(0,0,0,.06);--su-bar:rgba(255,255,255,.94);--su-green-text:#2F6B40;--su-orange-text:#A8431F;--su-w05:rgba(0,0,0,.04);--su-w06:rgba(0,0,0,.06);--su-w07:rgba(0,0,0,.08);--su-w08:rgba(0,0,0,.08);--su-w1:rgba(0,0,0,.1);--su-w10:rgba(0,0,0,.1);--su-w25:rgba(0,0,0,.25);}
+  :root:not([data-theme="dark"]) #screen-setup{--setup-accent-text:#A8431F !important}
+  :root:not([data-theme="dark"]) #screen-trn-setup{--setup-accent-text:#2F6B40 !important}
+}
+/* Paginakop voor Ranglijst, Statistieken, Geschiedenis, Instellingen (zelfde stijl als setup) */
+h2.page-head{display:flex;align-items:center;justify-content:flex-start;gap:0;margin:4px 0 16px;font-size:28px;font-weight:800;line-height:1.1;color:var(--text);text-align:left}
+h2.page-head svg{display:none !important}
+
 /* ═══════════════════════════════════════════
    NEW SETUP SCREEN STYLES (v187)
    ═══════════════════════════════════════════ */
@@ -679,28 +693,28 @@ select{
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  background: rgba(28,26,27,.88);
-  border: 1px solid rgba(255,255,255,.07);
+  background: var(--su-card);
+  border: 1px solid var(--su-w07);
   border-radius: 14px;
   margin-bottom: 8px;
   cursor: pointer;
   width: 100%;
   text-align: left;
-  color: #F3EDE8;
+  color: var(--su-text);
   transition: background .15s;
 }
 .game-select-row:hover, .game-select-row:active { background: rgba(50,46,47,.95); }
 .game-select-icon {
   width: 44px; height: 44px;
   border-radius: 12px;
-  background: rgba(255,255,255,.07);
+  background: var(--su-w07);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  color: #F3EDE8;
+  color: var(--su-text);
 }
 .game-select-text { flex: 1; min-width: 0; }
-.game-select-name { font-size: 17px; font-weight: 800; margin-bottom: 2px; color: #F3EDE8; }
-.game-select-sub { font-size: 13px; color: #A8A09A; }
+.game-select-name { font-size: 17px; font-weight: 800; margin-bottom: 2px; color: var(--su-text); }
+.game-select-sub { font-size: 13px; color: var(--su-muted); }
 
 /* Section labels */
 .setup-section-label {
@@ -709,14 +723,14 @@ select{
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: #A8A09A;
+  color: var(--su-muted);
   margin-bottom: 8px;
 }
 
 /* Setup cards */
 .setup-card {
-  background: rgba(28,26,27,.88);
-  border: 1px solid rgba(255,255,255,.07);
+  background: var(--su-card);
+  border: 1px solid var(--su-w07);
   border-radius: 18px;
   padding: 22px;
   margin-bottom: 14px;
@@ -729,8 +743,8 @@ select{
   gap: 4px;
   padding: 4px;
   border-radius: 14px;
-  background: #141314;
-  border: 1px solid rgba(255,255,255,.06);
+  background: var(--su-well);
+  border: 1px solid var(--su-w06);
   margin-bottom: 10px;
 }
 #screen-setup .seg-btn,
@@ -738,7 +752,7 @@ select{
   height: 46px;
   border-radius: 10px;
   background: transparent;
-  color: #D9D1CB;
+  color: var(--su-btn);
   font-size: 14px;
   font-weight: 600;
   border: none;
@@ -766,7 +780,7 @@ select{
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 13px;
-  color: #8FCB9C;
+  color: var(--su-green-text);
   margin-top: 10px;
 }
 .info-block-orange {
@@ -775,7 +789,7 @@ select{
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 13px;
-  color: #E07A55;
+  color: var(--su-orange-text);
   margin-top: 10px;
 }
 
@@ -783,7 +797,7 @@ select{
 .setup-action-bar {
   position: relative; /* staat onder de inhoud; scroll naar beneden om verder te gaan */
   margin-top: 4px;
-  background: rgba(20,19,20,.92);
+  background: var(--su-bar);
   border-radius: 18px;
   padding: 14px 14px 14px 22px;
   display: flex;
@@ -794,13 +808,13 @@ select{
   -webkit-backdrop-filter: blur(16px);
   z-index: 10;
   margin-bottom: 8px;
-  border: 1px solid rgba(255,255,255,.06);
+  border: 1px solid var(--su-w06);
 }
 .setup-action-summary { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.setup-action-context { font-size: 12px; color: #A8A09A; }
-.setup-action-main { font-size: 15px; font-weight: 700; color: #F3EDE8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.setup-action-context { font-size: 12px; color: var(--su-muted); }
+.setup-action-main { font-size: 15px; font-weight: 700; color: var(--su-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .setup-action-btns { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-.setup-btn-back { height: 44px; padding: 0 14px; border-radius: 11px; background: transparent; color: #A8A09A; font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
+.setup-btn-back { height: 44px; padding: 0 14px; border-radius: 11px; background: transparent; color: var(--su-muted); font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
 .setup-btn-next { height: 52px; padding: 0 20px; border-radius: 13px; background: var(--setup-accent, #B94E2A); color: #fff; font-size: 15px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 
 /* Responsive */
@@ -814,7 +828,7 @@ select{
 
 /* ── Mobile actiebalk (v189) ── */
 @media (max-width: 600px) {
-  .setup-action-bar { padding: 10px 10px 10px 16px; gap: 10px; background: rgba(20,19,20,.97); }
+  .setup-action-bar { padding: 10px 10px 10px 16px; gap: 10px; background: var(--su-bar); }
   .setup-action-context { display: none; }
   .setup-action-main { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 13px; line-height: 1.3; }
   .setup-btn-back { display: none !important; }
@@ -822,8 +836,8 @@ select{
 }
 
 /* ── Halve It: rondetegels (v189) ── */
-.hi-legend { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 2px 0 10px; font-size: 12px; color: #A8A09A; }
-.hi-legend-keys { display: flex; gap: 12px; font-weight: 600; color: #C9BFB8; flex-shrink: 0; }
+.hi-legend { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 2px 0 10px; font-size: 12px; color: var(--su-muted); }
+.hi-legend-keys { display: flex; gap: 12px; font-weight: 600; color: var(--su-soft); flex-shrink: 0; }
 .hi-legend-keys span { display: flex; align-items: center; gap: 5px; }
 .hi-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .hi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
@@ -831,28 +845,28 @@ select{
 .hi-tile { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-height: 80px; box-sizing: border-box; padding: 10px 10px 10px 12px; border-radius: 12px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: pan-y; transition: transform .15s ease, box-shadow .15s ease, opacity .15s; }
 .hi-tile-num { background: rgba(224,122,85,.10); border: 1px solid rgba(224,122,85,.28); }
 .hi-tile-task { background: rgba(94,158,110,.12); border: 1px solid rgba(143,203,156,.28); }
-.hi-tile-round { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: #A8A09A; }
-.hi-tile-label { color: #F3EDE8; font-weight: 800; line-height: 1.15; overflow-wrap: normal; word-break: normal; -webkit-hyphens: auto; hyphens: auto; }
+.hi-tile-round { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--su-muted); }
+.hi-tile-label { color: var(--su-text); font-weight: 800; line-height: 1.15; overflow-wrap: normal; word-break: normal; -webkit-hyphens: auto; hyphens: auto; }
 .hi-tile-num .hi-tile-label { font-size: 26px; font-weight: 900; line-height: 1; }
 .hi-tile-task .hi-tile-label { font-size: 13px; }
 @media (max-width: 600px) { .hi-tile-task .hi-tile-label { font-size: 12px; } .hi-tile { padding: 9px 8px 9px 10px; } }
 .hi-tile-round { padding-right: 24px; }
-.hi-tile-del { position: absolute; top: 0; right: 0; width: 40px; height: 40px; border: none; background: transparent; color: #A8A09A; display: flex; align-items: flex-start; justify-content: flex-end; padding: 8px 8px 0 0; cursor: pointer; }
+.hi-tile-del { position: absolute; top: 0; right: 0; width: 40px; height: 40px; border: none; background: transparent; color: var(--su-muted); display: flex; align-items: flex-start; justify-content: flex-end; padding: 8px 8px 0 0; cursor: pointer; }
 .hi-tile.hi-dragging { transform: scale(1.06); box-shadow: 0 10px 28px rgba(0,0,0,.55); z-index: 5; opacity: .95; }
 .hi-add-row { display: flex; gap: 8px; align-items: center; }
-.hi-add-row select { flex: 1; min-width: 0; height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.1); background: #141314; color: #F3EDE8; font-size: 14px; }
+.hi-add-row select { flex: 1; min-width: 0; height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--su-w1); background: var(--su-well); color: var(--su-text); font-size: 14px; }
 .hi-add-row button { height: 46px; padding: 0 16px; border-radius: 12px; border: none; background: var(--setup-accent, #B94E2A); color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; }
 
 /* ── Toernooi formaatkaarten (v189) ── */
-.trn-fmt-card { display: flex; flex-direction: column; gap: 14px; width: 100%; text-align: left; padding: 14px 16px; margin-bottom: 8px; border-radius: 14px; background: rgba(28,26,27,.88); border: 2px solid rgba(255,255,255,.07); color: #F3EDE8; cursor: pointer; font-family: inherit; box-sizing: border-box; }
+.trn-fmt-card { display: flex; flex-direction: column; gap: 14px; width: 100%; text-align: left; padding: 14px 16px; margin-bottom: 8px; border-radius: 14px; background: var(--su-card); border: 2px solid var(--su-w07); color: var(--su-text); cursor: pointer; font-family: inherit; box-sizing: border-box; }
 .trn-fmt-card.active { background: rgba(62,123,79,.16); border-color: #5E9E6E; }
 .trn-fmt-head { display: flex; align-items: center; gap: 14px; }
-.trn-fmt-icon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(94,158,110,.16); color: #8FCB9C; }
+.trn-fmt-icon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(94,158,110,.16); color: var(--su-green-text); }
 .trn-fmt-card.active .trn-fmt-icon { background: #3E7B4F; color: #fff; }
 .trn-fmt-text { flex: 1; min-width: 0; }
 .trn-fmt-title { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
-.trn-fmt-sub { font-size: 13px; color: #A8A09A; }
-.trn-fmt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); flex-shrink: 0; box-sizing: border-box; }
+.trn-fmt-sub { font-size: 13px; color: var(--su-muted); }
+.trn-fmt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--su-w25); flex-shrink: 0; box-sizing: border-box; }
 .trn-fmt-card.active .trn-fmt-radio { border: 7px solid #5E9E6E; background: #fff; }
 .trn-fmt-groups { display: flex; flex-direction: column; gap: 8px; }
 .trn-fmt-groups .setup-section-label { margin: 0; }
@@ -1430,8 +1444,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- SETTINGS -->
 <div class="screen" id="screen-settings">
-  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
-  <h2 style="margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Instellingen</h2>
+  <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Instellingen</h2>
   <div class="card" style="margin-bottom:10px">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px" id="set-lbl-appearance">Weergave</div>
     <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px" id="set-lbl-theme">Thema</div>
@@ -1486,8 +1499,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- LEADERBOARD -->
 <div class="screen" id="screen-leaderboard">
-  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
-  <h2 style="margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</h2>
+  <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</h2>
   <!-- Tab groups -->
   <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">501 / 301</div>
   <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
@@ -1511,23 +1523,22 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- WEDSTRIJDGESCHIEDENIS -->
 <div class="screen" id="screen-history">
-  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
-  <h2 style="margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Wedstrijdgeschiedenis</h2>
+  <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Wedstrijdgeschiedenis</h2>
   <div id="history-content"></div>
 </div>
 
 <!-- SETUP vrij spel -->
-<div class="screen" id="screen-setup" style="--setup-accent:#B94E2A;--setup-accent-text:#E07A55">
+<div class="screen" id="screen-setup" style="--setup-accent:#B94E2A;--setup-accent-text:var(--su-orange-text)">
   <div style="max-width:720px;margin:0 auto;padding:0 0 16px;">
 
     <!-- Header -->
     <div style="display:flex;align-items:center;gap:12px;padding:16px 0 12px;">
-      <button onclick="setupHeaderBack()" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
+      <button onclick="setupHeaderBack()" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:var(--su-w08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--su-text);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <div>
-        <div style="font-size:13px;color:#A8A09A;margin-bottom:1px">Nieuw spel</div>
-        <div style="font-size:28px;font-weight:800;line-height:1.1;color:#F3EDE8" id="setup-main-title">Kies een spel</div>
+        <div style="font-size:13px;color:var(--su-muted);margin-bottom:1px">Nieuw spel</div>
+        <div style="font-size:28px;font-weight:800;line-height:1.1;color:var(--su-text)" id="setup-main-title">Kies een spel</div>
       </div>
     </div>
 
@@ -1537,67 +1548,67 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <!-- Stap 1: Welk spel? -->
     <div id="setup-step-1">
       <div style="margin-bottom:6px">
-        <span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E07A55">Wedstrijd</span>
+        <span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--su-orange-text)">Wedstrijd</span>
       </div>
       <button onclick="selectGame('x01');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 3l-6.5 6.5M21 3h-5m5 0v5"/><line x1="2" y1="22" x2="14" y2="10"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">501 / 301</div><div class="game-select-sub">Speel naar nul</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('cricket');goToSetupStep(3);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Cricket</div><div class="game-select-sub">Sluit getallen af</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('eliminatie');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Eliminatie</div><div class="game-select-sub">Gooi je tegenstander terug</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('afgooien');goToSetupStep(3);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3m9-9h-3M6 12H3"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Afgooien</div><div class="game-select-sub">Bouw 5 punten, gooi af</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
 
       <div style="margin-top:14px;margin-bottom:6px">
-        <span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8FCB9C">Training</span>
+        <span style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--su-green-text)">Training</span>
       </div>
       <button onclick="selectGame('atc');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Around the Clock</div><div class="game-select-sub">Loop alle getallen door</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('shanghai7');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Shanghai</div><div class="game-select-sub">7 of 20 rondes</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('halveit');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Halve It</div><div class="game-select-sub">Voltooi de doelen, of halveer</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('checkout121');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">121 Checkout</div><div class="game-select-sub">Klim omhoog met checkouts</div></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A;flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
     </div><!-- /setup-step-1 -->
 
@@ -1613,7 +1624,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <span class="setup-section-label" id="setup-players-label">SPELERS</span>
         <div id="player-list" style="margin-bottom:10px"></div>
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-          <input type="text" id="player-name-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')addPlayer()" style="flex:1;height:52px;font-size:15px;padding:0 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8;">
+          <input type="text" id="player-name-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')addPlayer()" style="flex:1;height:52px;font-size:15px;padding:0 16px;border-radius:14px;border:1px solid var(--su-w1);background:var(--su-w05);color:var(--su-text);">
           <button onclick="addPlayer()" style="height:52px;min-width:52px;border-radius:14px;background:var(--setup-accent,#B94E2A);color:#fff;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
         </div>
         <div id="player-error" class="error" style="font-size:12px;min-height:16px;margin-top:2px"></div>
@@ -1631,7 +1642,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <div id="start-player-card">
           <div id="sp-pick-grid" style="display:none"></div>
           <div id="sp-coin-area" style="display:none;text-align:center;padding:8px 0">
-            <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2.5px solid #9A6E0A;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.4);overflow:hidden">?</div>
+            <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2.5px solid #9A6E0A;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px var(--su-w4);overflow:hidden">?</div>
             <div id="wheel-wrap" style="display:none;position:relative;margin:0 auto 10px;width:224px">
               <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:22px;line-height:1;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">&#9660;</div>
               <canvas id="spin-wheel" width="224" height="224" style="display:block;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.5)"></canvas>
@@ -1640,7 +1651,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
             <button id="coin-spin-btn" class="btn btn-sm btn-primary" onclick="flipCoin()">Gooi het muntje</button>
           </div>
         </div>
-        <div style="font-size:13px;color:#A8A09A;margin-top:6px">Loting = muntje bij 2 spelers, rad bij 3+</div>
+        <div style="font-size:13px;color:var(--su-muted);margin-top:6px">Loting = muntje bij 2 spelers, rad bij 3+</div>
       </div>
 
       <!-- Bot kaart -->
@@ -1648,17 +1659,17 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <div class="setup-card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
             <div style="display:flex;align-items:center;gap:10px">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#A8A09A"><rect x="7" y="11" width="10" height="8" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="6" r="1"/><circle cx="9" cy="15" r="1"/><circle cx="15" cy="15" r="1"/></svg>
-              <span style="font-size:15px;font-weight:700;color:#F3EDE8">Bot tegenstander</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted)"><rect x="7" y="11" width="10" height="8" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="6" r="1"/><circle cx="9" cy="15" r="1"/><circle cx="15" cy="15" r="1"/></svg>
+              <span style="font-size:15px;font-weight:700;color:var(--su-text)">Bot tegenstander</span>
             </div>
             <input type="checkbox" id="bot-enabled" class="ios-toggle" onchange="onBotToggle(this.checked)" role="switch">
           </div>
-          <div id="bot-auto-info" style="font-size:12px;color:#A8A09A;margin-bottom:8px;padding:8px 12px;background:rgba(255,255,255,.05);border-radius:10px"></div>
+          <div id="bot-auto-info" style="font-size:12px;color:var(--su-muted);margin-bottom:8px;padding:8px 12px;background:var(--su-w05);border-radius:10px"></div>
           <div id="bot-opts" style="display:none">
             <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
               <div style="flex:1;min-width:120px">
                 <span class="setup-section-label">NAAM</span>
-                <input type="text" id="bot-name" value="Bot" style="width:100%;height:46px;font-size:14px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8;box-sizing:border-box;">
+                <input type="text" id="bot-name" value="Bot" style="width:100%;height:46px;font-size:14px;padding:0 12px;border-radius:12px;border:1px solid var(--su-w1);background:var(--su-w05);color:var(--su-text);box-sizing:border-box;">
               </div>
               <div style="flex:1;min-width:160px">
                 <span class="setup-section-label">NIVEAU</span>
@@ -1670,7 +1681,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
             </div>
             <div id="bot-player-pick" style="margin-bottom:8px">
               <span class="setup-section-label">SPEEL OP NIVEAU VAN</span>
-              <select id="bot-player-select" onchange="onBotPlayerSelect(this.value)" style="width:100%;height:46px;font-size:14px;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;"></select>
+              <select id="bot-player-select" onchange="onBotPlayerSelect(this.value)" style="width:100%;height:46px;font-size:14px;padding:0 12px;background:var(--su-w05);border:1px solid var(--su-w1);border-radius:12px;color:var(--su-text);"></select>
             </div>
             <div id="bot-manual-opts" style="display:none">
               <div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr)">
@@ -1704,17 +1715,17 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 </div>
 
 <!-- TOURNAMENT SETUP -->
-<div class="screen" id="screen-trn-setup" style="--setup-accent:#3E7B4F;--setup-accent-text:#8FCB9C">
+<div class="screen" id="screen-trn-setup" style="--setup-accent:#3E7B4F;--setup-accent-text:var(--su-green-text)">
   <div style="max-width:720px;margin:0 auto;padding:0 0 16px;">
 
     <!-- Header -->
     <div style="display:flex;align-items:center;gap:12px;padding:16px 0 12px;">
-      <button onclick="trnHeaderBack()" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#F3EDE8;">
+      <button onclick="trnHeaderBack()" aria-label="Terug" style="width:44px;height:44px;border-radius:50%;background:var(--su-w08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--su-text);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <div>
-        <div style="font-size:13px;color:#A8A09A;margin-bottom:1px">Toernooi</div>
-        <div style="font-size:28px;font-weight:800;line-height:1.1;color:#F3EDE8" id="trn-main-title">Formaat</div>
+        <div style="font-size:13px;color:var(--su-muted);margin-bottom:1px">Toernooi</div>
+        <div style="font-size:28px;font-weight:800;line-height:1.1;color:var(--su-text)" id="trn-main-title">Formaat</div>
       </div>
     </div>
 
@@ -1736,21 +1747,21 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
           <button class="seg-btn seg-btn-num" id="trn-game-vrij" onclick="setTrnGameCustom()">Vrij…</button>
         </div>
         <div id="trn-custom-game-row" style="display:none;margin-bottom:10px">
-          <input type="number" id="trn-game-custom-val" min="101" max="9999" placeholder="Eigen getal…" style="width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;box-sizing:border-box" oninput="trnGameCustom=parseInt(this.value)||1001">
+          <input type="number" id="trn-game-custom-val" min="101" max="9999" placeholder="Eigen getal…" style="width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:var(--su-w05);border:1px solid var(--su-w1);border-radius:12px;color:var(--su-text);box-sizing:border-box" oninput="trnGameCustom=parseInt(this.value)||1001">
         </div>
         <span class="setup-section-label">UITGOOI</span>
         <div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:4px">
           <button class="seg-btn active" id="trn-dout-yes" onclick="setTrnDoubleOut(true)">Double out</button>
           <button class="seg-btn" id="trn-dout-no" onclick="setTrnDoubleOut(false)">Straight out</button>
         </div>
-        <div style="font-size:13px;color:#A8A09A;margin-bottom:14px">Gooi exact de score leeg op een dubbel</div>
+        <div style="font-size:13px;color:var(--su-muted);margin-bottom:14px">Gooi exact de score leeg op een dubbel</div>
         <span class="setup-section-label">PER DUEL</span>
         <div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:4px">
           <button class="seg-btn" id="trn-bo-1" onclick="setTrnBO(1)">Best of 1</button>
           <button class="seg-btn active" id="trn-bo-3" onclick="setTrnBO(3)">Best of 3</button>
           <button class="seg-btn" id="trn-bo-5" onclick="setTrnBO(5)">Best of 5</button>
         </div>
-        <div style="font-size:13px;color:#A8A09A">Best of 3: wie het eerst 2 legs wint, gaat door</div>
+        <div style="font-size:13px;color:var(--su-muted)">Best of 3: wie het eerst 2 legs wint, gaat door</div>
       </div>
     </div>
 
@@ -1760,7 +1771,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
         <span class="setup-section-label" id="trn-players-label">DEELNEMERS</span>
         <div id="trn-player-list" style="margin-bottom:10px"></div>
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-          <input type="text" id="trn-player-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')trnAddPlayer()" style="flex:1;height:52px;font-size:15px;padding:0 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8;">
+          <input type="text" id="trn-player-input" placeholder="Naam toevoegen…" onkeydown="if(event.key==='Enter')trnAddPlayer()" style="flex:1;height:52px;font-size:15px;padding:0 16px;border-radius:14px;border:1px solid var(--su-w1);background:var(--su-w05);color:var(--su-text);">
           <button onclick="trnAddPlayer()" style="height:52px;min-width:52px;border-radius:14px;background:#3E7B4F;color:#fff;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
         </div>
         <div id="trn-player-error" class="error" style="font-size:12px;min-height:16px"></div>
@@ -2027,8 +2038,7 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 
 <!-- STATS -->
 <div class="screen" id="screen-stats">
-  <button onclick="showScreen('screen-home')" class="setup-nav-arrow" style="margin-bottom:12px">← Terug</button>
-  <h2 style="margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Statistieken</h2>
+  <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Statistieken</h2>
 
   <!-- Export / Import bar -->
   <div class="card" style="margin-bottom:12px">
@@ -2819,7 +2829,7 @@ function renderSetupRules(){
         '<button class="seg-btn seg-btn-num" id="x01-score-301" onclick="setX01Score(301)">301</button>'+
         '<button class="seg-btn seg-btn-num" id="x01-score-custom" onclick="setX01ScoreCustom()">Eigen</button>'+
       '</div>'+
-      '<input type="number" id="x01-score-custom-val" min="101" max="9999" value="1001" style="display:none;width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;margin-bottom:8px;box-sizing:border-box" oninput="x01CustomScore=parseInt(this.value)||1001">'+
+      '<input type="number" id="x01-score-custom-val" min="101" max="9999" value="1001" style="display:none;width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:var(--su-w05);border:1px solid var(--su-w1);border-radius:12px;color:var(--su-text);margin-bottom:8px;box-sizing:border-box" oninput="x01CustomScore=parseInt(this.value)||1001">'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="setup-two-col">'+
       '<div class="setup-card">'+
@@ -2849,7 +2859,7 @@ function renderSetupRules(){
           '<button class="seg-btn seg-btn-num" id="fmt-s2" onclick="setMatchSets(2)">2</button>'+
           '<button class="seg-btn seg-btn-num" id="fmt-s3" onclick="setMatchSets(3)">3</button>'+
         '</div>'+
-        '<div style="font-size:11px;color:#A8A09A;text-align:center;margin-top:4px">(1 set = geen sets)</div>'+
+        '<div style="font-size:11px;color:var(--su-muted);text-align:center;margin-top:4px">(1 set = geen sets)</div>'+
       '</div>'+
     '</div>';
     setTimeout(function(){
@@ -2875,7 +2885,7 @@ function renderSetupRules(){
       '<input type="checkbox" id="hi-random-order" style="display:none" onchange="hiRandomOrder=this.checked">'+
       '<div id="hi-rand-info" class="info-block-green" style="display:none;margin-top:0"></div>'+
       '<div id="hi-editor-wrap">'+
-      '<div class="hi-legend"><span id="hi-legend-hint">Houd een ronde vast en sleep om te verplaatsen</span><span class="hi-legend-keys"><span><i class="hi-dot" style="background:#E07A55"></i>Getal</span><span><i class="hi-dot" style="background:#8FCB9C"></i>Opdracht</span></span></div>'+
+      '<div class="hi-legend"><span id="hi-legend-hint">Houd een ronde vast en sleep om te verplaatsen</span><span class="hi-legend-keys"><span><i class="hi-dot" style="background:var(--su-orange-text)"></i>Getal</span><span><i class="hi-dot" style="background:var(--su-green-text)"></i>Opdracht</span></span></div>'+
       '<div id="seq-editor"></div>'+
       '<div class="hi-add-row">'+
         '<select id="seq-add-select" aria-label="Doel kiezen">'+
@@ -2888,7 +2898,7 @@ function renderSetupRules(){
       '<div id="seq-custom-row" style="display:none;margin-top:8px">'+
         '<span class="setup-section-label">EIGEN OPDRACHT</span>'+
         '<div style="display:flex;gap:6px;margin-top:4px">'+
-          '<input type="text" id="seq-custom-input" placeholder="bijv. 3 dezelfde kleuren" style="flex:1;height:44px;font-size:13px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#F3EDE8">'+
+          '<input type="text" id="seq-custom-input" placeholder="bijv. 3 dezelfde kleuren" style="flex:1;height:44px;font-size:13px;padding:0 12px;border-radius:12px;border:1px solid var(--su-w1);background:var(--su-w05);color:var(--su-text)">'+
           '<button class="btn btn-sm btn-primary" onclick="addCustomSeqItem()">+</button>'+
         '</div>'+
       '</div>'+
@@ -2904,13 +2914,13 @@ function renderSetupRules(){
       '</div>'+
       '<span class="setup-section-label">BIJ 3 MISSES</span>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
-        '<button id="sh-halve-off" onclick="setShHalve(false)" style="padding:14px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
-          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Normaal</div>'+
-          '<div style="font-size:12px;color:#A8A09A">0 punten voor die ronde</div>'+
+        '<button id="sh-halve-off" onclick="setShHalve(false)" style="padding:14px;border-radius:12px;border:2px solid transparent;background:var(--su-w05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:var(--su-text);margin-bottom:4px">Normaal</div>'+
+          '<div style="font-size:12px;color:var(--su-muted)">0 punten voor die ronde</div>'+
         '</button>'+
-        '<button id="sh-halve-on" onclick="setShHalve(true)" style="padding:14px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
-          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Halveren</div>'+
-          '<div style="font-size:12px;color:#A8A09A">Totaalscore gehalveerd</div>'+
+        '<button id="sh-halve-on" onclick="setShHalve(true)" style="padding:14px;border-radius:12px;border:2px solid transparent;background:var(--su-w05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:var(--su-text);margin-bottom:4px">Halveren</div>'+
+          '<div style="font-size:12px;color:var(--su-muted)">Totaalscore gehalveerd</div>'+
         '</button>'+
       '</div>'+
       '<div class="info-block-green">Scoor op elk getal. Shanghai (single + dubbel + triple) wint direct het spel.</div>'+
@@ -2925,18 +2935,18 @@ function renderSetupRules(){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">SCOREMODUS</span>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
-        '<button id="atc-mode-basic" onclick="setAtcMode(\'basic\')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
-          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Standaard</div>'+
-          '<div style="font-size:12px;color:#A8A09A;margin-bottom:8px">Elke raak = 1 stap vooruit</div>'+
-          '<div style="font-size:11px;color:#8FCB9C;font-family:monospace">5 → 6</div>'+
+        '<button id="atc-mode-basic" onclick="setAtcMode(\'basic\')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:var(--su-w05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:var(--su-text);margin-bottom:4px">Standaard</div>'+
+          '<div style="font-size:12px;color:var(--su-muted);margin-bottom:8px">Elke raak = 1 stap vooruit</div>'+
+          '<div style="font-size:11px;color:var(--su-green-text);font-family:monospace">5 → 6</div>'+
         '</button>'+
-        '<button id="atc-mode-pts" onclick="setAtcMode(\'pts\')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
-          '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Enkel/Dubbel/Triple</div>'+
-          '<div style="font-size:12px;color:#A8A09A;margin-bottom:8px">Dubbel = 2 stappen, triple = 3</div>'+
-          '<div style="font-size:11px;color:#8FCB9C;font-family:monospace">D5 → 7</div>'+
+        '<button id="atc-mode-pts" onclick="setAtcMode(\'pts\')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:var(--su-w05);cursor:pointer;text-align:left">'+
+          '<div style="font-size:14px;font-weight:700;color:var(--su-text);margin-bottom:4px">Enkel/Dubbel/Triple</div>'+
+          '<div style="font-size:12px;color:var(--su-muted);margin-bottom:8px">Dubbel = 2 stappen, triple = 3</div>'+
+          '<div style="font-size:11px;color:var(--su-green-text);font-family:monospace">D5 → 7</div>'+
         '</button>'+
       '</div>'+
-      '<div id="atc-mode-hint" style="font-size:13px;color:#A8A09A;margin-top:8px"></div>'+
+      '<div id="atc-mode-hint" style="font-size:13px;color:var(--su-muted);margin-top:8px"></div>'+
     '</div>';
     setTimeout(function(){
       var basic=document.getElementById('atc-mode-basic');if(basic)basic.style.borderColor=atcMode==='basic'?'var(--setup-accent,#B94E2A)':'transparent';
@@ -2996,14 +3006,14 @@ function renderSetupRules(){
         '<button class="seg-btn seg-btn-num" id="eli-custom-btn" onclick="setEliTargetCustom()">Eigen</button>'+
       '</div>'+
       '<div id="eli-custom-row" style="display:none;margin-bottom:10px">'+
-        '<input type="number" id="eli-custom-input" min="10" max="9999" placeholder="Eigen getal…" style="width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#F3EDE8;box-sizing:border-box" oninput="eliApplyCustomTarget(this.value)">'+
+        '<input type="number" id="eli-custom-input" min="10" max="9999" placeholder="Eigen getal…" style="width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:var(--su-w05);border:1px solid var(--su-w1);border-radius:12px;color:var(--su-text);box-sizing:border-box" oninput="eliApplyCustomTarget(this.value)">'+
       '</div>'+
       '<span class="setup-section-label">UITGOOI</span>'+
       '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:4px">'+
         '<button class="seg-btn" id="eli-out-single" onclick="setEliOut(\'single\')">Single out</button>'+
         '<button class="seg-btn" id="eli-out-double" onclick="setEliOut(\'double\')">Double out</button>'+
       '</div>'+
-      '<div id="eli-out-hint" style="font-size:13px;color:#A8A09A;margin-bottom:12px">Elke worp telt om het spel te winnen</div>'+
+      '<div id="eli-out-hint" style="font-size:13px;color:var(--su-muted);margin-bottom:12px">Elke worp telt om het spel te winnen</div>'+
       '<div class="info-block-green">Gooi exact de doelscore.</div>'+
       '<div class="info-block-orange" style="margin-top:8px">Raak je de score van een tegenstander? Die gaat terug naar nul!</div>'+
     '</div>';
@@ -3044,8 +3054,8 @@ function updateSetupStepper(){
     var idx=i+1;
     var done=idx<stepN;
     var active=idx===stepN;
-    var barColor=done?accent:(active?'var(--setup-accent-text,#E07A55)':'rgba(255,255,255,.10)');
-    var labelColor=done?'#C9BFB8':(active?'#fff':'#A8A09A');
+    var barColor=done?accent:(active?'var(--setup-accent-text,var(--su-orange-text))':'var(--su-w10)');
+    var labelColor=done?'var(--su-soft)':(active?'var(--su-text)':'var(--su-muted)');
     return '<div style="text-align:center">'+
       '<div style="height:4px;border-radius:2px;background:'+barColor+';margin-bottom:5px"></div>'+
       '<div style="font-size:11px;font-weight:700;color:'+labelColor+'">'+idx+' · '+label+'</div>'+
@@ -3125,8 +3135,8 @@ function updateTrnStepper(){
     var idx=i+1;
     var done=idx<trnStep;
     var active=idx===trnStep;
-    var barColor=done?'#3E7B4F':(active?'#8FCB9C':'rgba(255,255,255,.10)');
-    var labelColor=done?'#C9BFB8':(active?'#fff':'#A8A09A');
+    var barColor=done?'#3E7B4F':(active?'var(--su-green-text)':'var(--su-w10)');
+    var labelColor=done?'var(--su-soft)':(active?'var(--su-text)':'var(--su-muted)');
     return '<div style="text-align:center">'+
       '<div style="height:4px;border-radius:2px;background:'+barColor+';margin-bottom:5px"></div>'+
       '<div style="font-size:11px;font-weight:700;color:'+labelColor+'">'+idx+' · '+label+'</div>'+
@@ -3311,7 +3321,7 @@ function renderSeqEditor(){
   el.style.cssText='';
   if(hiSequence.length===0){
     el.className='';
-    el.innerHTML='<div style="padding:16px;text-align:center;font-size:13px;color:#A8A09A">Geen doelen. Voeg er hieronder een toe.</div>';
+    el.innerHTML='<div style="padding:16px;text-align:center;font-size:13px;color:var(--su-muted)">Geen doelen. Voeg er hieronder een toe.</div>';
     return;
   }
   hiSequence.forEach(function(item,i){
@@ -3479,8 +3489,8 @@ function renderSetupPlayers(){
   el.innerHTML='';
   setupPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)';
-    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--setup-accent,#B94E2A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:#F3EDE8">'+n+'</span></div><button style="background:transparent;border:none;color:#A8A09A;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--su-w08)';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--setup-accent,#B94E2A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:var(--su-text)">'+n+'</span></div><button style="background:transparent;border:none;color:var(--su-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
     el.appendChild(row);
   });
   var lbl=document.getElementById('setup-players-label');
@@ -3967,8 +3977,8 @@ function renderTrnPlayers(){
   el.innerHTML='';
   trnPlayers.forEach(function(n,i){
     var row=document.createElement('div');
-    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)';
-    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:#3E7B4F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:#F3EDE8">'+n+'</span></div><button style="background:transparent;border:none;color:#A8A09A;font-size:18px;cursor:pointer;padding:4px 8px;min-height:36px" onclick="trnRemovePlayer('+i+')">&#x2715;</button>';
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--su-w08)';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:#3E7B4F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:var(--su-text)">'+n+'</span></div><button style="background:transparent;border:none;color:var(--su-muted);font-size:18px;cursor:pointer;padding:4px 8px;min-height:36px" onclick="trnRemovePlayer('+i+')">&#x2715;</button>';
     el.appendChild(row);
   });
   var lbl=document.getElementById('trn-players-label');
@@ -7786,7 +7796,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=193;
+var APP_VERSION=194;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
