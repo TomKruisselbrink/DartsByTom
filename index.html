@@ -781,8 +781,8 @@ select{
 
 /* Sticky action bar */
 .setup-action-bar {
-  position: sticky;
-  bottom: 8px; /* #app-content heeft al 80px padding voor de pill-nav */
+  position: relative; /* staat onder de inhoud; scroll naar beneden om verder te gaan */
+  margin-top: 4px;
   background: rgba(20,19,20,.92);
   border-radius: 18px;
   padding: 14px 14px 14px 22px;
@@ -3025,7 +3025,11 @@ function updateSetupStepper(){
   var g=selectedGame;
   var noRules=(g==='cricket'||g==='afgooien');
   var steps,stepN;
-  if(noRules){
+  if(setupStep===1){
+    // Nog geen spel gekozen: generieke stappen
+    steps=['Spel','Regels','Spelers'];
+    stepN=1;
+  } else if(noRules){
     var gn=(_GAME_NAMES&&_GAME_NAMES[g])?_GAME_NAMES[g]:g;
     steps=[gn,'Spelers'];
     stepN=(setupStep>=3)?2:1;
@@ -3040,8 +3044,8 @@ function updateSetupStepper(){
     var idx=i+1;
     var done=idx<stepN;
     var active=idx===stepN;
-    var barColor=done?accent:(active?'rgba(185,78,42,.35)':'rgba(255,255,255,.10)');
-    var labelColor=done?'var(--setup-accent-text,#E07A55)':(active?'#fff':'#A8A09A');
+    var barColor=done?accent:(active?'var(--setup-accent-text,#E07A55)':'rgba(255,255,255,.10)');
+    var labelColor=done?'#C9BFB8':(active?'#fff':'#A8A09A');
     return '<div style="text-align:center">'+
       '<div style="height:4px;border-radius:2px;background:'+barColor+';margin-bottom:5px"></div>'+
       '<div style="font-size:11px;font-weight:700;color:'+labelColor+'">'+idx+' · '+label+'</div>'+
@@ -3121,8 +3125,8 @@ function updateTrnStepper(){
     var idx=i+1;
     var done=idx<trnStep;
     var active=idx===trnStep;
-    var barColor=done?'#3E7B4F':(active?'rgba(62,123,79,.35)':'rgba(255,255,255,.10)');
-    var labelColor=done?'#8FCB9C':(active?'#fff':'#A8A09A');
+    var barColor=done?'#3E7B4F':(active?'#8FCB9C':'rgba(255,255,255,.10)');
+    var labelColor=done?'#C9BFB8':(active?'#fff':'#A8A09A');
     return '<div style="text-align:center">'+
       '<div style="height:4px;border-radius:2px;background:'+barColor+';margin-bottom:5px"></div>'+
       '<div style="font-size:11px;font-weight:700;color:'+labelColor+'">'+idx+' · '+label+'</div>'+
