@@ -1,4 +1,7 @@
-const CACHE = 'darts-v191-20261022';
+// Versie komt uit index.html (APP_VERSION), via register('./sw.js?v=…').
+// Dit bestand hoeft bij een release NIET aangepast te worden.
+const VERSION = new URL(self.location).searchParams.get('v') || '0';
+const CACHE = 'darts-v' + VERSION;
 const FILES = ['/DartsByTom/', '/DartsByTom/index.html', '/DartsByTom/manifest.json'];
 
 self.addEventListener('install', function(e) {

@@ -2091,6 +2091,8 @@ var DEFAULT_SEQ=[
 ];
 var hiSequence=[];
 var hiRandomOrder=false;
+var hiMode='std';   // 'std' | 'rand' | 'own'
+var hiOwnSeq=null; // bewaarde eigen volgorde
 function generateRandomHiSeq(length){
   var pool=[];
   // Numbers 1-20
@@ -2702,7 +2704,7 @@ function renderSetup(){
   matchFormat='firstto';matchN=2;matchSets=1;
   setupStartPlayer=0;startMode='first';
   botEnabled=false;botLevelMode='auto';botManualLevel='medium';
-  hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign({},s)});
+  hiSequence=hiMode==='own'&&hiOwnSeq?_hiCopy(hiOwnSeq):DEFAULT_SEQ.map(function(s){return Object.assign({},s)});
   try{
     var last=JSON.parse(localStorage.getItem('darts_last_players')||'[]');
     if(last.length)setupPlayers=last.slice();
@@ -2866,12 +2868,14 @@ function renderSetupRules(){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">VOLGORDE</span>'+
       '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px">'+
-        '<button class="seg-btn" id="hi-mode-std" onclick="resetSeq();hiRandomOrder=false;renderSetupRules();">Standaard</button>'+
-        '<button class="seg-btn" id="hi-mode-rand" onclick="hiRandomOrder=true;renderSetupRules();">Willekeurig</button>'+
-        '<button class="seg-btn" id="hi-mode-own" onclick="hiRandomOrder=false;renderSetupRules();">Eigen</button>'+
+        '<button class="seg-btn" id="hi-mode-std" onclick="setHiMode(\'std\')">Standaard</button>'+
+        '<button class="seg-btn" id="hi-mode-rand" onclick="setHiMode(\'rand\')">Willekeurig</button>'+
+        '<button class="seg-btn" id="hi-mode-own" onclick="setHiMode(\'own\')">Eigen</button>'+
       '</div>'+
       '<input type="checkbox" id="hi-random-order" style="display:none" onchange="hiRandomOrder=this.checked">'+
-      '<div class="hi-legend"><span>Houd een ronde vast en sleep om te verplaatsen</span><span class="hi-legend-keys"><span><i class="hi-dot" style="background:#E07A55"></i>Getal</span><span><i class="hi-dot" style="background:#8FCB9C"></i>Opdracht</span></span></div>'+
+      '<div id="hi-rand-info" class="info-block-green" style="display:none;margin-top:0"></div>'+
+      '<div id="hi-editor-wrap">'+
+      '<div class="hi-legend"><span id="hi-legend-hint">Houd een ronde vast en sleep om te verplaatsen</span><span class="hi-legend-keys"><span><i class="hi-dot" style="background:#E07A55"></i>Getal</span><span><i class="hi-dot" style="background:#8FCB9C"></i>Opdracht</span></span></div>'+
       '<div id="seq-editor"></div>'+
       '<div class="hi-add-row">'+
         '<select id="seq-add-select" aria-label="Doel kiezen">'+
@@ -2888,14 +2892,9 @@ function renderSetupRules(){
           '<button class="btn btn-sm btn-primary" onclick="addCustomSeqItem()">+</button>'+
         '</div>'+
       '</div>'+
+      '</div>'+
     '</div>';
-    setTimeout(function(){
-      renderSeqEditor();
-      var isRand=hiRandomOrder;
-      var ms=document.getElementById('hi-mode-std');if(ms)ms.className='seg-btn'+(!isRand?' active':'');
-      var mr=document.getElementById('hi-mode-rand');if(mr)mr.className='seg-btn'+(isRand?' active':'');
-      var mo=document.getElementById('hi-mode-own');if(mo)mo.className='seg-btn';
-    },0);
+    setTimeout(function(){updateHiModeUI();},0);
   } else if(g==='shanghai7'||g==='shanghai20'){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">RONDES</span>'+
@@ -3092,7 +3091,7 @@ function buildRulesSummary(){
     var out=(typeof doubleOut!=='undefined'&&doubleOut)?'Double out':'Straight out';
     var fmt=(typeof matchFormat!=='undefined'&&matchFormat==='firstto')?'First to '+(matchN||2):'Best of '+(matchN||2);
     return sc+' · '+out+' · '+fmt;
-  } else if(g==='halveit'){return 'Halve It · '+(hiSequence?hiSequence.length:0)+' rondes';}
+  } else if(g==='halveit'){return 'Halve It · '+({std:'standaard',rand:'willekeurig',own:'eigen volgorde'}[hiMode]||'')+' · '+(hiSequence?hiSequence.length:0)+' rondes';}
   else if(g==='shanghai7'||g==='shanghai20'){return 'Shanghai · '+(g==='shanghai7'?'7':'20')+' rondes';}
   else if(g==='atc'){return 'ATC · '+(atcMode==='basic'?'Standaard':'Punten');}
   else if(g==='checkout121'){return '121 Checkout';}
@@ -3271,6 +3270,39 @@ function seqLabel(s){
   if(s.type==='bull')return 'Bull';
   return s.label||'?';
 }
+function _hiCopy(arr){return arr.map(function(x){return Object.assign({},x);});}
+function setHiMode(m){
+  if(hiMode==='own')hiOwnSeq=_hiCopy(hiSequence); // eigen volgorde onthouden
+  hiMode=m;
+  hiRandomOrder=(m==='rand');
+  if(m==='std'){hiSequence=_hiCopy(DEFAULT_SEQ);}
+  else if(m==='own'){hiSequence=_hiCopy(hiOwnSeq||DEFAULT_SEQ);}
+  // rand: hiSequence blijft staan, alleen de lengte telt (aantal rondes)
+  updateHiModeUI();
+}
+function _hiMarkOwn(){
+  // Aanpassen van de standaardvolgorde = eigen volgorde
+  if(hiMode==='std'){hiMode='own';hiRandomOrder=false;}
+  if(hiMode==='own')hiOwnSeq=_hiCopy(hiSequence);
+  updateHiModeUI(true);
+}
+function updateHiModeUI(skipEditor){
+  ['std','rand','own'].forEach(function(k){
+    var b=document.getElementById('hi-mode-'+k);
+    if(b)b.className='seg-btn'+(hiMode===k?' active':'');
+  });
+  var wrap=document.getElementById('hi-editor-wrap');
+  var info=document.getElementById('hi-rand-info');
+  if(wrap)wrap.style.display=hiMode==='rand'?'none':'';
+  if(info){
+    info.style.display=hiMode==='rand'?'':'none';
+    info.textContent='Bij de start krijg je '+hiSequence.length+' willekeurige doelen: getallen 1–20, Bull, specifieke doubles en triples, en kleuropdrachten.';
+  }
+  var hint=document.getElementById('hi-legend-hint');
+  if(hint)hint.textContent=hiMode==='std'?'Pas iets aan en het wordt je eigen volgorde':'Houd een ronde vast en sleep om te verplaatsen';
+  if(!skipEditor)renderSeqEditor();
+  if(typeof updateSetupActionBar==='function')updateSetupActionBar();
+}
 function renderSeqEditor(){
   var el=document.getElementById('seq-editor');
   if(!el)return; // Halve It-editor bestaat alleen als Halve It-regels getoond worden
@@ -3326,7 +3358,7 @@ function addSeqItem(){
   else if(v==='DC')hiSequence.push({type:'diff_color',val:0,label:'3 verschillende kleuren'});
   else if(v==='R3')hiSequence.push({type:'random3',val:0,label:'1 van 3 getallen'});
   else hiSequence.push({type:'num',val:parseInt(v),label:v});
-  renderSeqEditor();if(typeof updateSetupActionBar==="function")updateSetupActionBar();
+  renderSeqEditor();_hiMarkOwn();
 }
 function addCustomSeqItem(){
   var txt=document.getElementById('seq-custom-input').value.trim();
@@ -3335,9 +3367,9 @@ function addCustomSeqItem(){
   document.getElementById('seq-custom-input').value='';
   document.getElementById('seq-custom-row').style.display='none';
   document.getElementById('seq-add-select').value='20';
-  renderSeqEditor();if(typeof updateSetupActionBar==="function")updateSetupActionBar();
+  renderSeqEditor();_hiMarkOwn();
 }
-function removeSeq(i){hiSequence.splice(i,1);renderSeqEditor();if(typeof updateSetupActionBar==='function')updateSetupActionBar();}
+function removeSeq(i){hiSequence.splice(i,1);renderSeqEditor();_hiMarkOwn();}
 function moveSeq(i,dir){var j=i+dir;if(j<0||j>=hiSequence.length)return;var t=hiSequence[i];hiSequence[i]=hiSequence[j];hiSequence[j]=t;renderSeqEditor();}
 function resetSeq(){hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign({},s)});renderSeqEditor();if(typeof updateSetupActionBar==='function')updateSetupActionBar();}
 // ─── Seq drag-to-reorder (lang indrukken, dan slepen; werkt in het raster) ───
@@ -3385,7 +3417,7 @@ function _seqDragEnd(){
   var wasDragging=_seqDragIdx>=0;
   _seqDragIdx=-1;
   _seqCleanup();
-  if(wasDragging){renderSeqEditor();if(typeof updateSetupActionBar==='function')updateSetupActionBar();}
+  if(wasDragging){renderSeqEditor();_hiMarkOwn();}
 }
 // ─── Seq swipe-to-delete ───
 var _seqSwipeCont=null,_seqSwipeIdx=-1,_seqSwipeX0=0,_seqSwipeY0=0,_seqSwipeDir=null;
@@ -6353,7 +6385,7 @@ function showWin(winner,sub,extra){
   if(rbtn)rbtn.style.display=rematchConfig?'block':'none';
   document.getElementById('win-sub').textContent=sub;
   // Success check SVG — insert before stats
-  var checkSvg=isSoloEnd?'':'<div style="text-align:center;margin-bottom:10px"><svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">'+
+  var checkSvg=isSoloEnd?'':'<div style="display:flex;justify-content:center;margin-bottom:10px"><svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+
     '<circle cx="30" cy="30" r="26" stroke="rgba(34,197,94,.3)" stroke-width="3" fill="none" style="animation:popIn .4s ease-out"/>'+
     '<circle cx="30" cy="30" r="26" stroke="rgba(34,197,94,.7)" stroke-width="3" fill="none" stroke-dasharray="164" stroke-dashoffset="164" style="animation:drawCheck .5s ease-out .1s forwards;transform-origin:30px 30px;transform:rotate(-90deg)"/>'+
     '<path d="M19 30 L27 38 L41 22" stroke="#22c55e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="36" stroke-dashoffset="36" style="animation:drawCheck .4s ease-out .35s forwards"/>'+
@@ -7751,20 +7783,18 @@ function deleteMatchEntry(playerName, index){
 })();
 
 // Register service worker for PWA/offline
-// Versie in Instellingen = versie uit de CACHE-naam in sw.js. Bij een release alleen sw.js ophogen.
+// ════ APP-VERSIE ════
+// Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
+// krijgt het mee als ?v=… zodat de cache automatisch ververst.
+var APP_VERSION=193;
 function showAppVersion(){
   var el=document.getElementById('app-version');
-  if(!el||!('caches' in window))return;
-  caches.keys().then(function(keys){
-    var nums=keys.map(function(k){var m=/^darts-v(\d+)/.exec(k);return m?parseInt(m[1],10):0;}).filter(Boolean);
-    if(nums.length)el.textContent='v'+Math.max.apply(null,nums);
-  }).catch(function(){});
+  if(el)el.textContent='v'+APP_VERSION;
 }
 showAppVersion();
-if('serviceWorker' in navigator){navigator.serviceWorker.ready.then(function(){setTimeout(showAppVersion,500);}).catch(function(){});}
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js').catch(function(){});
+    navigator.serviceWorker.register('./sw.js?v='+APP_VERSION).catch(function(){});
   });
 }
 
