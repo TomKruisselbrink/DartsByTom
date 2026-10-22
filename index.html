@@ -1469,18 +1469,18 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <div class="card">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px" id="set-lbl-lang">Taal</div>
     <div style="display:flex;gap:8px" id="lang-seg">
-      <button class="setup-big-num lang-tile" data-lang-val="nl" onclick="applyLang('nl')" style="flex:1;flex-direction:column;height:96px;gap:0">
-        <svg viewBox="0 0 9 6" style="width:52px;height:35px;border-radius:5px;display:block" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="2" y="0" fill="#AE1C28"/><rect width="9" height="2" y="2" fill="#fff"/><rect width="9" height="2" y="4" fill="#21468B"/></svg>
+      <button class="setup-big-num lang-tile" data-lang-val="nl" onclick="applyLang('nl')" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:96px;gap:0;padding:0">
+        <svg viewBox="0 0 9 6" preserveAspectRatio="none" style="width:52px;height:34px;border-radius:5px;display:block" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="2" y="0" fill="#AE1C28"/><rect width="9" height="2" y="2" fill="#fff"/><rect width="9" height="2" y="4" fill="#21468B"/></svg>
         <span style="font-size:13px;font-weight:700;margin-top:7px">Nederlands</span>
       </button>
-      <button class="setup-big-num lang-tile" data-lang-val="en" onclick="applyLang('en')" style="flex:1;flex-direction:column;height:96px;gap:0">
-        <svg viewBox="0 0 60 36" style="width:52px;height:31px;border-radius:5px;display:block" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#012169"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" stroke-width="12"/><path d="M0,0 L60,36" stroke="#C8102E" stroke-width="8"/><path d="M60,0 L0,36" stroke="#C8102E" stroke-width="8"/><rect x="24" y="0" width="12" height="36" fill="#fff"/><rect x="0" y="12" width="60" height="12" fill="#fff"/><rect x="26" y="0" width="8" height="36" fill="#C8102E"/><rect x="0" y="14" width="60" height="8" fill="#C8102E"/></svg>
+      <button class="setup-big-num lang-tile" data-lang-val="en" onclick="applyLang('en')" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:96px;gap:0;padding:0">
+        <svg viewBox="0 0 60 36" preserveAspectRatio="xMidYMid slice" style="width:52px;height:34px;border-radius:5px;display:block" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#012169"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" stroke-width="12"/><path d="M0,0 L60,36" stroke="#C8102E" stroke-width="8"/><path d="M60,0 L0,36" stroke="#C8102E" stroke-width="8"/><rect x="24" y="0" width="12" height="36" fill="#fff"/><rect x="0" y="12" width="60" height="12" fill="#fff"/><rect x="26" y="0" width="8" height="36" fill="#C8102E"/><rect x="0" y="14" width="60" height="8" fill="#C8102E"/></svg>
         <span style="font-size:13px;font-weight:700;margin-top:7px">English</span>
       </button>
     </div>
   </div>
   <div style="text-align:center;margin-top:18px;padding-bottom:8px">
-    <span style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px">v186</span>
+    <span id="app-version" style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px"></span>
   </div>
 </div>
 
@@ -2419,6 +2419,7 @@ function showScreen(id){
   var _ac=document.getElementById('app-content');
   _ac.scrollTop=0;
   // Pill nav: show on home/stats/leaderboard/history/settings; update active tab
+  if(id==='screen-settings'&&typeof showAppVersion==='function')showAppVersion();
   var _pillScreens=['screen-home','screen-stats','screen-leaderboard','screen-history','screen-settings','screen-setup','screen-trn-setup'];
   var _pn=document.getElementById('pill-nav');
   if(_pn){
@@ -7750,6 +7751,17 @@ function deleteMatchEntry(playerName, index){
 })();
 
 // Register service worker for PWA/offline
+// Versie in Instellingen = versie uit de CACHE-naam in sw.js. Bij een release alleen sw.js ophogen.
+function showAppVersion(){
+  var el=document.getElementById('app-version');
+  if(!el||!('caches' in window))return;
+  caches.keys().then(function(keys){
+    var nums=keys.map(function(k){var m=/^darts-v(\d+)/.exec(k);return m?parseInt(m[1],10):0;}).filter(Boolean);
+    if(nums.length)el.textContent='v'+Math.max.apply(null,nums);
+  }).catch(function(){});
+}
+showAppVersion();
+if('serviceWorker' in navigator){navigator.serviceWorker.ready.then(function(){setTimeout(showAppVersion,500);}).catch(function(){});}
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
     navigator.serviceWorker.register('./sw.js').catch(function(){});
@@ -9146,8 +9158,13 @@ function _afgWin(winner){
 /* ── 4. Lang-tiles: zelfde active state als game-btn ── */
 .lang-tile {
   border-radius:14px !important;
+  background:rgba(255,255,255,.04) !important;
+  border:1.5px solid rgba(255,255,255,.08) !important;
+  color:var(--text) !important;
+  cursor:pointer;
   transition:border-color .15s, background .15s !important;
 }
+.lang-tile.active,
 .lang-tile.selected {
   border-color:var(--accent) !important;
   border-width:1.5px !important;
