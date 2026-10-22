@@ -2782,8 +2782,8 @@ function renderSetupRules(){
         '</div>'+
         '<span class="setup-section-label" style="margin-top:12px">FORMAT</span>'+
         '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr)">'+
-          '<button class="seg-btn" id="fmt-firstto" onclick="setMatchFormat('firstto')">First to</button>'+
-          '<button class="seg-btn" id="fmt-bestof" onclick="setMatchFormat('bestof')">Best of</button>'+
+          '<button class="seg-btn" id="fmt-firstto" onclick="setMatchFormat(\'firstto\')">First to</button>'+
+          '<button class="seg-btn" id="fmt-bestof" onclick="setMatchFormat(\'bestof\')">Best of</button>'+
         '</div>'+
       '</div>'+
       '<div class="setup-card">'+
@@ -2853,8 +2853,8 @@ function renderSetupRules(){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">RONDES</span>'+
       '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">'+
-        '<button class="seg-btn" id="sh-rounds-7" onclick="selectGame('shanghai7');document.getElementById('sh-rounds-7').classList.add('active');document.getElementById('sh-rounds-20').classList.remove('active')">1–7 (kort)</button>'+
-        '<button class="seg-btn" id="sh-rounds-20" onclick="selectGame('shanghai20');document.getElementById('sh-rounds-20').classList.add('active');document.getElementById('sh-rounds-7').classList.remove('active')">1–20 (volledig)</button>'+
+        '<button class="seg-btn" id="sh-rounds-7" onclick="selectGame(\'shanghai7\');document.getElementById(\'sh-rounds-7\').classList.add(\'active\');document.getElementById(\'sh-rounds-20\').classList.remove(\'active\')">1–7 (kort)</button>'+
+        '<button class="seg-btn" id="sh-rounds-20" onclick="selectGame(\'shanghai20\');document.getElementById(\'sh-rounds-20\').classList.add(\'active\');document.getElementById(\'sh-rounds-7\').classList.remove(\'active\')">1–20 (volledig)</button>'+
       '</div>'+
       '<span class="setup-section-label">BIJ 3 MISSES</span>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
@@ -2879,12 +2879,12 @@ function renderSetupRules(){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">SCOREMODUS</span>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
-        '<button id="atc-mode-basic" onclick="setAtcMode('basic')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
+        '<button id="atc-mode-basic" onclick="setAtcMode(\'basic\')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
           '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Standaard</div>'+
           '<div style="font-size:12px;color:#A8A09A;margin-bottom:8px">Elke raak = 1 stap vooruit</div>'+
           '<div style="font-size:11px;color:#8FCB9C;font-family:monospace">5 → 6</div>'+
         '</button>'+
-        '<button id="atc-mode-pts" onclick="setAtcMode('pts')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
+        '<button id="atc-mode-pts" onclick="setAtcMode(\'pts\')" style="padding:16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;text-align:left">'+
           '<div style="font-size:14px;font-weight:700;color:#F3EDE8;margin-bottom:4px">Enkel/Dubbel/Triple</div>'+
           '<div style="font-size:12px;color:#A8A09A;margin-bottom:8px">Dubbel = 2 stappen, triple = 3</div>'+
           '<div style="font-size:11px;color:#8FCB9C;font-family:monospace">D5 → 7</div>'+
@@ -2925,7 +2925,7 @@ function renderSetupRules(){
       '</div>'+
       '<span class="setup-section-label">SAFEHOUSE</span>'+
       '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px">'+
-        safeVals.map(function(v){return '<button class="seg-btn" id="co121-sh-'+v+'" onclick="setCo121Safehouse(''+v+'')">'+safeLabels[v]+'</button>';}).join('')+
+        safeVals.map(function(v){return '<button class="seg-btn" id="co121-sh-'+v+'" onclick="setCo121Safehouse(\''+v+'\')">'+safeLabels[v]+'</button>';}).join('')+
       '</div>'+
       '<div class="info-block-green">Gooi je een checkout uit in ≤ 3 pijlen, dan wordt dat je safehouse.</div>'+
     '</div>';
@@ -2954,8 +2954,8 @@ function renderSetupRules(){
       '</div>'+
       '<span class="setup-section-label">UITGOOI</span>'+
       '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:4px">'+
-        '<button class="seg-btn" id="eli-out-single" onclick="setEliOut('single')">Single out</button>'+
-        '<button class="seg-btn" id="eli-out-double" onclick="setEliOut('double')">Double out</button>'+
+        '<button class="seg-btn" id="eli-out-single" onclick="setEliOut(\'single\')">Single out</button>'+
+        '<button class="seg-btn" id="eli-out-double" onclick="setEliOut(\'double\')">Double out</button>'+
       '</div>'+
       '<div id="eli-out-hint" style="font-size:13px;color:#A8A09A;margin-bottom:12px">Elke worp telt om het spel te winnen</div>'+
       '<div class="info-block-green">Gooi exact de doelscore.</div>'+
@@ -3222,6 +3222,7 @@ function seqLabel(s){
 }
 function renderSeqEditor(){
   var el=document.getElementById('seq-editor');
+  if(!el)return; // Halve It-editor bestaat alleen als Halve It-regels getoond worden
   el.innerHTML='';
   el.style.cssText='border-radius:14px;overflow:hidden;background:var(--card);margin-bottom:8px;';
   if(hiSequence.length===0){
@@ -3353,8 +3354,8 @@ function _seqSwipeEnd(e){
 function renderKnownNames(sel){
   var db=getDB();var el=document.querySelector(sel);if(!el)return;el.innerHTML='';
   var inputId=sel==='#known-names'?'player-name-input':'trn-player-input';
-  var addFn=sel==='#known-names'?addPlayer:addTrnPlayer;
-  var players=sel==='#known-names'?setupPlayers:(trnSetup&&trnSetup.players?trnSetup.players:[]);
+  var addFn=sel==='#known-names'?addPlayer:trnAddPlayer;
+  var players=sel==='#known-names'?setupPlayers:trnPlayers;
   Object.keys(db).forEach(function(n){
     var already=players.indexOf(n)>=0;
     var c=document.createElement('button');
