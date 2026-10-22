@@ -206,6 +206,8 @@ body::before{
 [data-theme="light"] #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}
 @media(prefers-color-scheme:light){#game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}}
 #game-controls.show{display:flex}
+/* Ruimte vrijhouden onder de inhoud zodat de zwevende Ongedaan/Stop-balk niets bedekt (v195) */
+body:has(#game-controls.show) #app-content{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 84px) !important}
 .gc-btn{
   background:transparent;border:none;cursor:pointer;
   padding:6px 14px;border-radius:20px;
@@ -514,6 +516,22 @@ select{
 
 /* ─── MISC ─── */
 .empty{color:var(--muted);font-size:14px;text-align:center;padding:24px}
+/* Lege schermen (v195) */
+.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:36px 20px;margin-top:8px;border-radius:18px;background:var(--card);border:1px dashed var(--border)}
+.empty-state-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(181,80,47,.14);color:var(--accent);margin-bottom:4px}
+.empty-state-icon svg{display:block}
+.empty-state-title{font-size:16px;font-weight:800;color:var(--text)}
+.empty-state-sub{font-size:13px;line-height:1.45;color:var(--muted);max-width:280px}
+.empty-state-btn{margin-top:10px;height:48px;padding:0 22px;border:none;border-radius:14px;background:#B94E2A;color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+/* Ranglijst-filters (v195) */
+.lb-chiprow{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -20px 10px;padding:2px 20px}
+.lb-chiprow::-webkit-scrollbar{display:none}
+.lb-chip{flex:none;height:40px;padding:0 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.lb-chip.active{background:#B94E2A;border-color:#B94E2A;color:#fff}
+.lb-subrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:4px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
+.lb-subrow::-webkit-scrollbar{display:none}
+.lb-sub{flex:1 0 auto;height:36px;padding:0 12px;border:none;border-radius:10px;background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.lb-sub.active{background:rgba(181,80,47,.18);color:var(--accent)}
 .error{color:var(--danger);font-size:13px;margin-top:6px}
 .gap8{display:flex;gap:8px}
 .gap6{display:flex;gap:6px;flex-wrap:wrap}
@@ -1500,23 +1518,23 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <!-- LEADERBOARD -->
 <div class="screen" id="screen-leaderboard">
   <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</h2>
-  <!-- Tab groups -->
-  <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">501 / 301</div>
-  <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
-    <button class="btn btn-sm active" id="lb-tab-avg" onclick="showLbTab('avg')">Gemiddelde</button>
-    <button class="btn btn-sm" id="lb-tab-180" onclick="showLbTab('180')">180's</button>
-    <button class="btn btn-sm" id="lb-tab-co" onclick="showLbTab('co')">Dubbel %</button>
-    <button class="btn btn-sm" id="lb-tab-wins" onclick="showLbTab('wins')">Wins</button>
-    <button class="btn btn-sm" id="lb-tab-high" onclick="showLbTab('high')">Hoogste beurt</button>
+  <!-- Spelkeuze (horizontaal scrollen) -->
+  <div class="lb-chiprow" role="tablist" aria-label="Spel">
+    <button class="lb-chip active" id="lb-game-x01" onclick="showLbTab(lbX01Stat||'avg')">501 / 301</button>
+    <button class="lb-chip" id="lb-game-sh7" onclick="showLbTab('sh7')">Shanghai 1–7</button>
+    <button class="lb-chip" id="lb-game-sh20" onclick="showLbTab('sh20')">Shanghai 1–20</button>
+    <button class="lb-chip" id="lb-game-atc" onclick="showLbTab('atc')">Around the Clock</button>
+    <button class="lb-chip" id="lb-game-hi" onclick="showLbTab('hi')">Halve It</button>
+    <button class="lb-chip" id="lb-game-co121" onclick="showLbTab('co121')">121 Checkout</button>
+    <button class="lb-chip" id="lb-game-afg" onclick="showLbTab('afg')">Afgooien</button>
   </div>
-  <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Andere spellen</div>
-  <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-    <button class="btn btn-sm" id="lb-tab-sh7" onclick="showLbTab('sh7')">Shanghai 1–7</button>
-    <button class="btn btn-sm" id="lb-tab-sh20" onclick="showLbTab('sh20')">Shanghai 1–20</button>
-    <button class="btn btn-sm" id="lb-tab-atc" onclick="showLbTab('atc')">Around the Clock</button>
-    <button class="btn btn-sm" id="lb-tab-hi" onclick="showLbTab('hi')">Halve It</button>
-    <button class="btn btn-sm" id="lb-tab-co121" onclick="showLbTab('co121')">121 Checkout</button>
-    <button class="btn btn-sm" id="lb-tab-afg" onclick="showLbTab('afg')">Afgooien</button>
+  <!-- Statistiekkeuze, alleen bij 501 / 301 -->
+  <div class="lb-subrow" id="lb-stat-row" role="tablist" aria-label="Statistiek">
+    <button class="lb-sub active" id="lb-tab-avg" onclick="showLbTab('avg')">Gemiddelde</button>
+    <button class="lb-sub" id="lb-tab-180" onclick="showLbTab('180')">180's</button>
+    <button class="lb-sub" id="lb-tab-co" onclick="showLbTab('co')">Dubbel %</button>
+    <button class="lb-sub" id="lb-tab-wins" onclick="showLbTab('wins')">Wins</button>
+    <button class="lb-sub" id="lb-tab-high" onclick="showLbTab('high')">Hoogste beurt</button>
   </div>
   <div id="leaderboard-content"></div>
 </div>
@@ -5648,8 +5666,8 @@ function renderShanghai(){
   document.getElementById('sh-turn-name').textContent=state.players[state.currentPlayer];
   var thrown=state.shDarts||0;
   var dartsLeft=3-thrown;
-  var dartBarHtml=[0,1,2].map(function(i){return'<span style="font-size:18px">'+(i<thrown?'🎯':'⚪')+'</span>';}).join('')+
-    '<span style="font-size:11px;color:var(--muted);align-self:center;margin-left:5px">pijl '+(thrown+1)+' van 3</span>';
+  var dartBarHtml=[0,1,2].map(function(i){return'<span aria-hidden="true" style="width:12px;height:12px;border-radius:50%;display:inline-block;margin:0 2px;background:'+(i<thrown?'var(--accent)':'rgba(255,255,255,.85)')+';box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>';}).join('')+
+    '<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">pijl '+(thrown+1)+' van 3</span>';
   var dartBarEl=document.getElementById('sh-darts-turn');
   if(dartBarEl)dartBarEl.innerHTML=dartBarHtml;
   document.getElementById('sh-turn-pts').textContent=state.shTurnPts;
@@ -6420,10 +6438,19 @@ var statsVsFilter={};
 var statsSelectedPlayer=null;
 function selectStatsPlayer(n){statsSelectedPlayer=n;renderStats();}
 
+// Leeg-scherm met icoon, uitleg en (optioneel) knop naar Nieuw spel
+function emptyState(title,sub,cta){
+  return '<div class="empty-state">'+
+    '<div class="empty-state-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></div>'+
+    '<div class="empty-state-title">'+title+'</div>'+
+    (sub?'<div class="empty-state-sub">'+sub+'</div>':'')+
+    (cta?'<button class="empty-state-btn" onclick="showScreen(\'screen-setup\')">Speel je eerste potje</button>':'')+
+  '</div>';
+}
 function renderStats(){
   var db=getDB();var names=Object.keys(db);
   var el=document.getElementById('stats-content');
-  if(!names.length){el.innerHTML='<div class="empty">Nog geen statistieken</div>';return;}
+  if(!names.length){el.innerHTML=emptyState('Nog geen statistieken','Na je eerste potje zie je hier gemiddelden, checkouts en je beste beurten.',true);return;}
   if(!statsSelectedPlayer||names.indexOf(statsSelectedPlayer)<0)statsSelectedPlayer=names[0];
   el.innerHTML='';
   // Player name picker row
@@ -6974,13 +7001,24 @@ nextPlayer501=function(){
 // ═══════════════════════════════════════════
 var lbCurrentTab='avg';
 
+var lbX01Stat='avg';
 function showLbTab(tab){
   lbCurrentTab=tab;
-  var allTabs=['avg','180','co','wins','high','sh7','sh20','atc','hi','co121','afg'];
-  allTabs.forEach(function(t){
+  var x01Stats=['avg','180','co','wins','high'];
+  var isX01=x01Stats.indexOf(tab)>=0;
+  if(isX01)lbX01Stat=tab;
+  x01Stats.forEach(function(t){
     var el=document.getElementById('lb-tab-'+t);
-    if(el)el.className='btn btn-sm'+(t===tab?' active':'');
+    if(el)el.className='lb-sub'+(t===tab?' active':'');
   });
+  ['x01','sh7','sh20','atc','hi','co121','afg'].forEach(function(g){
+    var el=document.getElementById('lb-game-'+g);
+    if(el)el.className='lb-chip'+((isX01?g==='x01':g===tab)?' active':'');
+  });
+  var row=document.getElementById('lb-stat-row');
+  if(row)row.style.display=isX01?'':'none';
+  var act=document.querySelector('.lb-chip.active');
+  if(act&&act.scrollIntoView)try{act.scrollIntoView({block:'nearest',inline:'center'});}catch(e){}
   renderLeaderboard(tab);
 }
 
@@ -7003,7 +7041,7 @@ function renderLeaderboard(tab){
   var el=document.getElementById('leaderboard-content');
   if(!el)return;
   var names=Object.keys(db);
-  if(!names.length){el.innerHTML='<div class="empty">Nog geen statistieken</div>';return;}
+  if(!names.length){el.innerHTML=emptyState('Nog geen statistieken','Na je eerste potje zie je hier gemiddelden, checkouts en je beste beurten.',true);return;}
 
   var medals=['🥇','🥈','🥉'];
 
@@ -7013,7 +7051,7 @@ function renderLeaderboard(tab){
       var s=calcGameStats(name,'afgooien');
       return{name:name, wins:s?s.wins:0, games:s?s.games:0};
     }).filter(function(r){return r.games>0;});
-    if(!rows.length){el.innerHTML='<div class="empty">Nog niemand heeft Afgooien gespeeld</div>';return;}
+    if(!rows.length){el.innerHTML=emptyState('Nog niemand heeft Afgooien gespeeld','',false);return;}
     rows.sort(function(a,b){
       if(b.wins!==a.wins) return b.wins-a.wins;
       return (b.games>0?b.wins/b.games:0)-(a.games>0?a.wins/a.games:0);
@@ -7043,7 +7081,7 @@ function renderLeaderboard(tab){
       return{name:name, val:s?s.highScore:null, games:s?s.games:0, wins:s?s.wins:0};
     }).filter(function(r){return r.val!=null&&r.games>0});
 
-    if(!rows.length){el.innerHTML='<div class="empty">Nog niemand heeft dit spel gespeeld</div>';return;}
+    if(!rows.length){el.innerHTML=emptyState('Nog niemand heeft dit spel gespeeld','',false);return;}
 
     rows.sort(function(a,b){return b.val-a.val});
 
@@ -7104,7 +7142,7 @@ function renderLeaderboard(tab){
     return true;
   });
 
-  if(!filtered.length){el.innerHTML='<div class="empty">Nog geen 501/301 statistieken</div>';return;}
+  if(!filtered.length){el.innerHTML=emptyState('Nog geen 501 / 301-statistieken','',false);return;}
 
   el.innerHTML='<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">'+labels[tab]+'</div>'+
     filtered.map(function(r,i){
@@ -7126,7 +7164,7 @@ function renderHistory(){
   var el=document.getElementById('history-content');
   if(!el)return;
   var names=Object.keys(db);
-  if(!names.length){el.innerHTML='<div class="empty">Nog geen wedstrijden gespeeld</div>';return;}
+  if(!names.length){el.innerHTML=emptyState('Nog geen wedstrijden gespeeld','Elk potje dat je speelt komt hier te staan, met de uitslag per leg.',true);return;}
 
   // Default to first player if none selected
   if(!historySelectedPlayer||names.indexOf(historySelectedPlayer)<0){
@@ -7796,7 +7834,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=194;
+var APP_VERSION=195;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -8597,7 +8635,7 @@ function renderAfgBull(){
       '<div style="font-size:13px;color:var(--muted);margin-bottom:12px">Wat raakte hij/zij?</div>'+
       '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">'+
         '<div style="display:flex;gap:8px">'+
-          '<button class="btn btn-primary" style="flex:1;font-weight:700" data-bull-type="bull2" data-bull-val="50">🎯 Bull (50)</button>'+
+          '<button class="btn btn-primary" style="flex:1;font-weight:700" data-bull-type="bull2" data-bull-val="50">Bull (50)</button>'+
           '<button class="btn" style="flex:1;font-weight:700;border-color:rgba(181,80,47,.3)" data-bull-type="bull1" data-bull-val="25">Bull buiten (25)</button>'+
         '</div>'+
         '<button class="btn" style="color:var(--muted)" data-bull-type="miss" data-bull-val="0">✕ Mis / buiten</button>'+
