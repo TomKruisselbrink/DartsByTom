@@ -257,6 +257,17 @@ body::before{
 .ac-row{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:40px;border-top:1px solid var(--border);font-size:14px}
 .ac-row span{color:var(--muted)}.ac-row b{color:var(--text);text-align:right}
 .ac-btns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;margin-top:10px}
+.vc-row{display:flex;gap:8px;margin-top:12px}
+.vc-row select{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:14px;font-weight:700;padding:0 10px}
+.vc-hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:8px}.vc-hint:empty{display:none}
+.sp-open{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;border:0;padding:4px 0;color:var(--muted);cursor:pointer;text-align:left;font:inherit}
+.sp-open>span b{display:block;font-size:15px;color:var(--text)}
+.sp-open>span span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.sp-search{width:100%;box-sizing:border-box;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;padding:0 12px;margin-bottom:6px}
+.sp-head{width:100%;display:flex;align-items:center;gap:8px;min-height:48px;background:transparent;border:0;padding:0;color:var(--text);font:inherit;cursor:pointer;text-align:left}
+.sp-head b{flex:1;min-width:0;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-nk{font-size:12px;color:var(--muted);max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-row.open{padding-bottom:12px}
 .fr-add{display:flex;gap:8px}
 .fr-add input{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;padding:0 12px}
 .fr-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 4px}
@@ -410,6 +421,7 @@ body::before{
 #x01-stats-sheet.open{display:flex}
 .x01-sheet-panel{width:100%;max-width:560px;max-height:78vh;overflow-y:auto;background:var(--surface);border-radius:20px 20px 0 0;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 96px);box-sizing:border-box}
 .game-sheet{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
+.game-sheet .x01-sheet-panel{background:linear-gradient(var(--surface),var(--surface)),var(--bg);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
 .x01-sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:var(--text)}
 .x01-sheet-head b{font-size:16px}
 .x01-sheet-head button{width:40px;height:40px;border:none;border-radius:50%;background:var(--card);color:var(--text);font-size:22px;cursor:pointer}
@@ -1699,6 +1711,11 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <label for="caller-enabled" style="cursor:pointer"><span style="display:block;font-size:14px;font-weight:700;color:var(--text)">Omroeper</span><span style="display:block;font-size:12px;color:var(--muted);margin-top:2px">"Tom, you require 121" bij een finish, plus 180 en game shot</span></label>
       <input type="checkbox" id="caller-enabled" class="ios-toggle" onchange="setCallerEnabled(this.checked);if(this.checked)callerSay('Game on!',true)">
     </div>
+    <div class="vc-row">
+      <select id="caller-voice" onchange="setCallerVoice(this.value)"><option value="">Automatisch</option></select>
+      <button class="sp-say" aria-label="Stem testen" onclick="callerSay('Game on! Tom, you require 121',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
+    </div>
+    <div class="vc-hint" id="caller-voice-hint"></div>
   </div>
   <div class="card" style="margin-bottom:10px">
     <div style="display:flex;justify-content:space-between;align-items:center">
@@ -1732,7 +1749,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
   <!-- Spelers: bijnaam voor omroeper + delen met groep (v201) -->
   <div class="card" style="margin-bottom:10px">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Spelers</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.45">Bijnaam = wat de omroeper zegt (ook handig om een naam goed uitgesproken te krijgen). Uit bij "Delen" = speler blijft privé op deze telefoon.</div>
     <div id="settings-players"></div>
   </div>
   <!-- Export / Import (verplaatst van Statistieken, v198) -->
@@ -2361,17 +2377,36 @@ var soundEnabled=(localStorage.getItem('darts_sound')!=='0');
 var callerEnabled=(function(){try{return localStorage.getItem('darts_caller')!=='0';}catch(e){return true;}})();
 function renderSettingsPlayers(){
   var el=document.getElementById('settings-players');if(!el)return;
-  var db=getDB();var names=Object.keys(db).sort(function(a,b){return a.localeCompare(b);});
-  if(!names.length){el.innerHTML='<div style="font-size:13px;color:var(--muted)">Nog geen spelers. Ze verschijnen hier na hun eerste potje.</div>';el.innerHTML+=_hiddenArchiveHtml();return;}
-  el.innerHTML=names.map(function(n){
-    var en=encodeURIComponent(n), nick=(db[n]&&db[n].nickname)||'', priv=isPrivatePlayer(n);
-    return '<div class="sp-row">'+
-      '<div class="sp-top"><b>'+n+'</b><span class="sp-tag'+(priv?' priv':'')+'">'+(priv?'privé':'gedeeld')+'</span></div>'+
-      '<div class="sp-bottom">'+
-        '<input type="text" class="sp-nick" placeholder="Bijnaam" value="'+nick.replace(/"/g,'&quot;')+'" data-n="'+en+'" onchange="setPlayerNickname(decodeURIComponent(this.getAttribute(\'data-n\')),this.value)">'+
+  var db=dbCache,names=Object.keys(db);
+  var priv=names.filter(isPrivatePlayer).length,nick=names.filter(function(n){return db[n]&&db[n].nickname;}).length,arc=Object.keys(_getHiddenArchive()).length;
+  var parts=[names.length+(names.length===1?' speler':' spelers')];
+  if(priv)parts.push(priv+' privé');if(nick)parts.push(nick+' met bijnaam');if(arc)parts.push(arc+' verborgen');
+  el.innerHTML='<button class="sp-open" onclick="openPlayersSheet()"><span><b>'+(names.length?parts.join(' · '):'Nog geen spelers')+'</b><span>Bijnaam voor de omroeper en wie je deelt</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>';
+  var list=document.getElementById('sp-sheet-list');if(list)_renderPlayersList();
+}
+var _spOpen='';
+function openPlayersSheet(){
+  _spOpen='';
+  openGameSheet('Spelers','<div class="ac-note" style="margin-bottom:8px">Tik op een speler voor bijnaam en delen. Bijnaam = wat de omroeper zegt. Delen uit = speler blijft privé op deze telefoon.</div>'+
+    '<input id="sp-search" class="sp-search" placeholder="Zoek speler" autocomplete="off" oninput="_renderPlayersList()">'+
+    '<div id="sp-sheet-list"></div>');
+  _renderPlayersList();
+}
+function _spToggle(en){var n=decodeURIComponent(en);_spOpen=_spOpen===n?'':n;_renderPlayersList();}
+function _renderPlayersList(){
+  var el=document.getElementById('sp-sheet-list');if(!el)return;
+  var db=dbCache,q=((document.getElementById('sp-search')||{}).value||'').trim().toLowerCase();
+  var names=Object.keys(db).sort(function(a,b){return a.localeCompare(b);}).filter(function(n){return !q||n.toLowerCase().indexOf(q)>=0||((db[n].nickname||'').toLowerCase().indexOf(q)>=0);});
+  if(!Object.keys(db).length){el.innerHTML='<div class="ac-note">Nog geen spelers. Ze verschijnen hier na hun eerste potje.</div>'+_hiddenArchiveHtml();return;}
+  el.innerHTML=(names.length?'':'<div class="ac-note">Geen speler gevonden.</div>')+names.map(function(n){
+    var en=encodeURIComponent(n),nk=(db[n]&&db[n].nickname)||'',pv=isPrivatePlayer(n),open=_spOpen===n;
+    var h='<div class="sp-row'+(open?' open':'')+'"><button class="sp-head" onclick="_spToggle(\''+en+'\')"><b>'+_esc(n)+'</b>'+(nk?'<span class="sp-nk">'+_esc(nk)+'</span>':'')+'<span class="sp-tag'+(pv?' priv':'')+'">'+(pv?'privé':'gedeeld')+'</span></button>';
+    if(open)h+='<div class="sp-bottom">'+
+        '<input type="text" class="sp-nick" placeholder="Bijnaam" value="'+_esc(nk)+'" data-n="'+en+'" onchange="setPlayerNickname(decodeURIComponent(this.getAttribute(\'data-n\')),this.value);renderSettingsPlayers()">'+
         '<button class="sp-say" aria-label="Laat horen" onclick="var i=this.parentNode.querySelector(\'.sp-nick\');callerSay((i.value.trim()||decodeURIComponent(\''+en+'\'))+\', you require 32\',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>'+
-        '<label class="sp-share"><span>Delen</span><input type="checkbox" class="ios-toggle"'+(priv?'':' checked')+' onchange="setPlayerPrivate(decodeURIComponent(\''+en+'\'),!this.checked);renderSettingsPlayers()"></label>'+
-      '</div></div>';
+        '<label class="sp-share"><span>Delen</span><input type="checkbox" class="ios-toggle"'+(pv?'':' checked')+' onchange="setPlayerPrivate(decodeURIComponent(\''+en+'\'),!this.checked);renderSettingsPlayers()"></label>'+
+      '</div>';
+    return h+'</div>';
   }).join('')+_hiddenArchiveHtml();
 }
 function _hiddenArchiveHtml(){
@@ -2388,14 +2423,42 @@ function setPlayerNickname(name,val){
 }
 function setCallerEnabled(v){callerEnabled=v;try{localStorage.setItem('darts_caller',v?'1':'0');}catch(e){}if(!v&&window.speechSynthesis)speechSynthesis.cancel();}
 var _callerVoice=null;
+function _voiceQuality(v){var t=(v.name+' '+v.voiceURI).toLowerCase();return /premium/.test(t)?2:(/enhanced|verbeterd|neural|natural/.test(t)?1:0);}
+function _englishVoices(){
+  if(!window.speechSynthesis)return [];
+  var vs=(speechSynthesis.getVoices()||[]).filter(function(v){return /^en/i.test(v.lang);});
+  return vs.sort(function(a,b){
+    var gb=function(v){return /en[-_]GB/i.test(v.lang)?1:0;};
+    return (_voiceQuality(b)-_voiceQuality(a))||(gb(b)-gb(a))||a.name.localeCompare(b.name);
+  });
+}
 function _pickCallerVoice(){
   if(!window.speechSynthesis)return null;
   var vs=speechSynthesis.getVoices()||[];
+  var want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){}
+  if(want){var w=vs.find(function(x){return x.voiceURI===want;});if(w)return w;}
+  var en=_englishVoices();
+  // Beste kwaliteit eerst (Premium / Verbeterd), dan Britse mannenstemmen
+  var top=en.filter(function(v){return _voiceQuality(v)>0&&/en[-_]GB/i.test(v.lang);});
+  if(top.length)return top[0];
   var pref=['Daniel','Google UK English Male','Arthur','Oliver','Microsoft Ryan','Microsoft George'];
   for(var i=0;i<pref.length;i++){var v=vs.find(function(x){return x.name.indexOf(pref[i])>=0;});if(v)return v;}
-  return vs.find(function(x){return /en-GB/i.test(x.lang);})||vs.find(function(x){return /^en/i.test(x.lang);})||null;
+  return en.find(function(x){return /en[-_]GB/i.test(x.lang);})||en[0]||null;
 }
-if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=function(){_callerVoice=_pickCallerVoice();};}catch(e){}}
+function setCallerVoice(uri){try{localStorage.setItem('darts_caller_voice',uri||'');}catch(e){}_callerVoice=_pickCallerVoice();callerSay('Game on!',true);}
+function renderVoicePicker(){
+  var sel=document.getElementById('caller-voice'),hint=document.getElementById('caller-voice-hint');if(!sel)return;
+  var en=_englishVoices(),want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){}
+  var q=['','(verbeterd)','(premium)'];
+  sel.innerHTML='<option value="">Automatisch</option>'+en.map(function(v){
+    var label=v.name.replace(/\s*\((enhanced|premium|verbeterd)\)\s*/i,' ')+' '+q[_voiceQuality(v)]+' · '+v.lang.replace('_','-');
+    return '<option value="'+_esc(v.voiceURI)+'"'+(v.voiceURI===want?' selected':'')+'>'+_esc(label.replace(/\s+/g,' ').trim())+'</option>';
+  }).join('');
+  var hasGood=en.some(function(v){return _voiceQuality(v)>0;});
+  var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(hint)hint.textContent=hasGood?'':(ios?'Betere stem? Download er een op je iPhone: Instellingen › Toegankelijkheid › Gesproken materiaal › Stemmen › Engels, kies bijv. Daniel of Arthur en tik op "Verbeterd" of "Premium". Herstart daarna de app.':'Tip: installeer een betere Engelse stem in de spraakinstellingen van je apparaat.');
+}
+if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=function(){_callerVoice=_pickCallerVoice();renderVoicePicker();};}catch(e){}}
 function callerSay(text,interrupt){
   if(!callerEnabled||!window.speechSynthesis||!text)return;
   try{
@@ -2942,12 +3005,40 @@ function frLink(uid,local){
   Object.keys(L).forEach(function(k){if(L[k]&&L[k].uid===uid)delete L[k];});
   var S=_ls('darts_friend_shadow',{});
   if(local){
-    L[local]={uid:uid,username:(frFriends[uid]&&frFriends[uid].username)||''};
-    var p=dbCache[local];S[local]=(p&&Array.isArray(p.gameHistory))?p.gameHistory.map(_ekey):[];
-    showToast('Nieuwe potjes van '+local+' gaan nu ook naar '+L[local].username,'success');
-  }
-  _lsSet('darts_friend_links',L);_lsSet('darts_friend_shadow',S);
+    var uname=(frFriends[uid]&&frFriends[uid].username)||'';
+    L[local]={uid:uid,username:uname};
+    var p=dbCache[local];
+    S[local]={k:(p&&Array.isArray(p.gameHistory))?p.gameHistory.map(_ekey):[],ds:JSON.parse(JSON.stringify((p&&p.doubleStats)||{}))};
+    _lsSet('darts_friend_links',L);_lsSet('darts_friend_shadow',S);
+    var n=(p&&Array.isArray(p.gameHistory))?p.gameHistory.length:0;
+    if(n){
+      openGameSheet('Eerdere potjes meesturen?',
+        '<div class="ac-note">'+_esc(local)+' heeft al <b>'+n+'</b> '+(n===1?'potje':'potjes')+' op deze telefoon. Wil je die ook in het account van '+_esc(uname)+' zetten? Potjes die hij al heeft, worden overgeslagen.</div>'+
+        '<button class="g-hit" style="width:100%" onclick="closeGameSheet();frSendHistory(decodeURIComponent(\''+encodeURIComponent(local)+'\'))">Ja, alle '+n+' potjes meesturen</button>'+
+        '<button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="closeGameSheet();showToast(\'Alleen nieuwe potjes gaan mee\',\'info\')">Nee, alleen nieuwe potjes</button>');
+    } else showToast('Nieuwe potjes van '+local+' gaan nu ook naar '+uname,'success');
+  } else {_lsSet('darts_friend_links',L);_lsSet('darts_friend_shadow',S);}
   renderFriendsCard();_acctScheduleBackup(500);
+}
+// Hele geschiedenis (en favoriete dubbels) van een gekoppelde speler naar de vriend sturen
+function frSendHistory(local){
+  var lk=getFriendLinks()[local];var p=dbCache[local];
+  if(!lk||!p||!Array.isArray(p.gameHistory)||!acctUser)return;
+  var changed=false;
+  p.gameHistory.forEach(function(e){if(e&&!e.gid){e.gid='L'+_hash(JSON.stringify(e)).slice(1);changed=true;}});
+  if(changed){try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){_storageFull(e);}}
+  var pm=_privMap(),games=p.gameHistory.filter(function(e){return e&&!e.via;}).map(function(e){return _frSanitize(e,pm);});
+  var out=_ls('darts_outbox',[]),first=true,hs=_ls('darts_hist_sent',{}),hk=lk.uid+'|'+local,dsDone=!!hs[hk];
+  hs[hk]=1;_lsSet('darts_hist_sent',hs);
+  for(var i=0;i<games.length;i+=80){
+    out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:games.slice(i,i+80),ds:(first&&!dsDone)?JSON.parse(JSON.stringify(p.doubleStats||{})):null,hist:true,ts:Date.now()}});
+    first=false;
+  }
+  if(!games.length&&p.doubleStats&&!dsDone)out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:[],ds:p.doubleStats,hist:true,ts:Date.now()}});
+  // schaduw bijwerken, zodat dezelfde potjes niet nog eens als "nieuw" gaan
+  var S=_ls('darts_friend_shadow',{});S[local]={k:p.gameHistory.map(_ekey),ds:JSON.parse(JSON.stringify(p.doubleStats||{}))};_lsSet('darts_friend_shadow',S);
+  _lsSet('darts_outbox',out);_outboxFlush();
+  showToast(games.length+' potjes worden naar '+lk.username+' gestuurd','success');
 }
 function _hash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return 'h'+(h>>>0).toString(36)+'.'+s.length;}
 function _ekey(e){return (e&&e.gid)?('g:'+e.gid):_hash(JSON.stringify(e));}
@@ -2961,11 +3052,14 @@ function _frSync(){
   Object.keys(L).forEach(function(local){
     var lk=L[local];if(!lk||!frFriends[lk.uid])return;
     var p=dbCache[local];if(!p||!Array.isArray(p.gameHistory))return;
-    var seen={};(S[local]||[]).forEach(function(k){seen[k]=1;});
+    var sh=S[local];if(Array.isArray(sh))sh={k:sh,ds:JSON.parse(JSON.stringify(p.doubleStats||{}))};if(!sh)sh={k:[],ds:{}};
+    var seen={};(sh.k||[]).forEach(function(k){seen[k]=1;});
     var fresh=p.gameHistory.filter(function(e){return e&&e.gid&&e.gid.indexOf(DEVICE_ID+'-')===0&&!seen['g:'+e.gid];});
-    S[local]=p.gameHistory.map(_ekey);
+    var ds=null,cur=p.doubleStats||{};
+    if(fresh.length){Object.keys(cur).forEach(function(k){var d=(cur[k]||0)-((sh.ds&&sh.ds[k])||0);if(d>0){ds=ds||{};ds[k]=d;}});}
+    S[local]={k:p.gameHistory.map(_ekey),ds:JSON.parse(JSON.stringify(cur))};
     if(fresh.length){
-      out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:fresh.map(function(e){return _frSanitize(e,pm);}),ts:Date.now()}});
+      out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:fresh.map(function(e){return _frSanitize(e,pm);}),ds:ds,ts:Date.now()}});
       added=true;
     }
   });
@@ -2995,28 +3089,32 @@ function _inboxApply(docs){
   if(!docs||!docs.length||!acctUser)return;
   var me=acctProfile&&acctProfile.player;
   if(!me){renderFriendsCard();return;} // eerst je eigen speler kiezen; potjes blijven veilig in de inbox
-  var applied=_ls('darts_inbox_applied',[]),n=0,from={};
+  var applied=_ls('darts_inbox_applied',[]),n=0,dsN=0,from={};
   if(!dbCache[me])dbCache[me]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
   var p=dbCache[me];if(!Array.isArray(p.gameHistory))p.gameHistory=[];
-  var have={};p.gameHistory.forEach(function(e){if(e&&e.gid)have[e.gid]=1;});
+  var have={},haveC={};
+  function ck(e){var d=e.detailedStats||{};return [e.date,e.gameType,e.won?1:0,e.darts||0,e.score||0,d.avg3||'',d.turns||'',e.legResult||'',e.highScore||'',e.afgScore||''].join('|');}
+  p.gameHistory.forEach(function(e){if(!e)return;if(e.gid)have[e.gid]=1;haveC[ck(e)]=1;});
   docs.forEach(function(d){
     if(applied.indexOf(d.id)<0){
       var pl=d.data||{},map={};if(pl.as)map[pl.as]=me;
       (pl.games||[]).slice().reverse().forEach(function(e){
         if(!e||!e.gid||have[e.gid])return;
-        var g=_frSanitize(e,map);g.via=pl.fromName||'';
+        if(e.gid.charAt(0)==='L'&&haveC[ck(e)])return; // oud potje dat je al had
+        var g=_frSanitize(e,map);g.via=pl.fromName||'';haveC[ck(g)]=1;
         p.gameHistory.unshift(g);have[e.gid]=1;n++;
         p.games=(p.games||0)+1;if(g.won)p.wins=(p.wins||0)+1;
         p.totalDarts=(p.totalDarts||0)+(g.darts||0);p.totalScore=(p.totalScore||0)+(g.score||0);
       });
+      if(pl.ds&&typeof pl.ds==='object'){p.doubleStats=p.doubleStats||{};Object.keys(pl.ds).forEach(function(k){var v=+pl.ds[k]||0;if(v>0){p.doubleStats[k]=(p.doubleStats[k]||0)+v;dsN++;}});}
       applied.push(d.id);if(pl.fromName)from[pl.fromName]=1;
     }
     _acctUserRef().collection('inbox').doc(d.id).delete().catch(function(e){console.error('Inbox opruimen',e);});
   });
   _lsSet('darts_inbox_applied',applied.slice(-300));
   _inboxDocs=[];
-  if(n){
-    if(p.gameHistory.length>50)p.gameHistory=p.gameHistory.slice(0,50);
+  if(n||dsN){
+    _sortHistory(p);_trimHistory(p);
     saveDB(dbCache);
     showToast(n+(n===1?' potje':' potjes')+' van '+Object.keys(from).join(', ')+' toegevoegd','success');
     _refreshScopeScreens();
@@ -3127,10 +3225,31 @@ function _scoped(impl,screenId,elId,args){
   if(fr){var el=document.getElementById(elId);if(el)el.querySelectorAll('.st-danger,[onclick*="deleteMatchEntry"],[onclick*="generateChallenge"]').forEach(function(b){b.parentNode&&b.parentNode.removeChild(b);});}
 }
 
+// ═══ Geschiedenis zonder limiet (v204) ═══
+// Alle potjes blijven bewaard. Bij potjes ouder dan de nieuwste 200 vervalt alleen het leg-voor-leg detail
+// (gemiddelden, checkouts en uitslag blijven), zodat de telefoonopslag niet volloopt.
+var HISTORY_DETAIL_KEEP=200,_histLimit=30,_storageWarned=false;
+function _trimHistory(p){
+  if(!p||!Array.isArray(p.gameHistory))return;
+  for(var i=HISTORY_DETAIL_KEEP;i<p.gameHistory.length;i++){var e=p.gameHistory[i];if(e&&(e.legBreakdown||e.hiRoundHistory)){delete e.legBreakdown;delete e.hiRoundHistory;}}
+}
+function _dateNum(d){var m=/^(\d{1,2})-(\d{1,2})-(\d{4})/.exec(d||'');return m?(+m[3])*10000+(+m[2])*100+(+m[1]):0;}
+function _sortHistory(p){
+  if(!p||!Array.isArray(p.gameHistory))return;
+  var idx=p.gameHistory.map(function(e,i){return {e:e,i:i,d:_dateNum(e&&e.date)};});
+  idx.sort(function(a,b){return (b.d-a.d)||(a.i-b.i);});
+  p.gameHistory=idx.map(function(x){return x.e;});
+}
+function _storageFull(e){
+  console.error('Lokaal opslaan mislukt',e);
+  if(_storageWarned)return;_storageWarned=true;
+  showToast((acctUser?'Telefoonopslag vol: je cloud-back-up is nog veilig':'Telefoonopslag vol: maak een account voor een back-up'),'error');
+}
+
 function saveDB(db){
   dbCache = db;
   // Always persist locally as backup
-  try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
+  try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){_storageFull(e);}
   _acctScheduleBackup();
   _frScheduleSync();
   if(!groupCode) return;
@@ -3306,7 +3425,7 @@ function updatePlayerStat(name,gameType,data){
   if(data.hiStats)entry.hiStats=data.hiStats;
   if(data.hiRoundHistory)entry.hiRoundHistory=data.hiRoundHistory;
   p.gameHistory.unshift(entry);
-  if(p.gameHistory.length>50)p.gameHistory=p.gameHistory.slice(0,50);
+  _trimHistory(p);
   db[name]=p;saveDB(db);
 }
 
@@ -3388,7 +3507,7 @@ function showScreen(id){
     if(id!=='screen-game'&&typeof toggleX01Stats==='function')toggleX01Stats(false);
   }
   // Tournament nav rendered inline in renderTrnOverview/renderStandings
-  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();renderFriendsCard();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
+  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();renderFriendsCard();renderVoicePicker();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
   if(id==='screen-stats')renderStats();
   if(id==='screen-leaderboard'){renderLeaderboard('avg');}
   if(id==='screen-history')renderHistory();
@@ -7714,8 +7833,7 @@ function importStats(){
         if(existingKeys.indexOf(key)<0){local.gameHistory.push(g);added++;}
       });
       if(added>0){
-        local.gameHistory.sort(function(a,b){return b.date>a.date?1:-1});
-        if(local.gameHistory.length>50)local.gameHistory=local.gameHistory.slice(0,50);
+        _sortHistory(local);_trimHistory(local);
         local.games=local.gameHistory.length;
         local.wins=local.gameHistory.filter(function(g){return g.won}).length;
         updatedNames.push(name+' (+'+added+')');
@@ -8154,7 +8272,7 @@ function _renderHistoryImpl(){
 
   // Games for selected player
   var p=db[historySelectedPlayer];
-  var games=(p.gameHistory||[]).slice(0,30);
+  var games=(p.gameHistory||[]).slice(0,_histLimit);
 
   var _lastDay=null;
   function _dayLabel(d){
@@ -8258,11 +8376,12 @@ function _renderHistoryImpl(){
   el.innerHTML=
     '<div class="lb-chiprow">'+tabs+'</div>'+
     // Game list
-    gameRows;
+    gameRows+
+    ((p.gameHistory||[]).length>_histLimit?'<button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="_histLimit+=50;renderHistory()">Toon meer ('+((p.gameHistory||[]).length-_histLimit)+' oudere)</button>':'');
 }
 
 function selectHistoryPlayer(name){
-  historySelectedPlayer=name;
+  historySelectedPlayer=name;_histLimit=30;
   renderHistory();
 }
 
@@ -8779,7 +8898,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=203;
+var APP_VERSION=204;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -10019,7 +10138,7 @@ function _afgWin(winner){
       afgScore:q.score,
       players:allNames.length
     });
-    if(pr.gameHistory.length>50)pr.gameHistory=pr.gameHistory.slice(0,50);
+    _trimHistory(pr);
     db[q.name]=pr; saveDB(db);
   });
   showScreen('screen-home');
