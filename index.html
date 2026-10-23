@@ -3744,7 +3744,7 @@ function renderAccountCard(){
   var me=(acctProfile&&acctProfile.player)||'';
   var names=Object.keys(getDB()).sort(function(a,b){return a.localeCompare(b);});
   if(me&&names.indexOf(me)<0)names.unshift(me);
-  el.innerHTML='<div class="ac-row" style="border-top:0"><span>Ingelogd als</span><b>'+_esc(uname)+'</b></div>'+
+  el.innerHTML='<div class="ac-row" style="border-top:0"><span>Ingelogd als</span><b>'+_esc(me||uname)+(me?' <span style="font-weight:600;color:var(--muted)">@'+_esc(uname)+'</span>':'')+'</b></div>'+
     '<div class="ac-row"><span>Jij bent</span><select onchange="acctSetPlayer(this.value)" style="height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-weight:700;padding:0 10px;max-width:60%">'+
       (me?'':'<option value="">Kies je speler</option>')+names.map(function(n){return '<option value="'+_esc(n)+'"'+(n===me?' selected':'')+'>'+_esc(n)+'</option>';}).join('')+'</select></div>'+
     '<div class="ac-row"><span>Laatste back-up</span><b id="ac-last">'+(_acctReady?_fmtTs(acctBackupMeta&&acctBackupMeta.ts):'laden…')+'</b></div>'+
@@ -4287,7 +4287,7 @@ function stClose(){
 function _stSum(id,txt){var e=document.getElementById('st-sum-'+id);if(e)e.textContent=txt;}
 function renderSettingsMenu(){
   if(!document.getElementById('st-menu'))return;
-  _stSum('account',acctUser?('Ingelogd als '+_myUsername()):'Niet ingelogd · maak een back-up in de cloud');
+  _stSum('account',acctUser?('Ingelogd als '+((acctProfile&&acctProfile.player)||_myUsername())):'Niet ingelogd · maak een back-up in de cloud');
   var nf=Object.keys(frFriends||{}).length,nr=Object.keys(frIn||{}).length;
   _stSum('friends',!acctUser?'Log in om vrienden toe te voegen':(nf?(nf+(nf===1?' vriend':' vrienden')):'Nog geen vrienden')+(nr?' · '+nr+(nr===1?' nieuw verzoek':' nieuwe verzoeken'):''));
   var bd=document.getElementById('st-badge-friends');if(bd){bd.hidden=!nr;bd.textContent=nr;}
@@ -9862,7 +9862,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=212;
+var APP_VERSION=213;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
