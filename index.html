@@ -1118,6 +1118,42 @@ h2.page-head svg{display:none !important}
 .trn-fmt-groups .setup-section-label { margin: 0; }
 #screen-trn-setup .trn-fmt-groups .seg-ctrl { margin-bottom: 0; }
 
+
+/* ═══ Knopgevoel (v208): spelknoppen met diepte en indrukeffect ═══ */
+:root{--k-hi:rgba(255,255,255,.14);--k-top:rgba(255,255,255,.10);--k-bot:rgba(255,255,255,.015);--k-edge:rgba(0,0,0,.6);--k-drop:rgba(0,0,0,.32)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--k-hi:rgba(255,255,255,.95);--k-top:rgba(255,255,255,.85);--k-bot:rgba(255,255,255,.25);--k-edge:rgba(0,0,0,.17);--k-drop:rgba(0,0,0,.08)}}
+:root[data-theme="light"]{--k-hi:rgba(255,255,255,.95);--k-top:rgba(255,255,255,.85);--k-bot:rgba(255,255,255,.25);--k-edge:rgba(0,0,0,.17);--k-drop:rgba(0,0,0,.08)}
+.x01-pad .btn:not(.btn-primary),.numpad .btn:not(.btn-primary):not(.btn-danger),.x01-input .btn-sm,.g-keys button,.g-big3 button,.g-sec{
+  background-image:linear-gradient(180deg,var(--k-top),var(--k-bot)) !important;
+  border:1px solid var(--border) !important;
+  box-shadow:inset 0 1px 0 var(--k-hi),0 3px 0 var(--k-edge),0 7px 12px -4px var(--k-drop) !important;
+  transform:translateY(0);
+  transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 70ms ease-out !important;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+.x01-pad .btn:not(.btn-primary):active:not(:disabled),.numpad .btn:not(.btn-primary):not(.btn-danger):active:not(:disabled),.x01-input .btn-sm:active:not(:disabled),.g-keys button:active:not(:disabled),.g-big3 button:active:not(:disabled),.g-sec:active:not(:disabled),.x01-pad .btn:not(.btn-primary).k-down,.numpad .btn:not(.btn-primary):not(.btn-danger).k-down,.x01-input .btn-sm.k-down,.g-keys button.k-down,.g-big3 button.k-down,.g-sec.k-down{
+  transform:translateY(3px) !important;
+  box-shadow:inset 0 1px 0 var(--k-hi),0 0 0 var(--k-edge),0 2px 4px -2px var(--k-drop) !important;
+  filter:brightness(.94);
+  transition-duration:15ms !important;
+}
+.g-keys button:disabled{box-shadow:none !important;background-image:none !important}
+.x01-pad .btn-primary,.numpad .btn-primary,.g-hit{
+  background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 58%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 3px 0 rgba(0,0,0,.4),0 8px 14px -4px rgba(0,0,0,.35) !important;
+  transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 70ms ease-out !important;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+.x01-pad .btn-primary:active,.numpad .btn-primary:active,.g-hit:active,.x01-pad .btn-primary.k-down,.numpad .btn-primary.k-down,.g-hit.k-down{
+  transform:translateY(3px) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 0 rgba(0,0,0,.4),0 2px 4px -2px rgba(0,0,0,.3) !important;
+  filter:brightness(.9);
+  transition-duration:15ms !important;
+}
+.g-miss{box-shadow:0 3px 0 rgba(255,90,70,.28);transition:transform 70ms ease-out,box-shadow 70ms ease-out;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.g-miss:active,.g-miss.k-down{transform:translateY(3px);box-shadow:0 0 0 rgba(255,90,70,.28)}
+.g-seg button{transition:transform 60ms ease-out}
+.g-seg button:active,.g-seg button.k-down{transform:scale(.96)}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -1708,6 +1744,12 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <div style="display:flex;justify-content:space-between;align-items:center">
       <label for="sound-enabled" style="font-size:14px;font-weight:700;color:var(--text);cursor:pointer" id="set-lbl-sound">Geluid</label>
       <input type="checkbox" id="sound-enabled" class="ios-toggle" checked onchange="setSoundEnabled(this.checked)">
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+      <label for="haptics-enabled" style="cursor:pointer"><span style="display:block;font-size:14px;font-weight:700;color:var(--text)">Trillen bij tikken</span><span style="display:block;font-size:12px;color:var(--muted);margin-top:2px">Korte tik bij elke knop tijdens een potje</span></label>
+      <input type="checkbox" id="haptics-enabled" class="ios-toggle" onchange="setHaptics(this.checked)">
     </div>
   </div>
   <div class="card" style="margin-bottom:10px">
@@ -3262,6 +3304,36 @@ function _storageFull(e){
   showToast((acctUser?'Telefoonopslag vol: je cloud-back-up is nog veilig':'Telefoonopslag vol: maak een account voor een back-up'),'error');
 }
 
+// ═══ Knopgevoel (v208): indrukeffect ook op iPhone + trillen bij tikken ═══
+var hapticsOn=(function(){try{return localStorage.getItem('darts_haptics')!=='0';}catch(e){return true;}})();
+var _KSEL='.x01-pad .btn,.numpad .btn,.x01-input .btn-sm,.g-keys button,.g-big3 button,.g-sec,.g-hit,.g-miss,.g-seg button';
+var _hapEl=null;
+function haptic(){
+  if(!hapticsOn)return;
+  try{
+    if(navigator.vibrate){navigator.vibrate(8);return;}
+    // iPhone (iOS 18+): een verborgen schakelaar geeft een korte tik
+    if(!_hapEl){var l=document.createElement('label');l.setAttribute('aria-hidden','true');l.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';var i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;l.appendChild(i);document.body.appendChild(l);_hapEl=l;}
+    _hapEl.click();
+  }catch(e){}
+}
+function setHaptics(v){hapticsOn=!!v;try{localStorage.setItem('darts_haptics',v?'1':'0');}catch(e){}if(v)haptic();}
+(function(){
+  var down=null,t0=0;
+  function release(){if(!down)return;var el=down,wait=Math.max(0,70-(Date.now()-t0));down=null;setTimeout(function(){el.classList.remove('k-down');},wait);}
+  document.addEventListener('pointerdown',function(e){
+    var b=e.target&&e.target.closest&&e.target.closest(_KSEL);
+    if(!b||b.disabled)return;
+    down=b;t0=Date.now();b.classList.add('k-down');
+  },{passive:true});
+  document.addEventListener('pointerup',release,{passive:true});
+  document.addEventListener('pointercancel',release,{passive:true});
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest&&e.target.closest(_KSEL);
+    if(b&&!b.disabled)haptic();
+  },true);
+})();
+
 function saveDB(db){
   dbCache = db;
   // Always persist locally as backup
@@ -3525,7 +3597,7 @@ function showScreen(id){
     if(id!=='screen-game'&&typeof toggleX01Stats==='function')toggleX01Stats(false);
   }
   // Tournament nav rendered inline in renderTrnOverview/renderStandings
-  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();renderFriendsCard();renderVoicePicker();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
+  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();renderFriendsCard();renderVoicePicker();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var hcb=document.getElementById('haptics-enabled');if(hcb)hcb.checked=hapticsOn;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
   if(id==='screen-stats')renderStats();
   if(id==='screen-leaderboard'){renderLeaderboard('avg');}
   if(id==='screen-history')renderHistory();
@@ -8965,7 +9037,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=207;
+var APP_VERSION=208;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
