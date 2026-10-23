@@ -257,6 +257,19 @@ body::before{
 .ac-row{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:40px;border-top:1px solid var(--border);font-size:14px}
 .ac-row span{color:var(--muted)}.ac-row b{color:var(--text);text-align:right}
 .ac-btns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;margin-top:10px}
+.fr-add{display:flex;gap:8px}
+.fr-add input{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;padding:0 12px}
+.fr-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 4px}
+.fr-row{display:flex;align-items:center;gap:8px;min-height:48px;border-top:1px solid var(--border);padding:6px 0}
+.fr-row:first-of-type{border-top:0}
+.fr-row .fr-who{flex:1;min-width:0}
+.fr-row .fr-who b{display:block;font-size:15px;color:var(--text)}
+.fr-row .fr-who span{display:block;font-size:12px;color:var(--muted)}
+.fr-link{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:0 0 8px}
+.fr-link select{flex:1;min-width:0;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:14px;font-weight:700;padding:0 8px}
+.fr-x{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
+.scope-slot .seg-ctrl{margin:0 0 12px}
+.fr-note{font-size:12px;color:var(--muted);margin:-4px 0 10px}
 .ac-btns .btn{justify-content:center;padding-left:6px;padding-right:6px}
 
 [data-theme="light"] .sp-tag{color:#1E5631}
@@ -1698,6 +1711,11 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Account</div>
     <div id="settings-account"></div>
   </div>
+  <!-- Vrienden (v203) -->
+  <div class="card" id="settings-friends-card" style="margin-bottom:10px;display:none">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Vrienden</div>
+    <div id="settings-friends"></div>
+  </div>
   <div class="card" style="margin-bottom:10px">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Cloud &amp; Delen</div>
     <button id="group-tile" onclick="openGroupModal()" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:none;border-radius:var(--radius-sm);padding:0;cursor:pointer">
@@ -2472,7 +2490,9 @@ var groupCode = localStorage.getItem('darts_group_code') || null;
 var currentLbTab = 'avg';
 var fbListener = null;
 
-function getDB(){return dbCache;}
+var _viewDB=null;
+function getDB(){return _viewDB||dbCache;}
+function _withView(db,fn){var o=_viewDB;_viewDB=db;try{return fn();}finally{_viewDB=o;}}
 function _loadLocalDB(){
   try{var raw=localStorage.getItem('darts_db');if(raw){var d=JSON.parse(raw);if(d&&typeof d==='object')return d;}}catch(e){}
   return null;
@@ -2588,6 +2608,7 @@ function _acctErr(e){
   var m={'auth/email-already-in-use':'Deze gebruikersnaam is al bezet.','auth/invalid-credential':'Gebruikersnaam of wachtwoord klopt niet.','auth/invalid-login-credentials':'Gebruikersnaam of wachtwoord klopt niet.','auth/wrong-password':'Gebruikersnaam of wachtwoord klopt niet.','auth/user-not-found':'Gebruikersnaam of wachtwoord klopt niet.','auth/weak-password':'Wachtwoord moet minstens 6 tekens zijn.','auth/operation-not-allowed':'Inloggen staat nog niet aan in Firebase (Authentication → E-mail/wachtwoord).','auth/network-request-failed':'Geen internetverbinding.','auth/too-many-requests':'Te veel pogingen. Probeer het straks opnieuw.','permission-denied':'Firebase-regels staan dit niet toe. Zijn de nieuwe regels al geplakt?'}[c];
   return m||((e&&e.message)?e.message:'Er ging iets mis.');
 }
+function _myUsername(){return (acctProfile&&acctProfile.username)||((acctUser&&acctUser.email)||'').replace(ACCT_DOMAIN,'');}
 function _acctUserRef(){return fbDb.collection('users').doc(acctUser.uid);}
 function _esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function _fmtTs(ms){if(!ms)return 'nog niet';var d=new Date(ms);function z(n){return (n<10?'0':'')+n;}return z(d.getDate())+'-'+z(d.getMonth()+1)+' '+z(d.getHours())+':'+z(d.getMinutes());}
@@ -2597,7 +2618,7 @@ if(fbAuth){
     var same=!!(u&&acctUser&&acctUser.uid===u.uid);
     acctUser=u||null;if(!same){acctProfile=null;acctBackupMeta=null;}_acctReady=!u;
     renderAccountCard();
-    if(!u)return;
+    if(!u){frStop();renderFriendsCard();_refreshScopeScreens();_frHandlePendingInvite();return;}
     _acctUserRef().get().then(function(doc){
       var d=(doc&&doc.exists)?doc.data():null;
       acctProfile=d?Object.assign({},acctProfile||{},d):(acctProfile||{});
@@ -2607,6 +2628,7 @@ if(fbAuth){
       return _acctAutoRestore();
     }).then(function(){
       renderAccountCard();
+      frStart();
       _acctScheduleBackup(1500);
     }).catch(function(e){console.error('Account laden mislukt',e);_acctReady=true;renderAccountCard();});
   });
@@ -2633,6 +2655,9 @@ function _acctMerge(bk){
   });
   if(added.length||updated.length){
     try{localStorage.setItem('darts_db_before_restore',localStorage.getItem('darts_db')||'{}');}catch(e){}
+    if(bk&&bk.links&&typeof bk.links==='object'&&!Object.keys(getFriendLinks()).length){
+      _lsSet('darts_friend_links',bk.links);
+    }
     if(bk&&Array.isArray(bk.private)){
       var pv=getPrivatePlayers();bk.private.forEach(function(n){if(pv.indexOf(n)<0)pv.push(n);});
       try{localStorage.setItem('darts_private',JSON.stringify(pv));}catch(e){}
@@ -2670,7 +2695,7 @@ function acctBackupNow(manual){
     if(g<acctBackupMeta.games*0.5){console.warn('Back-up overgeslagen: lokaal veel minder potjes dan in de cloud');return Promise.resolve();}
   }
   _acctBackupBusy=true;
-  var str=JSON.stringify({v:1,db:db,private:getPrivatePlayers()});
+  var str=JSON.stringify({v:1,db:db,private:getPrivatePlayers(),links:getFriendLinks()});
   var chunks=[];for(var i=0;i<str.length;i+=ACCT_CHUNK)chunks.push(str.slice(i,i+ACCT_CHUNK));
   var games=0;names.forEach(function(n){games+=_games(db[n]);});
   var ref=_acctUserRef().collection('backup');
@@ -2679,6 +2704,18 @@ function acctBackupNow(manual){
   var old=(acctBackupMeta&&acctBackupMeta.chunks)||0;
   for(var j=chunks.length;j<old;j++)b.delete(ref.doc('c'+j));
   var meta={ts:Date.now(),chunks:chunks.length,players:names,games:games,app:APP_VERSION};
+  // Openbaar voor vrienden: alleen jouw eigen speler, privé-spelers als "Gast"
+  var me=acctProfile&&acctProfile.player;
+  meta.pubChunks=(acctBackupMeta&&acctBackupMeta.pubChunks)||0;
+  if(me&&db[me]){
+    var pstr=JSON.stringify(_frSanitize(db[me],_privMap()));
+    var pch=[];for(var pi=0;pi<pstr.length;pi+=ACCT_CHUNK)pch.push(pstr.slice(pi,pi+ACCT_CHUNK));
+    var pref=_acctUserRef().collection('public');
+    pch.forEach(function(c,i){b.set(pref.doc('c'+i),{d:c});});
+    for(var pj=pch.length;pj<meta.pubChunks;pj++)b.delete(pref.doc('c'+pj));
+    b.set(pref.doc('meta'),{player:me,username:_myUsername(),ts:meta.ts,chunks:pch.length});
+    meta.pubChunks=pch.length;
+  }
   b.set(ref.doc('meta'),meta);
   return b.commit().then(function(){
     acctBackupMeta=meta;
@@ -2710,7 +2747,7 @@ function renderAccountCard(){
     '<div class="ac-row"><span>Jij bent</span><select onchange="acctSetPlayer(this.value)" style="height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-weight:700;padding:0 10px;max-width:60%">'+
       (me?'':'<option value="">Kies je speler</option>')+names.map(function(n){return '<option value="'+_esc(n)+'"'+(n===me?' selected':'')+'>'+_esc(n)+'</option>';}).join('')+'</select></div>'+
     '<div class="ac-row"><span>Laatste back-up</span><b id="ac-last">'+(_acctReady?_fmtTs(acctBackupMeta&&acctBackupMeta.ts):'laden…')+'</b></div>'+
-    '<div class="ac-btns"><button class="btn btn-primary btn-sm" onclick="acctBackupNow(true)">Nu back-uppen</button><button class="btn btn-sm" onclick="openAcctRestore()">Herstellen</button><button class="btn btn-sm" onclick="acctLogout()">Uitloggen</button></div>';
+    '<div class="ac-btns"><button class="btn btn-primary btn-sm" onclick="acctBackupNow(true)">Back-up</button><button class="btn btn-sm" onclick="openAcctRestore()">Herstellen</button><button class="btn btn-sm" onclick="acctLogout()">Uitloggen</button></div>';
 }
 function openAcctSheet(mode){
   var reg=mode==='register';
@@ -2759,7 +2796,8 @@ function acctSetPlayer(n){
   if(!acctUser)return;
   acctProfile=acctProfile||{};acctProfile.player=n;
   _acctUserRef().set({player:n},{merge:true}).catch(function(e){showToast(_acctErr(e),'error');});
-  renderAccountCard();
+  renderAccountCard();renderFriendsCard();_acctScheduleBackup(500);
+  if(n)_inboxRecheck();
 }
 function acctLogout(){
   openGameSheet('Uitloggen?','<div class="ac-note">Je gegevens blijven gewoon op deze telefoon staan. Er wordt alleen geen back-up meer gemaakt tot je weer inlogt.</div>'+
@@ -2789,11 +2827,312 @@ function acctRestoreNow(){
   }).catch(function(e){showToast(_acctErr(e),'error');});
 }
 
+// ═══ Vrienden (v203, fase 2) + potjes doorsturen naar vrienden (fase 3) ═══
+// Vriendschap: verzoek in friendRequests/{van}_{naar}; na accepteren staat ieder in de friends-lijst van de ander.
+// Vrienden lezen alleen users/{uid}/public (jouw eigen speler, privé-spelers als "Gast").
+// Potjes: een lokale speler kan gekoppeld worden aan een vriend. Nieuwe potjes van die speler gaan naar
+// users/{vriend}/inbox; de app van de vriend zet ze bij zijn eigen speler (alleen toevoegen, dubbel = overgeslagen).
+var DEVICE_ID=(function(){try{var d=localStorage.getItem('darts_device_id');if(!d){d='d'+Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);localStorage.setItem('darts_device_id',d);}return d;}catch(e){return 'd0';}})();
+var _gidN=0;
+function _newGid(){_gidN++;return DEVICE_ID+'-'+Date.now().toString(36)+_gidN.toString(36)+Math.random().toString(36).slice(2,5);}
+var frFriends={},frIn={},frOut={},_frUnsubs=[],_frData={},_frLoading=false,_frLoadedAt=0,_frFriendsLoaded=false,_statsScope='local',_inboxDocs=[];
+function _ls(k,def){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?def:v;}catch(e){return def;}}
+function _lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function getFriendLinks(){var o=_ls('darts_friend_links',{});return (o&&typeof o==='object'&&!Array.isArray(o))?o:{};}
+function _linkedLocalFor(uid){var L=getFriendLinks();for(var k in L){if(L[k]&&L[k].uid===uid)return k;}return '';}
+function _has(o,k){return Object.prototype.hasOwnProperty.call(o,k);}
+function _frSanitize(obj,map){
+  if(Array.isArray(obj))return obj.map(function(x){return _frSanitize(x,map);});
+  if(obj&&typeof obj==='object'){var o={};Object.keys(obj).forEach(function(k){o[_has(map,k)?map[k]:k]=_frSanitize(obj[k],map);});return o;}
+  if(typeof obj==='string'&&_has(map,obj))return map[obj];
+  return obj;
+}
+function _privMap(){var m={};getPrivatePlayers().forEach(function(n,i){m[n]='Gast'+(i?' '+(i+1):'');});return m;}
+
+function frStart(){
+  frStop();
+  if(!acctUser)return;
+  var uid=acctUser.uid;
+  _frUnsubs.push(fbDb.collection('friendRequests').where('to','==',uid).onSnapshot(function(sn){frIn={};sn.forEach(function(d){frIn[d.id]=d.data();});renderFriendsCard();},function(e){console.error('Vriendverzoeken',e);}));
+  _frUnsubs.push(fbDb.collection('friendRequests').where('from','==',uid).onSnapshot(function(sn){frOut={};sn.forEach(function(d){frOut[d.id]=d.data();});renderFriendsCard();},function(e){console.error('Verstuurde verzoeken',e);}));
+  _frUnsubs.push(_acctUserRef().collection('friends').onSnapshot(function(sn){
+    frFriends={};sn.forEach(function(d){frFriends[d.id]=d.data();});
+    _frFriendsLoaded=true;_frLoadedAt=0;
+    renderFriendsCard();_frLoadAll().then(function(){renderFriendsCard();_refreshScopeScreens();});
+    _frScheduleSync();_outboxFlush();
+  },function(e){console.error('Vrienden',e);}));
+  _frUnsubs.push(_acctUserRef().collection('inbox').onSnapshot(function(sn){
+    var docs=[];sn.forEach(function(d){docs.push({id:d.id,data:d.data()});});_inboxDocs=docs;_inboxApply(docs);
+  },function(e){console.error('Inbox',e);}));
+  _frHandlePendingInvite();
+}
+function frStop(){_frUnsubs.forEach(function(f){try{f();}catch(e){}});_frUnsubs=[];frFriends={};frIn={};frOut={};_frData={};_frFriendsLoaded=false;_frLoadedAt=0;_inboxDocs=[];if(_statsScope==='friends')_statsScope='local';}
+
+// Openbare gegevens van vrienden ophalen (cache 60 s)
+function _frLoadAll(force){
+  if(!acctUser)return Promise.resolve();
+  if(!force&&_frLoadedAt&&Date.now()-_frLoadedAt<60000)return Promise.resolve();
+  var uids=Object.keys(frFriends);
+  _frLoading=true;
+  return Promise.all(uids.map(function(uid){
+    var pref=fbDb.collection('users').doc(uid).collection('public');
+    return pref.doc('meta').get().then(function(m){
+      if(!m.exists){_frData[uid]={username:frFriends[uid].username,player:'',data:null};return;}
+      var md=m.data(),ps=[];
+      for(var i=0;i<(md.chunks||0);i++)ps.push(pref.doc('c'+i).get());
+      return Promise.all(ps).then(function(cs){
+        var str=cs.map(function(c){return (c.exists&&c.data().d)||'';}).join('');
+        var data=null;try{data=str?JSON.parse(str):null;}catch(e){}
+        _frData[uid]={username:md.username||frFriends[uid].username,player:md.player||'',ts:md.ts,data:data};
+      });
+    }).catch(function(e){console.error('Vriend laden mislukt',uid,e);});
+  })).then(function(){_frLoading=false;_frLoadedAt=Date.now();Object.keys(_frData).forEach(function(u){if(!frFriends[u])delete _frData[u];});});
+}
+
+function frSendRequest(name){
+  name=_acctNorm(name).replace(/^@/,'');
+  if(!acctUser)return Promise.reject({message:'Log eerst in.'});
+  var me=_myUsername();
+  if(!_acctValid(name))return Promise.reject({message:'Onbekende gebruikersnaam.'});
+  if(name===me)return Promise.reject({message:'Dat ben je zelf.'});
+  return fbDb.collection('usernames').doc(name).get().then(function(d){
+    if(!d.exists)throw {message:'Geen account gevonden met de naam "'+name+'".'};
+    var to=d.data().uid;
+    if(frFriends[to])throw {message:'Jullie zijn al vrienden.'};
+    var revId=to+'_'+acctUser.uid;
+    if(frIn[revId])return frAccept(revId).then(function(){return 'accepted';});
+    if(frOut[acctUser.uid+'_'+to])throw {message:'Je hebt '+name+' al een verzoek gestuurd.'};
+    return fbDb.collection('friendRequests').doc(acctUser.uid+'_'+to).set({from:acctUser.uid,to:to,fromName:me,toName:name,ts:Date.now()}).then(function(){return 'sent';});
+  });
+}
+function frAddFromInput(){
+  var i=document.getElementById('fr-name');var v=i?i.value:'';
+  if(!v.trim())return;
+  frSendRequest(v).then(function(r){
+    if(i)i.value='';
+    if(r==='sent')showToast('Verzoek verstuurd','success');
+  }).catch(function(e){showToast((e&&e.message&&!e.code)?e.message:_acctErr(e),'error');});
+}
+function frAccept(id){
+  var r=frIn[id];if(!r)return Promise.resolve();
+  var me=acctUser.uid,now=Date.now();
+  var b=fbDb.batch();
+  b.set(_acctUserRef().collection('friends').doc(r.from),{username:r.fromName||'',since:now});
+  b.set(fbDb.collection('users').doc(r.from).collection('friends').doc(me),{username:_myUsername(),since:now});
+  b.delete(fbDb.collection('friendRequests').doc(id));
+  return b.commit().then(function(){showToast('Je bent nu vrienden met '+(r.fromName||''),'success');_acctScheduleBackup(500);})
+    .catch(function(e){showToast(_acctErr(e),'error');});
+}
+function frDecline(id){fbDb.collection('friendRequests').doc(id).delete().catch(function(e){showToast(_acctErr(e),'error');});}
+function frRemoveAsk(uid){
+  var f=frFriends[uid]||{};
+  openGameSheet('Vriend verwijderen?','<div class="ac-note">'+_esc(f.username||'')+' kan jouw statistieken dan niet meer zien, en potjes gaan niet meer naar zijn of haar account. Gegevens op deze telefoon blijven staan.</div>'+
+    '<button class="g-hit" style="width:100%;background:#B94E2A" onclick="closeGameSheet();frRemove(\''+uid+'\')">Verwijderen</button>');
+}
+function frRemove(uid){
+  var b=fbDb.batch();
+  b.delete(_acctUserRef().collection('friends').doc(uid));
+  b.delete(fbDb.collection('users').doc(uid).collection('friends').doc(acctUser.uid));
+  var L=getFriendLinks();Object.keys(L).forEach(function(k){if(L[k]&&L[k].uid===uid)delete L[k];});_lsSet('darts_friend_links',L);
+  b.commit().then(function(){showToast('Vriend verwijderd','info');}).catch(function(e){showToast(_acctErr(e),'error');});
+}
+// Lokale speler koppelen aan een vriend: vanaf nu gaan nieuwe potjes van die speler naar de vriend
+function frLink(uid,local){
+  var L=getFriendLinks();
+  Object.keys(L).forEach(function(k){if(L[k]&&L[k].uid===uid)delete L[k];});
+  var S=_ls('darts_friend_shadow',{});
+  if(local){
+    L[local]={uid:uid,username:(frFriends[uid]&&frFriends[uid].username)||''};
+    var p=dbCache[local];S[local]=(p&&Array.isArray(p.gameHistory))?p.gameHistory.map(_ekey):[];
+    showToast('Nieuwe potjes van '+local+' gaan nu ook naar '+L[local].username,'success');
+  }
+  _lsSet('darts_friend_links',L);_lsSet('darts_friend_shadow',S);
+  renderFriendsCard();_acctScheduleBackup(500);
+}
+function _hash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return 'h'+(h>>>0).toString(36)+'.'+s.length;}
+function _ekey(e){return (e&&e.gid)?('g:'+e.gid):_hash(JSON.stringify(e));}
+
+// Nieuwe potjes van gekoppelde spelers in de verzendbak zetten
+var _frSyncTimer=null;
+function _frScheduleSync(){if(!acctUser)return;clearTimeout(_frSyncTimer);_frSyncTimer=setTimeout(_frSync,1500);}
+function _frSync(){
+  if(!acctUser||!_frFriendsLoaded)return;
+  var L=getFriendLinks(),S=_ls('darts_friend_shadow',{}),out=_ls('darts_outbox',[]),added=false,pm=_privMap();
+  Object.keys(L).forEach(function(local){
+    var lk=L[local];if(!lk||!frFriends[lk.uid])return;
+    var p=dbCache[local];if(!p||!Array.isArray(p.gameHistory))return;
+    var seen={};(S[local]||[]).forEach(function(k){seen[k]=1;});
+    var fresh=p.gameHistory.filter(function(e){return e&&e.gid&&e.gid.indexOf(DEVICE_ID+'-')===0&&!seen['g:'+e.gid];});
+    S[local]=p.gameHistory.map(_ekey);
+    if(fresh.length){
+      out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:fresh.map(function(e){return _frSanitize(e,pm);}),ts:Date.now()}});
+      added=true;
+    }
+  });
+  _lsSet('darts_friend_shadow',S);
+  if(added){_lsSet('darts_outbox',out);_outboxFlush();}
+}
+var _outboxBusy=false;
+function _outboxFlush(){
+  if(!acctUser||_outboxBusy||!_frFriendsLoaded)return;
+  var out=_ls('darts_outbox',[]);if(!out.length)return;
+  var item=out[0];
+  function drop(){_lsSet('darts_outbox',_ls('darts_outbox',[]).filter(function(x){return x.id!==item.id;}));}
+  if(!frFriends[item.to]){drop();setTimeout(_outboxFlush,0);return;} // geen vriend meer: niet versturen
+  _outboxBusy=true;
+  fbDb.collection('users').doc(item.to).collection('inbox').doc(item.id).set(item.payload).then(function(){
+    drop();_outboxBusy=false;_outboxFlush();
+  }).catch(function(e){
+    console.error('Potje naar vriend sturen mislukt',e);_outboxBusy=false;
+    if(e&&e.code==='permission-denied')drop();
+  });
+}
+window.addEventListener('online',function(){_outboxFlush();});
+
+// Binnengekomen potjes van vrienden bij je eigen speler zetten
+function _inboxRecheck(){if(_inboxDocs.length)_inboxApply(_inboxDocs);}
+function _inboxApply(docs){
+  if(!docs||!docs.length||!acctUser)return;
+  var me=acctProfile&&acctProfile.player;
+  if(!me){renderFriendsCard();return;} // eerst je eigen speler kiezen; potjes blijven veilig in de inbox
+  var applied=_ls('darts_inbox_applied',[]),n=0,from={};
+  if(!dbCache[me])dbCache[me]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
+  var p=dbCache[me];if(!Array.isArray(p.gameHistory))p.gameHistory=[];
+  var have={};p.gameHistory.forEach(function(e){if(e&&e.gid)have[e.gid]=1;});
+  docs.forEach(function(d){
+    if(applied.indexOf(d.id)<0){
+      var pl=d.data||{},map={};if(pl.as)map[pl.as]=me;
+      (pl.games||[]).slice().reverse().forEach(function(e){
+        if(!e||!e.gid||have[e.gid])return;
+        var g=_frSanitize(e,map);g.via=pl.fromName||'';
+        p.gameHistory.unshift(g);have[e.gid]=1;n++;
+        p.games=(p.games||0)+1;if(g.won)p.wins=(p.wins||0)+1;
+        p.totalDarts=(p.totalDarts||0)+(g.darts||0);p.totalScore=(p.totalScore||0)+(g.score||0);
+      });
+      applied.push(d.id);if(pl.fromName)from[pl.fromName]=1;
+    }
+    _acctUserRef().collection('inbox').doc(d.id).delete().catch(function(e){console.error('Inbox opruimen',e);});
+  });
+  _lsSet('darts_inbox_applied',applied.slice(-300));
+  _inboxDocs=[];
+  if(n){
+    if(p.gameHistory.length>50)p.gameHistory=p.gameHistory.slice(0,50);
+    saveDB(dbCache);
+    showToast(n+(n===1?' potje':' potjes')+' van '+Object.keys(from).join(', ')+' toegevoegd','success');
+    _refreshScopeScreens();
+  }
+}
+
+// Uitnodigingslink: ?vriend=gebruikersnaam
+(function(){
+  try{
+    var m=location.search.match(/[?&]vriend=([^&#]+)/);
+    if(m){localStorage.setItem('darts_pending_invite',decodeURIComponent(m[1]));history.replaceState(null,'',location.pathname+location.hash);}
+  }catch(e){}
+})();
+function frInviteLink(){return location.origin+location.pathname+'?vriend='+encodeURIComponent(_myUsername());}
+function frShareLink(){
+  var url=frInviteLink();
+  if(navigator.share){navigator.share({title:'Darts by Tom',text:'Voeg me toe als vriend in Darts by Tom ('+_myUsername()+'):',url:url}).catch(function(){});return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){showToast('Link gekopieerd','success');}).catch(function(){_frShowLink(url);});return;}
+  _frShowLink(url);
+}
+function _frShowLink(url){openGameSheet('Jouw uitnodigingslink','<div class="ac-note">Kopieer deze link en stuur hem naar je vriend.</div><div class="ac-field"><input readonly value="'+_esc(url)+'" onclick="this.select()"></div>');}
+function _frHandlePendingInvite(){
+  var name='';try{name=localStorage.getItem('darts_pending_invite')||'';}catch(e){}
+  if(!name||!fbAuth)return;
+  if(!acctUser){
+    openGameSheet('Uitnodiging van '+_esc(name),'<div class="ac-note">'+_esc(name)+' wil vrienden met je worden in Darts by Tom. Maak een account of log in, dan sturen we het verzoek meteen.</div>'+
+      '<div class="ac-btns"><button class="btn btn-primary btn-sm" onclick="openAcctSheet(\'register\')">Account maken</button><button class="btn btn-sm" onclick="openAcctSheet(\'login\')">Inloggen</button></div>');
+    return;
+  }
+  if(!_frFriendsLoaded){setTimeout(_frHandlePendingInvite,800);return;}
+  try{localStorage.removeItem('darts_pending_invite');}catch(e){}
+  if(_acctNorm(name)===_myUsername())return;
+  frSendRequest(name).then(function(r){showToast(r==='accepted'?'Jullie zijn nu vrienden':'Vriendverzoek gestuurd naar '+name,'success');})
+    .catch(function(e){showToast((e&&e.message&&!e.code)?e.message:_acctErr(e),'info');});
+}
+
+function renderFriendsCard(){
+  var card=document.getElementById('settings-friends-card'),el=document.getElementById('settings-friends');
+  if(!card||!el)return;
+  if(!acctUser){card.style.display='none';el.innerHTML='';return;}
+  card.style.display='';
+  var inp=document.getElementById('fr-name'),keep=inp?inp.value:'',foc=inp&&document.activeElement===inp;
+  var me=acctProfile&&acctProfile.player;
+  var h='<div class="fr-add"><input id="fr-name" placeholder="Gebruikersnaam" autocapitalize="none" autocomplete="off" spellcheck="false" onkeydown="if(event.key===\'Enter\')frAddFromInput()"><button class="btn btn-primary btn-sm" onclick="frAddFromInput()">Toevoegen</button></div>'+
+    '<button class="btn btn-sm" style="width:100%;margin-top:8px;justify-content:center" onclick="frShareLink()">Deel mijn uitnodigingslink</button>';
+  if(!me)h+='<div class="ac-note" style="margin:10px 0 0;color:#E0A055">Kies bij Account eerst welke speler jij bent. Pas dan zien vrienden je statistieken en komen hun potjes bij jou binnen.</div>';
+  var ins=Object.keys(frIn);
+  if(ins.length){
+    h+='<div class="fr-lbl">Verzoeken</div>'+ins.map(function(id){var r=frIn[id];return '<div class="fr-row"><div class="fr-who"><b>'+_esc(r.fromName)+'</b><span>wil vrienden worden</span></div>'+
+      '<button class="btn btn-primary btn-sm" onclick="frAccept(\''+id+'\')">Accepteren</button><button class="fr-x" aria-label="Weigeren" onclick="frDecline(\''+id+'\')">&times;</button></div>';}).join('');
+  }
+  var outs=Object.keys(frOut);
+  if(outs.length){
+    h+='<div class="fr-lbl">Verstuurd</div>'+outs.map(function(id){var r=frOut[id];return '<div class="fr-row"><div class="fr-who"><b>'+_esc(r.toName)+'</b><span>wacht op antwoord</span></div>'+
+      '<button class="fr-x" aria-label="Intrekken" onclick="frDecline(\''+id+'\')">&times;</button></div>';}).join('');
+  }
+  var fs=Object.keys(frFriends).sort(function(a,b){return (frFriends[a].username||'').localeCompare(frFriends[b].username||'');});
+  h+='<div class="fr-lbl">Vrienden'+(fs.length?' ('+fs.length+')':'')+'</div>';
+  if(!fs.length)h+='<div class="ac-note" style="margin:4px 0 0">Nog geen vrienden. Voeg iemand toe op gebruikersnaam of deel je link.</div>';
+  else{
+    var L=getFriendLinks(),locals=Object.keys(dbCache).sort(function(a,b){return a.localeCompare(b);});
+    h+=fs.map(function(uid){
+      var f=frFriends[uid],d=_frData[uid]||{},linked=_linkedLocalFor(uid);
+      var opts='<option value="">Niet gekoppeld</option>'+locals.filter(function(n){return n!==me&&(!L[n]||L[n].uid===uid);}).map(function(n){return '<option value="'+_esc(n)+'"'+(n===linked?' selected':'')+'>'+_esc(n)+'</option>';}).join('');
+      return '<div class="fr-row"><div class="fr-who"><b>'+_esc(f.username)+'</b><span>'+(d.player?'speelt als '+_esc(d.player):(d.data===null&&_frLoadedAt?'nog geen statistieken gedeeld':'&nbsp;'))+'</span></div>'+
+        '<button class="fr-x" aria-label="Verwijderen" onclick="frRemoveAsk(\''+uid+'\')">&times;</button></div>'+
+        '<div class="fr-link"><span>Op deze telefoon:</span><select onchange="frLink(\''+uid+'\',this.value)">'+opts+'</select></div>';
+    }).join('');
+    h+='<div class="ac-note" style="margin:6px 0 0">Koppel een vriend aan de speler die hij op deze telefoon is. Nieuwe potjes van die speler komen dan ook in zijn eigen account terecht.</div>';
+  }
+  el.innerHTML=h;
+  var ni=document.getElementById('fr-name');if(ni){ni.value=keep;if(foc)ni.focus();}
+}
+
+// Statistieken / Ranglijst / Geschiedenis: "Deze telefoon" of "Vrienden"
+function _friendsViewDB(){
+  var v={},me=acctProfile&&acctProfile.player;
+  if(me&&dbCache[me])v[me]=dbCache[me];
+  Object.keys(_frData).forEach(function(uid){
+    var f=_frData[uid];if(!f||!f.data||!frFriends[uid])return;
+    var k=f.player||f.username;if(v[k])k=k+' ('+f.username+')';
+    v[k]=f.data;
+  });
+  return v;
+}
+function _scopeAvailable(){return !!(acctUser&&Object.keys(frFriends).length);}
+function setStatsScope(sc){
+  _statsScope=sc==='friends'?'friends':'local';
+  _refreshScopeScreens();
+  if(_statsScope==='friends')_frLoadAll().then(_refreshScopeScreens);
+}
+function _refreshScopeScreens(){
+  var a=document.querySelector('.screen.active');if(!a)return;
+  if(a.id==='screen-stats')renderStats();
+  else if(a.id==='screen-history')renderHistory();
+  else if(a.id==='screen-leaderboard')renderLeaderboard(currentLbTab||'avg');
+}
+function _scoped(impl,screenId,elId,args){
+  var avail=_scopeAvailable();
+  if(!avail&&_statsScope==='friends')_statsScope='local';
+  var fr=_statsScope==='friends';
+  if(fr)_withView(_friendsViewDB(),function(){impl.apply(null,args);});
+  else impl.apply(null,args);
+  var scr=document.getElementById(screenId);if(!scr)return;
+  var slot=scr.querySelector('.scope-slot');
+  if(!slot){var hd=scr.querySelector('.page-head');if(hd){slot=document.createElement('div');slot.className='scope-slot';hd.parentNode.insertBefore(slot,hd.nextSibling);}}
+  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':''):'';
+  if(fr){var el=document.getElementById(elId);if(el)el.querySelectorAll('.st-danger,[onclick*="deleteMatchEntry"],[onclick*="generateChallenge"]').forEach(function(b){b.parentNode&&b.parentNode.removeChild(b);});}
+}
+
 function saveDB(db){
   dbCache = db;
   // Always persist locally as backup
   try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
   _acctScheduleBackup();
+  _frScheduleSync();
   if(!groupCode) return;
   // Write each player doc to Firestore (privé- en verborgen spelers niet)
   Object.keys(db).forEach(function(name){
@@ -2957,7 +3296,7 @@ function updatePlayerStat(name,gameType,data){
   p.totalDarts+=(data.darts||0);p.totalScore+=(data.score||0);
   if(!p.gameHistory)p.gameHistory=[];
   var _opp=state.players.filter(function(n){return n!==name;});
-  var entry={date:new Date().toLocaleDateString('nl-NL'),gameType:gameType,won:data.won,darts:data.darts,score:data.score,opponents:_opp.length?_opp:undefined};
+  var entry={gid:_newGid(),date:new Date().toLocaleDateString('nl-NL'),gameType:gameType,won:data.won,darts:data.darts,score:data.score,opponents:_opp.length?_opp:undefined};
   if(data.detailedStats)entry.detailedStats=data.detailedStats;
   if(data.legBreakdown)entry.legBreakdown=data.legBreakdown;
   if(data.legResult)entry.legResult=data.legResult;     // e.g. "2–1"
@@ -3049,7 +3388,7 @@ function showScreen(id){
     if(id!=='screen-game'&&typeof toggleX01Stats==='function')toggleX01Stats(false);
   }
   // Tournament nav rendered inline in renderTrnOverview/renderStandings
-  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
+  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();renderFriendsCard();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
   if(id==='screen-stats')renderStats();
   if(id==='screen-leaderboard'){renderLeaderboard('avg');}
   if(id==='screen-history')renderHistory();
@@ -7080,7 +7419,8 @@ function emptyState(title,sub,cta){
     (cta?'<button class="empty-state-btn" onclick="showScreen(\'screen-setup\')">Speel je eerste potje</button>':'')+
   '</div>';
 }
-function renderStats(){
+function renderStats(){_scoped(_renderStatsImpl,'screen-stats','stats-content',arguments);}
+function _renderStatsImpl(){
   var db=getDB();var names=Object.keys(db);
   var el=document.getElementById('stats-content');
   if(!names.length){el.innerHTML=emptyState('Nog geen statistieken','Na je eerste potje zie je hier gemiddelden, checkouts en je beste beurten.',true);return;}
@@ -7275,6 +7615,7 @@ function setStatsFilter(name,gameType){
   renderStats();
 }
 function clearPlayer(name){
+  if(_statsScope==='friends')return;
   if(!confirm('Statistieken van '+name+' wissen? Dit verwijdert ook alle wedstrijdgeschiedenis van deze speler.'))return;
   var db=getDB();
   delete db[name];
@@ -7667,7 +8008,8 @@ function calcGameStats(name, gameTypeFilter){
   return{games:games.length, wins:wins, highScore:highScore, avgScore:avgScore};
 }
 
-function renderLeaderboard(tab){
+function renderLeaderboard(tab){_scoped(_renderLeaderboardImpl,'screen-leaderboard','leaderboard-content',arguments);}
+function _renderLeaderboardImpl(tab){
   var db=getDB();
   var el=document.getElementById('leaderboard-content');
   if(!el)return;
@@ -7790,7 +8132,8 @@ function renderLeaderboard(tab){
 // ═══════════════════════════════════════════
 var historySelectedPlayer=null;
 
-function renderHistory(){
+function renderHistory(){_scoped(_renderHistoryImpl,'screen-history','history-content',arguments);}
+function _renderHistoryImpl(){
   var db=getDB();
   var el=document.getElementById('history-content');
   if(!el)return;
@@ -8399,6 +8742,7 @@ function toggleLegDetail(lid){
   if(btn)btn.textContent=(open?'▶':'▼')+btn.textContent.slice(1);
 }
 function deleteMatchEntry(playerName, index){
+  if(_statsScope==='friends')return;
   if(!confirm('Deze wedstrijd verwijderen?'))return;
   var db=getDB();
   if(!db[playerName]||!db[playerName].gameHistory)return;
@@ -8435,7 +8779,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=202;
+var APP_VERSION=203;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -9667,6 +10011,7 @@ function _afgWin(winner){
     if(won)pr.wins++;
     if(!pr.gameHistory)pr.gameHistory=[];
     pr.gameHistory.unshift({
+      gid:_newGid(),
       date:new Date().toLocaleDateString('nl-NL'),
       gameType:'afgooien',
       won:won,
