@@ -235,7 +235,105 @@ body::before{
 #np-rest{text-align:right}
 .x01-input .btn-sm{height:38px;border-radius:10px !important}
 .x01-pad .btn{height:56px;padding:0 !important;border-radius:14px !important}
-/* gedeelde spelcomponenten */
+/* gedeelde spelcomponenten */.sp-row{padding:10px 0;border-top:1px solid var(--border)}
+.sp-row:first-child{border-top:0;padding-top:2px}
+.sp-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.sp-top b{font-size:15px;color:var(--text)}
+.sp-tag{font-size:11px;font-weight:800;padding:2px 8px;border-radius:7px;background:rgba(62,123,79,.2);color:#8FCB9C}
+.sp-tag.priv{background:rgba(127,127,127,.2);color:var(--muted)}
+.sp-bottom{display:flex;align-items:center;gap:8px}
+.sp-nick{flex:1;min-width:0;height:42px;box-sizing:border-box;padding:0 12px;border-radius:11px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px}
+.sp-say{width:42px;height:42px;flex-shrink:0;border-radius:11px;border:1px solid var(--border);background:var(--card);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sp-say svg{display:block}
+.sp-share{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;cursor:pointer}
+.pp-list{display:flex;flex-direction:column}
+.pp-row{display:flex;align-items:center;justify-content:space-between;min-height:48px;border-top:1px solid var(--border);font-size:15px;font-weight:700;color:var(--text);cursor:pointer}
+.pp-row:first-child{border-top:0}
+.ac-field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.ac-field span{font-size:12px;font-weight:700;color:var(--muted)}
+.ac-field input,.ac-field select{height:48px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;padding:0 14px;box-sizing:border-box;width:100%}
+.ac-err{min-height:18px;font-size:13px;font-weight:700;color:#FF7A6B;margin:2px 0 8px}
+.ac-note{font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:12px}
+.ac-row{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:40px;border-top:1px solid var(--border);font-size:14px}
+.ac-row span{color:var(--muted)}.ac-row b{color:var(--text);text-align:right}
+.ac-btns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;margin-top:10px}
+.ac-btns .btn{justify-content:center;padding-left:6px;padding-right:6px}
+
+[data-theme="light"] .sp-tag{color:#1E5631}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .sp-tag{color:#1E5631}}
+.rm-list{display:flex;flex-direction:column;gap:8px}
+.rm-pl{display:flex;align-items:center;gap:12px;min-height:54px;padding:0 14px;border-radius:14px;border:2px solid var(--border);background:var(--card);color:var(--text);font:inherit;cursor:pointer;text-align:left;transition:background .12s,border-color .12s}
+.rm-pl:disabled{cursor:default}
+.rm-num{width:28px;height:28px;border-radius:50%;background:rgba(127,127,127,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.rm-name{flex:1;font-size:16px;font-weight:800}
+.rm-go{font-size:12px;font-weight:700;color:var(--muted)}
+.rm-pl.hl{border-color:#E07A55;background:rgba(185,78,42,.16)}
+.rm-pl.won{border-color:#5E9E6E;background:rgba(62,123,79,.2)}
+.rm-pl.won .rm-num{background:#3E7B4F;color:#fff}
+
+/* ═══ Winscherm (v199) ═══ */
+.win-wrap{position:relative;z-index:1;max-width:420px;margin:0 auto;padding:18px 4px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.win-media{width:100%;display:flex;justify-content:center;min-height:190px;align-items:center}
+#win-gif-wrap{width:100%;max-width:320px;border-radius:20px;overflow:hidden;line-height:0;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+#win-gif-wrap img{width:100%;display:block}
+.win-board svg{display:block;overflow:visible}
+.win-board .wb-dart{transform-origin:100px 100px;opacity:0}
+.win-board.play .wb-dart{animation:wbFly .55s cubic-bezier(.2,.9,.3,1) .25s forwards,wbWobble .5s ease-out .8s}
+.win-board .wb-ring{opacity:0;transform-origin:100px 100px}
+.win-board.play .wb-ring{animation:wbRing 1.1s ease-out .78s 2}
+.win-board.play .wb-board{animation:wbHit .25s ease-out .78s}
+@keyframes wbFly{0%{opacity:0;transform:translate(150px,-150px) scale(1.25)}60%{opacity:1}100%{opacity:1;transform:translate(0,0) scale(1)}}
+@keyframes wbWobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}55%{transform:rotate(3deg)}80%{transform:rotate(-1deg)}}
+@keyframes wbRing{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(8)}}
+@keyframes wbHit{0%{transform:scale(1)}40%{transform:scale(.96)}100%{transform:scale(1)}}
+.win-kicker{margin-top:8px;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8FCB9C}
+.win-title{margin:0;font-size:34px;font-weight:900;line-height:1.1;color:var(--text)}
+.win-title .win-name{color:var(--accent)}
+.win-sub{font-size:14px;color:var(--muted);margin-bottom:10px}
+#win-stats{width:100%;display:flex;flex-direction:column;gap:8px}
+.win-card{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--border);text-align:left}
+.win-extra .stat-row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px}
+.win-extra .stat-row:last-child{border-bottom:0}
+.ws-row{display:grid;grid-template-columns:1.3fr repeat(var(--cols,2),minmax(0,1fr));gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted)}
+.ws-row:last-child{border-bottom:0}
+.ws-row b{text-align:right;color:var(--text);font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws-row b.best{color:var(--accent)}
+.ws-head b{font-size:12px;color:var(--muted);font-weight:800}
+.win-actions{width:100%;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.win-btn{min-height:52px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.win-btn.primary{background:#B94E2A;border-color:#B94E2A;color:#fff;box-shadow:0 6px 20px rgba(185,78,42,.4)}
+.win-links{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.win-links button{min-height:44px;border:0;border-radius:12px;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+/* ═══ Toernooi (v199) ═══ */
+.trn-head{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.trn-exit{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.g-seg.trn-seg button.on{background:#3E7B4F}
+.trn-champ{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 12px;margin-bottom:14px;border-radius:18px;background:rgba(62,123,79,.14);border:1px solid rgba(143,203,156,.3);text-align:center}
+.trn-champ-icon{width:60px;height:60px;border-radius:50%;background:#3E7B4F;color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.trn-champ-icon svg{display:block}
+.trn-champ-kicker{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8FCB9C}
+.trn-champ-name{font-size:28px;font-weight:900;color:var(--text)}
+#screen-trn-overview .trn-match,#screen-trn-standings .trn-match{background:var(--card);border:2px solid var(--border);border-radius:16px;box-shadow:none}
+#screen-trn-overview .trn-match.current{border-color:#5E9E6E}
+#screen-trn-overview .trn-match.done{opacity:.6}
+#screen-trn-overview .trn-match-header{background:transparent;font-size:12px;font-weight:800;letter-spacing:.1em;padding:10px 14px 4px}
+#screen-trn-overview .trn-match.current .trn-match-header{background:transparent;color:#8FCB9C}
+#screen-trn-overview .trn-player-row{padding:9px 14px}
+#screen-trn-overview .trn-player-name{font-size:16px;font-weight:700}
+#screen-trn-overview .trn-player-wins{font-size:20px;font-weight:900}
+#screen-trn-overview .trn-player-row.winner .trn-player-name,#screen-trn-overview .trn-player-row.winner .trn-player-wins{color:#8FCB9C}
+.bracket-round-title{font-size:12px !important;font-weight:800 !important;letter-spacing:.12em !important}
+#screen-trn-overview .card,#screen-trn-standings .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px 0}
+.standing-row{padding:11px 14px !important;font-size:15px !important}
+.standing-pos{width:26px;height:26px;min-width:26px !important;border-radius:50%;background:rgba(127,127,127,.18);display:flex;align-items:center;justify-content:center;font-size:12px !important;color:var(--text) !important}
+.standing-row:first-child .standing-pos{background:#3E7B4F;color:#fff !important}
+.standing-rec{font-size:12px;color:var(--muted);white-space:nowrap}
+.standing-pts{color:#8FCB9C !important;font-weight:900 !important;min-width:40px;text-align:right}
+[data-theme="light"] .win-kicker,[data-theme="light"] .trn-champ-kicker,[data-theme="light"] .standing-pts{color:#2F6B40 !important}
+[data-theme="light"] #screen-trn-overview .trn-player-row.winner .trn-player-name,[data-theme="light"] #screen-trn-overview .trn-player-row.winner .trn-player-wins,[data-theme="light"] #screen-trn-overview .trn-match.current .trn-match-header{color:#2F6B40 !important}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) #screen-trn-overview .trn-player-row.winner .trn-player-name,:root:not([data-theme="dark"]) #screen-trn-overview .trn-player-row.winner .trn-player-wins,:root:not([data-theme="dark"]) #screen-trn-overview .trn-match.current .trn-match-header{color:#2F6B40 !important}}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .win-kicker,:root:not([data-theme="dark"]) .trn-champ-kicker,:root:not([data-theme="dark"]) .standing-pts{color:#2F6B40 !important}}
+
 .g-wrap{display:flex;flex-direction:column;gap:10px;min-height:100%}
 .g-target{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 12px 14px;border-radius:18px;background:var(--card);border:1px solid var(--border);text-align:center}
 .g-target-lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
@@ -624,6 +722,10 @@ select{
 .lb-chiprow{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -20px 10px;padding:2px 20px}
 .lb-chiprow::-webkit-scrollbar{display:none}
 .lb-chip{flex:none;height:40px;padding:0 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.st-lbl{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:2px 0 6px}
+.st-danger{width:100%;margin-top:16px;min-height:44px;border-radius:12px;border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:var(--danger);font-size:14px;font-weight:700;cursor:pointer}
+#screen-stats .metric .lbl{font-size:12px}
+#screen-stats .metric .val{font-size:20px}
 .lb-chip.active{background:#B94E2A;border-color:#B94E2A;color:#fff}
 .lb-subrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:4px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
 .lb-subrow::-webkit-scrollbar{display:none}
@@ -990,6 +1092,7 @@ h2.page-head svg{display:none !important}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
@@ -1534,8 +1637,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </button>
   </div>
 
-  <!-- Secondary actions -->
-  <div class="home-section-label">Overzicht</div>
 
   <!-- Quick game tiles -->
   <div class="home-section-label">Snel starten</div>
@@ -1581,10 +1682,21 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
     </div>
   </div>
   <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+      <label for="caller-enabled" style="cursor:pointer"><span style="display:block;font-size:14px;font-weight:700;color:var(--text)">Omroeper</span><span style="display:block;font-size:12px;color:var(--muted);margin-top:2px">"Tom, you require 121" bij een finish, plus 180 en game shot</span></label>
+      <input type="checkbox" id="caller-enabled" class="ios-toggle" onchange="setCallerEnabled(this.checked);if(this.checked)callerSay('Game on!',true)">
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:10px">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <span style="font-size:14px;font-weight:700;color:var(--text)" id="set-lbl-fullscreen">Volledig scherm</span>
       <input type="checkbox" id="fs-settings-btn" class="ios-toggle" onchange="_toggleFullscreen()">
     </div>
+  </div>
+  <!-- Account (v202) -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Account</div>
+    <div id="settings-account"></div>
   </div>
   <div class="card" style="margin-bottom:10px">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Cloud &amp; Delen</div>
@@ -1599,6 +1711,38 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <div id="group-tile-badge" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--card);color:var(--muted)">Niet verbonden</div>
     </button>
   </div>
+  <!-- Spelers: bijnaam voor omroeper + delen met groep (v201) -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Spelers</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.45">Bijnaam = wat de omroeper zegt (ook handig om een naam goed uitgesproken te krijgen). Uit bij "Delen" = speler blijft privé op deze telefoon.</div>
+    <div id="settings-players"></div>
+  </div>
+  <!-- Export / Import (verplaatst van Statistieken, v198) -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Delen &amp; samenvoegen</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Kies een speler om te exporteren en geef de code aan de host. De host importeert alle codes om statistieken samen te voegen.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" style="display:inline-flex;align-items:center;gap:5px" onclick="showExportPanel()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Exporteer stats</button>
+      <button class="btn btn-sm" style="display:inline-flex;align-items:center;gap:5px" onclick="showImportPanel()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Importeer stats van vriend</button>
+    </div>
+    <div id="export-panel" style="display:none;margin-top:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Welke speler exporteren?</div>
+      <select id="export-player-select" style="width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:700;margin-bottom:8px"></select>
+      <button class="btn btn-sm btn-primary" style="width:100%;margin-bottom:10px" onclick="exportStats()">Genereer exportcode</button>
+      <div id="export-code-wrap" style="display:none">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Exportcode — stuur dit naar de host</div>
+        <textarea id="export-code" readonly style="width:100%;height:80px;font-size:11px;font-family:monospace;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--text);resize:none"></textarea>
+        <button class="btn btn-sm btn-primary" style="margin-top:6px;width:100%" onclick="copyExportCode()">Kopieer code</button>
+      </div>
+    </div>
+    <div id="import-panel" style="display:none;margin-top:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Plak de exportcode van een vriend</div>
+      <textarea id="import-code" style="width:100%;height:80px;font-size:11px;font-family:monospace;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--text);resize:none" placeholder="Plak hier de code…"></textarea>
+      <button class="btn btn-sm btn-primary" style="margin-top:6px;width:100%" onclick="importStats()">Samenvoegen</button>
+      <div id="import-result" style="font-size:12px;margin-top:6px"></div>
+    </div>
+  </div>
+
   <div class="card">
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px" id="set-lbl-lang">Taal</div>
     <div style="display:flex;gap:8px" id="lang-seg">
@@ -2086,22 +2230,47 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <!-- WIN (vrij spel) -->
 <div class="screen" id="screen-win" style="position:relative;overflow:hidden">
   <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
-  <div style="position:relative;z-index:1;text-align:center;padding:2rem 1rem">
-    <div id="win-gif-wrap" style="display:none;margin:0 auto 12px;max-width:300px;border-radius:18px;overflow:hidden;line-height:0">
-      <img id="win-gif-img" style="width:100%;border-radius:18px;display:block" alt="">
-    </div>
-    <div class="win-icon" id="win-icon-anim" style="animation:winPopIn .55s cubic-bezier(.34,1.56,.64,1) forwards;display:flex;justify-content:center;align-items:center;padding:8px 0"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(254,104,7,0.6))"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
-    <div class="win-title" id="win-title" style="font-size:28px;font-weight:900;margin:12px 0 6px;text-shadow:0 0 30px rgba(254,104,7,0.6)"></div>
-    <div class="win-sub" id="win-sub" style="color:var(--muted);font-size:14px;margin-bottom:20px"></div>
-    <div id="win-stats" style="margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto"></div>
-    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;margin:0 auto">
-      <button class="btn btn-primary btn-full" id="btn-rematch" style="display:none;font-size:16px" onclick="rematch()"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Rematch — zelfde spelers</button>
-      <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-setup')">Nieuw spel</button>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-full" style="display:inline-flex;align-items:center;justify-content:center;gap:6px" onclick="stopConfetti();showScreen('screen-leaderboard')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</button>
-        <button class="btn btn-full" onclick="stopConfetti();showScreen('screen-stats')">Statistieken</button>
+  <div class="win-wrap">
+    <div class="win-media">
+      <div id="win-gif-wrap" style="display:none"><img id="win-gif-img" alt="Darts-gif"></div>
+      <!-- Eigen animatie: pijl vliegt in de bull (werkt altijd, ook offline) -->
+      <div class="win-board" id="win-icon-anim" aria-hidden="true">
+        <svg viewBox="0 0 200 200" width="190" height="190">
+          <g class="wb-board">
+            <circle cx="100" cy="100" r="92" fill="#141314"/>
+            <circle cx="100" cy="100" r="80" fill="#2a2523"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#B94E2A" stroke-width="9" stroke-dasharray="15.7 15.7"/>
+            <circle cx="100" cy="100" r="60" fill="#e9e1d6"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#141314" stroke-width="60" stroke-dasharray="9.42 9.42" opacity=".9"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="#3E7B4F" stroke-width="7" stroke-dasharray="7.85 7.85"/>
+            <circle cx="100" cy="100" r="13" fill="#3E7B4F"/>
+            <circle cx="100" cy="100" r="6" fill="#B94E2A"/>
+          </g>
+          <circle class="wb-ring" cx="100" cy="100" r="10" fill="none" stroke="#E07A55" stroke-width="3"/>
+          <g class="wb-dart">
+            <path d="M100 100 L121 79" stroke="#c9ced2" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M119 81 L149 51" stroke="#141314" stroke-width="13" stroke-linecap="round"/>
+            <path d="M119 81 L149 51" stroke="#F3EDE8" stroke-width="9" stroke-linecap="round"/>
+            <path d="M126 74 L129 71 M133 67 L136 64 M140 60 L143 57" stroke="#B94E2A" stroke-width="9"/>
+            <path d="M149 51 L161 39" stroke="#c9ced2" stroke-width="3" stroke-linecap="round"/>
+            <path d="M158 42 L182 6 L172 46 Z" fill="#E07A55" stroke="#141314" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M158 42 L194 18 L154 52 Z" fill="#B94E2A" stroke="#141314" stroke-width="2" stroke-linejoin="round"/>
+          </g>
+        </svg>
       </div>
-      <button class="btn btn-full" style="color:var(--muted);font-size:13px" onclick="stopConfetti();showScreen('screen-home')">Home</button>
+    </div>
+    <div class="win-kicker" id="win-kicker">Game shot!</div>
+    <h1 class="win-title" id="win-title"></h1>
+    <div class="win-sub" id="win-sub"></div>
+    <div id="win-stats"></div>
+    <div class="win-actions">
+      <button class="win-btn primary" id="btn-rematch" style="display:none" onclick="rematch()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Rematch</button>
+      <button class="win-btn" onclick="stopConfetti();showScreen('screen-setup')">Nieuw spel</button>
+      <div class="win-links">
+        <button onclick="stopConfetti();showScreen('screen-leaderboard')">Ranglijst</button>
+        <button onclick="stopConfetti();showScreen('screen-stats')">Statistieken</button>
+        <button onclick="stopConfetti();showScreen('screen-home')">Home</button>
+      </div>
     </div>
   </div>
 </div>
@@ -2109,32 +2278,6 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <!-- STATS -->
 <div class="screen" id="screen-stats">
   <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Statistieken</h2>
-
-  <!-- Export / Import bar -->
-  <div class="card" style="margin-bottom:12px">
-    <div style="font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Delen &amp; samenvoegen</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Kies een speler om te exporteren en geef de code aan de host. De host importeert alle codes om statistieken samen te voegen.</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary btn-sm" style="display:inline-flex;align-items:center;gap:5px" onclick="showExportPanel()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Exporteer stats</button>
-      <button class="btn btn-sm" style="display:inline-flex;align-items:center;gap:5px" onclick="showImportPanel()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Importeer stats van vriend</button>
-    </div>
-    <div id="export-panel" style="display:none;margin-top:12px">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Welke speler exporteren?</div>
-      <select id="export-player-select" style="width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:700;margin-bottom:8px"></select>
-      <button class="btn btn-sm btn-primary" style="width:100%;margin-bottom:10px" onclick="exportStats()">Genereer exportcode</button>
-      <div id="export-code-wrap" style="display:none">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Exportcode — stuur dit naar de host</div>
-        <textarea id="export-code" readonly style="width:100%;height:80px;font-size:11px;font-family:monospace;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--text);resize:none"></textarea>
-        <button class="btn btn-sm btn-primary" style="margin-top:6px;width:100%" onclick="copyExportCode()">Kopieer code</button>
-      </div>
-    </div>
-    <div id="import-panel" style="display:none;margin-top:12px">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Plak de exportcode van een vriend</div>
-      <textarea id="import-code" style="width:100%;height:80px;font-size:11px;font-family:monospace;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--text);resize:none" placeholder="Plak hier de code…"></textarea>
-      <button class="btn btn-sm btn-primary" style="margin-top:6px;width:100%" onclick="importStats()">Samenvoegen</button>
-      <div id="import-result" style="font-size:12px;margin-top:6px"></div>
-    </div>
-  </div>
 
   <div id="stats-content"></div>
 </div>
@@ -2196,6 +2339,69 @@ var selectedGame='x01';
 var x01StartScore=501;
 var x01CustomScore=1001;
 var soundEnabled=(localStorage.getItem('darts_sound')!=='0');
+// Omroeper: spreekt "Tom, you require 121" uit als je op een finish staat (v199)
+var callerEnabled=(function(){try{return localStorage.getItem('darts_caller')!=='0';}catch(e){return true;}})();
+function renderSettingsPlayers(){
+  var el=document.getElementById('settings-players');if(!el)return;
+  var db=getDB();var names=Object.keys(db).sort(function(a,b){return a.localeCompare(b);});
+  if(!names.length){el.innerHTML='<div style="font-size:13px;color:var(--muted)">Nog geen spelers. Ze verschijnen hier na hun eerste potje.</div>';el.innerHTML+=_hiddenArchiveHtml();return;}
+  el.innerHTML=names.map(function(n){
+    var en=encodeURIComponent(n), nick=(db[n]&&db[n].nickname)||'', priv=isPrivatePlayer(n);
+    return '<div class="sp-row">'+
+      '<div class="sp-top"><b>'+n+'</b><span class="sp-tag'+(priv?' priv':'')+'">'+(priv?'privé':'gedeeld')+'</span></div>'+
+      '<div class="sp-bottom">'+
+        '<input type="text" class="sp-nick" placeholder="Bijnaam" value="'+nick.replace(/"/g,'&quot;')+'" data-n="'+en+'" onchange="setPlayerNickname(decodeURIComponent(this.getAttribute(\'data-n\')),this.value)">'+
+        '<button class="sp-say" aria-label="Laat horen" onclick="var i=this.parentNode.querySelector(\'.sp-nick\');callerSay((i.value.trim()||decodeURIComponent(\''+en+'\'))+\', you require 32\',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>'+
+        '<label class="sp-share"><span>Delen</span><input type="checkbox" class="ios-toggle"'+(priv?'':' checked')+' onchange="setPlayerPrivate(decodeURIComponent(\''+en+'\'),!this.checked);renderSettingsPlayers()"></label>'+
+      '</div></div>';
+  }).join('')+_hiddenArchiveHtml();
+}
+function _hiddenArchiveHtml(){
+  var arc=_getHiddenArchive(),ks=Object.keys(arc);if(!ks.length)return '';
+  return '<div class="st-lbl" style="margin-top:14px">Verborgen door de groep</div>'+
+    '<div style="font-size:12px;color:var(--muted);margin:2px 0 8px">Iemand in de groep heeft deze spelers privé gezet. Hun gegevens staan nog veilig op dit apparaat.</div>'+
+    ks.map(function(n){return '<div class="sp-row"><div class="sp-top"><b>'+n+'</b><button class="lb-chip" onclick="restoreHiddenPlayer(decodeURIComponent(\''+encodeURIComponent(n)+'\'))">Terughalen</button></div></div>';}).join('');
+}
+function setPlayerNickname(name,val){
+  var db=getDB();if(!db[name])return;
+  val=(val||'').trim().slice(0,40);
+  if(val)db[name].nickname=val;else delete db[name].nickname;
+  saveDB(db);
+}
+function setCallerEnabled(v){callerEnabled=v;try{localStorage.setItem('darts_caller',v?'1':'0');}catch(e){}if(!v&&window.speechSynthesis)speechSynthesis.cancel();}
+var _callerVoice=null;
+function _pickCallerVoice(){
+  if(!window.speechSynthesis)return null;
+  var vs=speechSynthesis.getVoices()||[];
+  var pref=['Daniel','Google UK English Male','Arthur','Oliver','Microsoft Ryan','Microsoft George'];
+  for(var i=0;i<pref.length;i++){var v=vs.find(function(x){return x.name.indexOf(pref[i])>=0;});if(v)return v;}
+  return vs.find(function(x){return /en-GB/i.test(x.lang);})||vs.find(function(x){return /^en/i.test(x.lang);})||null;
+}
+if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=function(){_callerVoice=_pickCallerVoice();};}catch(e){}}
+function callerSay(text,interrupt){
+  if(!callerEnabled||!window.speechSynthesis||!text)return;
+  try{
+    if(interrupt)speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);
+    if(!_callerVoice)_callerVoice=_pickCallerVoice();
+    if(_callerVoice)u.voice=_callerVoice;
+    u.lang=(_callerVoice&&_callerVoice.lang)||'en-GB';
+    u.rate=0.92;u.pitch=0.85;u.volume=1;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+var _callerLastKey='',_callerLastAt=0;
+function callerName(n){var db=getDB();return (db&&db[n]&&db[n].nickname)?db[n].nickname:n;}
+function callerRequire(){
+  // X01: aan het begin van een beurt, als de speler op een finish staat
+  if(!state||!state.players||!state.scores||state.currentPlayer===undefined)return;
+  var cur=state.currentPlayer, rem=state.scores[cur];
+  var key=cur+':'+rem+':'+(state.currentLeg||1)+':'+(state.currentSet||1);
+  var now=Date.now();
+  if(key===_callerLastKey&&now-_callerLastAt<15000)return;
+  _callerLastKey=key;_callerLastAt=now;
+  if(rem>0&&rem<=170&&typeof getCheckout==='function'&&getCheckout(rem))callerSay(callerName(state.players[cur])+', you require '+rem);
+}
 function setSoundEnabled(v){soundEnabled=v;localStorage.setItem('darts_sound',v?'1':'0');}
 var doubleOut=true;
 var matchFormat='firstto'; // 'firstto' or 'bestof'
@@ -2296,13 +2502,302 @@ function icon(n,s,c){
   return '<svg xmlns="http://www.w3.org/2000/svg" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="'+st+'">'+( p[n]||'')+'</svg>';
 }
 
+// ═══ Privé-spelers (v201) ═══
+// Privé = alleen op dit apparaat, gaat nooit naar de groep. Lijst staat lokaal.
+// In de groep zelf staat een lijst "hidden", zodat andere telefoons die spelers ook opruimen
+// en nooit opnieuw uploaden.
+function getPrivatePlayers(){try{var a=JSON.parse(localStorage.getItem('darts_private')||'[]');return Array.isArray(a)?a:[];}catch(e){return [];}}
+function isPrivatePlayer(n){return getPrivatePlayers().indexOf(n)>=0;}
+var _groupHidden=[];
+var _hiddenListener=null;
+function _isBlockedForGroup(n){return isPrivatePlayer(n)||_groupHidden.indexOf(n)>=0;}
+function _groupDocRef(){return fbDb.collection('groups').doc(groupCode);}
+function _syncPrivateToGroup(){
+  if(!groupCode)return;
+  var priv=getPrivatePlayers();
+  if(!priv.length)return;
+  try{
+    _groupDocRef().set({hidden:firebase.firestore.FieldValue.arrayUnion.apply(null,priv)},{merge:true})
+      .catch(function(e){console.error('Verbergen in groep mislukt',e);});
+  }catch(e){console.error(e);}
+  priv.forEach(function(n){
+    _groupDocRef().collection('players').doc(n).delete().catch(function(e){console.error('FB delete error',e);});
+  });
+}
+function setPlayerPrivate(name,priv){
+  var list=getPrivatePlayers().filter(function(n){return n!==name;});
+  if(priv)list.push(name);
+  try{localStorage.setItem('darts_private',JSON.stringify(list));}catch(e){}
+  if(!groupCode)return;
+  if(priv){
+    _syncPrivateToGroup();
+  } else {
+    try{
+      _groupDocRef().set({hidden:firebase.firestore.FieldValue.arrayRemove(name)},{merge:true}).catch(function(e){console.error(e);});
+    }catch(e){}
+    _groupHidden=_groupHidden.filter(function(n){return n!==name;});
+    var db=getDB();
+    if(db[name])_groupDocRef().collection('players').doc(name).set(db[name]).catch(function(e){console.error('FB save error',e);});
+  }
+}
+function _getHiddenArchive(){try{var o=JSON.parse(localStorage.getItem('darts_hidden_archive')||'{}');return (o&&typeof o==='object')?o:{};}catch(e){return {};}}
+// Terughalen: speler komt terug op dit apparaat en wordt hier privé (blijft dus uit de groep)
+function restoreHiddenPlayer(name){
+  var arc=_getHiddenArchive();if(!arc[name])return;
+  var list=getPrivatePlayers().filter(function(n){return n!==name;});list.push(name);
+  try{localStorage.setItem('darts_private',JSON.stringify(list));}catch(e){}
+  var db=getDB();
+  if(!db[name])db[name]=arc[name];
+  delete arc[name];
+  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}
+  saveDB(db);renderSettingsPlayers();
+}
+function startHiddenListener(){
+  if(_hiddenListener){_hiddenListener();_hiddenListener=null;}
+  if(!groupCode)return;
+  try{
+    _hiddenListener=_groupDocRef().onSnapshot(function(doc){
+      var d=doc&&doc.exists&&doc.data?doc.data():null;
+      _groupHidden=(d&&Array.isArray(d.hidden))?d.hidden:[];
+      // Spelers die iemand anders privé heeft gezet: hier opruimen (eigen privé-spelers blijven)
+      var changed=false;
+      // Niet wissen maar archiveren op dit apparaat, zodat er nooit gegevens verloren gaan
+      var arc=_getHiddenArchive();
+      _groupHidden.forEach(function(n){if(!isPrivatePlayer(n)&&dbCache[n]){arc[n]=dbCache[n];delete dbCache[n];changed=true;}});
+      if(changed){try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}}
+      if(changed){
+        try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){}
+        var a=document.querySelector('.screen.active');
+        if(a&&a.id==='screen-stats')renderStats();else if(a&&a.id==='screen-history')renderHistory();else if(a&&a.id==='screen-leaderboard')renderLeaderboard(currentLbTab||'avg');
+      }
+    },function(err){console.error('Hidden listener error',err);});
+  }catch(e){console.error(e);}
+}
+
+// ═══ Account + cloud-back-up (v202, fase 1) ═══
+// Inloggen met alleen gebruikersnaam + wachtwoord. Onder water: gebruikersnaam@dartsbytom.app (Firebase Auth).
+// Back-up = complete lokale database (alle spelers, ook privé) in users/{uid}/backup, alleen leesbaar voor jezelf.
+// Herstellen voegt alleen toe of vult aan, er wordt nooit iets lokaal weggegooid.
+var fbAuth=null;try{if(firebase.auth)fbAuth=firebase.auth();}catch(e){fbAuth=null;}
+var acctUser=null,acctProfile=null,acctBackupMeta=null,_acctBackupTimer=null,_acctBackupBusy=false,_acctBackupAgain=false,_acctReady=false;
+var ACCT_DOMAIN='@dartsbytom.app',ACCT_CHUNK=700000;
+function _acctNorm(u){return (u||'').trim().toLowerCase();}
+function _acctValid(u){return /^[a-z0-9_.-]{3,20}$/.test(u);}
+function _acctErr(e){
+  var c=(e&&e.code)||'';
+  var m={'auth/email-already-in-use':'Deze gebruikersnaam is al bezet.','auth/invalid-credential':'Gebruikersnaam of wachtwoord klopt niet.','auth/invalid-login-credentials':'Gebruikersnaam of wachtwoord klopt niet.','auth/wrong-password':'Gebruikersnaam of wachtwoord klopt niet.','auth/user-not-found':'Gebruikersnaam of wachtwoord klopt niet.','auth/weak-password':'Wachtwoord moet minstens 6 tekens zijn.','auth/operation-not-allowed':'Inloggen staat nog niet aan in Firebase (Authentication → E-mail/wachtwoord).','auth/network-request-failed':'Geen internetverbinding.','auth/too-many-requests':'Te veel pogingen. Probeer het straks opnieuw.','permission-denied':'Firebase-regels staan dit niet toe. Zijn de nieuwe regels al geplakt?'}[c];
+  return m||((e&&e.message)?e.message:'Er ging iets mis.');
+}
+function _acctUserRef(){return fbDb.collection('users').doc(acctUser.uid);}
+function _esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function _fmtTs(ms){if(!ms)return 'nog niet';var d=new Date(ms);function z(n){return (n<10?'0':'')+n;}return z(d.getDate())+'-'+z(d.getMonth()+1)+' '+z(d.getHours())+':'+z(d.getMinutes());}
+
+if(fbAuth){
+  fbAuth.onAuthStateChanged(function(u){
+    var same=!!(u&&acctUser&&acctUser.uid===u.uid);
+    acctUser=u||null;if(!same){acctProfile=null;acctBackupMeta=null;}_acctReady=!u;
+    renderAccountCard();
+    if(!u)return;
+    _acctUserRef().get().then(function(doc){
+      var d=(doc&&doc.exists)?doc.data():null;
+      acctProfile=d?Object.assign({},acctProfile||{},d):(acctProfile||{});
+      return _acctLoadMeta();
+    }).then(function(){
+      _acctReady=true;
+      return _acctAutoRestore();
+    }).then(function(){
+      renderAccountCard();
+      _acctScheduleBackup(1500);
+    }).catch(function(e){console.error('Account laden mislukt',e);_acctReady=true;renderAccountCard();});
+  });
+}
+function _acctLoadMeta(){
+  return _acctUserRef().collection('backup').doc('meta').get().then(function(d){acctBackupMeta=(d&&d.exists)?d.data():null;});
+}
+function _acctReadBackup(){
+  if(!acctBackupMeta||!acctBackupMeta.chunks)return Promise.resolve(null);
+  var ps=[];for(var i=0;i<acctBackupMeta.chunks;i++)ps.push(_acctUserRef().collection('backup').doc('c'+i).get());
+  return Promise.all(ps).then(function(docs){
+    var str=docs.map(function(d){return (d&&d.exists&&d.data().d)||'';}).join('');
+    try{return JSON.parse(str);}catch(e){console.error('Back-up onleesbaar',e);return null;}
+  });
+}
+function _games(p){return (p&&Array.isArray(p.gameHistory))?p.gameHistory.length:0;}
+// Samenvoegen: ontbrekende spelers toevoegen, spelers met méér potjes in de back-up aanvullen. Nooit verwijderen.
+function _acctMerge(bk){
+  var db=getDB(),added=[],updated=[];
+  var players=(bk&&bk.db)||{};
+  Object.keys(players).forEach(function(n){
+    if(!db[n]){db[n]=players[n];added.push(n);}
+    else if(_games(players[n])>_games(db[n])){var nick=db[n].nickname;db[n]=players[n];if(nick&&!db[n].nickname)db[n].nickname=nick;updated.push(n);}
+  });
+  if(added.length||updated.length){
+    try{localStorage.setItem('darts_db_before_restore',localStorage.getItem('darts_db')||'{}');}catch(e){}
+    if(bk&&Array.isArray(bk.private)){
+      var pv=getPrivatePlayers();bk.private.forEach(function(n){if(pv.indexOf(n)<0)pv.push(n);});
+      try{localStorage.setItem('darts_private',JSON.stringify(pv));}catch(e){}
+    }
+    saveDB(db);
+  }
+  return {added:added,updated:updated};
+}
+// Na inloggen: als er lokaal spelers ontbreken die wél in de back-up staan, die er automatisch bij zetten.
+function _acctAutoRestore(){
+  if(!acctBackupMeta)return Promise.resolve();
+  var local=getDB();
+  var missing=(acctBackupMeta.players||[]).some(function(n){return !local[n];});
+  if(!missing)return Promise.resolve();
+  return _acctReadBackup().then(function(bk){
+    if(!bk)return;
+    var r=_acctMerge(bk);
+    if(r.added.length)showToast(r.added.length+(r.added.length===1?' speler':' spelers')+' teruggezet uit je back-up','success');
+  });
+}
+function _acctScheduleBackup(delay){
+  if(!acctUser||!_acctReady)return;
+  clearTimeout(_acctBackupTimer);
+  _acctBackupTimer=setTimeout(acctBackupNow,delay||4000);
+}
+function acctBackupNow(manual){
+  if(!acctUser)return Promise.resolve();
+  if(_acctBackupBusy){_acctBackupAgain=true;return Promise.resolve();}
+  var db=getDB();
+  var names=Object.keys(db);
+  if(!names.length){if(manual)showToast('Nog niets om te back-uppen','info');return Promise.resolve();}
+  // Veiligheid: nooit een kleinere back-up over een grotere heen zetten zonder dat je het zelf vraagt
+  if(!manual&&acctBackupMeta&&acctBackupMeta.games>0){
+    var g=0;names.forEach(function(n){g+=_games(db[n]);});
+    if(g<acctBackupMeta.games*0.5){console.warn('Back-up overgeslagen: lokaal veel minder potjes dan in de cloud');return Promise.resolve();}
+  }
+  _acctBackupBusy=true;
+  var str=JSON.stringify({v:1,db:db,private:getPrivatePlayers()});
+  var chunks=[];for(var i=0;i<str.length;i+=ACCT_CHUNK)chunks.push(str.slice(i,i+ACCT_CHUNK));
+  var games=0;names.forEach(function(n){games+=_games(db[n]);});
+  var ref=_acctUserRef().collection('backup');
+  var b=fbDb.batch();
+  chunks.forEach(function(c,i){b.set(ref.doc('c'+i),{d:c});});
+  var old=(acctBackupMeta&&acctBackupMeta.chunks)||0;
+  for(var j=chunks.length;j<old;j++)b.delete(ref.doc('c'+j));
+  var meta={ts:Date.now(),chunks:chunks.length,players:names,games:games,app:APP_VERSION};
+  b.set(ref.doc('meta'),meta);
+  return b.commit().then(function(){
+    acctBackupMeta=meta;
+    if(manual)showToast('Back-up gemaakt','success');
+    _acctRefreshStatus();
+  }).catch(function(e){
+    console.error('Back-up mislukt',e);
+    if(manual)showToast(_acctErr(e),'error');
+  }).then(function(){
+    _acctBackupBusy=false;
+    if(_acctBackupAgain){_acctBackupAgain=false;_acctScheduleBackup(2000);}
+  });
+}
+function _acctRefreshStatus(){var el=document.getElementById('ac-last');if(el)el.textContent=_fmtTs(acctBackupMeta&&acctBackupMeta.ts);}
+
+function renderAccountCard(){
+  var el=document.getElementById('settings-account');if(!el)return;
+  if(!fbAuth){el.innerHTML='<div class="ac-note" style="margin:0">Account is niet beschikbaar (geen verbinding met Firebase).</div>';return;}
+  if(!acctUser){
+    el.innerHTML='<div class="ac-note">Maak een account aan. Je statistieken en geschiedenis staan dan veilig in de cloud, ook als je telefoon kwijt of leeg is. Alleen jij kunt je back-up zien.</div>'+
+      '<div class="ac-btns"><button class="btn btn-primary btn-sm" onclick="openAcctSheet(\'register\')">Account maken</button><button class="btn btn-sm" onclick="openAcctSheet(\'login\')">Inloggen</button></div>';
+    return;
+  }
+  var uname=(acctProfile&&acctProfile.username)||(acctUser.email||'').replace(ACCT_DOMAIN,'');
+  var me=(acctProfile&&acctProfile.player)||'';
+  var names=Object.keys(getDB()).sort(function(a,b){return a.localeCompare(b);});
+  if(me&&names.indexOf(me)<0)names.unshift(me);
+  el.innerHTML='<div class="ac-row" style="border-top:0"><span>Ingelogd als</span><b>'+_esc(uname)+'</b></div>'+
+    '<div class="ac-row"><span>Jij bent</span><select onchange="acctSetPlayer(this.value)" style="height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-weight:700;padding:0 10px;max-width:60%">'+
+      (me?'':'<option value="">Kies je speler</option>')+names.map(function(n){return '<option value="'+_esc(n)+'"'+(n===me?' selected':'')+'>'+_esc(n)+'</option>';}).join('')+'</select></div>'+
+    '<div class="ac-row"><span>Laatste back-up</span><b id="ac-last">'+(_acctReady?_fmtTs(acctBackupMeta&&acctBackupMeta.ts):'laden…')+'</b></div>'+
+    '<div class="ac-btns"><button class="btn btn-primary btn-sm" onclick="acctBackupNow(true)">Nu back-uppen</button><button class="btn btn-sm" onclick="openAcctRestore()">Herstellen</button><button class="btn btn-sm" onclick="acctLogout()">Uitloggen</button></div>';
+}
+function openAcctSheet(mode){
+  var reg=mode==='register';
+  var names=Object.keys(getDB()).sort(function(a,b){return a.localeCompare(b);});
+  var html='<div class="ac-field"><span>Gebruikersnaam</span><input id="ac-user" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="bijv. tom"></div>'+
+    '<div class="ac-field"><span>Wachtwoord</span><input id="ac-pw" type="password" autocomplete="'+(reg?'new-password':'current-password')+'" placeholder="minstens 6 tekens"></div>';
+  if(reg){
+    html+='<div class="ac-field"><span>Wachtwoord nog een keer</span><input id="ac-pw2" type="password" autocomplete="new-password"></div>';
+    if(names.length)html+='<div class="ac-field"><span>Welke speler ben jij?</span><select id="ac-player"><option value="">Later kiezen</option>'+names.map(function(n){return '<option value="'+_esc(n)+'">'+_esc(n)+'</option>';}).join('')+'</select></div>';
+    html+='<div class="ac-note">3 tot 20 tekens: letters, cijfers, punt, streepje of _. Onthoud je wachtwoord goed: zonder e-mailadres kan het niet worden teruggezet.</div>';
+  }
+  html+='<div class="ac-err" id="ac-err"></div><button class="g-hit" id="ac-go" style="width:100%" onclick="'+(reg?'acctRegister()':'acctLogin()')+'">'+(reg?'Account maken':'Inloggen')+'</button>';
+  openGameSheet(reg?'Account maken':'Inloggen',html);
+  setTimeout(function(){var i=document.getElementById('ac-user');if(i)i.focus();},50);
+}
+function _acctBusy(on,label){var b=document.getElementById('ac-go');if(b){b.disabled=on;b.style.opacity=on?.6:1;if(label)b.textContent=label;}}
+function _acctShowErr(t){var e=document.getElementById('ac-err');if(e)e.textContent=t||'';}
+function acctRegister(){
+  var u=_acctNorm(document.getElementById('ac-user').value),pw=document.getElementById('ac-pw').value,pw2=document.getElementById('ac-pw2').value;
+  var pl=document.getElementById('ac-player');var player=pl?pl.value:'';
+  if(!_acctValid(u))return _acctShowErr('Gebruikersnaam: 3 tot 20 tekens, alleen letters, cijfers, . - _');
+  if(pw.length<6)return _acctShowErr('Wachtwoord moet minstens 6 tekens zijn.');
+  if(pw!==pw2)return _acctShowErr('De wachtwoorden zijn niet gelijk.');
+  _acctShowErr('');_acctBusy(true,'Bezig…');
+  fbAuth.createUserWithEmailAndPassword(u+ACCT_DOMAIN,pw).then(function(cred){
+    var uid=cred.user.uid;
+    var prof={username:u,player:player||'',createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+    var b=fbDb.batch();
+    b.set(fbDb.collection('usernames').doc(u),{uid:uid});
+    b.set(fbDb.collection('users').doc(uid),prof);
+    return b.commit().then(function(){acctProfile={username:u,player:player||''};});
+  }).then(function(){
+    closeGameSheet();showToast('Account gemaakt','success');
+    _acctReady=true;renderAccountCard();acctBackupNow(false);
+  }).catch(function(e){console.error(e);_acctBusy(false,'Account maken');_acctShowErr(_acctErr(e));});
+}
+function acctLogin(){
+  var u=_acctNorm(document.getElementById('ac-user').value),pw=document.getElementById('ac-pw').value;
+  if(!u||!pw)return _acctShowErr('Vul je gebruikersnaam en wachtwoord in.');
+  _acctShowErr('');_acctBusy(true,'Bezig…');
+  fbAuth.signInWithEmailAndPassword(u+ACCT_DOMAIN,pw).then(function(){
+    closeGameSheet();showToast('Ingelogd','success');
+  }).catch(function(e){console.error(e);_acctBusy(false,'Inloggen');_acctShowErr(_acctErr(e));});
+}
+function acctSetPlayer(n){
+  if(!acctUser)return;
+  acctProfile=acctProfile||{};acctProfile.player=n;
+  _acctUserRef().set({player:n},{merge:true}).catch(function(e){showToast(_acctErr(e),'error');});
+  renderAccountCard();
+}
+function acctLogout(){
+  openGameSheet('Uitloggen?','<div class="ac-note">Je gegevens blijven gewoon op deze telefoon staan. Er wordt alleen geen back-up meer gemaakt tot je weer inlogt.</div>'+
+    '<button class="g-hit" style="width:100%;background:#B94E2A" onclick="closeGameSheet();acctBackupNow(false).then(function(){return fbAuth.signOut();}).then(function(){showToast(\'Uitgelogd\',\'info\');})">Uitloggen</button>');
+}
+function openAcctRestore(){
+  if(!acctUser)return;
+  _acctLoadMeta().then(function(){
+    if(!acctBackupMeta){openGameSheet('Herstellen','<div class="ac-note">Er staat nog geen back-up in de cloud.</div>');return;}
+    var m=acctBackupMeta;
+    openGameSheet('Herstellen uit back-up',
+      '<div class="ac-row" style="border-top:0"><span>Back-up van</span><b>'+_fmtTs(m.ts)+'</b></div>'+
+      '<div class="ac-row"><span>Spelers</span><b>'+(m.players||[]).length+'</b></div>'+
+      '<div class="ac-row"><span>Potjes</span><b>'+(m.games||0)+'</b></div>'+
+      '<div class="ac-note" style="margin-top:10px">Ontbrekende spelers worden toegevoegd en spelers met meer potjes in de back-up worden aangevuld. Er wordt niets van deze telefoon verwijderd.</div>'+
+      '<button class="g-hit" style="width:100%" onclick="acctRestoreNow()">Herstellen</button>');
+  }).catch(function(e){showToast(_acctErr(e),'error');});
+}
+function acctRestoreNow(){
+  _acctReadBackup().then(function(bk){
+    closeGameSheet();
+    if(!bk){showToast('Back-up kon niet worden gelezen','error');return;}
+    var r=_acctMerge(bk);
+    if(!r.added.length&&!r.updated.length)showToast('Alles was al up-to-date','info');
+    else showToast((r.added.length+r.updated.length)+(r.added.length+r.updated.length===1?' speler':' spelers')+' hersteld','success');
+    renderSettingsPlayers();renderAccountCard();
+  }).catch(function(e){showToast(_acctErr(e),'error');});
+}
+
 function saveDB(db){
   dbCache = db;
   // Always persist locally as backup
   try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
+  _acctScheduleBackup();
   if(!groupCode) return;
-  // Write each player doc to Firestore
+  // Write each player doc to Firestore (privé- en verborgen spelers niet)
   Object.keys(db).forEach(function(name){
+    if(_isBlockedForGroup(name))return;
     fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(db[name]).catch(function(e){console.error('FB save error',e);});
   });
 }
@@ -2330,6 +2825,8 @@ function closeGroupModal(){
 function disconnectGroup(){
   if(!confirm('Verbinding verbreken met groep "'+groupCode+'"? Lokale stats blijven bewaard.'))return;
   if(fbListener){fbListener();fbListener=null;}
+  if(_hiddenListener){_hiddenListener();_hiddenListener=null;}
+  _groupHidden=[];
   groupCode=null;
   localStorage.removeItem('darts_group_code');
   dbCache={};
@@ -2375,10 +2872,20 @@ function updateGroupTile(){
   }
 }
 
-function confirmGroupCode(){
+function confirmGroupCode(skipAsk){
   var val = document.getElementById('group-code-input').value.trim();
   if(!val || val.length < 2){
     document.getElementById('group-code-error').textContent = 'Voer minimaal 2 tekens in.';
+    return;
+  }
+  // Eerst vragen welke spelers van dit apparaat gedeeld mogen worden (v201)
+  var _local=Object.keys(_loadLocalDB()||{});
+  if(!skipAsk&&_local.length){
+    document.getElementById('group-modal').style.display='none';
+    openGameSheet('Wie wil je delen met de groep?',
+      '<div style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.45">Uitgevinkte spelers blijven privé op deze telefoon. Je kunt dit later aanpassen in Instellingen.</div>'+
+      '<div class="pp-list">'+_local.map(function(n){return '<label class="pp-row"><span>'+n+'</span><input type="checkbox" class="ios-toggle" data-pp="'+encodeURIComponent(n)+'"'+(isPrivatePlayer(n)?'':' checked')+'></label>';}).join('')+'</div>'+
+      '<button class="g-hit" style="width:100%;margin-top:12px;background:#3E7B4F" onclick="_confirmShareChoice()">Verbinden</button>');
     return;
   }
   localStorage.setItem('darts_group_code', val);
@@ -2391,6 +2898,7 @@ function confirmGroupCode(){
     if(localRaw){
       var localData = JSON.parse(localRaw);
       Object.keys(localData).forEach(function(name){
+        if(isPrivatePlayer(name))return; // privé-spelers niet delen
         fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(localData[name], {merge:true})
           .catch(function(e){console.error('Auto-upload fout voor '+name, e);});
       });
@@ -2401,14 +2909,24 @@ function confirmGroupCode(){
   updateGroupTile();
 }
 
+function _confirmShareChoice(){
+  document.querySelectorAll('#game-sheet [data-pp]').forEach(function(cb){setPlayerPrivate(decodeURIComponent(cb.getAttribute('data-pp')),!cb.checked);});
+  closeGameSheet();
+  confirmGroupCode(true);
+}
 function startFirebaseListener(){
+  startHiddenListener();
+  _syncPrivateToGroup();
   if(fbListener) fbListener(); // unsubscribe previous
   fbListener = fbDb.collection('groups').doc(groupCode).collection('players').onSnapshot(function(snapshot){
     snapshot.docChanges().forEach(function(change){
+      var _id=change.doc.id;
+      if(isPrivatePlayer(_id))return; // eigen privé-speler: lokale gegevens leidend, niet overschrijven of wissen
       if(change.type === 'added' || change.type === 'modified'){
-        dbCache[change.doc.id] = change.doc.data();
+        if(_groupHidden.indexOf(_id)>=0)return;
+        dbCache[_id] = change.doc.data();
       } else if(change.type === 'removed'){
-        delete dbCache[change.doc.id];
+        delete dbCache[_id];
       }
     });
     // Hide loading overlay on first load
@@ -2531,7 +3049,7 @@ function showScreen(id){
     if(id!=='screen-game'&&typeof toggleX01Stats==='function')toggleX01Stats(false);
   }
   // Tournament nav rendered inline in renderTrnOverview/renderStandings
-  if(id==='screen-settings'){var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
+  if(id==='screen-settings'){renderSettingsPlayers();renderAccountCard();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
   if(id==='screen-stats')renderStats();
   if(id==='screen-leaderboard'){renderLeaderboard('avg');}
   if(id==='screen-history')renderHistory();
@@ -4345,20 +4863,30 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
 // ═══════════════════════════════════════════
 // TOURNAMENT OVERVIEW RENDER
 // ═══════════════════════════════════════════
+function _trnFormatLabel(){
+  return (trn.format==='knockout'?'Knock-out':trn.format==='roundrobin'?'Round Robin':'Groepsfase + knock-out')+(trn.bestOf?' · Best of '+trn.bestOf:'');
+}
+function _trnHead(el,active){
+  var hasStand=trn.format==='roundrobin'||(trn.format==='group'&&trn.phase==='group');
+  var h=document.createElement('div');
+  h.className='trn-head';
+  h.innerHTML='<div class="g-head"><div class="g-head-l"><span class="g-head-sub">Toernooi · '+_trnFormatLabel()+'</span><span class="g-head-main">'+(active==='stand'?'Stand':'Wedstrijden')+'</span></div>'+
+    '<button class="trn-exit" aria-label="Toernooi verlaten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
+    (hasStand?'<div class="g-seg trn-seg" style="grid-template-columns:1fr 1fr"><button class="'+(active!=='stand'?'on':'')+'" data-v="m">Wedstrijden</button><button class="'+(active==='stand'?'on':'')+'" data-v="s">Stand</button></div>':'');
+  h.querySelector('.trn-exit').onclick=function(){if(confirm('Toernooi verlaten?'))showScreen('screen-home');};
+  h.querySelectorAll('.trn-seg button').forEach(function(b){b.onclick=function(){if(b.getAttribute('data-v')==='s'){renderStandings();showScreen('screen-trn-standings');}else{renderTrnOverview();showScreen('screen-trn-overview');}};});
+  el.appendChild(h);
+}
+function _trnChampion(name){
+  var d=document.createElement('div');
+  d.className='trn-champ';
+  d.innerHTML='<div class="trn-champ-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>'+
+    '<div class="trn-champ-kicker">Toernooiwinnaar</div><div class="trn-champ-name">'+name+'</div>';
+  return d;
+}
 function renderTrnOverview(){
   var el=document.getElementById('trn-overview-content');el.innerHTML='';
-  // Nav bar
-  var navBar=document.createElement('div');
-  navBar.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px';
-  var homeB=document.createElement('button');homeB.className='setup-nav-arrow';homeB.textContent='← Home';homeB.style.cssText='padding:6px 14px';
-  homeB.onclick=function(){if(confirm('Toernooi verlaten?'))showScreen('screen-home');};
-  navBar.appendChild(homeB);
-  if(trn.format==='roundrobin'||(trn.format==='group'&&trn.phase==='group')){
-    var stB=document.createElement('button');stB.className='setup-nav-arrow';stB.textContent='Stand →';stB.style.cssText='padding:6px 14px';
-    stB.onclick=function(){renderStandings();showScreen('screen-trn-standings');};
-    navBar.appendChild(stB);
-  }
-  el.appendChild(navBar);
+  _trnHead(el,'matches');
   if(trn.format==='knockout'){
     renderKnockoutOverview(el);
   } else if(trn.format==='roundrobin'){
@@ -4379,7 +4907,7 @@ function matchHeader(match,label,isCurrent,isLocked){
   var p1win=match.winner===match.p1,p2win=match.winner===match.p2;
   div.innerHTML=
     '<div class="trn-match-header">'+label+
-      (match.done?' — Gespeeld':isCurrent?' — Aan de beurt':isLocked?' — Wacht op vorige':'')+
+      (match.done?' · gespeeld':isCurrent?' · nu spelen':isLocked?' · wacht':'')+
     '</div>'+
     '<div class="trn-player-row'+(p1win?' winner':match.done?' loser':'')+'">'+
       '<span class="trn-player-name">'+match.p1+'</span>'+
@@ -4391,8 +4919,8 @@ function matchHeader(match,label,isCurrent,isLocked){
     '</div>';
   if(isCurrent){
     var playBtn=document.createElement('button');
-    playBtn.className='btn btn-primary btn-full';
-    playBtn.style.margin='8px';playBtn.style.width='calc(100% - 16px)';
+    playBtn.className='g-hit';
+    playBtn.style.cssText='margin:4px 10px 10px;width:calc(100% - 20px);min-height:48px;font-size:16px';
     playBtn.textContent='Speel leg '+(match.w1+match.w2+1);
     playBtn.onclick=(function(m){return function(){
       launchTrnMatch(m,function(winnerName){
@@ -4411,9 +4939,7 @@ function renderKnockoutOverview(el,isSubphase){
   var finalRound=trn.bracket[totalRounds-1];
   if(finalRound&&finalRound.length===1&&finalRound[0].done){
     var champ=finalRound[0].winner;
-    var champDiv=document.createElement('div');
-    champDiv.innerHTML='<div class="win-icon" style="padding:8px 0"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(254,104,7,0.5))\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div><div class="win-title">'+champ+'</div><div class="win-sub">Toernooi winnaar!</div>';
-    el.appendChild(champDiv);
+    el.appendChild(_trnChampion(champ));
   }
   trn.bracket.forEach(function(round,ri){
     var section=document.createElement('div');section.className='bracket-round';
@@ -4445,9 +4971,7 @@ function renderRROverview(el){
     var playoffAllDone=trn.rrPlayoffMatches.length>0&&trn.rrPlayoffMatches.every(function(m){return m.done;});
     if(playoffAllDone){
       var champ=trn.rrPlayoffMatches[0].winner;
-      var champDiv=document.createElement('div');
-      champDiv.innerHTML='<div class="win-icon" style="padding:8px 0"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(254,104,7,0.5))\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div><div class="win-title">'+champ+'</div><div class="win-sub">Toernooi winnaar!</div>';
-      el.appendChild(champDiv);
+      el.appendChild(_trnChampion(champ));
     }
     var sec=document.createElement('div');sec.className='bracket-round';
     var t=document.createElement('div');t.className='bracket-round-title';t.textContent='Finale ronde';
@@ -4466,7 +4990,7 @@ function renderRROverview(el){
     standSec.appendChild(st);
     var sorted2=trn.rrStandings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won;});
     var mini=document.createElement('div');mini.className='card';
-    mini.innerHTML=sorted2.map(function(s,i){return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.won+'W/'+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';}).join('');
+    mini.innerHTML=sorted2.map(function(s,i){return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="standing-rec">'+s.won+'W · '+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';}).join('');
     standSec.appendChild(mini);el.appendChild(standSec);
     return;
   }
@@ -4476,12 +5000,12 @@ function renderRROverview(el){
     // Show standings summary
     var sumDiv=document.createElement('div');sumDiv.className='card';sumDiv.style.marginBottom='12px';
     sumDiv.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px;letter-spacing:.5px">EINDSTAND POULE</div>'+
-      sorted.map(function(s,i){return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.won+'W/'+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';}).join('');
+      sorted.map(function(s,i){return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="standing-rec">'+s.won+'W · '+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';}).join('');
     el.appendChild(sumDiv);
     if(sorted.length>=2){
       var pfBtn=document.createElement('button');
-      pfBtn.className='btn btn-primary btn-full';pfBtn.style.marginBottom='16px';
-      pfBtn.innerHTML='&#127941; Start finale ronde &#8594;';
+      pfBtn.className='g-hit';pfBtn.style.cssText='width:100%;margin-bottom:16px';
+      pfBtn.textContent='Start finale ronde →';
       pfBtn.onclick=startRRPlayoff;
       el.appendChild(pfBtn);
     }
@@ -4504,7 +5028,7 @@ function renderGroupOverview(el){
   var allGroupsDone=trn.groupMatches.every(function(m){return m.done});
   if(allGroupsDone){
     var advBtn=document.createElement('button');
-    advBtn.className='btn btn-info btn-full';advBtn.style.marginBottom='12px';
+    advBtn.className='g-hit';advBtn.style.cssText='width:100%;margin-bottom:12px';
     advBtn.textContent='Knock-out fase starten →';
     advBtn.onclick=startGroupKnockout;
     el.appendChild(advBtn);
@@ -4517,7 +5041,7 @@ function renderGroupOverview(el){
     var sorted=grp.standings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won});
     var mini=document.createElement('div');mini.className='card';mini.style.marginBottom='8px';
     mini.innerHTML=sorted.map(function(s,i){
-      return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.won+'W/'+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';
+      return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="standing-rec">'+s.won+'W · '+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';
     }).join('');
     sec.appendChild(mini);
     trn.groupMatches.filter(function(m){return m.group===grp.name}).forEach(function(match,i){
@@ -4529,10 +5053,7 @@ function renderGroupOverview(el){
 
 function renderStandings(){
   var el=document.getElementById('trn-standings-content');el.innerHTML='';
-  var navBar2=document.createElement('div');navBar2.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px';
-  var backB=document.createElement('button');backB.className='setup-nav-arrow';backB.textContent='← Bracket';backB.style.cssText='padding:6px 14px';
-  backB.onclick=function(){renderTrnOverview();showScreen('screen-trn-overview');};
-  navBar2.appendChild(backB);el.appendChild(navBar2);
+  _trnHead(el,'stand');
   var standings=[];
   if(trn.format==='roundrobin'){standings=trn.rrStandings;}
   else if(trn.format==='group'){
@@ -4542,7 +5063,7 @@ function renderStandings(){
       var sorted=grp.standings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won});
       var card=document.createElement('div');card.className='card';
       card.innerHTML=sorted.map(function(s,i){
-        return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.played+'G '+s.won+'W '+s.lost+'V</span><span class="standing-pts">'+s.pts+'</span></div>';
+        return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="standing-rec">'+s.played+'G · '+s.won+'W · '+s.lost+'V</span><span class="standing-pts">'+s.pts+'</span></div>';
       }).join('');
       sec.appendChild(card);el.appendChild(sec);
     });
@@ -4551,7 +5072,7 @@ function renderStandings(){
   var card=document.createElement('div');card.className='card';
   var sorted=standings.slice().sort(function(a,b){return b.pts-a.pts||b.won-a.won});
   card.innerHTML=sorted.map(function(s,i){
-    return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="muted" style="font-size:12px">'+s.played+'G '+s.won+'W '+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';
+    return'<div class="standing-row"><span class="standing-pos">'+(i+1)+'</span><span class="standing-name">'+s.name+'</span><span class="standing-rec">'+s.played+'G · '+s.won+'W · '+s.lost+'V</span><span class="standing-pts">'+s.pts+'pt</span></div>';
   }).join('');
   el.appendChild(card);
 }
@@ -5187,8 +5708,42 @@ function saveRematchConfig(){
     hiSeq:state.hiSeq?state.hiSeq.map(function(s){return Object.assign({},s)}):null
   };
 }
+// Rematch: eerst kiezen wie begint (zelf kiezen of loting) (v200)
 function rematch(){
   if(!rematchConfig)return;
+  var c=rematchConfig;
+  if(!c.players||c.players.length<2){_doRematch(0);return;}
+  var html='<div class="rm-list">'+c.players.map(function(n,i){
+    return '<button class="rm-pl" data-i="'+i+'" onclick="_doRematch('+i+')"><span class="rm-num">'+(i+1)+'</span><span class="rm-name">'+n+'</span><span class="rm-go">begint</span></button>';
+  }).join('')+'</div>'+
+  '<button class="g-hit" id="rm-draw" style="width:100%;margin-top:10px;background:#B94E2A" onclick="_rematchDraw()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Loting</button>';
+  openGameSheet('Wie begint de rematch?',html);
+}
+function _rematchDraw(){
+  var c=rematchConfig;if(!c)return;
+  var btns=[].slice.call(document.querySelectorAll('#game-sheet .rm-pl'));
+  var draw=document.getElementById('rm-draw');
+  if(!btns.length)return;
+  btns.forEach(function(b){b.disabled=true;});if(draw)draw.disabled=true;
+  var winner=Math.floor(Math.random()*btns.length);
+  var steps=btns.length*3+winner, k=0, delay=70;
+  (function tick(){
+    btns.forEach(function(b){b.classList.remove('hl');});
+    btns[k%btns.length].classList.add('hl');
+    if(k>=steps){
+      btns[winner].classList.add('won');
+      if(draw)draw.textContent=c.players[winner]+' begint!';
+      if(typeof callerSay==='function')callerSay(callerName(c.players[winner])+' to throw first. Game on!',true);
+      setTimeout(function(){_doRematch(winner);},1100);
+      return;
+    }
+    k++;delay=Math.min(260,delay*1.08);
+    setTimeout(tick,delay);
+  })();
+}
+function _doRematch(startIdx){
+  if(!rematchConfig)return;
+  closeGameSheet();
   stopConfetti();
   var c=rematchConfig;
   state.botPlayerIndex=-1;
@@ -5196,7 +5751,7 @@ function rematch(){
   if(c.atcMode)atcMode=c.atcMode;
   if(c.shHalve!==undefined)shHalveOpt=c.shHalve;
   if(c.hiSeq)hiSequence=c.hiSeq.map(function(s){return Object.assign({},s)});
-  launchGame(c.gameType,c.players,c.doubleOut,c.matchFormat,c.matchN,c.matchSets,c.x01Start);
+  launchGame(c.gameType,c.players,c.doubleOut,c.matchFormat,c.matchN,c.matchSets,c.x01Start,startIdx||0);
 }
 
 function quickScore(val){
@@ -5390,6 +5945,7 @@ function endGame501(winnerName){
   if(state.trnMode&&state.trnMatchCallback){
     var cb=state.trnMatchCallback;state.trnMode=false;state.trnMatchCallback=null;
     state.botPlayerIndex=-1;
+    callerSay('Game shot, and the leg, '+callerName(winnerName)+'!',true);
     cb(winnerName);return;
   }
   // If double-out, ask which double was thrown (skip for bot — show info instead)
@@ -5458,6 +6014,7 @@ function finishEndGame501(winnerName){
     // Wissel op volgorde van leg — leg 1: speler 0, leg 2: speler 1, etc.
     state.currentPlayer=(state.currentLeg-1+state.firstPlayer)%state.players.length;
     setScoreFeedback(winnerName+' wint de leg!'+(setOver?' Set gewonnen!':''),'var(--success)');
+    callerSay('Game shot, and the '+(setOver?'set':'leg')+', '+callerName(winnerName)+'!',true);
     setTimeout(function(){
       renderGame();
       if(state.currentPlayer===state.botPlayerIndex){
@@ -6454,60 +7011,66 @@ function renderHiHistory(){
 // ═══════════════════════════════════════════
 // WIN & STATS
 // ═══════════════════════════════════════════
+// Eigen darts-gifs: zet hier links naar gifs (bijv. van giphy.com, "Copy GIF link").
+// Leeg = de ingebouwde animatie. Optioneel: een eigen gratis Giphy API-key voor willekeurige gifs.
+var WIN_GIFS=[];
+var GIPHY_API_KEY='';
 function loadWinGif(){
-  var wrap=document.getElementById('win-gif-wrap');
-  var img=document.getElementById('win-gif-img');
+  var wrap=document.getElementById('win-gif-wrap'),img=document.getElementById('win-gif-img'),board=document.getElementById('win-icon-anim');
   if(!wrap||!img)return;
-  wrap.style.display='none';img.src='';
-  var tags=['darts','darts+bullseye','dart+throw'];
-  var tag=tags[Math.floor(Math.random()*tags.length)];
-  fetch('https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag='+tag+'&rating=g',{mode:'cors'})
-    .then(function(r){return r.ok?r.json():Promise.reject('err');})
-    .then(function(j){
-      var src=j&&j.data&&j.data.images&&j.data.images.fixed_height&&j.data.images.fixed_height.url;
-      if(!src)src=j&&j.data&&j.data.images&&j.data.images.original&&j.data.images.original.url;
-      if(src){
-        img.onload=function(){wrap.style.display='block';};
-        img.onerror=function(){wrap.style.display='none';};
-        img.src=src;
-      }
-    })
-    .catch(function(){/* offline of rate-limited: gewoon geen gif */});
+  wrap.style.display='none';img.removeAttribute('src');if(board)board.style.display='';
+  function show(src){
+    img.onload=function(){wrap.style.display='block';if(board)board.style.display='none';};
+    img.onerror=function(){wrap.style.display='none';if(board)board.style.display='';};
+    img.src=src;
+  }
+  if(WIN_GIFS.length){show(WIN_GIFS[Math.floor(Math.random()*WIN_GIFS.length)]);return;}
+  if(!GIPHY_API_KEY||!navigator.onLine)return;
+  var tags=['darts','darts celebration','bullseye'];
+  fetch('https://api.giphy.com/v1/gifs/random?api_key='+GIPHY_API_KEY+'&tag='+encodeURIComponent(tags[Math.floor(Math.random()*tags.length)])+'&rating=g')
+    .then(function(r){return r.ok?r.json():Promise.reject();})
+    .then(function(j){var im=j&&j.data&&j.data.images;var src=im&&((im.fixed_height&&im.fixed_height.url)||(im.original&&im.original.url));if(src)show(src);})
+    .catch(function(){});
+}
+function _winStatsTable(){
+  // Vergelijkingstabel voor 501/301
+  if(!state.players||!state.history||typeof calcDetailedStats!=='function')return '';
+  if(!(state.gameType==='x01'||state.gameType==='501'||state.gameType==='301'))return '';
+  var rows=[['3-pijl gem.','avg3'],["180's",'count180'],['Hoogste beurt','highTurn'],['Hoogste finish','highFinish'],['Dubbel %','checkoutPct']];
+  var st=state.players.map(function(n,i){try{return calcDetailedStats(i);}catch(e){return {};}});
+  var head='<div class="ws-row ws-head"><span></span>'+state.players.map(function(n){return '<b>'+n+'</b>';}).join('')+'</div>';
+  var body=rows.map(function(r){
+    var vals=st.map(function(x){var v=x[r[1]];return (v===null||v===undefined||v===0&&r[1]==='highFinish')?'—':(r[1]==='checkoutPct'?v+'%':v);});
+    var nums=st.map(function(x){return typeof x[r[1]]==='number'?x[r[1]]:-1;});
+    var best=Math.max.apply(null,nums);
+    return '<div class="ws-row"><span>'+r[0]+'</span>'+vals.map(function(v,i){return '<b class="'+(nums[i]===best&&best>0&&state.players.length>1?'best':'')+'">'+v+'</b>';}).join('')+'</div>';
+  }).join('');
+  return '<div class="win-card" style="--cols:'+state.players.length+'">'+head+body+'</div>';
 }
 function showWin(winner,sub,extra){
   var isSoloEnd=(state.players&&state.players.length<=1)||winner==='Eindstand';
-  document.getElementById('win-title').innerHTML=isSoloEnd?
-    '<span style="color:var(--accent)">Eindstand</span>':
-    '<span style="color:var(--accent)">'+winner+'</span> wint!';
+  document.getElementById('win-title').innerHTML=isSoloEnd?'Eindstand':'<span class="win-name">'+winner+'</span> wint!';
+  var kick=document.getElementById('win-kicker');
+  if(kick)kick.textContent=isSoloEnd?'Goed gegooid':((state.gameType==='x01'||state.gameType==='501'||state.gameType==='301')?'Game shot and the match':'Gewonnen');
   var rbtn=document.getElementById('btn-rematch');
-  if(rbtn)rbtn.style.display=rematchConfig?'block':'none';
-  document.getElementById('win-sub').textContent=sub;
-  // Success check SVG — insert before stats
-  var checkSvg=isSoloEnd?'':'<div style="display:flex;justify-content:center;margin-bottom:10px"><svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+
-    '<circle cx="30" cy="30" r="26" stroke="rgba(34,197,94,.3)" stroke-width="3" fill="none" style="animation:popIn .4s ease-out"/>'+
-    '<circle cx="30" cy="30" r="26" stroke="rgba(34,197,94,.7)" stroke-width="3" fill="none" stroke-dasharray="164" stroke-dashoffset="164" style="animation:drawCheck .5s ease-out .1s forwards;transform-origin:30px 30px;transform:rotate(-90deg)"/>'+
-    '<path d="M19 30 L27 38 L41 22" stroke="#22c55e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="36" stroke-dashoffset="36" style="animation:drawCheck .4s ease-out .35s forwards"/>'+
-  '</svg></div>';
-  document.getElementById('win-stats').innerHTML=(checkSvg+(extra?'<div class="card">'+extra+'</div>':''));
+  if(rbtn)rbtn.style.display=rematchConfig?'':'none';
+  document.getElementById('win-sub').textContent=(sub||'').replace(/\s*🎯/g,'');
+  var tbl=_winStatsTable();
+  document.getElementById('win-stats').innerHTML=tbl+(extra?'<div class="win-card win-extra">'+extra+'</div>':'');
   showScreen('screen-win');
   playSound('win');
   startConfetti();
   loadWinGif();
-  // Win icon: pop-in entrance then continuous pulse
-  var wicon=document.getElementById('win-icon-anim');
-  if(wicon){
-    wicon.style.animation='winPopIn .55s cubic-bezier(.34,1.56,.64,1) forwards';
-    wicon.addEventListener('animationend',function onWinPopEnd(){
-      wicon.removeEventListener('animationend',onWinPopEnd);
-      wicon.style.animation='winPulse 1s ease-in-out infinite';
-    });
-  }
+  if(!isSoloEnd)callerSay(callerName(winner)+' wins the match!');
+  var wb=document.getElementById('win-icon-anim');
+  if(wb){wb.classList.remove('play');void wb.offsetWidth;wb.classList.add('play');}
 }
 var statsGameFilter={};  // per player: welk gametype geselecteerd
 var statsVsFilter={};
 var statsSelectedPlayer=null;
 function selectStatsPlayer(n){statsSelectedPlayer=n;renderStats();}
 
+var GAME_TYPE_LABELS={'x01':'X01','501':'501','301':'301','atc':'Around the Clock','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien','eliminatie':'Eliminatie'};
 // Leeg-scherm met icoon, uitleg en (optioneel) knop naar Nieuw spel
 function emptyState(title,sub,cta){
   return '<div class="empty-state">'+
@@ -6525,11 +7088,10 @@ function renderStats(){
   el.innerHTML='';
   // Player name picker row
   var _picker=document.createElement('div');
-  _picker.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;';
+  _picker.className='lb-chiprow';
   names.forEach(function(_n){
     var _btn=document.createElement('button');var _act=_n===statsSelectedPlayer;
-    _btn.style.cssText='padding:6px 16px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;'+
-      'background:'+(_act?'var(--accent)':'var(--surface)')+';color:'+(_act?'#fff':'var(--muted)')+';';
+    _btn.className='lb-chip'+(_act?' active':'');
     _btn.textContent=_n;_btn.onclick=function(){selectStatsPlayer(_n);};
     _picker.appendChild(_btn);
   });
@@ -6540,7 +7102,7 @@ function renderStats(){
 
     // Collect all game types this player has played
     var allTypes=['alle'];
-    var typeLabels={'alle':'Alle','x01':'X01','501':'501','301':'301','atc':'ATC','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien'};
+    var typeLabels=Object.assign({'alle':'Alle spellen'},GAME_TYPE_LABELS);
     (p.gameHistory||[]).forEach(function(g){if(allTypes.indexOf(g.gameType)<0)allTypes.push(g.gameType);});
 
     var activeFilter=statsGameFilter[name]||'alle';
@@ -6567,11 +7129,9 @@ function renderStats(){
       var vsBtns=allOpponents.map(function(opp){
         var lbl=opp==='alle'?'Alle':opp;var isActive=opp===activeVs;
         var en=encodeURIComponent(name);var eo=encodeURIComponent(opp);
-        return'<button onclick="setStatsVsFilter(decodeURIComponent(\''+en+'\'),decodeURIComponent(\''+eo+'\'))" style="padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:'+(isActive?'var(--accent2)':'var(--surface)')+';color:'+(isActive?'#fff':'var(--muted)')+'">'+lbl+'</button>';
+        return'<button class="lb-sub'+(isActive?' active':'')+'" onclick="setStatsVsFilter(decodeURIComponent(\''+en+'\'),decodeURIComponent(\''+eo+'\'))">'+(opp==='alle'?'Iedereen':'vs '+lbl)+'</button>';
       }).join('');
-      vsTabsHtml='<div style="margin-bottom:10px">'+
-        '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Versus</div>'+
-        '<div style="display:flex;gap:4px;flex-wrap:wrap">'+vsBtns+'</div></div>';
+      vsTabsHtml='<div class="st-lbl">Tegen</div><div class="lb-subrow" style="margin-bottom:12px">'+vsBtns+'</div>';
     }
 
     // Summary for filtered games
@@ -6579,17 +7139,11 @@ function renderStats(){
     var fWins=filtered.filter(function(g){return g.won;}).length;
     var fWr=fGames>0?Math.round(fWins/fGames*100):0;
 
-    // Filter tab buttons — sliding pill
-    var tabsHtml='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">'+
+    // Spelfilter als chips (v198)
+    var tabsHtml='<div class="st-lbl">Spel</div><div class="lb-subrow" style="margin-bottom:10px">'+
       allTypes.map(function(t){
         var lbl=typeLabels[t]||t;
-        var isActive=t===activeFilter;
-        return'<button onclick="setStatsFilter(\''+name+'\',\''+t+'\')" style="'+
-          'padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;transition:background .2s,color .15s,transform .15s;transform:scale('+(isActive?'1.05':'1')+');'+
-          'background:'+(isActive?'var(--accent)':'var(--surface)')+';'+
-          'color:'+(isActive?'#fff':'var(--muted)')+';">'+
-          (isActive?'<span style="display:inline-block;animation:slideIn .2s cubic-bezier(.34,1.56,.64,1)">'+lbl+'</span>':lbl)+
-        '</button>';
+        return'<button class="lb-sub'+(t===activeFilter?' active':'')+'" onclick="setStatsFilter(decodeURIComponent(\''+encodeURIComponent(name)+'\'),\''+t+'\')">'+lbl+'</button>';
       }).join('')+
     '</div>';
 
@@ -6617,13 +7171,13 @@ function renderStats(){
         function sTile(val,lbl,clr){
           return'<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 6px;text-align:center">'+
             '<div style="font-size:18px;font-weight:900;color:'+clr+';line-height:1.1">'+val+'</div>'+
-            '<div style="font-size:9px;color:var(--muted);margin-top:2px;line-height:1.3">'+lbl+'</div>'+
+            '<div style="font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">'+lbl+'</div>'+
           '</div>';
         }
         var hi140=avg.count180+(avg.count160||0)+(avg.count140||0);
         var hi100=hi140+(avg.count120||0)+(avg.count100||0);
         avgBlock=
-          '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">501/301 — '+avg.gamesX01+' wedstr.</div>'+
+          '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">501/301 — '+avg.gamesX01+' wedstr.</div>'+
           '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px">'+
             sTile(avg.avg3,'3-pijl gem.','var(--accent)')+
             sTile(avg.avg1,'1-pijl gem.','var(--accent2)')+
@@ -6649,11 +7203,11 @@ function renderStats(){
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
             '<div style="background:rgba(181,80,47,.08);border:1px solid rgba(181,80,47,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
               '<div style="font-size:28px;font-weight:900;color:var(--accent)">'+gs.highScore+'</div>'+
-              '<div style="font-size:10px;color:var(--muted);margin-top:2px">'+(labelMap[activeFilter]||'Beste score')+'</div>'+
+              '<div style="font-size:12px;color:var(--muted);margin-top:2px">'+(labelMap[activeFilter]||'Beste score')+'</div>'+
             '</div>'+
             '<div style="background:rgba(15,155,142,.08);border:1px solid rgba(15,155,142,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
               '<div style="font-size:28px;font-weight:900;color:var(--accent2)">'+Math.round(gs.avgScore)+'</div>'+
-              '<div style="font-size:10px;color:var(--muted);margin-top:2px">Gemiddelde score</div>'+
+              '<div style="font-size:12px;color:var(--muted);margin-top:2px">Gemiddelde score</div>'+
             '</div>'+
           '</div>';
       }
@@ -6683,11 +7237,11 @@ function renderStats(){
         '<div style="display:flex;justify-content:space-between;align-items:center">'+
           '<div>'+
             '<span style="font-size:13px;font-weight:600">'+typeLabel+'</span>'+
-            '<span style="color:var(--muted);font-size:11px;margin-left:6px">'+g.date+'</span>'+
+            '<span style="color:var(--muted);font-size:12px;margin-left:6px">'+g.date+'</span>'+
           '</div>'+
           (!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+
         '</div>'+
-        (infoItems.length?'<div style="color:var(--muted);font-size:11px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+
+        (infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+
       '</div>';
     }).join('');
 
@@ -6696,7 +7250,7 @@ function renderStats(){
         '<h3 style="margin:0">'+name+'</h3>'+
         '<div style="display:flex;gap:6px">'+
           '<button class="btn btn-xs" style="color:var(--accent2);display:inline-flex;align-items:center" onclick="generateChallenge(\''+name+'\')"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent2)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Daag uit</button>'+
-          '<button class="btn btn-xs btn-danger" onclick="clearPlayer(\''+name+'\')">Wis</button>'+
+
         '</div>'+
       '</div>'+
       tabsHtml+
@@ -6706,11 +7260,12 @@ function renderStats(){
       avgBlock+
       otherBlock+
       buildH2HBlock(filtered)+
-      '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Recente wedstrijden</div>'+
+      '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Recente wedstrijden</div>'+
       (histRows||'<div class="empty">Geen wedstrijden gevonden</div>')+
-      (_histExtra.length?'<div id="stats-more-'+encodeURIComponent(name)+'" style="display:none">'+_histExtra.map(function(g){var ds=g.detailedStats;var infoItems=[];if(g.setResult)infoItems.push('Sets '+g.setResult);else if(g.legResult)infoItems.push('Legs '+g.legResult);if(ds){infoItems.push('gem '+ds.avg3+(ds.count180?' · '+ds.count180+'×180':''));}var typeLabel=typeLabels[g.gameType]||g.gameType;return'<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-size:13px;font-weight:600">'+typeLabel+'</span><span style="color:var(--muted);font-size:11px;margin-left:6px">'+g.date+'</span></div>'+(!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+'</div>'+(infoItems.length?'<div style="color:var(--muted);font-size:11px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+'</div>';}).join('')+'</div>'+
+      (_histExtra.length?'<div id="stats-more-'+encodeURIComponent(name)+'" style="display:none">'+_histExtra.map(function(g){var ds=g.detailedStats;var infoItems=[];if(g.setResult)infoItems.push('Sets '+g.setResult);else if(g.legResult)infoItems.push('Legs '+g.legResult);if(ds){infoItems.push('gem '+ds.avg3+(ds.count180?' · '+ds.count180+'×180':''));}var typeLabel=typeLabels[g.gameType]||g.gameType;return'<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-size:13px;font-weight:600">'+typeLabel+'</span><span style="color:var(--muted);font-size:12px;margin-left:6px">'+g.date+'</span></div>'+(!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+'</div>'+(infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+'</div>';}).join('')+'</div>'+
       '<button onclick="var m=document.getElementById(\'stats-more-'+encodeURIComponent(name)+'\');var open=m.style.display!==\'none\';m.style.display=open?\'none\':\'\';this.textContent=open?\'Toon meer ('+_histExtra.length+')\':\'Toon minder\';" style="width:100%;margin-top:6px;background:none;border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:7px;font-size:12px;color:var(--muted);cursor:pointer">Toon meer ('+_histExtra.length+')</button>':
-      '');
+      '')+
+      '<button class="st-danger" onclick="clearPlayer(decodeURIComponent(\''+encodeURIComponent(name)+'\'))">Statistieken van '+name+' wissen</button>';
     el.appendChild(card);
 }
 
@@ -6724,6 +7279,8 @@ function clearPlayer(name){
   var db=getDB();
   delete db[name];
   dbCache=db;
+  // Ook de lokale kopie bijwerken, anders komt de speler na herstart terug (v198)
+  try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
   if(statsSelectedPlayer===name)statsSelectedPlayer=null;
   // Delete from Firestore
   if(groupCode){
@@ -7048,8 +7605,10 @@ nextPlayer501=function(){
       }
     } else if(h.won){
       playSound('checkout');
+      callerSay('Game shot! '+callerName(state.players[h.player]),true);
     } else if(h.score===180){
       playSound('180');
+      callerSay('One hundred and eighty!',true);
       // Flash golden
       var sbp=document.getElementById('sb-players');
       if(sbp){
@@ -7063,6 +7622,9 @@ nextPlayer501=function(){
     }
   }
   _origNextPlayer();
+  // Omroeper: nieuwe beurt begonnen
+  var _hlAt=(state.history||[]).length;
+  setTimeout(function(){if((state.history||[]).length===_hlAt)callerRequire();},700);
 };
 
 // ═══════════════════════════════════════════
@@ -7244,21 +7806,22 @@ function renderHistory(){
   var tabs=names.map(function(name){
     var isActive=name===historySelectedPlayer;
     var p=db[name];
-    return'<button onclick="selectHistoryPlayer(\''+name+'\')" style="'+
-      'padding:8px 14px;border-radius:var(--radius-sm);border:1px solid '+(isActive?'var(--accent)':'var(--border)')+';'+
-      'background:'+(isActive?'rgba(254,104,7,.15)':'var(--card)')+';'+
-      'color:'+(isActive?'var(--accent)':'var(--text)')+';'+
-      'font-weight:'+(isActive?'700':'500')+';font-size:13px;cursor:pointer;white-space:nowrap;transition:all .15s">'+
-      name+
-      '<span style="display:block;font-size:10px;color:var(--muted);font-weight:400">'+(p.wins||0)+'W · '+(p.games||0)+'G</span>'+
-    '</button>';
+    return'<button class="lb-chip'+(isActive?' active':'')+'" onclick="selectHistoryPlayer(decodeURIComponent(\''+encodeURIComponent(name)+'\'))">'+name+'</button>';
   }).join('');
 
   // Games for selected player
   var p=db[historySelectedPlayer];
   var games=(p.gameHistory||[]).slice(0,30);
 
+  var _lastDay=null;
+  function _dayLabel(d){
+    var t=new Date(),y=new Date(Date.now()-864e5);
+    var f=function(x){return x.toLocaleDateString('nl-NL');};
+    return d===f(t)?'Vandaag':(d===f(y)?'Gisteren':d);
+  }
   var gameRows=games.length?games.map(function(g,i){
+    var _hdr='';
+    if(g.date!==_lastDay){_lastDay=g.date;_hdr='<div class="st-lbl" style="margin:14px 2px 6px">'+_dayLabel(g.date)+'</div>';}
     var ds=g.detailedStats;
     var info=[];
     if(g.setResult)info.push('Sets '+g.setResult);
@@ -7278,10 +7841,10 @@ function renderHistory(){
           var pStats=leg.playerStats||{};
           var players=Object.keys(pStats);
           return'<div style="margin-bottom:6px">'+
-            '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Leg '+(li+1)+(leg.winner?' · <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px;vertical-align:middle\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>'+leg.winner:'')+'</div>'+
+            '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Leg '+(li+1)+(leg.winner?' · <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px;vertical-align:middle\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>'+leg.winner:'')+'</div>'+
             '<div style="display:flex;gap:5px;flex-wrap:wrap">'+
             players.map(function(pn){var ps=pStats[pn];
-              return'<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:11px">'+
+              return'<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px">'+
                 '<strong style="color:'+(pn===leg.winner?'var(--success)':'var(--text)')+'">'+pn+'</strong>'+
                 ' · gem <strong>'+ps.avg+'</strong>'+
                 (ps.count180?' · '+ps.count180+'×180':'')+
@@ -7291,7 +7854,7 @@ function renderHistory(){
             '</div></div>';
         }).join('')+
       '</div>'+
-      '<button id="'+lid+'-btn" onclick="toggleLegDetail('+JSON.stringify(lid)+')" style="font-size:11px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
+      '<button id="'+lid+'-btn" onclick="toggleLegDetail('+JSON.stringify(lid)+')" style="font-size:12px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
     }
     var detailId='gd-'+historySelectedPlayer.replace(/[^a-z0-9]/gi,'')+'-'+i;
     // Halve It specific detail
@@ -7299,21 +7862,21 @@ function renderHistory(){
     if(g.hiStats){
       var hs=g.hiStats;
       var _dext='',_text2='';
-      if(hs.doublePct!==null&&hs.doublePct!==undefined)_dext='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:var(--accent2)">'+hs.doublePct+'%</div><div style="font-size:9px;color:var(--muted)">double</div><div style="font-size:9px;color:var(--muted)">'+hs.doubleHits+'/'+(hs.doubleHits+hs.doubleMisses)+'</div></div>';
-      if(hs.treblePct!==null&&hs.treblePct!==undefined)_text2='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:#f59e0b">'+hs.treblePct+'%</div><div style="font-size:9px;color:var(--muted)">triple</div><div style="font-size:9px;color:var(--muted)">'+hs.trebleHits+'/'+(hs.trebleHits+hs.trebleMisses)+'</div></div>';
+      if(hs.doublePct!==null&&hs.doublePct!==undefined)_dext='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:var(--accent2)">'+hs.doublePct+'%</div><div style="font-size:12px;color:var(--muted)">double</div><div style="font-size:12px;color:var(--muted)">'+hs.doubleHits+'/'+(hs.doubleHits+hs.doubleMisses)+'</div></div>';
+      if(hs.treblePct!==null&&hs.treblePct!==undefined)_text2='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:#f59e0b">'+hs.treblePct+'%</div><div style="font-size:12px;color:var(--muted)">triple</div><div style="font-size:12px;color:var(--muted)">'+hs.trebleHits+'/'+(hs.trebleHits+hs.trebleMisses)+'</div></div>';
       hiDetailHtml+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;background:var(--card);border-radius:var(--radius-sm)">'
-        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+hs.pct+'%</div><div style="font-size:9px;color:var(--muted)">raak</div><div style="font-size:9px;color:var(--muted)">'+hs.hits+'/'+(hs.hits+hs.misses)+'</div></div>'
+        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+hs.pct+'%</div><div style="font-size:12px;color:var(--muted)">raak</div><div style="font-size:12px;color:var(--muted)">'+hs.hits+'/'+(hs.hits+hs.misses)+'</div></div>'
         +_dext+_text2
-        +'<div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:900;color:var(--text)">'+g.score+'</div><div style="font-size:9px;color:var(--muted)">eindscore</div></div>'
+        +'<div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:900;color:var(--text)">'+g.score+'</div><div style="font-size:12px;color:var(--muted)">eindscore</div></div>'
         +'</div>';
       if(g.hiRoundHistory&&g.hiRoundHistory.length){
-        hiDetailHtml+='<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Rondes</div>';
+        hiDetailHtml+='<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Rondes</div>';
         hiDetailHtml+=g.hiRoundHistory.map(function(r){
           return'<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--separator)">'
             +'<span style="font-size:12px;color:var(--text)">'+r.label+'</span>'
             +(r.halved
-              ?'<span style="font-size:11px;font-weight:700;color:var(--danger)">Gehalveerd → '+r.newScore+'</span>'
-              :'<span style="font-size:11px;font-weight:700;color:var(--success)">+'+r.pts+' → '+r.newScore+'</span>')
+              ?'<span style="font-size:12px;font-weight:700;color:var(--danger)">Gehalveerd → '+r.newScore+'</span>'
+              :'<span style="font-size:12px;font-weight:700;color:var(--success)">+'+r.pts+' → '+r.newScore+'</span>')
             +'</div>';
         }).join('');
       }
@@ -7321,22 +7884,22 @@ function renderHistory(){
     var detailHtml=
       hiDetailHtml+
       (info.length&&!g.hiStats?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'+
-        info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--muted)">'+t+'</span>';}).join('')+
+        info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:12px;color:var(--muted)">'+t+'</span>';}).join('')+
       '</div>':'')+
       legHtml;
-    return'<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;overflow:hidden" class="fade-in">'+
+    return _hdr+'<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden" class="fade-in">'+
       '<div onclick="toggleHistoryDetail(\''+detailId+'\')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
-          (!g.opponents||!g.opponents.length?'':'<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:3px 7px;font-size:11px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
+          (!g.opponents||!g.opponents.length?'':'<div style="background:'+(g.won?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)')+';border-radius:6px;padding:3px 7px;font-size:12px;font-weight:700;color:'+(g.won?'var(--success)':'var(--muted)')+'">'+
             (g.won?'Win':'Verlies')+
           '</div>')+
           '<div>'+
-            '<div style="font-size:13px;font-weight:700">'+g.gameType+'</div>'+
-            '<div style="font-size:11px;color:var(--muted)">'+g.date+'</div>'+
+            '<div style="font-size:15px;font-weight:800">'+(GAME_TYPE_LABELS[g.gameType]||g.gameType)+'</div>'+
+            '<div style="font-size:12px;color:var(--muted)">'+(g.opponents&&g.opponents.length?'tegen '+g.opponents.join(', '):'solo')+(g.legResult?' · '+g.legResult:'')+'</div>'+
           '</div>'+
         '</div>'+
         '<div style="display:flex;align-items:center;gap:10px">'+
-          (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+ds.avg3+'</div><div style="font-size:9px;color:var(--muted)">gem</div></div>':'')+
+          (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+ds.avg3+'</div><div style="font-size:12px;color:var(--muted)">gem</div></div>':'')+
           '<span id="'+detailId+'-arrow" style="font-size:12px;color:var(--muted);transition:transform .2s">▼</span>'+
         '</div>'+
       '</div>'+
@@ -7350,31 +7913,7 @@ function renderHistory(){
   }).join(''):'<div class="empty">Nog geen wedstrijden voor deze speler</div>';
 
   el.innerHTML=
-    // Player tabs row (scrollable)
-    '<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:12px;scrollbar-width:none">'+tabs+'</div>'+
-    // Summary bar for selected player
-    (function(){
-      var avg=calcPlayerAvgStats(historySelectedPlayer);
-      var wr=p.games>0?Math.round(p.wins/p.games*100):0;
-      return'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px">'+
-        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;text-align:center">'+
-          '<div style="font-size:18px;font-weight:900;color:var(--accent)">'+(avg?avg.avg3:'—')+'</div>'+
-          '<div style="font-size:9px;color:var(--muted);margin-top:1px">Gemiddelde</div>'+
-        '</div>'+
-        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;text-align:center">'+
-          '<div style="font-size:18px;font-weight:900;color:var(--text)">'+wr+'%</div>'+
-          '<div style="font-size:9px;color:var(--muted);margin-top:1px">Win %</div>'+
-        '</div>'+
-        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;text-align:center">'+
-          '<div style="font-size:18px;font-weight:900;color:var(--text)">'+(avg?avg.count180:'—')+'</div>'+
-          '<div style="font-size:9px;color:var(--muted);margin-top:1px">180\'s</div>'+
-        '</div>'+
-        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;text-align:center">'+
-          '<div style="font-size:18px;font-weight:900;color:var(--accent2)">'+(avg&&avg.checkoutPct!==null?avg.checkoutPct+'%':'—')+'</div>'+
-          '<div style="font-size:9px;color:var(--muted);margin-top:1px">Dubbel %</div>'+
-        '</div>'+
-      '</div>';
-    })()+
+    '<div class="lb-chiprow">'+tabs+'</div>'+
     // Game list
     gameRows;
 }
@@ -7408,14 +7947,14 @@ function buildH2HBlock(filteredGames){
     var avgStr=d.avgCount>0?(Math.round(d.totalAvg/d.avgCount*10)/10)+'':'';
     return'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--separator);gap:8px">'+
       '<div style="flex:1;font-size:13px;font-weight:600;color:var(--text)">'+opp+'</div>'+
-      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--success)">'+d.won+'</div><div style="font-size:9px;color:var(--muted)">W</div></div>'+
-      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--danger)">'+losses+'</div><div style="font-size:9px;color:var(--muted)">L</div></div>'+
-      '<div style="text-align:center;min-width:40px"><div style="font-size:13px;font-weight:800;color:'+(pct>=50?'var(--success)':'var(--danger)')+'">'+pct+'%</div><div style="font-size:9px;color:var(--muted)">Win%</div></div>'+
-      (avgStr?'<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--accent)">'+avgStr+'</div><div style="font-size:9px;color:var(--muted)">Gem.</div></div>':'<div style="min-width:36px"></div>')+
+      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--success)">'+d.won+'</div><div style="font-size:12px;color:var(--muted)">W</div></div>'+
+      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--danger)">'+losses+'</div><div style="font-size:12px;color:var(--muted)">L</div></div>'+
+      '<div style="text-align:center;min-width:40px"><div style="font-size:13px;font-weight:800;color:'+(pct>=50?'var(--success)':'var(--danger)')+'">'+pct+'%</div><div style="font-size:12px;color:var(--muted)">Win%</div></div>'+
+      (avgStr?'<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--accent)">'+avgStr+'</div><div style="font-size:12px;color:var(--muted)">Gem.</div></div>':'<div style="min-width:36px"></div>')+
     '</div>';
   }).join('');
 
-  return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Head-to-Head</div>'+
+  return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Head-to-Head</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:2px 10px;margin-bottom:10px">'+rows+'</div>';
 }
 
@@ -7439,12 +7978,12 @@ function buildPersonalRecords(name){
     if(g.won){curStreak++;if(curStreak>maxStreak)maxStreak=curStreak;}
     else curStreak=0;
   });
-  return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>Persoonlijke records</div>'+
+  return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>Persoonlijke records</div>'+
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px">'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--warning)">'+bestAvg+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">Best gem.</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent)">'+bestHigh+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent2)">'+(bestCo?bestCo+'%':'—')+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--success)">'+maxStreak+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--warning)">'+bestAvg+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best gem.</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent)">'+bestHigh+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent2)">'+(bestCo?bestCo+'%':'—')+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--success)">'+maxStreak+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
     '</div>';
 }
 
@@ -7469,7 +8008,7 @@ function buildAvgGraph(name){
     return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5"/>'+
       '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="-apple-system,sans-serif">'+avgs[i]+'</text>';
   }).join('');
-  return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Gemiddelde over tijd</div>'+
+  return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Gemiddelde over tijd</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px">'+
       '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="overflow:visible">'+
         '<defs><linearGradient id="ag_'+name.replace(/\W/g,'')+'" x1="0" y1="0" x2="0" y2="1">'+
@@ -7480,7 +8019,7 @@ function buildAvgGraph(name){
         '<path d="'+pathD+'" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>'+
         dots+
       '</svg>'+
-      '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px">'+
         '<span>'+x01[0].date+'</span><span>'+x01[x01.length-1].date+'</span>'+
       '</div>'+
     '</div>';
@@ -7820,10 +8359,10 @@ function buildDoubleStats(name){
       '<div style="flex:1;background:var(--surface);border-radius:20px;height:8px;overflow:hidden">'+
         '<div style="width:'+pct+'%;background:var(--accent2);height:100%;border-radius:20px;transition:width .4s"></div>'+
       '</div>'+
-      '<div style="font-size:11px;color:var(--muted);min-width:44px;text-align:right">'+pct+'% ('+e.val+'x)</div>'+
+      '<div style="font-size:12px;color:var(--muted);min-width:44px;text-align:right">'+pct+'% ('+e.val+'x)</div>'+
     '</div>';
   }).join('');
-  return'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Favoriete dubbels ('+total+' checkouts)</div>'+
+  return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Favoriete dubbels ('+total+' checkouts)</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px">'+bars+'</div>';
 }
 
@@ -7896,7 +8435,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=197;
+var APP_VERSION=202;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
