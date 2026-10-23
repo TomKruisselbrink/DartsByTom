@@ -866,8 +866,16 @@ select{
   0%{opacity:0;transform:translateY(10px) scale(0.985)}
   100%{opacity:1;transform:translateY(0) scale(1)}
 }
+@keyframes screenSlideIn{
+  0%{opacity:0;transform:translateX(var(--sx,0px))}
+  35%{opacity:1}
+  100%{opacity:1;transform:translateX(0)}
+}
 .screen.active{
-  animation:screenSpringIn 0.32s cubic-bezier(0.25,1,0.5,1) both;
+  animation:screenSpringIn 0.38s cubic-bezier(.32,.72,0,1) both;
+}
+.screen.active.slide-in{
+  animation:screenSlideIn 0.42s cubic-bezier(.32,.72,0,1) both;
 }
 #screen-game.active{animation:none}
 @media(prefers-reduced-motion:reduce){
@@ -1154,6 +1162,40 @@ h2.page-head svg{display:none !important}
 .g-miss:active,.g-miss.k-down{transform:translateY(3px);box-shadow:0 0 0 rgba(255,90,70,.28)}
 .g-seg button{transition:transform 60ms ease-out}
 .g-seg button:active,.g-seg button.k-down{transform:scale(.96)}
+
+/* ═══ Instellingen-indeling (v209) ═══ */
+.st-sec{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:20px 4px 8px}
+#screen-settings .page-head+.st-sec{margin-top:6px}
+.st-card{margin-bottom:8px}
+.st-cap{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.st-list{padding-top:4px !important;padding-bottom:4px !important}
+.st-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;border-top:1px solid var(--border)}
+.st-list>.st-row:first-child{border-top:0}
+.st-row label{cursor:pointer;font-size:15px;font-weight:700;color:var(--text);flex:1;min-width:0}
+.st-row label b{display:block;font-size:15px}
+.st-row label span{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:2px}
+.st-sub{padding:0 0 12px}
+.st-more summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;color:var(--muted)}
+.st-more summary::-webkit-details-marker{display:none}
+.st-more summary>span b{display:block;font-size:15px;color:var(--text)}
+.st-more summary>span span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.st-more summary svg{transition:transform .25s ease;flex-shrink:0}
+.st-more[open] summary svg{transform:rotate(180deg)}
+.st-more-body{margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+
+/* Halve It: zelfde knopgevoel; eigen kleurranden blijven staan */
+.hi-k,#hi-input-area button{
+  background-image:linear-gradient(180deg,var(--k-top),var(--k-bot)) !important;
+  box-shadow:inset 0 1px 0 var(--k-hi),0 3px 0 var(--k-edge),0 7px 12px -4px var(--k-drop) !important;
+  transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 70ms ease-out !important;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+.hi-k:active,.hi-k.k-down,#hi-input-area button:active,#hi-input-area button.k-down{
+  transform:translateY(3px) !important;
+  box-shadow:inset 0 1px 0 var(--k-hi),0 0 0 var(--k-edge),0 2px 4px -2px var(--k-drop) !important;
+  filter:brightness(.94);transition-duration:15ms !important;
+}
+#hi-input-area .g-miss,#hi-input-area button[onclick*="hiSegCancelNum"]{background-image:none !important}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -1731,57 +1773,69 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 <!-- SETTINGS -->
 <div class="screen" id="screen-settings">
   <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Instellingen</h2>
-  <div class="card" style="margin-bottom:10px">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px" id="set-lbl-appearance">Weergave</div>
-    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px" id="set-lbl-theme">Thema</div>
+
+  <div class="st-sec">Account</div>
+  <div class="card st-card">
+    <div id="settings-account"></div>
+  </div>
+  <div class="card st-card" id="settings-friends-card" style="display:none">
+    <div class="st-cap">Vrienden</div>
+    <div id="settings-friends"></div>
+  </div>
+
+  <div class="st-sec">Spelers</div>
+  <div class="card st-card">
+    <div id="settings-players"></div>
+  </div>
+
+  <div class="st-sec">Tijdens het spel</div>
+  <div class="card st-card st-list">
+    <div class="st-row">
+      <label for="sound-enabled" id="set-lbl-sound">Geluid</label>
+      <input type="checkbox" id="sound-enabled" class="ios-toggle" checked onchange="setSoundEnabled(this.checked)">
+    </div>
+    <div class="st-row">
+      <label for="haptics-enabled"><b>Trillen bij tikken</b><span>Korte tik bij elke knop</span></label>
+      <input type="checkbox" id="haptics-enabled" class="ios-toggle" onchange="setHaptics(this.checked)">
+    </div>
+    <div class="st-row">
+      <label for="caller-enabled"><b>Omroeper</b><span>"Tom, you require 121", 180 en game shot</span></label>
+      <input type="checkbox" id="caller-enabled" class="ios-toggle" onchange="setCallerEnabled(this.checked);if(this.checked)callerSay('Game on!',true)">
+    </div>
+    <div class="st-sub">
+      <div class="vc-row" style="margin-top:0">
+        <select id="caller-voice" onchange="setCallerVoice(this.value)"><option value="">Automatisch</option></select>
+        <button class="sp-say" aria-label="Stem testen" onclick="callerSay('Game on! Tom, you require 121',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
+      </div>
+      <div class="vc-hint" id="caller-voice-hint"></div>
+    </div>
+    <div class="st-row">
+      <label for="fs-settings-btn" id="set-lbl-fullscreen">Volledig scherm</label>
+      <input type="checkbox" id="fs-settings-btn" class="ios-toggle" onchange="_toggleFullscreen()">
+    </div>
+  </div>
+
+  <div class="st-sec" id="set-lbl-appearance">Weergave</div>
+  <div class="card st-card">
+    <div class="st-cap" id="set-lbl-theme">Thema</div>
     <div class="seg-ctrl" id="theme-seg">
       <button class="seg-btn" data-theme-val="auto" onclick="applyTheme('auto')" id="set-lbl-auto">Automatisch</button>
       <button class="seg-btn" data-theme-val="light" onclick="applyTheme('light')" id="set-lbl-light">Licht</button>
       <button class="seg-btn" data-theme-val="dark" onclick="applyTheme('dark')" id="set-lbl-dark">Donker</button>
     </div>
-  </div>
-  <div class="card" style="margin-bottom:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <label for="sound-enabled" style="font-size:14px;font-weight:700;color:var(--text);cursor:pointer" id="set-lbl-sound">Geluid</label>
-      <input type="checkbox" id="sound-enabled" class="ios-toggle" checked onchange="setSoundEnabled(this.checked)">
+    <div class="st-cap" id="set-lbl-lang" style="margin-top:14px">Taal</div>
+    <div class="seg-ctrl" id="lang-seg">
+      <button class="seg-btn lang-opt" data-lang-val="nl" onclick="applyLang('nl')">Nederlands</button>
+      <button class="seg-btn lang-opt" data-lang-val="en" onclick="applyLang('en')">English</button>
     </div>
   </div>
-  <div class="card" style="margin-bottom:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-      <label for="haptics-enabled" style="cursor:pointer"><span style="display:block;font-size:14px;font-weight:700;color:var(--text)">Trillen bij tikken</span><span style="display:block;font-size:12px;color:var(--muted);margin-top:2px">Korte tik bij elke knop tijdens een potje</span></label>
-      <input type="checkbox" id="haptics-enabled" class="ios-toggle" onchange="setHaptics(this.checked)">
-    </div>
-  </div>
-  <div class="card" style="margin-bottom:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-      <label for="caller-enabled" style="cursor:pointer"><span style="display:block;font-size:14px;font-weight:700;color:var(--text)">Omroeper</span><span style="display:block;font-size:12px;color:var(--muted);margin-top:2px">"Tom, you require 121" bij een finish, plus 180 en game shot</span></label>
-      <input type="checkbox" id="caller-enabled" class="ios-toggle" onchange="setCallerEnabled(this.checked);if(this.checked)callerSay('Game on!',true)">
-    </div>
-    <div class="vc-row">
-      <select id="caller-voice" onchange="setCallerVoice(this.value)"><option value="">Automatisch</option></select>
-      <button class="sp-say" aria-label="Stem testen" onclick="callerSay('Game on! Tom, you require 121',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
-    </div>
-    <div class="vc-hint" id="caller-voice-hint"></div>
-  </div>
-  <div class="card" style="margin-bottom:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <span style="font-size:14px;font-weight:700;color:var(--text)" id="set-lbl-fullscreen">Volledig scherm</span>
-      <input type="checkbox" id="fs-settings-btn" class="ios-toggle" onchange="_toggleFullscreen()">
-    </div>
-  </div>
-  <!-- Account (v202) -->
-  <div class="card" style="margin-bottom:10px">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Account</div>
-    <div id="settings-account"></div>
-  </div>
-  <!-- Vrienden (v203) -->
-  <div class="card" id="settings-friends-card" style="margin-bottom:10px;display:none">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Vrienden</div>
-    <div id="settings-friends"></div>
-  </div>
-  <div class="card" style="margin-bottom:10px">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Cloud &amp; Delen</div>
-    <button id="group-tile" onclick="openGroupModal()" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:none;border-radius:var(--radius-sm);padding:0;cursor:pointer">
+
+  <div class="st-sec">Gegevens</div>
+  <details class="card st-card st-more">
+    <summary><span><b>Groep &amp; stats uitwisselen</b><span>Oude groepscode en export/import van spelers</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="st-more-body">
+      <div class="st-cap">Groep (cloud)</div>
+      <button id="group-tile" onclick="openGroupModal()" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:none;border-radius:var(--radius-sm);padding:0;cursor:pointer">
       <div style="display:flex;align-items:center;gap:10px">
         <span id="group-tile-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></span>
         <div style="text-align:left">
@@ -1791,15 +1845,8 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       </div>
       <div id="group-tile-badge" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--card);color:var(--muted)">Niet verbonden</div>
     </button>
-  </div>
-  <!-- Spelers: bijnaam voor omroeper + delen met groep (v201) -->
-  <div class="card" style="margin-bottom:10px">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Spelers</div>
-    <div id="settings-players"></div>
-  </div>
-  <!-- Export / Import (verplaatst van Statistieken, v198) -->
-  <div class="card" style="margin-bottom:10px">
-    <div style="font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Delen &amp; samenvoegen</div>
+      <div style="height:16px"></div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Delen &amp; samenvoegen</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Kies een speler om te exporteren en geef de code aan de host. De host importeert alle codes om statistieken samen te voegen.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-primary btn-sm" style="display:inline-flex;align-items:center;gap:5px" onclick="showExportPanel()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Exporteer stats</button>
@@ -1821,21 +1868,9 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms));}
       <button class="btn btn-sm btn-primary" style="margin-top:6px;width:100%" onclick="importStats()">Samenvoegen</button>
       <div id="import-result" style="font-size:12px;margin-top:6px"></div>
     </div>
-  </div>
-
-  <div class="card">
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px" id="set-lbl-lang">Taal</div>
-    <div style="display:flex;gap:8px" id="lang-seg">
-      <button class="setup-big-num lang-tile" data-lang-val="nl" onclick="applyLang('nl')" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:96px;gap:0;padding:0">
-        <svg viewBox="0 0 9 6" preserveAspectRatio="none" style="width:52px;height:34px;border-radius:5px;display:block" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="2" y="0" fill="#AE1C28"/><rect width="9" height="2" y="2" fill="#fff"/><rect width="9" height="2" y="4" fill="#21468B"/></svg>
-        <span style="font-size:13px;font-weight:700;margin-top:7px">Nederlands</span>
-      </button>
-      <button class="setup-big-num lang-tile" data-lang-val="en" onclick="applyLang('en')" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:96px;gap:0;padding:0">
-        <svg viewBox="0 0 60 36" preserveAspectRatio="xMidYMid slice" style="width:52px;height:34px;border-radius:5px;display:block" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#012169"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" stroke-width="12"/><path d="M0,0 L60,36" stroke="#C8102E" stroke-width="8"/><path d="M60,0 L0,36" stroke="#C8102E" stroke-width="8"/><rect x="24" y="0" width="12" height="36" fill="#fff"/><rect x="0" y="12" width="60" height="12" fill="#fff"/><rect x="26" y="0" width="8" height="36" fill="#C8102E"/><rect x="0" y="14" width="60" height="8" fill="#C8102E"/></svg>
-        <span style="font-size:13px;font-weight:700;margin-top:7px">English</span>
-      </button>
     </div>
-  </div>
+  </details>
+
   <div style="text-align:center;margin-top:18px;padding-bottom:8px">
     <span id="app-version" style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px"></span>
   </div>
@@ -3306,7 +3341,7 @@ function _storageFull(e){
 
 // ═══ Knopgevoel (v208): indrukeffect ook op iPhone + trillen bij tikken ═══
 var hapticsOn=(function(){try{return localStorage.getItem('darts_haptics')!=='0';}catch(e){return true;}})();
-var _KSEL='.x01-pad .btn,.numpad .btn,.x01-input .btn-sm,.g-keys button,.g-big3 button,.g-sec,.g-hit,.g-miss,.g-seg button';
+var _KSEL='.hi-k,#hi-input-area button,.x01-pad .btn,.numpad .btn,.x01-input .btn-sm,.g-keys button,.g-big3 button,.g-sec,.g-hit,.g-miss,.g-seg button';
 var _hapEl=null;
 function haptic(){
   if(!hapticsOn)return;
@@ -3333,6 +3368,25 @@ function setHaptics(v){hapticsOn=!!v;try{localStorage.setItem('darts_haptics',v?
     if(b&&!b.disabled)haptic();
   },true);
 })();
+
+// Pill-nav: oranje indicator schuift mee naar de actieve tab (v209)
+var _pnRaf=null;
+function _pnPlace(){
+  var nav=document.getElementById('pill-nav'),ind=document.getElementById('pn-ind'),t=nav&&nav.querySelector('.pn-tab.active');
+  if(!nav||!ind)return;
+  if(!t){ind.style.opacity='0';return;}
+  ind.style.opacity='1';
+  ind.style.width=t.offsetWidth+'px';
+  ind.style.transform='translateX('+t.offsetLeft+'px)';
+}
+function _pnFollow(){
+  // de tabs veranderen zelf ook van breedte (label klapt uit): even meebewegen tot dat klaar is
+  var t0=performance.now();
+  cancelAnimationFrame(_pnRaf);
+  (function step(){_pnPlace();if(performance.now()-t0<460)_pnRaf=requestAnimationFrame(step);})();
+}
+window.addEventListener('load',function(){var n=document.getElementById('pill-nav');if(n){n.classList.add('no-anim');_pnPlace();setTimeout(function(){n.classList.remove('no-anim');},50);}});
+window.addEventListener('resize',_pnPlace);
 
 function saveDB(db){
   dbCache = db;
@@ -3559,9 +3613,14 @@ function calcPlayerAvgStats(name){
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
+var _navOrder=['screen-home','screen-leaderboard','screen-stats','screen-history','screen-settings'];
+var _curScreen='screen-home';
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');s.style.display='none'});
+  var _from=_curScreen;_curScreen=id;
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active','slide-in');s.style.display='none'});
   var el=document.getElementById(id);
+  var _fi=_navOrder.indexOf(_from),_ti=_navOrder.indexOf(id);
+  if(_fi>=0&&_ti>=0&&_fi!==_ti){el.style.setProperty('--sx',(_ti>_fi?28:-28)+'px');el.classList.add('slide-in');}
   el.style.display=(id==='screen-game'||id==='screen-afgooien'||id==='screen-halveit'||id==='screen-eliminatie')?'flex':'block';
   el.classList.remove('active');void el.offsetWidth;el.classList.add('active');
   var _ac=document.getElementById('app-content');
@@ -3579,6 +3638,7 @@ function showScreen(id){
     document.querySelectorAll('.pn-tab').forEach(function(t){t.classList.remove('active');});
     var _at=document.getElementById(_tabMap[id]||'');
     if(_at)_at.classList.add('active');
+    _pnFollow();
   }
   // Show/hide game action bar
   var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit'];
@@ -7076,25 +7136,19 @@ function renderHalveIt(){
     numGrid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px';
     [{label:'Enkel',val:item.val},{label:'Dubbel',val:item.val*2},{label:'Triple',val:item.val*3}].forEach(function(opt){
       var btn=document.createElement('button');
-      btn.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 4px;min-height:84px;cursor:pointer;text-align:center;color:var(--text);transition:transform .08s';
+      btn.className='hi-k';
+      btn.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 4px;min-height:84px;cursor:pointer;text-align:center;color:var(--text)';
       btn.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+opt.label+'</div>'+
         '<div style="font-size:25px;font-weight:900;line-height:1.15">'+opt.val+'</div>';
       btn.addEventListener('click',(function(v){return function(){hiAddPts(v);};})(opt.val));
-      btn.addEventListener('pointerdown',function(){this.style.transform='scale(.93)';});
-      btn.addEventListener('pointerup',function(){this.style.transform='';});
-      btn.addEventListener('pointercancel',function(){this.style.transform='';});
-      btn.addEventListener('pointerleave',function(){this.style.transform='';});
       numGrid.appendChild(btn);
     });
     inputWrap.appendChild(numGrid);
     var misBtn=document.createElement('button');
-    misBtn.style.cssText='border:1.5px dashed rgba(255,122,107,.45);background:rgba(255,90,70,.06);border-radius:14px;padding:12px;font-size:16px;font-weight:800;color:#FF8A7A;cursor:pointer;min-height:54px;width:100%;transition:transform .08s';
+    misBtn.className='g-miss';
+    misBtn.style.cssText='border:1.5px dashed rgba(255,122,107,.45);background:rgba(255,90,70,.06);border-radius:14px;padding:12px;font-size:16px;font-weight:800;color:#FF8A7A;cursor:pointer;min-height:54px;width:100%';
     misBtn.textContent='Mis';
     misBtn.addEventListener('click',function(){hiAddPts(0);});
-    misBtn.addEventListener('pointerdown',function(){this.style.transform='scale(.97)';});
-    misBtn.addEventListener('pointerup',function(){this.style.transform='';});
-    misBtn.addEventListener('pointercancel',function(){this.style.transform='';});
-    misBtn.addEventListener('pointerleave',function(){this.style.transform='';});
     inputWrap.appendChild(misBtn);
     content.appendChild(inputWrap);
   } else {
@@ -7216,14 +7270,14 @@ function renderHiInputArea(item){
     el.innerHTML=
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak een willekeurige double — 3x mis = score gehalveerd</div>'+
       '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">'+
-      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){var pos=HI_BOARD_ORDER.indexOf(n);var isRed=(pos%2===0);var bc=isRed?'rgba(217,35,45,.3)':'rgba(30,126,52,.3)';var bg=isRed?'rgba(217,35,45,.09)':'rgba(30,126,52,.09)';var tc=isRed?'#D9232D':'#1E7E34';return'<button class="btn" style="padding:16px 4px;font-size:16px;font-weight:700;border-color:'+bc+';background:'+bg+';color:'+tc+'" onclick="hiAddPts('+(n*2)+')">D'+n+'</button>';}).join('')+
-      '<button class="btn" style="color:var(--muted);grid-column:span 4;padding:14px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
+      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){var pos=HI_BOARD_ORDER.indexOf(n);var isRed=(pos%2===0);var bc=isRed?'rgba(217,35,45,.3)':'rgba(30,126,52,.3)';var bg=isRed?'rgba(217,35,45,.09)':'rgba(30,126,52,.09)';var tc=isRed?'#D9232D':'#1E7E34';return'<button class="btn" style="padding:11px 4px;font-size:16px;font-weight:700;border-color:'+bc+';background:'+bg+';color:'+tc+'" onclick="hiAddPts('+(n*2)+')">D'+n+'</button>';}).join('')+
+      '<button class="btn" style="color:var(--muted);grid-column:span 4;padding:12px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='treble'){
     el.innerHTML=
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak een willekeurige triple — 3x mis = score gehalveerd</div>'+
       '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">'+
-      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){var pos=HI_BOARD_ORDER.indexOf(n);var isRed=(pos%2===0);var bc=isRed?'rgba(217,35,45,.3)':'rgba(30,126,52,.3)';var bg=isRed?'rgba(217,35,45,.09)':'rgba(30,126,52,.09)';var tc=isRed?'#D9232D':'#1E7E34';return'<button class="btn" style="padding:16px 4px;font-size:16px;font-weight:700;border-color:'+bc+';background:'+bg+';color:'+tc+'" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
-      '<button class="btn" style="color:var(--muted);grid-column:span 4;padding:14px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
+      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){var pos=HI_BOARD_ORDER.indexOf(n);var isRed=(pos%2===0);var bc=isRed?'rgba(217,35,45,.3)':'rgba(30,126,52,.3)';var bg=isRed?'rgba(217,35,45,.09)':'rgba(30,126,52,.09)';var tc=isRed?'#D9232D':'#1E7E34';return'<button class="btn" style="padding:11px 4px;font-size:16px;font-weight:700;border-color:'+bc+';background:'+bg+';color:'+tc+'" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
+      '<button class="btn" style="color:var(--muted);grid-column:span 4;padding:12px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='spec_double'||item.type==='spec_treble'){
     var _hitVal=item.type==='spec_double'?item.val*2:item.val*3;
     var _tl=item.type==='spec_double'?'D'+item.val:'T'+item.val;
@@ -9037,7 +9091,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=208;
+var APP_VERSION=209;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -9195,7 +9249,7 @@ function applyLang(lang){
     if(el)el.textContent=lang==='nl'?smap[id][0]:smap[id][1];
   });
   // Lang tiles active state
-  document.querySelectorAll('.lang-tile').forEach(function(b){
+  document.querySelectorAll('.lang-tile,.lang-opt').forEach(function(b){
     b.classList.toggle('active',b.getAttribute('data-lang-val')===lang);
   });
 }
@@ -10318,23 +10372,28 @@ function _afgWin(winner){
 }
 #pill-nav.hidden{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(10px);}
 .pn-tab{
+  position:relative;z-index:1;
   display:flex;align-items:center;justify-content:center;gap:0;
   border:none;background:transparent;cursor:pointer;
   padding:9px 14px;border-radius:32px;
-  color:rgba(255,255,255,0.38);
-  transition:background .22s cubic-bezier(.34,1.56,.64,1),color .18s,padding .22s cubic-bezier(.34,1.56,.64,1),gap .22s;
+  color:rgba(255,255,255,0.42);
+  transition:color .3s ease,padding .42s cubic-bezier(.32,.72,0,1),gap .42s cubic-bezier(.32,.72,0,1);
   white-space:nowrap;overflow:hidden;
 }
 .pn-tab.active{
-  background:var(--accent);color:#fff;
+  background:transparent;color:#fff;
   padding:9px 16px;gap:7px;
 }
-.pn-tab svg{flex-shrink:0;transition:transform .22s cubic-bezier(.34,1.56,.64,1);}
-.pn-tab.active svg{transform:scale(1.1);}
+#pn-ind{position:absolute;z-index:0;top:5px;left:0;height:calc(100% - 10px);width:40px;border-radius:32px;background:var(--accent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 4px 14px rgba(185,78,42,.35);
+  transition:transform .42s cubic-bezier(.32,.72,0,1),width .42s cubic-bezier(.32,.72,0,1);will-change:transform,width;pointer-events:none}
+#pill-nav.no-anim #pn-ind{transition:none}
+.pn-tab svg{flex-shrink:0;transition:transform .42s cubic-bezier(.32,.72,0,1);}
+.pn-tab.active svg{transform:scale(1.08);}
 .pn-tab-lbl{
   font-size:13px;font-weight:700;letter-spacing:.2px;
   max-width:0;overflow:hidden;
-  transition:max-width .22s cubic-bezier(.34,1.56,.64,1),opacity .18s;
+  transition:max-width .42s cubic-bezier(.32,.72,0,1),opacity .3s ease;
   opacity:0;
 }
 .pn-tab.active .pn-tab-lbl{max-width:100px;opacity:1;}
@@ -10626,6 +10685,7 @@ body { -webkit-font-smoothing: antialiased; }
 </style>
 <!-- ═══ PILL NAV HTML ═══ -->
 <div id="pill-nav">
+  <span id="pn-ind" aria-hidden="true"></span>
   <button class="pn-tab active" id="pn-home" onclick="showScreen('screen-home')" aria-label="Home">
     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span class="pn-tab-lbl">Home</span>
