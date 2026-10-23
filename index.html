@@ -3040,7 +3040,8 @@ function frSendHistory(local){
   var changed=false;
   p.gameHistory.forEach(function(e){if(e&&!e.gid){e.gid='L'+_hash(JSON.stringify(e)).slice(1);changed=true;}});
   if(changed){try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){_storageFull(e);}}
-  var pm=_privMap(),games=p.gameHistory.filter(function(e){return e&&!e.via;}).map(function(e){return _frSanitize(e,pm);});
+  var pm=_privMap();delete pm[local];
+  var games=p.gameHistory.filter(function(e){return e&&!e.via;}).map(function(e){return _frSanitize(e,pm);});
   var out=_ls('darts_outbox',[]),first=true,hs=_ls('darts_hist_sent',{}),hk=lk.uid+'|'+local,dsDone=!!hs[hk];
   hs[hk]=1;_lsSet('darts_hist_sent',hs);
   for(var i=0;i<games.length;i+=80){
@@ -3072,7 +3073,8 @@ function _frSync(){
     if(fresh.length){Object.keys(cur).forEach(function(k){var d=(cur[k]||0)-((sh.ds&&sh.ds[k])||0);if(d>0){ds=ds||{};ds[k]=d;}});}
     S[local]={k:p.gameHistory.map(_ekey),ds:JSON.parse(JSON.stringify(cur))};
     if(fresh.length){
-      out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:fresh.map(function(e){return _frSanitize(e,pm);}),ds:ds,ts:Date.now()}});
+      var pmx=Object.assign({},pm);delete pmx[local];
+      out.push({id:acctUser.uid.slice(0,10)+'_'+_newGid(),to:lk.uid,payload:{from:acctUser.uid,fromName:_myUsername(),as:local,games:fresh.map(function(e){return _frSanitize(e,pmx);}),ds:ds,ts:Date.now()}});
       added=true;
     }
   });
@@ -3301,8 +3303,10 @@ function disconnectGroup(){
   _groupHidden=[];
   groupCode=null;
   localStorage.removeItem('darts_group_code');
-  dbCache={};
+  // Lokale gegevens houden (v207): voorheen werd alles leeggemaakt, en het eerstvolgende potje overschreef dan je opslag
+  dbCache=_loadLocalDB()||dbCache||{};
   document.getElementById('group-modal').style.display='none';
+  try{renderSettingsPlayers();_refreshScopeScreens();_refreshKnownNames();}catch(e){}
   updateGroupTile();
 }
 
@@ -8961,7 +8965,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=206;
+var APP_VERSION=207;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
