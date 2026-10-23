@@ -2,12 +2,25 @@
 // Dit bestand hoeft bij een release NIET aangepast te worden.
 const VERSION = new URL(self.location).searchParams.get('v') || '0';
 const CACHE = 'darts-v' + VERSION;
-const FILES = ['/DartsByTom/', '/DartsByTom/index.html', '/DartsByTom/manifest.json'];
+// Relatief aan de plek van sw.js, werkt dus op dartsbytom.com én op github.io/DartsByTom
+const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+// Externe scripts die de app nodig heeft: ook bewaren, zodat de app offline start
+const EXTERNAL = [
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js'
+];
 
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(CACHE).then(function(cache) {
-      return cache.addAll(FILES);
+      // Elk bestand los: één mislukte download breekt de installatie niet meer
+      return Promise.all(
+        FILES.map(function(f) { return cache.add(f).catch(function() {}); }).concat(
+        EXTERNAL.map(function(u) {
+          return fetch(new Request(u, { mode: 'no-cors' })).then(function(r) { return cache.put(u, r); }).catch(function() {});
+        }))
+      );
     })
   );
   self.skipWaiting();
@@ -16,34 +29,50 @@ self.addEventListener('install', function(e) {
 self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(keys) {
-      return Promise.all(
-        keys.map(function(k) {
-          // Delete ALL old caches
-          if(k !== CACHE) return caches.delete(k);
-        })
-      );
+      return Promise.all(keys.map(function(k) { if (k !== CACHE) return caches.delete(k); }));
     })
   );
   self.clients.claim();
 });
 
 self.addEventListener('fetch', function(e) {
-  // Always fetch fresh for HTML, use cache for assets
-  if(e.request.url.endsWith('.html') || e.request.url.endsWith('/')) {
+  var req = e.request;
+  if (req.method !== 'GET') return;
+  var url = new URL(req.url);
+
+  // De app zelf: altijd eerst de nieuwste versie, offline de bewaarde
+  if (req.mode === 'navigate' || (url.origin === self.location.origin && (url.pathname.endsWith('.html') || url.pathname.endsWith('/')))) {
     e.respondWith(
-      fetch(e.request).then(function(response) {
-        var clone = response.clone();
-        caches.open(CACHE).then(function(cache) { cache.put(e.request, clone); });
-        return response;
+      fetch(req).then(function(res) {
+        var copy = res.clone();
+        caches.open(CACHE).then(function(c) { c.put(req, copy); });
+        return res;
       }).catch(function() {
-        return caches.match(e.request);
+        return caches.match(req, { ignoreSearch: true }).then(function(r) {
+          return r || caches.match('./index.html').then(function(r2) { return r2 || caches.match('./'); });
+        });
       })
     );
-  } else {
-    e.respondWith(
-      caches.match(e.request).then(function(cached) {
-        return cached || fetch(e.request);
-      })
-    );
+    return;
   }
+
+  // Firebase-scripts (vaste versie): uit de cache, anders downloaden en bewaren
+  if (url.hostname === 'www.gstatic.com') {
+    e.respondWith(
+      caches.match(req).then(function(cached) {
+        return cached || fetch(req).then(function(res) {
+          var copy = res.clone();
+          caches.open(CACHE).then(function(c) { c.put(req, copy); });
+          return res;
+        });
+      })
+    );
+    return;
+  }
+
+  // Overige bestanden van de eigen site (iconen, manifest): cache, anders netwerk
+  if (url.origin === self.location.origin) {
+    e.respondWith(caches.match(req).then(function(cached) { return cached || fetch(req); }));
+  }
+  // Al het andere (Firestore, inloggen) gaat gewoon via het netwerk
 });
