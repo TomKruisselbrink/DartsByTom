@@ -2446,9 +2446,18 @@ function _pickCallerVoice(){
   return en.find(function(x){return /en[-_]GB/i.test(x.lang);})||en[0]||null;
 }
 function setCallerVoice(uri){try{localStorage.setItem('darts_caller_voice',uri||'');}catch(e){}_callerVoice=_pickCallerVoice();callerSay('Game on!',true);}
+var _voiceTries=0,_voiceRetry=null;
 function renderVoicePicker(){
   var sel=document.getElementById('caller-voice'),hint=document.getElementById('caller-voice-hint');if(!sel)return;
   var en=_englishVoices(),want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){}
+  // iOS geeft na het downloaden van een stem soms even een lege lijst: opnieuw proberen in plaats van alles leeg te tonen
+  if(!en.length&&window.speechSynthesis){
+    _voiceTries++;
+    if(_voiceTries<=20){clearTimeout(_voiceRetry);_voiceRetry=setTimeout(renderVoicePicker,500);if(hint)hint.textContent='Stemmen laden…';return;}
+    if(hint)hint.textContent='Je iPhone geeft nu geen stemmen door. Dat gebeurt vaak vlak na het downloaden van een stem. Sluit de app helemaal af (omhoog vegen uit het app-overzicht) en open hem opnieuw. Helpt dat niet, herstart dan je iPhone.';
+    return;
+  }
+  _voiceTries=0;
   var q=['','(verbeterd)','(premium)'];
   sel.innerHTML='<option value="">Automatisch</option>'+en.map(function(v){
     var label=v.name.replace(/\s*\((enhanced|premium|verbeterd)\)\s*/i,' ')+' '+q[_voiceQuality(v)]+' · '+v.lang.replace('_','-');
@@ -8898,7 +8907,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=204;
+var APP_VERSION=205;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
