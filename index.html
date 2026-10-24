@@ -900,7 +900,8 @@ h2.page-head svg{display:none !important}
   color: var(--su-text);
   transition: background .15s;
 }
-.game-select-row:hover, .game-select-row:active { background: rgba(50,46,47,.95); }
+.game-select-row:active { background: var(--su-press, rgba(50,46,47,.95)); }
+@media (hover:hover){ .game-select-row:hover { background: var(--su-press, rgba(50,46,47,.95)); } }
 .game-select-icon {
   width: 44px; height: 44px;
   border-radius: 12px;
@@ -1606,6 +1607,18 @@ video {
 #trn-start-p2.dc-pick.on{border-color:#3E7B4F;background:rgba(62,123,79,.2)}
 @media(prefers-reduced-motion:reduce){.dc-coin.flip{animation-duration:.01s}}
 
+
+/* v218: ingedrukte speltype-rij in licht thema */
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--su-press:rgba(226,219,212,.95)}}
+:root[data-theme="light"]{--su-press:rgba(226,219,212,.95)}
+
+/* v218: Halve It compacter op kleinere schermen */
+.hi-tight .hi-tcard{padding:10px 16px 8px !important}
+.hi-tight .hi-tbig{font-size:min(56px,var(--hi-tb,56px)) !important;margin:0 0 4px !important;letter-spacing:-1px !important}
+.hi-tight #hi-input-area button{padding-top:8px !important;padding-bottom:8px !important}
+.hi-tighter .hi-tbig{font-size:40px !important}
+.hi-tighter #hi-input-area>div>div:first-child{margin-bottom:4px !important}
+.hi-tighter #hi-input-area button{padding-top:6px !important;padding-bottom:6px !important}
 /* ═══ Licht thema (v217): warm gebroken wit met een rode en groene gloed, zoals het donkere dartbord-thema ═══ */
 @media (prefers-color-scheme:light){
   :root:not([data-theme="dark"]){background:#F4F1ED;--surface:rgba(255,255,255,.92);--card:rgba(242,238,233,.96);--border:rgba(60,40,30,.10);--separator:rgba(60,40,30,.07);--text:#1A1714;--muted:#6B6560;--bg:#F4F1ED}
@@ -1617,11 +1630,64 @@ video {
 :root[data-theme="light"] body{background:radial-gradient(ellipse 95% 50% at 0% 0%,rgba(185,78,42,.14),rgba(185,78,42,0) 62%),radial-gradient(ellipse 95% 50% at 100% 100%,rgba(62,123,79,.14),rgba(62,123,79,0) 62%),#F4F1ED}
 :root[data-theme="light"] .card{border-color:rgba(60,40,30,.07);box-shadow:0 1px 2px rgba(60,40,30,.05),0 6px 18px -6px rgba(60,40,30,.10)}
 :root[data-theme="light"] body::before{background:none}
+
+/* ═══ v218: Afgooien-teams en Random Checkout ═══ */
+.team-badge{margin-left:8px;height:24px;padding:0 9px;border-radius:12px;border:0;background:var(--tc);color:#fff;font:inherit;font-size:11px;font-weight:800;letter-spacing:.3px;cursor:pointer}
+.afg-kbadge{display:inline-block;margin-left:4px;padding:0 5px;border-radius:5px;background:var(--accent);color:#fff;font-size:9px;font-weight:900;letter-spacing:.4px;vertical-align:middle;line-height:14px}
+.afg-numlist{display:flex;flex-direction:column;gap:8px}
+.afg-numrow{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--border)}
+.afg-numrow:first-child{border-top:0}
+.afg-numrow b{display:block;font-size:16px;color:var(--text)}
+.afg-numrow span span{display:block;font-size:12px;color:var(--muted)}
+.afg-numbadge{width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rco-brk .seg-btn{height:auto;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:6px 2px}
+.rco-brk .seg-btn b{font-size:14px;font-weight:800}
+.rco-brk .seg-btn small{font-size:11px;font-weight:700;opacity:.75}
 </style>
 </head>
 <body>
 <script>
 var I18N={
+"LEVENS": "LIVES",
+"Zoveel punten heb je nodig om Killer te worden, en zoveel levens heb je.": "That's how many points you need to become a Killer, and how many lives you have.",
+"PUNTEN PER RAAK": "POINTS PER HIT",
+"Per vak 1 · 2 · 3": "Per segment 1 · 2 · 3",
+"Elke raak 1": "Every hit 1",
+"NUMMERS VERDELEN": "ASSIGN NUMBERS",
+"Gooien op de bull": "Throw at the bull",
+"Automatisch": "Automatic",
+"De app geeft iedereen een willekeurig nummer van 1 tot 20.": "The app gives everyone a random number from 1 to 20.",
+"Iedereen gooit één pijl op de bull: wie het dichtst bij zit begint, het geraakte vak wordt je nummer.": "Everyone throws one dart at the bull: closest starts, the segment you hit becomes your number.",
+"TEAMS": "TEAMS",
+"Uit": "Off",
+"Teamgenoten delen één nummer en één stel levens, en gooien om de beurt. Bij Spelers tik je op het team om iemand te verplaatsen.": "Teammates share one number and one set of lives, and take turns. Under Players, tap the team to move someone.",
+"Iedereen speelt voor zichzelf.": "Everyone plays for themselves.",
+"Aantal levens": "Number of lives",
+"Elk team heeft minstens één speler nodig.": "Every team needs at least one player.",
+"Jullie nummers": "Your numbers",
+"begint": "starts",
+"Game on!": "Game on!",
+"KILLER": "KILLER",
+"Raak": "Hit",
+"CHECKOUTS": "CHECKOUTS",
+"Hoe moeilijker de checkout, hoe meer punten je krijgt als je hem uitgooit.": "The harder the checkout, the more points you get for finishing it.",
+"Gelukt? Een bereik omhoog. Mislukt? Een bereik omlaag.": "Made it? Up one range. Missed? Down one range.",
+"Elke checkout komt uit een willekeurig gekozen bereik.": "Every checkout comes from a randomly chosen range.",
+"Iedereen begint onderaan en gaat omhoog na elke gelukte checkout. Wie als eerste het hoogste bereik uitgooit, wint.": "Everyone starts at the bottom and moves up after every successful checkout. The first to finish the highest range wins.",
+"PIJLEN PER CHECKOUT": "DARTS PER CHECKOUT",
+"AANTAL CHECKOUTS": "NUMBER OF CHECKOUTS",
+"Race": "Race",
+"Gooi uit": "Check out",
+"Beurt gegooid, nog niet uit": "Visit thrown, not out yet",
+"Spel afronden": "Finish game",
+"Willekeurige finishes, punten per bereik": "Random finishes, points per range",
+"Random Checkout": "Random Checkout",
+"Bereik": "Range",
+"Checkout": "Checkout",
+"Random Checkout — Meeste punten": "Random Checkout — Most points",
+"onbeperkt": "unlimited",
+"Standaard": "Standard",
+"Willekeurig": "Random",
 "Gooi het muntje": "Flip the coin",
 "Draai het rad": "Spin the wheel",
 "Spel & geluid": "Game & sound",
@@ -2297,6 +2363,8 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+ [/^(\d+) levens$/,'$1 lives'],[/^(\d+) teams$/,'$1 teams'],[/^Team ([A-D])$/,'Team $1'],[/^Gooit voor (.+)$/,'Throws for $1'],[/^voor (.+)$/,'for $1'],[/^(.+) is Killer$/,'$1 is Killer'],
+ [/^van (\d+)$/,'of $1'],[/^van (\d+) ·$/,'of $1 ·'],[/^(\d+) pnt · (\d+)\/(\d+) uit$/,'$1 pts · $2/$3 out'],[/^(\d+)\/(\d+) uit$/,'$1/$2 out'],[/^Bereik (.+)$/,'Range $1'],[/^(\d+) pijlen$/,'$1 darts'],
  [/^Ingelogd als (.+)$/,'Logged in as $1'],[/^(\d+) vrienden?$/,function(m){return m[1]+(m[1]==='1'?' friend':' friends');}],
  [/^(\d+) nieuwe? verzoek(en)?$/,function(m){return m[1]+(m[1]==='1'?' new request':' new requests');}],[/^Mijn vrienden \((\d+)\)$/,'My friends ($1)'],
  [/^Geluid (aan|uit)$/,function(m){return 'Sound '+(m[1]==='aan'?'on':'off');}],[/^Omroeper (aan|uit)$/,function(m){return 'Caller '+(m[1]==='aan'?'on':'off');}],
@@ -2771,6 +2839,7 @@ function _tr1(n){
     <button class="lb-chip" id="lb-game-atc" onclick="showLbTab('atc')">Around the Clock</button>
     <button class="lb-chip" id="lb-game-hi" onclick="showLbTab('hi')">Halve It</button>
     <button class="lb-chip" id="lb-game-co121" onclick="showLbTab('co121')">121 Checkout</button>
+    <button class="lb-chip" id="lb-game-rco" onclick="showLbTab('rco')">Random Checkout</button>
     <button class="lb-chip" id="lb-game-afg" onclick="showLbTab('afg')">Afgooien</button>
   </div>
   <!-- Statistiekkeuze, alleen bij 501 / 301 -->
@@ -2834,7 +2903,7 @@ function _tr1(n){
         <div class="game-select-text"><div class="game-select-name">Eliminatie</div><div class="game-select-sub">Gooi je tegenstander terug</div></div>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
-      <button onclick="selectGame('afgooien');goToSetupStep(3);" class="game-select-row">
+      <button onclick="selectGame('afgooien');goToSetupStep(2);" class="game-select-row">
         <div class="game-select-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3m9-9h-3M6 12H3"/></svg>
         </div>
@@ -2871,6 +2940,13 @@ function _tr1(n){
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">121 Checkout</div><div class="game-select-sub">Klim omhoog met checkouts</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('randomco');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Random Checkout</div><div class="game-select-sub">Willekeurige finishes, punten per bereik</div></div>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
     </div><!-- /setup-step-1 -->
@@ -3194,6 +3270,28 @@ function _tr1(n){
     <input type="number" id="co121-input" style="display:none" aria-hidden="true" tabindex="-1">
   </div>
   <div id="co121-history" style="display:none"></div>
+ </div>
+</div>
+
+<!-- RANDOM CHECKOUT (v218) -->
+<div class="screen" id="screen-randomco">
+ <div class="g-wrap">
+  <div class="g-head"><div class="g-head-l"><span class="g-head-sub" id="rco-sub">Random Checkout</span><span class="g-head-main">Beurt <span id="rco-player">—</span></span></div><div class="g-head-r" id="rco-count-wrap">Checkout<b id="rco-count">1</b></div></div>
+  <div class="g-target">
+    <span class="g-target-lbl">Gooi uit</span>
+    <div id="rco-target" class="g-target-big" style="font-size:84px">0</div>
+    <div id="rco-hint" class="g-chips" style="min-height:28px"></div>
+    <div class="g-darts" style="margin-top:6px;gap:14px"><span id="rco-bracket"></span><span>Pijlen over <b id="rco-darts" style="color:var(--text)">9</b></span></div>
+  </div>
+  <div id="rco-players" class="g-rows"></div>
+  <div class="g-input">
+    <div style="display:grid;grid-template-columns:3fr 2fr;gap:8px">
+      <button class="g-hit" style="min-height:64px" onclick="rcoResult(true)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Uitgegooid</button>
+      <button class="g-miss" style="min-height:64px" onclick="rcoResult(false)">Mislukt</button>
+    </div>
+    <button class="g-sec" id="rco-visit" onclick="rcoVisit()">Beurt gegooid, nog niet uit</button>
+    <button class="g-sec" id="rco-finish" onclick="rcoEnd()" style="display:none">Spel afronden</button>
+  </div>
  </div>
 </div>
 
@@ -3597,6 +3695,16 @@ function setPlayerPrivate(name,priv){
     if(db[name])_groupDocRef().collection('players').doc(name).set(db[name]).catch(function(e){console.error('FB save error',e);});
   }
 }
+// Je eigen speler (gekoppeld aan je account) mag nooit verborgen zijn door een groep (v218)
+function _restoreOwnFromArchive(){
+  var me=acctProfile&&acctProfile.player;if(!me)return;
+  var arc=_getHiddenArchive();if(!arc[me])return;
+  var db=getDB();
+  if(!db[me]||((arc[me].gameHistory||[]).length>(db[me].gameHistory||[]).length))db[me]=arc[me];
+  delete arc[me];
+  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}
+  saveDB(db);showToast(me+' is teruggezet op deze telefoon','success');
+}
 function _getHiddenArchive(){try{var o=JSON.parse(localStorage.getItem('darts_hidden_archive')||'{}');return (o&&typeof o==='object')?o:{};}catch(e){return {};}}
 // Terughalen: speler komt terug op dit apparaat en wordt hier privé (blijft dus uit de groep)
 function restoreHiddenPlayer(name){
@@ -3620,7 +3728,8 @@ function startHiddenListener(){
       var changed=false;
       // Niet wissen maar archiveren op dit apparaat, zodat er nooit gegevens verloren gaan
       var arc=_getHiddenArchive();
-      _groupHidden.forEach(function(n){if(!isPrivatePlayer(n)&&dbCache[n]){arc[n]=dbCache[n];delete dbCache[n];changed=true;}});
+      var _own=acctProfile&&acctProfile.player;
+      _groupHidden.forEach(function(n){if(!isPrivatePlayer(n)&&n!==_own&&dbCache[n]){arc[n]=dbCache[n];delete dbCache[n];changed=true;}});
       if(changed){try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}}
       if(changed){
         try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){}
@@ -3664,6 +3773,7 @@ if(fbAuth){
       _acctReady=true;
       return _acctAutoRestore();
     }).then(function(){
+      _restoreOwnFromArchive();
       renderAccountCard();
       frStart();
       _acctScheduleBackup(1500);
@@ -3834,6 +3944,7 @@ function acctSetPlayer(n){
   if(!acctUser)return;
   acctProfile=acctProfile||{};acctProfile.player=n;
   _acctUserRef().set({player:n},{merge:true}).catch(function(e){showToast(_acctErr(e),'error');});
+  _restoreOwnFromArchive();
   renderAccountCard();renderFriendsCard();_acctScheduleBackup(500);_refreshKnownNames();
   if(n)_inboxRecheck();
 }
@@ -4219,7 +4330,8 @@ function _scoped(impl,screenId,elId,args){
   var scr=document.getElementById(screenId);if(!scr)return;
   var slot=scr.querySelector('.scope-slot');
   if(!slot){var hd=scr.querySelector('.page-head');if(hd){slot=document.createElement('div');slot.className='scope-slot';hd.parentNode.insertBefore(slot,hd.nextSibling);}}
-  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':''):'';
+  var _noData=fr&&!_frLoading?Object.keys(frFriends).filter(function(u){return !(_frData[u]&&_frData[u].data);}).map(function(u){return _frName(u);}):[];
+  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':'')+(_noData.length?'<div class="fr-note">Nog geen statistieken gedeeld: '+_noData.map(_esc).join(', ')+'. Die vriend moet bij Account kiezen welke speler hij is.</div>':''):'';
   if(fr){var el=document.getElementById(elId);if(el)el.querySelectorAll('.st-danger,[onclick*="deleteMatchEntry"],[onclick*="generateChallenge"]').forEach(function(b){b.parentNode&&b.parentNode.removeChild(b);});}
 }
 
@@ -4589,12 +4701,12 @@ function showScreen(id){
     _pnFollow();
   }
   // Show/hide game action bar
-  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit'];
+  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit','screen-randomco'];
   var _inGame=_gameScreens.indexOf(id)>=0;
   var gb=document.getElementById('game-controls');
   if(gb){
     if(_inGame)gb.classList.add('show');else gb.classList.remove('show');
-    var _gTitles={'screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie'};
+    var _gTitles={'screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie','screen-randomco':'Random Checkout'};
     var gbt=document.getElementById('game-bar-title');if(gbt)gbt.textContent=_gTitles[id]||'';
     var _gs=document.getElementById('gc-stats'),_gss=document.getElementById('gc-stats-sep');
     var _infoLbl={'screen-game':'Stats','screen-halveit':'Rondes','screen-checkout121':'Pogingen'}[id];
@@ -4910,7 +5022,7 @@ var _GAME_NAMES={
   'x01':'501 / 301','501':'501','301':'301','halveit':'Halve It',
   'checkout121':'121 Checkout','atc':'Around the Clock',
   'shanghai7':'Shanghai','shanghai20':'Shanghai 20',
-  'eliminatie':'Eliminatie','cricket':'Cricket',
+  'eliminatie':'Eliminatie','cricket':'Cricket','randomco':'Random Checkout',
   'afgooien':'Afgooien','bull':'Bull'
 };
 // ═══════════════════════════════════════════
@@ -4918,7 +5030,7 @@ var _GAME_NAMES={
 // ═══════════════════════════════════════════
 var setupStep=1;
 function setupHeaderBack(){
-  var noRules=(selectedGame==='cricket'||selectedGame==='afgooien');
+  var noRules=(selectedGame==='cricket');
   if(setupStep<=1){showScreen('screen-home');return;}
   goToSetupStep(noRules&&setupStep===3?1:setupStep-1);
 }
@@ -4928,7 +5040,7 @@ function trnHeaderBack(){
 }
 function goToSetupStep(n){
   var g=selectedGame;
-  var noRules=(g==='cricket'||g==='afgooien');
+  var noRules=(g==='cricket');
   // Steps: 1=game select, 2=rules (skipped for noRules games), 3=players
   if(noRules){
     // Only 2 steps: 1=game, 2=players
@@ -5136,6 +5248,53 @@ function renderSetupRules(){
       var shv=typeof co121SetupSafehouse!=='undefined'?co121SetupSafehouse:'3dart';
       safeVals.forEach(function(v){var el=document.getElementById('co121-sh-'+v);if(el)el.className='seg-btn'+(shv===v?' active':'');});
     },0);
+  } else if(g==='afgooien'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">LEVENS</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(4,1fr);margin-bottom:6px">'+
+        [3,5,10].map(function(v){return '<button class="seg-btn seg-btn-num'+(afgLives===v?' active':'')+'" onclick="setAfgLives('+v+')">'+v+'</button>';}).join('')+
+        '<button class="seg-btn seg-btn-num'+([3,5,10].indexOf(afgLives)<0?' active':'')+'" onclick="setAfgLivesCustom()">'+([3,5,10].indexOf(afgLives)<0?afgLives:'Eigen')+'</button>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--su-muted);margin-bottom:14px">Zoveel punten heb je nodig om Killer te worden, en zoveel levens heb je.</div>'+
+      '<span class="setup-section-label">PUNTEN PER RAAK</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:6px">'+
+        '<button class="seg-btn'+(afgBySeg?' active':'')+'" onclick="setAfgBySeg(true)">Per vak 1 · 2 · 3</button>'+
+        '<button class="seg-btn'+(!afgBySeg?' active':'')+'" onclick="setAfgBySeg(false)">Elke raak 1</button>'+
+      '</div>'+
+      '<div style="height:10px"></div>'+
+      '<span class="setup-section-label">NUMMERS VERDELEN</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:6px">'+
+        '<button class="seg-btn'+(afgAssign==='manual'?' active':'')+'" onclick="setAfgAssign(\'manual\')">Gooien op de bull</button>'+
+        '<button class="seg-btn'+(afgAssign==='random'?' active':'')+'" onclick="setAfgAssign(\'random\')">Automatisch</button>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--su-muted);margin-bottom:14px">'+(afgAssign==='random'?'De app geeft iedereen een willekeurig nummer van 1 tot 20.':'Iedereen gooit één pijl op de bull: wie het dichtst bij zit begint, het geraakte vak wordt je nummer.')+'</div>'+
+      '<span class="setup-section-label">TEAMS</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(4,1fr);margin-bottom:6px">'+
+        [[0,'Geen'],[2,'2 teams'],[3,'3 teams'],[4,'4 teams']].map(function(t){return '<button class="seg-btn'+(afgTeams===t[0]?' active':'')+'" onclick="setAfgTeams('+t[0]+')">'+t[1]+'</button>';}).join('')+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--su-muted)">'+(afgTeams?'Teamgenoten delen één nummer en één stel levens, en gooien om de beurt. Bij Spelers tik je op het team om iemand te verplaatsen.':'Iedereen speelt voor zichzelf.')+'</div>'+
+    '</div>';
+  } else if(g==='randomco'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">CHECKOUTS</span>'+
+      '<div class="seg-ctrl rco-brk" style="grid-template-columns:repeat(4,1fr);margin-bottom:6px">'+
+        RCO_BRACKETS.map(function(b,i){return '<button class="seg-btn'+(rcoBrackets.indexOf(i)>=0?' active':'')+'" onclick="toggleRcoBracket('+i+')"><b>'+b[0]+'–'+(b[1]>=170?'170':b[1])+'</b><small>'+b[2]+' pnt</small></button>';}).join('')+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--su-muted);margin-bottom:14px">Hoe moeilijker de checkout, hoe meer punten je krijgt als je hem uitgooit.</div>'+
+      '<span class="setup-section-label">VOLGORDE</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr);margin-bottom:6px">'+
+        [['default','Standaard'],['random','Willekeurig'],['race','Race']].map(function(m){return '<button class="seg-btn'+(rcoMode===m[0]?' active':'')+'" onclick="setRcoMode(\''+m[0]+'\')">'+m[1]+'</button>';}).join('')+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--su-muted);margin-bottom:14px">'+({default:'Gelukt? Een bereik omhoog. Mislukt? Een bereik omlaag.',random:'Elke checkout komt uit een willekeurig gekozen bereik.',race:'Iedereen begint onderaan en gaat omhoog na elke gelukte checkout. Wie als eerste het hoogste bereik uitgooit, wint.'}[rcoMode])+'</div>'+
+      '<span class="setup-section-label">PIJLEN PER CHECKOUT</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(6,1fr);margin-bottom:14px">'+
+        [3,6,9,12,15,0].map(function(v){return '<button class="seg-btn seg-btn-num'+(rcoDarts===v?' active':'')+'" onclick="setRcoDarts('+v+')">'+(v||'∞')+'</button>';}).join('')+
+      '</div>'+
+      (rcoMode==='race'?'':'<span class="setup-section-label">AANTAL CHECKOUTS</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">'+
+        [10,25,0].map(function(v){return '<button class="seg-btn seg-btn-num'+(rcoCount===v?' active':'')+'" onclick="setRcoCount('+v+')">'+(v||'∞')+'</button>';}).join('')+
+      '</div>')+
+    '</div>';
   } else if(g==='eliminatie'){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">DOELSCORE</span>'+
@@ -5174,7 +5333,7 @@ function updateSetupStepper(){
   var el=document.getElementById('setup-stepper');
   if(!el)return;
   var g=selectedGame;
-  var noRules=(g==='cricket'||g==='afgooien');
+  var noRules=(g==='cricket');
   var steps,stepN;
   if(setupStep===1){
     // Nog geen spel gekozen: generieke stappen
@@ -5212,7 +5371,7 @@ function updateSetupActionBar(){
   var main=document.getElementById('setup-bar-main');
   if(!bar)return;
   var g=selectedGame;
-  var noRules=(g==='cricket'||g==='afgooien');
+  var noRules=(g==='cricket');
   if(setupStep===1){bar.style.display='none';return;}
   bar.style.display='flex';
   var gn=(_GAME_NAMES&&_GAME_NAMES[g])?_GAME_NAMES[g]:g;
@@ -5246,6 +5405,8 @@ function buildRulesSummary(){
   else if(g==='shanghai7'||g==='shanghai20'){return 'Shanghai · '+(g==='shanghai7'?'7':'20')+' rondes';}
   else if(g==='atc'){return 'ATC · '+(atcMode==='basic'?'Standaard':'Punten');}
   else if(g==='checkout121'){return '121 Checkout';}
+  else if(g==='afgooien'){return 'Afgooien · '+afgLives+' levens'+(afgTeams?' · '+afgTeams+' teams':'')+(afgAssign==='random'?' · automatisch':'');}
+  else if(g==='randomco'){return 'Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rcoMode])+' · '+(rcoDarts?rcoDarts+' pijlen':'onbeperkt');}
   else if(g==='eliminatie'){return 'Eliminatie';}
   return g;
 }
@@ -5659,7 +5820,7 @@ function renderSetupPlayers(){
   setupPlayers.forEach(function(n,i){
     var row=document.createElement('div');
     row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--su-w08)';
-    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--setup-accent,#B94E2A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:var(--su-text)">'+n+_whoTag(n)+'</span></div><button style="background:transparent;border:none;color:var(--su-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--setup-accent,#B94E2A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:var(--su-text)">'+n+_whoTag(n)+'</span>'+((selectedGame==='afgooien'&&afgTeams)?'<button class="team-badge" style="--tc:'+AFG_TEAM_COLORS[_afgTeamIdx(n)]+'" onclick="cycleAfgTeam('+i+')">'+_afgTeamLabel(_afgTeamIdx(n))+'</button>':'')+'</div><button style="background:transparent;border:none;color:var(--su-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
     el.appendChild(row);
   });
   var lbl=document.getElementById('setup-players-label');
@@ -5668,16 +5829,145 @@ function renderSetupPlayers(){
   renderKnownNames('#known-names');
   if(typeof updateSetupActionBar==='function')updateSetupActionBar();
 }
+// ═══ Afgooien-opties (v218): levens, punten per raak, nummers verdelen, teams ═══
+var afgLives=(function(){try{return parseInt(localStorage.getItem('darts_afg_lives'))||5;}catch(e){return 5;}})();
+var afgBySeg=(function(){try{return localStorage.getItem('darts_afg_byseg')!=='0';}catch(e){return true;}})();
+var afgAssign=(function(){try{return localStorage.getItem('darts_afg_assign')||'manual';}catch(e){return 'manual';}})();
+var afgTeams=0,afgTeamOf={};
+function _afgSave(k,v){try{localStorage.setItem(k,String(v));}catch(e){}}
+function setAfgLives(v){afgLives=Math.max(1,Math.min(10,v|0));_afgSave('darts_afg_lives',afgLives);renderSetupRules();updateSetupActionBar();}
+function setAfgLivesCustom(){
+  openGameSheet('Aantal levens','<div class="g-keys" style="grid-template-columns:repeat(5,1fr)">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){return '<button onclick="closeGameSheet();setAfgLives('+v+')">'+v+'</button>';}).join('')+'</div>');
+}
+function setAfgBySeg(v){afgBySeg=!!v;_afgSave('darts_afg_byseg',v?'1':'0');renderSetupRules();}
+function setAfgAssign(v){afgAssign=v;_afgSave('darts_afg_assign',v);renderSetupRules();updateSetupActionBar();}
+function setAfgTeams(n){afgTeams=n;_afgAutoTeams();renderSetupRules();updateSetupActionBar();}
+function _afgAutoTeams(){afgTeamOf={};if(!afgTeams)return;setupPlayers.forEach(function(n,i){afgTeamOf[n]=i%afgTeams;});}
+function _afgTeamIdx(n){if(afgTeamOf[n]==null){var i=setupPlayers.indexOf(n);afgTeamOf[n]=(i<0?0:i)%afgTeams;}return afgTeamOf[n];}
+function cycleAfgTeam(i){var n=setupPlayers[i];if(!n||!afgTeams)return;afgTeamOf[n]=(_afgTeamIdx(n)+1)%afgTeams;renderSetupPlayers();}
+var AFG_TEAM_COLORS=['#B94E2A','#3E7B4F','#5B6CCF','#D08A2E'];
+function _afgTeamLabel(t){return 'Team '+'ABCD'.charAt(t);}
+
+// ═══ RANDOM CHECKOUT (v218) ═══
+// Willekeurige checkout uit een gekozen bereik; uitgooien binnen het aantal pijlen levert de punten van dat bereik op.
+var RCO_BRACKETS=[[2,40,1],[41,60,2],[61,80,3],[81,90,4],[91,100,5],[101,130,8],[131,170,10]];
+var RCO_BOGEY=[159,162,163,165,166,168,169];
+var rcoBrackets=(function(){try{var a=JSON.parse(localStorage.getItem('darts_rco_brk')||'null');return Array.isArray(a)&&a.length?a:[0,1,2,3,4,5,6];}catch(e){return [0,1,2,3,4,5,6];}})();
+var rcoMode=(function(){try{return localStorage.getItem('darts_rco_mode')||'default';}catch(e){return 'default';}})();
+var rcoDarts=(function(){try{var v=localStorage.getItem('darts_rco_darts');return v==null?9:parseInt(v);}catch(e){return 9;}})();
+var rcoCount=(function(){try{var v=localStorage.getItem('darts_rco_count');return v==null?10:parseInt(v);}catch(e){return 10;}})();
+function _rcoSave(){try{localStorage.setItem('darts_rco_brk',JSON.stringify(rcoBrackets));localStorage.setItem('darts_rco_mode',rcoMode);localStorage.setItem('darts_rco_darts',String(rcoDarts));localStorage.setItem('darts_rco_count',String(rcoCount));}catch(e){}}
+function toggleRcoBracket(i){var k=rcoBrackets.indexOf(i);if(k>=0){if(rcoBrackets.length===1)return;rcoBrackets.splice(k,1);}else rcoBrackets.push(i);rcoBrackets.sort(function(a,b){return a-b;});_rcoSave();renderSetupRules();updateSetupActionBar();}
+function setRcoMode(m){rcoMode=m;_rcoSave();renderSetupRules();updateSetupActionBar();}
+function setRcoDarts(v){rcoDarts=v;_rcoSave();renderSetupRules();updateSetupActionBar();}
+function setRcoCount(v){rcoCount=v;_rcoSave();renderSetupRules();updateSetupActionBar();}
+var rco=null;
+function _rcoPick(bi,prev){
+  var b=RCO_BRACKETS[rco.brk[bi]],lo=b[0],hi=Math.min(170,b[1]),n,guard=0;
+  do{n=lo+Math.floor(Math.random()*(hi-lo+1));guard++;}while((RCO_BOGEY.indexOf(n)>=0||(n===prev&&hi>lo))&&guard<50);
+  return n;
+}
+function launchRandomCheckout(players){
+  rco={brk:rcoBrackets.slice(),mode:rcoMode,darts:rcoDarts,count:rcoCount,cur:0,snaps:[],history:[],
+    ps:players.map(function(){return {pts:0,attempts:0,hits:0,bi:0,darts:0};})};
+  state.players=players.slice();state.currentPlayer=0;state.gameType='randomco';
+  _rcoNewAttempt();
+  renderRandomCheckout();
+  showScreen('screen-randomco');
+}
+function _rcoNewAttempt(){
+  var p=rco.ps[rco.cur];
+  if(rco.mode==='random')p.bi=Math.floor(Math.random()*rco.brk.length);
+  rco.target=_rcoPick(p.bi,rco.target);
+  rco.visitsLeft=rco.darts?rco.darts/3:Infinity;
+}
+function _rcoSnap(){rco.snaps.push(JSON.stringify({cur:rco.cur,target:rco.target,visitsLeft:rco.visitsLeft===Infinity?-1:rco.visitsLeft,ps:rco.ps,history:rco.history}));if(rco.snaps.length>60)rco.snaps.shift();}
+function rcoUndo(){
+  if(!rco||!rco.snaps.length)return;
+  var s=JSON.parse(rco.snaps.pop());
+  rco.cur=s.cur;rco.target=s.target;rco.visitsLeft=s.visitsLeft<0?Infinity:s.visitsLeft;rco.ps=s.ps;rco.history=s.history;
+  state.currentPlayer=rco.cur;renderRandomCheckout();
+}
+function renderRandomCheckout(){
+  if(!rco)return;
+  var cur=rco.cur,p=rco.ps[cur],b=RCO_BRACKETS[rco.brk[p.bi]];
+  document.getElementById('rco-player').textContent=state.players[cur];
+  document.getElementById('rco-target').textContent=rco.target;
+  var co=getCheckout(rco.target);
+  document.getElementById('rco-hint').innerHTML=co?co.split(' ').map(function(d){return '<span class="g-chip">'+d+'</span>';}).join(''):'';
+  document.getElementById('rco-bracket').innerHTML='Bereik <b style="color:var(--text)">'+b[0]+'–'+Math.min(170,b[1])+'</b> · '+b[2]+' pnt';
+  document.getElementById('rco-darts').textContent=rco.visitsLeft===Infinity?'∞':rco.visitsLeft*3;
+  document.getElementById('rco-sub').textContent='Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rco.mode])+' · '+(rco.darts?rco.darts+' pijlen':'onbeperkt');
+  var cw=document.getElementById('rco-count-wrap');
+  if(rco.mode==='race')cw.innerHTML='Bereik<b>'+(p.bi+1)+' / '+rco.brk.length+'</b>';
+  else cw.innerHTML='Checkout<b>'+(p.attempts+1)+(rco.count?' / '+rco.count:'')+'</b>';
+  var rows=document.getElementById('rco-players');rows.innerHTML='';
+  state.players.forEach(function(n,i){
+    var q=rco.ps[i],qb=RCO_BRACKETS[rco.brk[q.bi]];
+    var d=document.createElement('div');d.className='g-prow'+(i===cur?' on':'');
+    d.innerHTML='<div class="g-prow-top"><span class="g-prow-name">'+(i===cur?'● ':'')+_esc(n)+'</span><span class="g-prow-meta">'+q.hits+'/'+q.attempts+' uit'+(rco.mode!=='random'?' · '+qb[0]+'–'+Math.min(170,qb[1]):'')+'</span><span class="g-prow-score">'+q.pts+'</span></div>';
+    rows.appendChild(d);
+  });
+  var multiVisit=rco.visitsLeft>1;
+  document.getElementById('rco-visit').style.display=multiVisit?'':'none';
+  document.getElementById('rco-finish').style.display=(rco.mode!=='race'&&!rco.count)?'':'none';
+}
+function rcoVisit(){
+  if(!rco)return;_rcoSnap();
+  rco.visitsLeft--;
+  if(rco.visitsLeft<=0){_rcoFinishAttempt(false);return;}
+  renderRandomCheckout();
+}
+function rcoResult(ok){if(!rco)return;_rcoSnap();_rcoFinishAttempt(ok);}
+function _rcoFinishAttempt(ok){
+  var cur=rco.cur,p=rco.ps[cur],b=RCO_BRACKETS[rco.brk[p.bi]];
+  var usedVisits=(rco.darts?rco.darts/3:0)-(rco.visitsLeft===Infinity?0:rco.visitsLeft)+(ok?1:0);
+  p.attempts++;p.darts+=rco.darts?Math.max(1,usedVisits)*3:3;
+  rco.history.push({player:cur,target:rco.target,ok:ok,pts:ok?b[2]:0});
+  if(ok){p.hits++;p.pts+=b[2];playSound('checkout');
+    if(rco.mode==='race'&&p.bi>=rco.brk.length-1){rcoEnd(cur);return;}
+    if(rco.mode!=='random')p.bi=Math.min(rco.brk.length-1,p.bi+1);
+  } else {
+    playSound('bust');
+    if(rco.mode==='default'&&rco.darts)p.bi=Math.max(0,p.bi-1);
+  }
+  // klaar? (iedereen heeft het aantal checkouts gehad)
+  if(rco.mode!=='race'&&rco.count&&rco.ps.every(function(q){return q.attempts>=rco.count;})){rcoEnd();return;}
+  rco.cur=(rco.cur+1)%rco.ps.length;state.currentPlayer=rco.cur;
+  _rcoNewAttempt();
+  renderRandomCheckout();
+}
+function rcoEnd(raceWinner){
+  if(!rco)return;
+  var order=state.players.map(function(n,i){return i;}).sort(function(a,b){return raceWinner!=null?(a===raceWinner?-1:b===raceWinner?1:rco.ps[b].pts-rco.ps[a].pts):(rco.ps[b].pts-rco.ps[a].pts)||(rco.ps[b].hits-rco.ps[a].hits);});
+  var win=order[0];
+  var solo=state.players.length<=1;
+  state.botPlayerIndex=-1;
+  state.players.forEach(function(n,i){
+    var q=rco.ps[i];
+    updatePlayerStat(n,'randomco',{won:!solo&&i===win,darts:q.darts,score:q.pts,highScore:q.pts});
+  });
+  var rows=order.map(function(i){var q=rco.ps[i];return '<div class="stat-row"><span>'+_esc(state.players[i])+'</span><strong>'+q.pts+' pnt · '+q.hits+'/'+q.attempts+' uit</strong></div>';}).join('');
+  var sub='Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rco.mode]);
+  rco=null;
+  showWin(solo?'Eindstand':state.players[win],sub,rows);
+}
+
 function startGame(){
   var err=document.getElementById('setup-error');
   if(setupPlayers.length<1){err.textContent='Voeg minimaal één speler toe.';return;}
   if(selectedGame==='halveit'&&hiSequence.length<1){err.textContent='Voeg minimaal één doel toe.';return;}
+  if(selectedGame==='afgooien'&&afgTeams){
+    var _cnt=[];for(var _t=0;_t<afgTeams;_t++)_cnt.push(0);setupPlayers.forEach(function(n){_cnt[_afgTeamIdx(n)]++;});
+    if(_cnt.some(function(c){return c===0;})){err.textContent='Elk team heeft minstens één speler nodig.';return;}
+  }
+  if(selectedGame==='afgooien'&&setupPlayers.length<2){err.textContent='Minimaal 2 spelers nodig.';return;}
   err.textContent='';
   state.trnMode=false;state.trnMatchCallback=null;
 
   // Add bot if enabled and game is 501/301
   var players=setupPlayers.slice();
-  if(botEnabled&&(selectedGame==='x01'||selectedGame==='501'||selectedGame==='301'||selectedGame==='halveit'||selectedGame==='afgooien')){
+  if(botEnabled&&!(selectedGame==='afgooien'&&afgTeams)&&(selectedGame==='x01'||selectedGame==='501'||selectedGame==='301'||selectedGame==='halveit'||selectedGame==='afgooien')){
     var bname=document.getElementById('bot-name').value.trim()||'Bot';
     state.botPlayerIndex=players.length;
     players.push(bname);
@@ -5850,7 +6140,7 @@ var _afgBotThinking=false;
 function _afgIsBot(){
   if(state.botPlayerIndex<0||!_afg||!_afg.players)return false;
   var p=_afgCurrentPlayer();
-  return !!(p&&state.players[state.botPlayerIndex]&&p.name===state.players[state.botPlayerIndex]);
+  return !!(p&&state.players[state.botPlayerIndex]&&_afgThrower(p)===state.players[state.botPlayerIndex]);
 }
 function triggerAfgBotDart(){
   _afgBotThinking=false;
@@ -5858,7 +6148,7 @@ function triggerAfgBotDart(){
   var p=_afgCurrentPlayer();if(!p)return;
   var avg=getBotAvg();
   var hp=Math.max(0.2,Math.min(0.85,(avg-20)/100));
-  if(p.score<5){
+  if(p.score<(_afg.target||5)){
     afgScore(Math.random()<hp?1:0);
   } else {
     var active=_afgActive().filter(function(q){return q.name!==p.name;});
@@ -6378,6 +6668,10 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
   } else if(gameType==='shanghai7'||gameType==='shanghai20'){
     state.shRound=1;state.shTarget=1;state.shMaxTarget=gameType==='shanghai20'?20:7;state.shStatsSaved=false;
     state.shScores=players.map(function(){return 0});state.shDarts=0;state.shTurnPts=0;state.shHistory=[];state.shHalve=shHalveOpt;setTimeout(saveRematchConfig,0);renderShanghai();showScreen('screen-shanghai');
+  } else if(gameType==='randomco'){
+    setTimeout(saveRematchConfig,0);
+    launchRandomCheckout(players);
+    return;
   } else if(gameType==='afgooien'){
     setTimeout(saveRematchConfig,0);
     startAfgooien();
@@ -7935,7 +8229,7 @@ function renderHalveIt(){
   var item=hiCurItem();
   var root=document.getElementById('hi-root');
   if(!root)return;
-  root.innerHTML='';
+  root.innerHTML='';root.classList.remove('hi-tight','hi-tighter');
   root.style.cssText='position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)';
 
   // ── Glow ──
@@ -8009,12 +8303,12 @@ function renderHalveIt(){
   var fSize=labelText2.length>14?'32px':labelText2.length>8?'54px':labelText2.length>4?'80px':'92px';
   var emojiDarts='';
   for(var d=0;d<3;d++) emojiDarts+='<span aria-hidden="true" style="width:12px;height:12px;border-radius:50%;display:inline-block;background:'+(d<thrown?'#B94E2A':'rgba(255,255,255,.85)')+';box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>';
-  var targetCard=document.createElement('div');
+  var targetCard=document.createElement('div');targetCard.className='hi-tcard';
   targetCard.style.cssText='margin:0 16px 8px;background:var(--surface);border:1px solid var(--border);'+
     'border-radius:20px;padding:18px 16px 14px;text-align:center;flex-shrink:0';
   targetCard.innerHTML=
     '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+(curIsBot?'🤖 ':'')+curName+' gooit op</div>'+
-    '<div style="font-size:'+fSize+';font-weight:900;color:'+targetColor+';line-height:1;letter-spacing:-3px;'+
+    '<div class="hi-tbig" style="font-size:'+fSize+';font-weight:900;color:'+targetColor+';line-height:1;letter-spacing:-3px;'+
          'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 8px">'+labelText2+'</div>'+
     '<div style="display:flex;align-items:center;justify-content:center;gap:6px">'+
       '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
@@ -8058,6 +8352,11 @@ function renderHalveIt(){
   }
 
   // Spelers staan nu boven de invoer; rondes via "Rondes" in de spelbalk (v196)
+  // Past het niet op het scherm? Dan compacter (v218)
+  requestAnimationFrame(function(){
+    if(content.scrollHeight>content.clientHeight+1){root.classList.add('hi-tight');
+      if(content.scrollHeight>content.clientHeight+1)root.classList.add('hi-tighter');}
+  });
 }
 
 function _buildHiPlayers(content){
@@ -8152,15 +8451,15 @@ function renderHiInputArea(item){
   } else if(item.type==='double'){
     el.innerHTML=
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak een willekeurige double — 3x mis = score gehalveerd</div>'+
-      '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">'+
+      '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">'+
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){var pos=HI_BOARD_ORDER.indexOf(n);var isRed=(pos%2===0);var bc=isRed?'rgba(217,35,45,.3)':'rgba(30,126,52,.3)';var bg=isRed?'rgba(217,35,45,.09)':'rgba(30,126,52,.09)';var tc=isRed?'#D9232D':'#1E7E34';return'<button class="btn" style="padding:11px 4px;font-size:16px;font-weight:700;border-color:'+bc+';background:'+bg+';color:'+tc+'" onclick="hiAddPts('+(n*2)+')">D'+n+'</button>';}).join('')+
-      '<button class="btn" style="color:var(--muted);grid-column:span 4;padding:12px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
+      '<button class="btn" style="color:var(--muted);grid-column:span 5;padding:12px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='treble'){
     el.innerHTML=
       '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center">Raak een willekeurige triple — 3x mis = score gehalveerd</div>'+
-      '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">'+
+      '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">'+
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(n){var pos=HI_BOARD_ORDER.indexOf(n);var isRed=(pos%2===0);var bc=isRed?'rgba(217,35,45,.3)':'rgba(30,126,52,.3)';var bg=isRed?'rgba(217,35,45,.09)':'rgba(30,126,52,.09)';var tc=isRed?'#D9232D':'#1E7E34';return'<button class="btn" style="padding:11px 4px;font-size:16px;font-weight:700;border-color:'+bc+';background:'+bg+';color:'+tc+'" onclick="hiAddPts('+(n*3)+')">T'+n+'</button>';}).join('')+
-      '<button class="btn" style="color:var(--muted);grid-column:span 4;padding:12px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
+      '<button class="btn" style="color:var(--muted);grid-column:span 5;padding:12px 6px;font-size:15px;border:1px solid var(--border)" onclick="hiAddPts(0)">Mis</button></div>';
   } else if(item.type==='spec_double'||item.type==='spec_treble'){
     var _hitVal=item.type==='spec_double'?item.val*2:item.val*3;
     var _tl=item.type==='spec_double'?'D'+item.val:'T'+item.val;
@@ -8564,7 +8863,7 @@ var statsVsFilter={};
 var statsSelectedPlayer=null;
 function selectStatsPlayer(n){statsSelectedPlayer=n;renderStats();}
 
-var GAME_TYPE_LABELS={'x01':'X01','501':'501','301':'301','atc':'Around the Clock','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien','eliminatie':'Eliminatie'};
+var GAME_TYPE_LABELS={'randomco':'Random Checkout','x01':'X01','501':'501','301':'301','atc':'Around the Clock','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien','eliminatie':'Eliminatie'};
 // Leeg-scherm met icoon, uitleg en (optioneel) knop naar Nieuw spel
 function emptyState(title,sub,cta){
   return '<div class="empty-state">'+
@@ -9137,7 +9436,7 @@ function showLbTab(tab){
     var el=document.getElementById('lb-tab-'+t);
     if(el)el.className='lb-sub'+(t===tab?' active':'');
   });
-  ['x01','sh7','sh20','atc','hi','co121','afg'].forEach(function(g){
+  ['x01','sh7','sh20','atc','hi','co121','rco','afg'].forEach(function(g){
     var el=document.getElementById('lb-game-'+g);
     if(el)el.className='lb-chip'+((isX01?g==='x01':g===tab)?' active':'');
   });
@@ -9199,9 +9498,9 @@ function _renderLeaderboardImpl(tab){
   }
 
   // Other game tabs
-  if(tab==='sh7'||tab==='sh20'||tab==='atc'||tab==='hi'||tab==='co121'){
-    var gtMap={sh7:'shanghai7',sh20:'shanghai20',atc:'atc',hi:'halveit',co121:'checkout121'};
-    var labelMap={sh7:'Shanghai 1–7 — Hoogste score',sh20:'Shanghai 1–20 — Hoogste score',atc:'Around the Clock — Meeste segmenten',hi:'Halve It — Hoogste score',co121:'121 Checkout — Hoogste checkout bereikt'};
+  if(tab==='sh7'||tab==='sh20'||tab==='atc'||tab==='hi'||tab==='co121'||tab==='rco'){
+    var gtMap={sh7:'shanghai7',sh20:'shanghai20',atc:'atc',hi:'halveit',co121:'checkout121',rco:'randomco'};
+    var labelMap={sh7:'Shanghai 1–7 — Hoogste score',sh20:'Shanghai 1–20 — Hoogste score',atc:'Around the Clock — Meeste segmenten',hi:'Halve It — Hoogste score',co121:'121 Checkout — Hoogste checkout bereikt',rco:'Random Checkout — Meeste punten'};
     var gt=gtMap[tab];
     var rows=names.map(function(name){
       var s=calcGameStats(name,gt);
@@ -9865,6 +10164,7 @@ function gameBarUndo(){
   else if(sid==='screen-checkout121')co121Undo();
   else if(sid==='screen-cricket')cricketUndo();
   else if(sid==='screen-eliminatie')eliUndo();
+  else if(sid==='screen-randomco')rcoUndo();
 }
 function toggleHistoryDetail(did){
   var el=document.getElementById(did);
@@ -9920,7 +10220,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=217;
+var APP_VERSION=218;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -10502,12 +10802,38 @@ function eliNextPlayer(){
 }
 
 function startAfgooien(){
-  _afg.players = setupPlayers.map(function(n){ return {name:n,number:null,score:0,eliminated:false}; });
+  var names=(state.players&&state.players.length?state.players:setupPlayers).slice();
+  var ents;
+  if(afgTeams>=2){
+    ents=[];for(var t=0;t<afgTeams;t++)ents.push({name:'',members:[],mIdx:0,team:t,number:null,score:0,eliminated:false});
+    names.forEach(function(n){ents[_afgTeamIdx(n)].members.push(n);});
+    ents=ents.filter(function(e){return e.members.length;});
+    ents.forEach(function(e){e.name=e.members.join(' & ');});
+  } else ents=names.map(function(n){ return {name:n,members:[n],mIdx:0,number:null,score:0,eliminated:false}; });
+  _afg.players = ents;
+  _afg.target = afgLives; _afg.bySeg = afgBySeg; _afg.teams = afgTeams>=2;
   _afg.bullHits = {}; _afg.bullIdx = 0; _afg.history = []; _afg.snapshots = [];
   _afgTiePlayers = []; _afgTieResolved = [];
   _afgBullReRound = false; _afgBullRePlayers = [];
+  if(afgAssign==='random'){
+    // willekeurige, unieke nummers; volgorde zoals ingesteld bij "Wie begint?"
+    var nums=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+    for(var i=nums.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=nums[i];nums[i]=nums[j];nums[j]=x;}
+    ents.forEach(function(e,k){e.number=nums[k];});
+    var startName=(typeof startMode!=='undefined'&&startMode!=='first'&&setupPlayers[setupStartPlayer])?setupPlayers[setupStartPlayer]:null;
+    if(startName){var si=ents.findIndex(function(e){return e.members.indexOf(startName)>=0;});if(si>0)_afg.players=ents.slice(si).concat(ents.slice(0,si));}
+    _afgFinalizeOrder();
+    _afgShowNumbers();
+    return;
+  }
   renderAfgBull();
   showScreen('screen-afgooien-bull');
+}
+function _afgThrower(p){return (p&&p.members&&p.members.length)?p.members[(p.mIdx||0)%p.members.length]:(p?p.name:'');}
+function _afgShowNumbers(){
+  openGameSheet('Jullie nummers','<div class="afg-numlist">'+_afg.players.map(function(e,i){
+    return '<div class="afg-numrow"><span class="afg-numbadge"'+(e.team!=null?' style="background:'+AFG_TEAM_COLORS[e.team]+'"':'')+'>'+e.number+'</span><span><b>'+_esc(e.name)+'</b>'+(i===0?'<span>begint</span>':'')+'</span></div>';}).join('')+'</div>'+
+    '<button class="g-hit" style="width:100%;margin-top:14px" onclick="closeGameSheet()">Game on!</button>');
 }
 
 var _afgBullReRound = false;   // true during a bull re-throw
@@ -10537,8 +10863,8 @@ function renderAfgBull(){
       '<div class="g-head"><div class="g-head-l"><span class="g-head-sub">'+_sub+'</span><span class="g-head-main">Wie begint?</span></div>'+
         '<div class="g-head-r">Speler<b>'+(_afg.bullIdx+1)+' / '+activePlayers.length+'</b></div></div>'+
       '<div class="g-target"><span class="g-target-lbl">Gooi op de bull</span>'+
-        '<div style="font-size:40px;font-weight:900;line-height:1.1;color:var(--text)">'+p.name+'</div>'+
-        '<div class="g-note">Wat raakte de pijl?</div></div>'+
+        '<div style="font-size:40px;font-weight:900;line-height:1.1;color:var(--text)">'+_afgThrower(p)+'</div>'+
+        '<div class="g-note">'+(_afg.teams?'Gooit voor '+p.name+' · ':'')+'Wat raakte de pijl?</div></div>'+
       '<div class="g-input">'+
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
           '<button class="g-hit" style="min-height:76px;flex-direction:column;gap:2px;background:#B94E2A" data-bull-type="bull2" data-bull-val="50"><span>Bull</span><small style="font-size:12px;opacity:.85">50</small></button>'+
@@ -10759,7 +11085,7 @@ function renderAfgooien(){
   if(!root) return;
   var p = _afgCurrentPlayer();
   if(!p) return;
-  var isAfg = p.score >= 5;
+  var isAfg = p.score >= _afg.target;var thrower=_afgThrower(p);
   var numLabel = p.number==='bull' ? 'Bull' : String(p.number);
 
   root.innerHTML = '';
@@ -10791,11 +11117,11 @@ function renderAfgooien(){
     card.innerHTML=
       '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'+
         '<div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:'+dotColor+'"></div>'+
-        '<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'+(q.eliminated?'text-decoration:line-through':'')+'">'+q.name+'</div>'+
+        '<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'+(q.eliminated?'text-decoration:line-through':'')+'">'+q.name+(q.score>=_afg.target&&!q.eliminated?' <span class="afg-kbadge">KILLER</span>':'')+'</div>'+
       '</div>'+
       '<div style="display:flex;align-items:baseline;gap:5px">'+
         '<div style="font-size:30px;font-weight:900;line-height:1;color:'+scoreColor+'">'+q.score+'</div>'+
-        '<div style="font-size:11px;color:var(--muted);font-weight:600">van 5</div>'+
+        '<div style="font-size:11px;color:var(--muted);font-weight:600">van '+_afg.target+' · <b style="color:var(--text)">'+(q.number==='bull'?'Bull':q.number)+'</b></div>'+
       '</div>';
     playerGrid.appendChild(card);
   });
@@ -10808,7 +11134,7 @@ function renderAfgooien(){
       'border-radius:20px;padding:20px 16px 16px;text-align:center;flex-shrink:0';
     var dDots=''; for(var d=1;d<=3;d++) dDots+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d<=_afg.dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
     targetCard.innerHTML=
-      '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+p.name+' gooit op</div>'+
+      '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+thrower+' gooit op</div>'+(_afg.teams?'<div style="font-size:11px;color:var(--muted);margin:-2px 0 2px">voor '+p.name+'</div>':'')+
       '<div style="font-size:96px;font-weight:900;color:var(--accent);line-height:1;letter-spacing:-4px;'+
            'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 6px;animation:afgNumBounce .35s cubic-bezier(.34,1.4,.64,1) both">'+numLabel+'</div>'+
       '<div style="display:flex;align-items:center;justify-content:center;gap:8px">'+
@@ -10852,7 +11178,7 @@ function renderAfgooien(){
     var dDots2=''; for(var d2=1;d2<=3;d2++) dDots2+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d2<=_afg.dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
     var hdr=document.createElement('div');
     hdr.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px';
-    hdr.innerHTML='<div style="font-size:16px;font-weight:800">🎯 Afgooien!</div>'+
+    hdr.innerHTML='<div style="font-size:16px;font-weight:800">'+thrower+' is Killer'+(_afg.teams?' <span style="font-size:12px;color:var(--muted);font-weight:700">('+p.name+')</span>':'')+'</div>'+
       '<div style="display:flex;align-items:center;gap:6px">'+
         '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
         '<div style="display:flex;gap:5px">'+dDots2+'</div>'+
@@ -10862,17 +11188,17 @@ function renderAfgooien(){
     active.forEach(function(t){
       var row=document.createElement('div');
       row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--separator)';
-      var scoreDots=''; for(var i=0;i<5;i++) scoreDots+='<span style="width:7px;height:7px;border-radius:50%;display:inline-block;background:'+(i<t.score?'var(--accent)':'var(--border)')+'"></span>';
+      var scoreDots=''; for(var i=0;i<_afg.target;i++) scoreDots+='<span style="width:7px;height:7px;border-radius:50%;display:inline-block;background:'+(i<t.score?'var(--accent)':'var(--border)')+'"></span>';
       var left=document.createElement('div');
       left.innerHTML='<div style="font-size:13px;font-weight:700">'+t.name+' <span style="color:var(--muted);font-size:11px">('+( t.number==='bull'?'Bull':t.number)+')</span></div>'+
         '<div style="display:flex;gap:2px;margin-top:3px">'+scoreDots+'</div>';
       var btns=document.createElement('div');
       btns.style.cssText='display:flex;gap:6px';
-      [-1,-2,-3].forEach(function(delta){
+      (_afg.bySeg?[-1,-2,-3]:[-1]).forEach(function(delta){
         var b=document.createElement('button');
         b.className='btn gc-btn';
         b.style.cssText='font-size:13px;min-height:36px';
-        b.textContent=delta;
+        b.textContent=_afg.bySeg?delta:'Raak';
         b.addEventListener('click',(function(n,d){return function(){afgAttack(n,Math.abs(d));};})(t.name,delta));
         btns.appendChild(b);
       });
@@ -10914,7 +11240,7 @@ function renderAfgooien(){
         'display:flex;align-items:center;justify-content:space-between';
       curRow.innerHTML='<div style="display:flex;align-items:center;gap:9px">'+
         '<div style="font-size:10px;font-weight:800;color:var(--accent);width:14px">✦</div>'+
-        '<div style="font-size:13px;font-weight:700;color:var(--accent)">'+p.name+'</div>'+
+        '<div style="font-size:13px;font-weight:700;color:var(--accent)">'+thrower+'</div>'+
         '<div style="font-size:11px;color:var(--muted)">op '+numLabel+'</div>'+
         '</div>'+
         '<div style="font-size:11px;color:var(--muted)">'+_afg.currentThrows.join(' · ')+'</div>';
@@ -10970,7 +11296,8 @@ function renderAfgooien(){
 function afgScore(pts){
   _afgSnapshot();
   var p = _afgCurrentPlayer(); if(!p) return;
-  var gained = Math.min(pts, Math.max(0, 5 - p.score));
+  if(!_afg.bySeg&&pts>0)pts=1;
+  var gained = Math.min(pts, Math.max(0, _afg.target - p.score));
   var throwLabel;
   if(pts===0){ throwLabel='M'; }
   else if(p.number==='bull'){ throwLabel=pts===1?'BB':'B'; }
@@ -10980,7 +11307,7 @@ function afgScore(pts){
     p.score += gained;
     playSound('score');
     _afg.currentTurnYield += gained;
-    _afg.history.push({player:p.name, delta:gained, desc:'op '+(p.number==='bull'?'Bull':p.number)});
+    _afg.history.push({player:_afgThrower(p), delta:gained, desc:'op '+(p.number==='bull'?'Bull':p.number)});
   } else {
     _afg.history.push({player:p.name, delta:0, desc:'mis'});
   }
@@ -10995,6 +11322,7 @@ function afgAttack(targetName, pts){
   var t = null;
   for(var i=0;i<_afg.players.length;i++){ if(_afg.players[i].name===targetName){ t=_afg.players[i]; break; } }
   if(!p||!t) return;
+  if(!_afg.bySeg)pts=1;
   _afg.currentThrows.push('-'+pts);
   _afg.currentTurnYield += pts;
   t.score = Math.max(0, t.score - pts);
@@ -11018,14 +11346,15 @@ function _afgNextTurn(){
     _afg.turnNum++;
     _afg.turns.push({
       turnNum: _afg.turnNum,
-      player: p.name,
+      player: _afgThrower(p)+(_afg.teams?' ('+p.name+')':''),
       target: p.number,
-      isAfg: p.score >= 5,
+      isAfg: p.score >= _afg.target,
       throws: _afg.currentThrows.slice(),
       yield: _afg.currentTurnYield
     });
   }
   _afg.currentThrows = []; _afg.currentTurnYield = 0;
+  if(p&&p.members&&p.members.length>1)p.mIdx=((p.mIdx||0)+1)%p.members.length; // teamgenoten om de beurt
   var start = _afg.currentIdx;
   do{ _afg.currentIdx=(_afg.currentIdx+1)%_afg.players.length; }
   while(_afg.players[_afg.currentIdx].eliminated && _afg.currentIdx!==start);
@@ -11036,35 +11365,38 @@ function _afgNextTurn(){
 function _afgWin(winner){
   _inGame=false;
   var gb=document.getElementById('game-controls'); if(gb) gb.classList.remove('show');
-  // Save stats for all players
-  var allNames = _afg.players.map(function(q){ return q.name; });
+  var allNames=[];_afg.players.forEach(function(q){(q.members||[q.name]).forEach(function(m){allNames.push(m);});});
   _afg.players.forEach(function(q){
-    var db=getDB();
-    if(!db[q.name])db[q.name]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
-    var pr=db[q.name];
-    pr.games++;
-    var won=q.name===winner.name;
-    if(won)pr.wins++;
-    if(!pr.gameHistory)pr.gameHistory=[];
-    pr.gameHistory.unshift({
-      gid:_newGid(),
-      ts:Date.now(),
-      date:new Date().toLocaleDateString('nl-NL'),
-      gameType:'afgooien',
-      won:won,
-      opponents:allNames.filter(function(n){return n!==q.name;}),
-      afgScore:q.score,
-      players:allNames.length
+    (q.members||[q.name]).forEach(function(m){
+      if(state.botPlayerIndex>=0&&state.players[state.botPlayerIndex]===m)return;
+      var db=getDB();
+      if(!db[m])db[m]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};
+      var pr=db[m];
+      pr.games++;
+      var won=q===winner;
+      if(won)pr.wins++;
+      if(!pr.gameHistory)pr.gameHistory=[];
+      var opp=allNames.filter(function(n){return (q.members||[q.name]).indexOf(n)<0;});
+      pr.gameHistory.unshift({
+        gid:_newGid(),ts:Date.now(),
+        date:new Date().toLocaleDateString('nl-NL'),
+        gameType:'afgooien',
+        won:won,
+        opponents:opp,
+        afgScore:q.score,
+        players:allNames.length,
+        team:_afg.teams?(q.members||[]).filter(function(n){return n!==m;}):undefined
+      });
+      _trimHistory(pr);
+      db[m]=pr; saveDB(db);
     });
-    _trimHistory(pr);
-    db[q.name]=pr; saveDB(db);
   });
   // Nieuw winstscherm, net als de andere spellen (v210)
-  state.players=allNames.slice();state.gameType='afgooien';
+  state.players=allNames.slice();state.gameType='afgooien';state.botPlayerIndex=-1;
   var rows=_afg.players.slice().sort(function(x,y){return (x.eliminated?1:0)-(y.eliminated?1:0)||(y.score||0)-(x.score||0);}).map(function(q){
-    return '<div class="stat-row"><span>'+_esc(q.name)+(q.number?' <span style="color:var(--muted);font-weight:600">· '+q.number+'</span>':'')+'</span><strong>'+(q.name===winner.name?'Winnaar':(q.eliminated?'Afgegooid':(q.score||0)+' pnt'))+'</strong></div>';
+    return '<div class="stat-row"><span>'+_esc(q.name)+(q.number?' <span style="color:var(--muted);font-weight:600">· '+q.number+'</span>':'')+'</span><strong>'+(q===winner?'Winnaar':(q.eliminated?'Afgegooid':(q.score||0)+' pnt'))+'</strong></div>';
   }).join('');
-  showWin(winner.name,'Afgooien · '+allNames.length+' spelers',rows);
+  showWin(winner.name,'Afgooien · '+(_afg.teams?_afg.players.length+' teams':allNames.length+' spelers'),rows);
 }
 
 // afgooienUndo defined above in afgooien section
