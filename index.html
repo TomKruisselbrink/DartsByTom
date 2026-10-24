@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#e8b89e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#F4F1ED" media="(prefers-color-scheme: light)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Darts">
@@ -17,11 +17,11 @@
 /* ─── DESIGN TOKENS ─── */
 :root{
   color-scheme:light dark;
-  --accent:#B5502F;
+  --accent:#B94E2A;
   --accent2:#9DBF9E;
   --success:#34C759;
   --danger:#FF3B30;
-  --warning:#B5502F;
+  --warning:#B94E2A;
   --info:#9DBF9E;
   --radius:13px;
   --radius-sm:10px;
@@ -112,12 +112,12 @@ body::before{
   inset:0;
   pointer-events:none;
   z-index:0;
-  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,80,47,.07) 0%, transparent 70%),
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(185,78,42,.07) 0%, transparent 70%),
              radial-gradient(ellipse 60% 40% at 80% 100%, rgba(157,191,158,.05) 0%, transparent 60%);
 }
 @media (prefers-color-scheme:light){
   body::before{
-    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(181,80,47,.06) 0%, transparent 70%);
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(185,78,42,.06) 0%, transparent 70%);
   }
 }
 /* ─── FORCED THEME OVERRIDES ─── */
@@ -459,8 +459,8 @@ body:has(#game-controls.show) #app-content{padding-bottom:calc(env(safe-area-ins
 }
 .known-name-btn:active{transform:scale(.95);opacity:.8}
 .known-name-btn.known-name-active{
-  background:rgba(181,80,47,.12);
-  border-color:rgba(181,80,47,.35);
+  background:rgba(185,78,42,.12);
+  border-color:rgba(185,78,42,.35);
   color:var(--accent);
   cursor:default;
 }
@@ -513,7 +513,7 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
   background:var(--accent);
   color:#fff;
   border-color:transparent;
-  box-shadow:0 2px 12px rgba(181,80,47,.35);
+  box-shadow:0 2px 12px rgba(185,78,42,.35);
 }
 .btn-primary:hover{background:var(--accent)}
 .btn-danger{
@@ -522,7 +522,7 @@ h3{font-size:17px;font-weight:600;margin-bottom:8px}
   border-color:rgba(255,59,48,.2);
 }
 .btn-sm{padding:8px 14px;font-size:13px}
-.btn.active{background:rgba(181,80,47,.12);color:var(--accent);border-color:rgba(181,80,47,.3)}
+.btn.active{background:rgba(185,78,42,.12);color:var(--accent);border-color:rgba(185,78,42,.3)}
 .btn-full{width:100%}
 .btn-xs{padding:5px 10px;font-size:12px}
 
@@ -611,7 +611,7 @@ select{
   background:var(--accent) !important;
   color:#fff !important;
   border-color:var(--accent) !important;
-  box-shadow:0 4px 14px rgba(181,80,47,.35) !important;
+  box-shadow:0 4px 14px rgba(185,78,42,.35) !important;
 }
 .segment button:active{transform:scale(.97) !important}
 
@@ -633,7 +633,7 @@ select{
 .game-btn:active{transform:scale(.96);opacity:.8;transition:transform .06s}
 .game-btn .name{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.2px}
 .game-btn .sub{font-size:13px;color:var(--muted);margin-top:4px}
-.game-btn.selected{border-color:var(--accent);border-width:1.5px;background:rgba(181,80,47,.18);box-shadow:0 2px 10px rgba(181,80,47,.18);}
+.game-btn.selected{border-color:var(--accent);border-width:1.5px;background:rgba(185,78,42,.18);box-shadow:0 2px 10px rgba(185,78,42,.18);}
 .game-btn.selected .name{color:var(--accent)}
 .game-btn.selected .sub{color:var(--accent);opacity:.7}
 
@@ -660,7 +660,7 @@ select{
   text-align:center;
   box-shadow:var(--shadow);
 }
-.player-card.active{border-color:var(--accent);background:rgba(181,80,47,.06)}
+.player-card.active{border-color:var(--accent);background:rgba(185,78,42,.06)}
 .player-card.halved{border-color:var(--danger);background:rgba(255,59,48,.06)}
 .player-card .pname{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .player-card.active .pname{color:var(--accent)}
@@ -678,7 +678,7 @@ select{
 /* ─── BADGES ─── */
 .badge{display:inline-block;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:600}
 .badge-success{background:rgba(52,199,89,.14);color:var(--success)}
-.badge-warning{background:rgba(181,80,47,.14);color:var(--warning)}
+.badge-warning{background:rgba(185,78,42,.14);color:var(--warning)}
 
 /* ─── STAT ROWS ─── */
 .stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--separator);font-size:14px}
@@ -702,7 +702,7 @@ select{
 .empty{color:var(--muted);font-size:14px;text-align:center;padding:24px}
 /* Lege schermen (v195) */
 .empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:36px 20px;margin-top:8px;border-radius:18px;background:var(--card);border:1px dashed var(--border)}
-.empty-state-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(181,80,47,.14);color:var(--accent);margin-bottom:4px}
+.empty-state-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(185,78,42,.14);color:var(--accent);margin-bottom:4px}
 .empty-state-icon svg{display:block}
 .empty-state-title{font-size:16px;font-weight:800;color:var(--text)}
 .empty-state-sub{font-size:13px;line-height:1.45;color:var(--muted);max-width:280px}
@@ -719,7 +719,7 @@ select{
 .lb-subrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:4px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
 .lb-subrow::-webkit-scrollbar{display:none}
 .lb-sub{flex:1 0 auto;height:36px;padding:0 12px;border:none;border-radius:10px;background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
-.lb-sub.active{background:rgba(181,80,47,.18);color:var(--accent)}
+.lb-sub.active{background:rgba(185,78,42,.18);color:var(--accent)}
 .error{color:var(--danger);font-size:13px;margin-top:6px}
 .gap8{display:flex;gap:8px}
 
@@ -728,7 +728,7 @@ select{
 .trn-match.current{border-color:var(--accent)}
 .trn-match.done{opacity:.6}
 .trn-match-header{padding:7px 14px;background:var(--card);font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
-.trn-match.current .trn-match-header{background:rgba(181,80,47,.1);color:var(--accent)}
+.trn-match.current .trn-match-header{background:rgba(185,78,42,.1);color:var(--accent)}
 .trn-player-row{display:flex;align-items:center;padding:11px 14px;gap:8px}
 .trn-player-row+.trn-player-row{border-top:0.5px solid var(--separator)}
 .trn-player-name{flex:1;font-size:15px;font-weight:600}
@@ -764,8 +764,8 @@ select{
 .home-tile:hover{transform:translateY(-3px) scale(1.01);filter:brightness(1.07)}
 .home-tile:active{transform:scale(.92);opacity:.82;transition:transform 30ms ease-out,opacity 30ms ease-out,filter 30ms}
 .home-tile-primary{
-  background:linear-gradient(145deg,#C5603F,#B5502F);
-  box-shadow:0 6px 24px rgba(181,80,47,.45),0 2px 6px rgba(181,80,47,.3);
+  background:linear-gradient(145deg,#C5603F,#B94E2A);
+  box-shadow:0 6px 24px rgba(185,78,42,.45),0 2px 6px rgba(185,78,42,.3);
 }
 .home-tile-secondary{
   background:linear-gradient(145deg,#AECFAF,#9DBF9E,#7DAF7E);
@@ -853,10 +853,10 @@ select{
 /* drag lift moved to .seq-item-cont.seq-row-dragging */
 
 /* ─── SEQUENCE EDITOR ITEMS ─── */
-:root { --seq-item-bg: #2C2C2E; --seq-pill-bg: rgba(181,80,47,.2); --seq-num-color: #636366; }
-[data-theme="light"] { --seq-item-bg: #F2F2F7; --seq-pill-bg: rgba(181,80,47,.12); --seq-num-color: #8E8E93; }
+:root { --seq-item-bg: #2C2C2E; --seq-pill-bg: rgba(185,78,42,.2); --seq-num-color: #636366; }
+[data-theme="light"] { --seq-item-bg: #F2F2F7; --seq-pill-bg: rgba(185,78,42,.12); --seq-num-color: #8E8E93; }
 @media(prefers-color-scheme:light){
-  :root:not([data-theme="dark"]) { --seq-item-bg: #F2F2F7; --seq-pill-bg: rgba(181,80,47,.12); --seq-num-color: #8E8E93; }
+  :root:not([data-theme="dark"]) { --seq-item-bg: #F2F2F7; --seq-pill-bg: rgba(185,78,42,.12); --seq-num-color: #8E8E93; }
 }
 .seq-item-cont.seq-row-dragging {
   box-shadow: 0 8px 28px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.18) !important;
@@ -1605,6 +1605,18 @@ video {
 #trn-start-p1.dc-pick.on{border-color:#B94E2A;background:rgba(185,78,42,.18)}
 #trn-start-p2.dc-pick.on{border-color:#3E7B4F;background:rgba(62,123,79,.2)}
 @media(prefers-reduced-motion:reduce){.dc-coin.flip{animation-duration:.01s}}
+
+/* ═══ Licht thema (v217): warm gebroken wit met een rode en groene gloed, zoals het donkere dartbord-thema ═══ */
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){background:#F4F1ED;--surface:rgba(255,255,255,.92);--card:rgba(242,238,233,.96);--border:rgba(60,40,30,.10);--separator:rgba(60,40,30,.07);--text:#1A1714;--muted:#6B6560;--bg:#F4F1ED}
+  :root:not([data-theme="dark"]) body{background:radial-gradient(ellipse 95% 50% at 0% 0%,rgba(185,78,42,.14),rgba(185,78,42,0) 62%),radial-gradient(ellipse 95% 50% at 100% 100%,rgba(62,123,79,.14),rgba(62,123,79,0) 62%),#F4F1ED}
+  :root:not([data-theme="dark"]) .card{border-color:rgba(60,40,30,.07);box-shadow:0 1px 2px rgba(60,40,30,.05),0 6px 18px -6px rgba(60,40,30,.10)}
+  :root:not([data-theme="dark"]) body::before{background:none}
+}
+:root[data-theme="light"]{background:#F4F1ED;--surface:rgba(255,255,255,.92);--card:rgba(242,238,233,.96);--border:rgba(60,40,30,.10);--separator:rgba(60,40,30,.07);--text:#1A1714;--muted:#6B6560;--bg:#F4F1ED}
+:root[data-theme="light"] body{background:radial-gradient(ellipse 95% 50% at 0% 0%,rgba(185,78,42,.14),rgba(185,78,42,0) 62%),radial-gradient(ellipse 95% 50% at 100% 100%,rgba(62,123,79,.14),rgba(62,123,79,0) 62%),#F4F1ED}
+:root[data-theme="light"] .card{border-color:rgba(60,40,30,.07);box-shadow:0 1px 2px rgba(60,40,30,.05),0 6px 18px -6px rgba(60,40,30,.10)}
+:root[data-theme="light"] body::before{background:none}
 </style>
 </head>
 <body>
@@ -3062,7 +3074,7 @@ function _tr1(n){
 <div class="screen" id="screen-game" style="display:none;flex-direction:column;height:100%">
 
   <!-- Format indicator (tournament only) -->
-  <div id="trn-leg-bar" style="display:none;text-align:center;padding:5px 16px;background:rgba(181,80,47,.15);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;flex-shrink:0"></div>
+  <div id="trn-leg-bar" style="display:none;text-align:center;padding:5px 16px;background:rgba(185,78,42,.15);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;flex-shrink:0"></div>
 
   <!-- Kop: spel, regels, leg en beurt (v196) -->
   <div id="x01-head" class="g-head"></div>
@@ -3513,7 +3525,9 @@ var groupCode = localStorage.getItem('darts_group_code') || null;
 var currentLbTab = 'avg';
 var fbListener = null;
 
-var _viewDB=null;
+var _viewDB=null,_keepStatsSel=false;
+// jouw eigen speler (ingelogd) altijd vooraan in de spelerskeuze
+function _meFirst(names){var me=acctUser&&acctProfile&&acctProfile.player;if(!me)return names;var i=names.indexOf(me);if(i>0){names=names.slice();names.splice(i,1);names.unshift(me);}return names;}
 function getDB(){return _viewDB||dbCache;}
 function _withView(db,fn){var o=_viewDB;_viewDB=db;try{return fn();}finally{_viewDB=o;}}
 function _loadLocalDB(){
@@ -4169,7 +4183,7 @@ function openFriendSheet(uid){
 function frShowStats(uid){
   var v=_friendsViewDB(),nm=_frName(uid),f=frFriends[uid]||{};
   var key=v[nm+' ('+f.username+')']?nm+' ('+f.username+')':nm;
-  _statsScope='friends';statsSelectedPlayer=key;
+  _statsScope='friends';statsSelectedPlayer=key;_keepStatsSel=true;
   showScreen('screen-stats');
 }
 // Statistieken / Ranglijst / Geschiedenis: "Deze telefoon" of "Vrienden"
@@ -4592,6 +4606,8 @@ function showScreen(id){
   }
   // Tournament nav rendered inline in renderTrnOverview/renderStandings
   if(id==='screen-settings'){stClose();renderSettingsPlayers();renderAccountCard();renderFriendsCard();renderVoicePicker();var scb=document.getElementById('sound-enabled');if(scb)scb.checked=soundEnabled;var ccb=document.getElementById('caller-enabled');if(ccb)ccb.checked=callerEnabled;var hcb=document.getElementById('haptics-enabled');if(hcb)hcb.checked=hapticsOn;var fscb=document.getElementById('fs-settings-btn');if(fscb)fscb.checked=!!(document.fullscreenElement||document.webkitFullscreenElement);}
+  if((id==='screen-stats'||id==='screen-history')&&!_keepStatsSel){var _me=acctUser&&acctProfile&&acctProfile.player;if(_me){statsSelectedPlayer=_me;historySelectedPlayer=_me;}}
+  _keepStatsSel=false;
   if(id==='screen-stats')renderStats();
   if(id==='screen-leaderboard'){renderLeaderboard('avg');}
   if(id==='screen-history')renderHistory();
@@ -6277,6 +6293,7 @@ function showTrnStartModal(match,onWin){
   document.getElementById('trn-start-modal').style.display='flex';
 }
 function trnChooseStart(idx){
+  if(!_trnStartMatch||_trnCoinFlipping)return;
   _trnStartIdx=idx;
   var p1btn=document.getElementById('trn-start-p1');
   var p2btn=document.getElementById('trn-start-p2');
@@ -6300,9 +6317,11 @@ function trnFlipCoin(){
   if(res)res.textContent='';
   if(go){go.disabled=true;go.style.opacity='.4';}
   if(coin){_startCoinSpin(coin);}
-  var winner=Math.floor(Math.random()*2);
+  var winner=Math.floor(Math.random()*2),forMatch=_trnStartMatch;
   setTimeout(function(){
     _trnCoinFlipping=false;
+    // venster inmiddels dicht of een volgende wedstrijd: niets meer doen (v216)
+    if(!_trnStartMatch||_trnStartMatch!==forMatch||document.getElementById('trn-start-modal').style.display==='none')return;
     trnChooseStart(winner);
   },1200);
 }
@@ -7922,7 +7941,7 @@ function renderHalveIt(){
   // ── Glow ──
   var glow=document.createElement('div');
   glow.style.cssText='position:absolute;top:0;left:0;right:0;height:260px;pointer-events:none;z-index:0;'+
-    'background:radial-gradient(120% 100% at 50% 0%, rgba(181,80,47,.28), transparent 70%)';
+    'background:radial-gradient(120% 100% at 50% 0%, rgba(185,78,42,.28), transparent 70%)';
   root.appendChild(glow);
 
   // ── Scrollable content ──
@@ -7996,7 +8015,7 @@ function renderHalveIt(){
   targetCard.innerHTML=
     '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+(curIsBot?'🤖 ':'')+curName+' gooit op</div>'+
     '<div style="font-size:'+fSize+';font-weight:900;color:'+targetColor+';line-height:1;letter-spacing:-3px;'+
-         'text-shadow:0 0 40px rgba(181,80,47,.45);margin:2px 0 8px">'+labelText2+'</div>'+
+         'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 8px">'+labelText2+'</div>'+
     '<div style="display:flex;align-items:center;justify-content:center;gap:6px">'+
       '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
       '<div style="display:flex;gap:6px">'+emojiDarts+'</div>'+
@@ -8269,7 +8288,7 @@ function renderHiInputArea(item){
   } else if(item.type==='custom'){
     // Free score entry with numpad-style input
     el.innerHTML=
-      '<div style="background:rgba(181,80,47,.1);border:1px solid rgba(181,80,47,.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--accent)">'+item.label+'</div>'+
+      '<div style="background:rgba(185,78,42,.1);border:1px solid rgba(185,78,42,.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--accent)">'+item.label+'</div>'+
       '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">'+
         '<input type="number" id="hi-custom-score" min="0" max="180" placeholder="Score…"'+
         ' style="flex:1;font-size:20px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--text)"'+
@@ -8557,7 +8576,7 @@ function emptyState(title,sub,cta){
 }
 function renderStats(){_scoped(_renderStatsImpl,'screen-stats','stats-content',arguments);}
 function _renderStatsImpl(){
-  var db=getDB();var names=Object.keys(db);
+  var db=getDB();var names=_meFirst(Object.keys(db));
   var el=document.getElementById('stats-content');
   if(!names.length){el.innerHTML=emptyState('Nog geen statistieken','Na je eerste potje zie je hier gemiddelden, checkouts en je beste beurten.',true);return;}
   if(!statsSelectedPlayer||names.indexOf(statsSelectedPlayer)<0)statsSelectedPlayer=names[0];
@@ -8677,7 +8696,7 @@ function _renderStatsImpl(){
         var labelMap={atc:'Hoogste segment',shanghai7:'Hoogste score',shanghai20:'Hoogste score',halveit:'Hoogste score',checkout121:'Meeste checkouts'};
         otherBlock=
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
-            '<div style="background:rgba(181,80,47,.08);border:1px solid rgba(181,80,47,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
+            '<div style="background:rgba(185,78,42,.08);border:1px solid rgba(185,78,42,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
               '<div style="font-size:28px;font-weight:900;color:var(--accent)">'+gs.highScore+'</div>'+
               '<div style="font-size:12px;color:var(--muted);margin-top:2px">'+(labelMap[activeFilter]||'Beste score')+'</div>'+
             '</div>'+
@@ -9272,7 +9291,7 @@ function _renderHistoryImpl(){
   var db=getDB();
   var el=document.getElementById('history-content');
   if(!el)return;
-  var names=Object.keys(db);
+  var names=_meFirst(Object.keys(db));
   if(!names.length){el.innerHTML=emptyState('Nog geen wedstrijden gespeeld','Elk potje dat je speelt komt hier te staan, met de uitslag per leg.',true);return;}
 
   // Default to first player if none selected
@@ -9901,7 +9920,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=215;
+var APP_VERSION=217;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -10749,7 +10768,7 @@ function renderAfgooien(){
   // ── Glow overlay ──
   var glow = document.createElement('div');
   glow.style.cssText = 'position:absolute;top:0;left:0;right:0;height:260px;pointer-events:none;z-index:0;'+
-    'background:radial-gradient(120% 100% at 50% 0%, rgba(181,80,47,.28), transparent 70%)';
+    'background:radial-gradient(120% 100% at 50% 0%, rgba(185,78,42,.28), transparent 70%)';
   root.appendChild(glow);
 
   // ── Scrollable content (above action bar) ──
@@ -10791,7 +10810,7 @@ function renderAfgooien(){
     targetCard.innerHTML=
       '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+p.name+' gooit op</div>'+
       '<div style="font-size:96px;font-weight:900;color:var(--accent);line-height:1;letter-spacing:-4px;'+
-           'text-shadow:0 0 40px rgba(181,80,47,.45);margin:2px 0 6px;animation:afgNumBounce .35s cubic-bezier(.34,1.4,.64,1) both">'+numLabel+'</div>'+
+           'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 6px;animation:afgNumBounce .35s cubic-bezier(.34,1.4,.64,1) both">'+numLabel+'</div>'+
       '<div style="display:flex;align-items:center;justify-content:center;gap:8px">'+
         '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
         '<div style="display:flex;gap:5px">'+dDots+'</div>'+
@@ -10936,7 +10955,7 @@ function renderAfgooien(){
   undoBtn.textContent='↩ Ongedaan';
   undoBtn.addEventListener('click',afgooienUndo);
   var stopBtn=document.createElement('button');
-  stopBtn.style.cssText='flex:1;background:rgba(181,80,47,.14);border:1px solid rgba(181,80,47,.4);'+
+  stopBtn.style.cssText='flex:1;background:rgba(185,78,42,.14);border:1px solid rgba(185,78,42,.4);'+
     'border-radius:14px;padding:13px;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer';
   stopBtn.textContent='■ Stop';
   stopBtn.addEventListener('click',function(){
@@ -11105,7 +11124,7 @@ function _afgWin(winner){
 /* ── 1. Unified card radius + lichtere achtergrond setup tiles ── */
 .card { border-radius:14px !important; }
 .game-btn { border-radius:14px !important; background:var(--card) !important; }
-.game-btn.selected { background:rgba(181,80,47,.18) !important; }
+.game-btn.selected { background:rgba(185,78,42,.18) !important; }
 
 /* ── 2. Slide-card-inner: consistent met rest van app ── */
 /* Sluit de card netjes af aan de onderkant met de nav-balk */
@@ -11127,7 +11146,7 @@ function _afgWin(winner){
 .lang-tile.selected {
   border-color:var(--accent) !important;
   border-width:1.5px !important;
-  background:rgba(181,80,47,.15) !important;
+  background:rgba(185,78,42,.15) !important;
 }
 
 /* ── 5. Setup-nav-arrow: consistente stijl voor alle back-knoppen ── */
@@ -11191,8 +11210,8 @@ body { -webkit-font-smoothing: antialiased; }
 
 /* ── 3. HOME TILES: diepere schaduwen + snelle :active ── */
 .home-tile-primary {
-  background: linear-gradient(150deg, #D4623F 0%, #B5502F 60%, #9a3f22 100%) !important;
-  box-shadow: 0 6px 24px rgba(181,80,47,.5), 0 2px 6px rgba(181,80,47,.3),
+  background: linear-gradient(150deg, #D4623F 0%, #B94E2A 60%, #9a3f22 100%) !important;
+  box-shadow: 0 6px 24px rgba(185,78,42,.5), 0 2px 6px rgba(185,78,42,.3),
               inset 0 1px 0 rgba(255,255,255,.18) !important;
   border: 1px solid rgba(255,255,255,.1) !important;
 }
@@ -11265,7 +11284,7 @@ body { -webkit-font-smoothing: antialiased; }
 /* Enter-knop */
 .numpad .btn-primary {
   background: var(--accent) !important;
-  box-shadow: 0 3px 0 rgba(120,30,10,.5), 0 1px 4px rgba(181,80,47,.3),
+  box-shadow: 0 3px 0 rgba(120,30,10,.5), 0 1px 4px rgba(185,78,42,.3),
               inset 0 1px 0 rgba(255,255,255,.2) !important;
   border-color: transparent !important;
 }
@@ -11291,8 +11310,8 @@ body { -webkit-font-smoothing: antialiased; }
 .player-card.active {
   border-color: var(--accent) !important;
   border-width: 1.5px !important;
-  background: rgba(181,80,47,.07) !important;
-  box-shadow: 0 0 0 3px rgba(181,80,47,.12), 0 4px 16px rgba(181,80,47,.15) !important;
+  background: rgba(185,78,42,.07) !important;
+  box-shadow: 0 0 0 3px rgba(185,78,42,.12), 0 4px 16px rgba(185,78,42,.15) !important;
 }
 .player-card .score-big {
   font-size: 36px !important;
@@ -11325,13 +11344,13 @@ body { -webkit-font-smoothing: antialiased; }
   transition: transform 35ms, opacity 35ms !important;
 }
 .game-btn.selected {
-  box-shadow: 0 0 0 2px rgba(181,80,47,.3), 0 4px 14px rgba(181,80,47,.2) !important;
+  box-shadow: 0 0 0 2px rgba(185,78,42,.3), 0 4px 14px rgba(185,78,42,.2) !important;
 }
 
 /* ── 10. PRIMAIRE KNOP: tastbaar ── */
 .btn-primary {
   background: var(--accent) !important;
-  box-shadow: 0 3px 0 rgba(120,30,10,.45), 0 2px 10px rgba(181,80,47,.3),
+  box-shadow: 0 3px 0 rgba(120,30,10,.45), 0 2px 10px rgba(185,78,42,.3),
               inset 0 1px 0 rgba(255,255,255,.18) !important;
 }
 .btn-primary:active {
@@ -11344,7 +11363,7 @@ body { -webkit-font-smoothing: antialiased; }
 
 /* ── 12. SEGMENT CONTROL: duidelijker actief ── */
 .segment button.active {
-  box-shadow: 0 2px 0 rgba(120,30,10,.35), 0 2px 10px rgba(181,80,47,.3),
+  box-shadow: 0 2px 0 rgba(120,30,10,.35), 0 2px 10px rgba(185,78,42,.3),
               inset 0 1px 0 rgba(255,255,255,.18) !important;
 }
 .segment button:active {
@@ -11361,7 +11380,7 @@ body { -webkit-font-smoothing: antialiased; }
                 inset 0 1px 0 rgba(255,255,255,.9) !important;
   }
   .player-card.active {
-    box-shadow: 0 0 0 2px rgba(181,80,47,.2), 0 4px 20px rgba(181,80,47,.12) !important;
+    box-shadow: 0 0 0 2px rgba(185,78,42,.2), 0 4px 20px rgba(185,78,42,.12) !important;
   }
 }
 </style>
