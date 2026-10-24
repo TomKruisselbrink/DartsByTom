@@ -3,7 +3,8 @@
 const VERSION = new URL(self.location).searchParams.get('v') || '0';
 const CACHE = 'darts-v' + VERSION;
 // Relatief aan de plek van sw.js, werkt dus op dartsbytom.com én op github.io/DartsByTom
-const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
+  './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon.svg', './favicon.ico'];
 // Externe scripts die de app nodig heeft: ook bewaren, zodat de app offline start
 const EXTERNAL = [
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
