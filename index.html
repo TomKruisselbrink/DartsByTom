@@ -1583,11 +1583,35 @@ video {
 :root[data-theme="light"] .pn-tab{color:rgba(0,0,0,.42)}
 :root[data-theme="light"] .pn-tab.active{color:#fff}
 :root[data-theme="light"] #pn-settings.has-badge::after{box-shadow:0 0 0 2px #fff}
+
+/* ═══ Loting in app-stijl (v215): muntje en rad zonder emoji ═══ */
+.dc-coin{--dc:var(--accent);width:76px;height:76px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;color:var(--muted);
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),rgba(255,255,255,0) 60%),var(--card);
+  border:2px solid var(--border);box-shadow:inset 0 0 0 6px var(--card),inset 0 0 0 7.5px rgba(127,127,127,.25),0 4px 0 var(--k-edge,rgba(0,0,0,.4)),0 8px 16px -6px rgba(0,0,0,.35)}
+.dc-coin.dc-sm{width:56px;height:56px}
+.dc-coin svg{display:block}
+.dc-coin.flip{animation:dcFlip 1.3s cubic-bezier(.3,.6,.3,1) both}
+.dc-coin.done{border-color:var(--dc);color:#fff;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 60%),var(--dc);
+  box-shadow:inset 0 0 0 6px var(--dc),inset 0 0 0 7.5px rgba(255,255,255,.45),0 4px 0 rgba(0,0,0,.35),0 8px 16px -6px rgba(0,0,0,.35);animation:dcLand .35s cubic-bezier(.3,1.4,.5,1) both}
+.dc-init{font-size:32px;font-weight:900;line-height:1}
+.dc-coin.dc-sm .dc-init{font-size:24px}
+@keyframes dcFlip{0%{transform:perspective(400px) rotateY(0) translateY(0)}45%{transform:perspective(400px) rotateY(900deg) translateY(-26px)}100%{transform:perspective(400px) rotateY(1800deg) translateY(0)}}
+@keyframes dcLand{0%{transform:scale(.85)}100%{transform:scale(1)}}
+#trn-start-modal>div{background:linear-gradient(var(--surface),var(--surface)),var(--bg) !important}
+.dc-pointer{position:absolute;top:-8px;left:50%;transform:translateX(-50%);z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+.dc-pick{padding:14px 8px;border-radius:14px;border:2px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:15px;font-weight:800;cursor:pointer;
+  box-shadow:inset 0 1px 0 var(--k-hi,rgba(255,255,255,.1)),0 3px 0 var(--k-edge,rgba(0,0,0,.4));transition:transform 70ms,box-shadow 70ms}
+.dc-pick:active{transform:translateY(3px);box-shadow:inset 0 1px 0 var(--k-hi,rgba(255,255,255,.1)),0 0 0 var(--k-edge,rgba(0,0,0,.4))}
+#trn-start-p1.dc-pick.on{border-color:#B94E2A;background:rgba(185,78,42,.18)}
+#trn-start-p2.dc-pick.on{border-color:#3E7B4F;background:rgba(62,123,79,.2)}
+@media(prefers-reduced-motion:reduce){.dc-coin.flip{animation-duration:.01s}}
 </style>
 </head>
 <body>
 <script>
 var I18N={
+"Gooi het muntje": "Flip the coin",
+"Draai het rad": "Spin the wheel",
 "Spel & geluid": "Game & sound",
 "Spel &amp; geluid": "Game & sound",
 "Niet ingelogd · maak een back-up in de cloud": "Not logged in · back up to the cloud",
@@ -2524,12 +2548,12 @@ function _tr1(n){
       <div style="font-size:11px;color:var(--muted);margin-top:2px">Gooi een muntje of kies zelf</div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-      <button id="trn-start-p1" onclick="trnChooseStart(0)" style="padding:14px 8px;background:#e53e3e;border:none;border-radius:var(--radius-sm);color:#fff;font-size:14px;font-weight:800;cursor:pointer;border:3px solid transparent"></button>
-      <button id="trn-start-p2" onclick="trnChooseStart(1)" style="padding:14px 8px;background:#0677FE;border:none;border-radius:var(--radius-sm);color:#fff;font-size:14px;font-weight:800;cursor:pointer;border:3px solid transparent"></button>
+      <button id="trn-start-p1" class="dc-pick" onclick="trnChooseStart(0)"></button>
+      <button id="trn-start-p2" class="dc-pick" onclick="trnChooseStart(1)"></button>
     </div>
     <div style="text-align:center;margin-bottom:14px">
-      <div id="trn-start-coin" style="width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2px solid #9A6E0A;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 2px rgba(255,255,255,.4);overflow:hidden">?</div>
-      <button onclick="trnFlipCoin()" class="btn btn-sm" style="background:var(--card);border:1px solid var(--border);color:var(--text)">&#x1FA99; Muntje gooien</button>
+      <div id="trn-start-coin" class="dc-coin dc-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></div>
+      <button onclick="trnFlipCoin()" class="btn btn-sm btn-primary">Gooi het muntje</button>
     </div>
     <div id="trn-start-result" style="text-align:center;font-size:13px;font-weight:700;min-height:20px;margin-bottom:12px"></div>
     <button id="trn-start-go" onclick="trnConfirmStart()" class="btn btn-primary btn-full" style="opacity:.4;pointer-events:none">Speel &#8594;</button>
@@ -2869,12 +2893,12 @@ function _tr1(n){
         <div id="start-player-card">
           <div id="sp-pick-grid" style="display:none"></div>
           <div id="sp-coin-area" style="display:none;text-align:center;padding:8px 0">
-            <div id="coin-emoji" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#C8961A,#F0C040,#C8961A);border:2.5px solid #9A6E0A;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px var(--su-w4);overflow:hidden">?</div>
+            <div id="coin-emoji" class="dc-coin"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></div>
             <div id="wheel-wrap" style="display:none;position:relative;margin:0 auto 10px;width:224px">
-              <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:22px;line-height:1;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">&#9660;</div>
-              <canvas id="spin-wheel" width="224" height="224" style="display:block;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.5)"></canvas>
+              <svg class="dc-pointer" width="26" height="22" viewBox="0 0 26 22" aria-hidden="true"><path d="M3 2h20L13 20z" fill="var(--accent)" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+              <canvas id="spin-wheel" width="448" height="448" style="display:block;width:224px;height:224px;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,.35)"></canvas>
             </div>
-            <div id="coin-result" style="font-size:14px;font-weight:700;color:var(--setup-accent,#B94E2A);min-height:22px;margin-bottom:10px"></div>
+            <div id="coin-result" style="font-size:14px;font-weight:700;color:var(--su-text,var(--text));min-height:22px;margin-bottom:10px"></div>
             <button id="coin-spin-btn" class="btn btn-sm btn-primary" onclick="flipCoin()">Gooi het muntje</button>
           </div>
         </div>
@@ -4591,27 +4615,35 @@ function quickStart(gameId){
 // ─── Start player ────────────────────────────────────────
 var setupStartPlayer=0;
 var startMode='first';
-var WHEEL_COLORS=['#e53e3e','#0677FE','#f59e0b','#10b981','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
+var WHEEL_COLORS=['#B94E2A','#3E7B4F','#5B6CCF','#D08A2E','#7A5BB5','#2E8C9A','#B5476E','#6E7781'];
 var _wheelSpinning=false;
 function drawWheel(angle){
   var canvas=document.getElementById('spin-wheel');
   if(!canvas||setupPlayers.length<3)return;
   var ctx=canvas.getContext('2d');
-  var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,r=W/2-4;
+  var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,r=W/2-8,k=W/224;
   var n=setupPlayers.length,arc=2*Math.PI/n;
   ctx.clearRect(0,0,W,H);
   for(var i=0;i<n;i++){
-    var start=angle+i*arc-Math.PI/2;
-    var end=start+arc;
+    var start=angle+i*arc-Math.PI/2,end=start+arc;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
     ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
-    ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=2;ctx.stroke();
+    // lichte glans aan de buitenrand, zelfde gevoel als de knoppen
+    var g=ctx.createRadialGradient(cx,cy,r*.35,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(255,255,255,.12)');
+    ctx.fillStyle=g;ctx.fill();
     ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);
-    ctx.textAlign='right';ctx.fillStyle='#fff';ctx.font='bold 13px system-ui,sans-serif';
-    var nm=setupPlayers[i];if(nm.length>9)nm=nm.slice(0,8)+'…';
-    ctx.fillText(nm,r-10,5);ctx.restore();
+    ctx.textAlign='right';ctx.fillStyle='#fff';ctx.font='800 '+(13*k)+'px -apple-system,BlinkMacSystemFont,system-ui,sans-serif';
+    var nm=setupPlayers[i];if(nm.length>10)nm=nm.slice(0,9)+'…';
+    ctx.fillText(nm,r-14*k,5*k);ctx.restore();
   }
-  ctx.beginPath();ctx.arc(cx,cy,12,0,2*Math.PI);ctx.fillStyle='rgba(0,0,0,.7)';ctx.fill();
+  // scheidingslijnen
+  ctx.strokeStyle='rgba(0,0,0,.28)';ctx.lineWidth=2*k;
+  for(var j=0;j<n;j++){var a2=angle+j*arc-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a2)*r,cy+Math.sin(a2)*r);ctx.stroke();}
+  // rand
+  ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.lineWidth=5*k;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.stroke();
+  // naaf als een bull
+  ctx.beginPath();ctx.arc(cx,cy,15*k,0,2*Math.PI);ctx.fillStyle='#1c1a1b';ctx.fill();ctx.lineWidth=3*k;ctx.strokeStyle='#fff';ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,6*k,0,2*Math.PI);ctx.fillStyle='#B94E2A';ctx.fill();
 }
 function spinWheel(){
   if(_wheelSpinning||setupPlayers.length<3)return;
@@ -4692,14 +4724,22 @@ var _COIN_GOLD='linear-gradient(145deg,#C8961A,#F0C040,#C8961A)';
 
 var _COIN_SHADOW='0 3px 10px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.4)';
 
-function _applyCoinFace(el,side){
-  el.style.background=_COIN_GOLD;el.style.boxShadow=_COIN_SHADOW;
-  el.style.animation='none';el.style.transform='scaleX(1)';
-  el.innerHTML=side==='kop'?_COIN_KOP:_COIN_MUNT;
+var _COIN_COLORS=['#B94E2A','#3E7B4F'];
+function _applyCoinFace(el,side,name){
+  var idx=side==='kop'?0:1;
+  el.classList.remove('flip');void el.offsetWidth;
+  el.style.setProperty('--dc',_COIN_COLORS[idx]);
+  el.classList.add('done');
+  el.innerHTML='<span class="dc-init">'+_esc(((name||'?').trim().charAt(0)||'?').toUpperCase())+'</span>';
+}
+function _resetCoin(el){
+  if(!el)return;el.classList.remove('flip','done');el.style.removeProperty('--dc');
+  el.innerHTML="<svg width=\"30\" height=\"30\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.2\" fill=\"currentColor\"/></svg>";
 }
 function _startCoinSpin(el){
-  el.innerHTML='';el.style.background='#B8940A';el.style.boxShadow='0 3px 10px rgba(0,0,0,.5)';
-  el.style.animation='coinSpin .2s linear infinite';
+  el.classList.remove('done');el.style.removeProperty('--dc');
+  el.innerHTML="<svg width=\"30\" height=\"30\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.2\" fill=\"currentColor\"/></svg>";
+  el.classList.remove('flip');void el.offsetWidth;el.classList.add('flip');
 }
 
 function flipCoin(){
@@ -4714,9 +4754,9 @@ function flipCoin(){
   var side=winner===0?'kop':'munt';
   if(coin)_startCoinSpin(coin);
   setTimeout(function(){
-    if(coin)_applyCoinFace(coin,side);
+    if(coin)_applyCoinFace(coin,side,setupPlayers[winner]);
     setupStartPlayer=winner;
-    var winColor=winner===0?'#e53e3e':'#0677FE';
+    var winColor=_COIN_COLORS[winner];
     if(result)result.innerHTML='<strong style="color:'+winColor+'">'+setupPlayers[winner]+'</strong> begint!';
     _coinFlipping=false;
   },1400);
@@ -4736,7 +4776,7 @@ function renderStartPlayerCard(){
   if(wheelWrap){wheelWrap.style.display=useWheel?'block':'none';if(useWheel)drawWheel(0);}
   if(btn)btn.textContent=useWheel?'Draai het rad':'Gooi het muntje';
   var modeBtn=document.getElementById('sp-mode-coin');
-  if(modeBtn)modeBtn.innerHTML=useWheel?'&#x1F3A1; Draai aan het rad':'&#x1FA99; Muntje';
+  if(modeBtn)modeBtn.textContent='Loting';
   var res=document.getElementById('coin-result');
   if(res)res.textContent='';
 }
@@ -6229,9 +6269,9 @@ function showTrnStartModal(match,onWin){
   var coin=document.getElementById('trn-start-coin');
   var res=document.getElementById('trn-start-result');
   var go=document.getElementById('trn-start-go');
-  if(p1btn){p1btn.textContent=match.p1;p1btn.style.borderColor='transparent';}
-  if(p2btn){p2btn.textContent=match.p2;p2btn.style.borderColor='transparent';}
-  if(coin){coin.innerHTML='?';coin.style.background=_COIN_GOLD||'linear-gradient(145deg,#C8961A,#F0C040,#C8961A)';coin.style.animation='';}
+  if(p1btn){p1btn.textContent=match.p1;p1btn.classList.remove('on');}
+  if(p2btn){p2btn.textContent=match.p2;p2btn.classList.remove('on');}
+  _resetCoin(coin);
   if(res)res.textContent='';
   if(go){go.style.opacity='.4';go.style.pointerEvents='none';}
   document.getElementById('trn-start-modal').style.display='flex';
@@ -6243,11 +6283,11 @@ function trnChooseStart(idx){
   var res=document.getElementById('trn-start-result');
   var go=document.getElementById('trn-start-go');
   var coin=document.getElementById('trn-start-coin');
-  var col=idx===0?'#e53e3e':'#0677FE';
+  var col=_COIN_COLORS[idx];
   var name=idx===0?_trnStartMatch.p1:_trnStartMatch.p2;
-  if(p1btn)p1btn.style.borderColor=idx===0?'#fff':'transparent';
-  if(p2btn)p2btn.style.borderColor=idx===1?'#fff':'transparent';
-  if(coin){_applyCoinFace(coin,idx===0?'kop':'munt');}
+  if(p1btn)p1btn.classList.toggle('on',idx===0);
+  if(p2btn)p2btn.classList.toggle('on',idx===1);
+  if(coin){_applyCoinFace(coin,idx===0?'kop':'munt',name);}
   if(res)res.innerHTML='<strong style="color:'+col+'">'+name+'</strong> begint!';
   if(go){go.style.opacity='1';go.style.pointerEvents='auto';go.disabled=false;}
 }
@@ -9861,7 +9901,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=214;
+var APP_VERSION=215;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
