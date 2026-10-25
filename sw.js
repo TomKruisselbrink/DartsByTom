@@ -44,9 +44,12 @@ self.addEventListener('fetch', function(e) {
   // De app zelf: altijd eerst de nieuwste versie, offline de bewaarde
   if (req.mode === 'navigate' || (url.origin === self.location.origin && (url.pathname.endsWith('.html') || url.pathname.endsWith('/')))) {
     e.respondWith(
-      fetch(req).then(function(res) {
+      // cache:'no-cache': niet de (tot 10 min) oude kopie uit de browsercache, maar altijd bij de server navragen
+      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(function(res) {
+        if (res.redirected) return fetch(req); // Safari accepteert geen doorverwezen antwoord op een navigatie
+        if (!res.ok) throw new Error(res.status);
         var copy = res.clone();
-        caches.open(CACHE).then(function(c) { c.put(req, copy); });
+        caches.open(CACHE).then(function(c) { c.put(url.origin + url.pathname, copy); }); // zonder ?nc=/?u=, anders groeit de cache
         return res;
       }).catch(function() {
         return caches.match(req, { ignoreSearch: true }).then(function(r) {

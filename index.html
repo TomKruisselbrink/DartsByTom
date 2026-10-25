@@ -391,6 +391,30 @@ body::before{
 .g-keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .g-keys button{height:56px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:21px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
 .g-keys button:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+.rco-keys button{height:48px;font-size:20px}
+.rco-keys .rco-ok{background:var(--accent);color:#fff;border-color:transparent;font-size:17px}
+.rco-keys .rco-ok:disabled{opacity:.4;text-decoration:none}
+.rco-disp{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-radius:14px;background:var(--card);border:1px solid var(--border);font-size:13px;font-weight:700;color:var(--muted)}
+@media (max-height:780px){
+#screen-randomco .g-wrap{gap:7px}
+#screen-randomco .g-target{padding:8px 12px 8px;gap:2px}
+#screen-randomco #rco-target{font-size:54px!important}
+#screen-randomco #rco-hint{min-height:22px!important}
+#screen-randomco .g-prow{min-height:34px;padding:4px 12px}
+#screen-randomco .g-rows{gap:4px}
+#screen-randomco .g-input{gap:6px}
+.rco-keys{gap:5px}.rco-keys button{height:40px;font-size:18px}
+.rco-disp{padding:5px 14px}@media (max-height:700px){
+#screen-randomco .g-target-lbl{display:none}
+#screen-randomco #rco-from{min-height:0!important}
+#screen-randomco #rco-target{font-size:48px!important}
+.rco-keys button{height:38px}
+#screen-randomco .g-head-sub{display:none}
+}
+.rco-disp b{font-size:20px}
+#screen-randomco .g-hit,#screen-randomco .g-miss{min-height:44px!important;font-size:16px}
+}
+.rco-disp b{font-size:24px;font-weight:900;color:var(--accent);min-width:60px;text-align:right}
 .g-keys button small{font-size:11px;font-weight:800;color:var(--accent)}
 .g-warn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,90,70,.08);border:1px solid rgba(255,122,107,.3);font-size:13px;line-height:1.35;color:var(--text)}
 .g-warn svg{flex-shrink:0;display:block}
@@ -1648,6 +1672,18 @@ video {
 <body>
 <script>
 var I18N={
+"Uitgegooid?": "Checked out?",
+"✕ Nee": "✕ No",
+"Was het op een": "Was it on a",
+"Score deze beurt": "Score this visit",
+"Maximaal 180": "Maximum 180",
+"Wissen": "Delete",
+"Controleren op updates": "Check for updates",
+"Controleren…": "Checking…",
+"Bijwerken…": "Updating…",
+"Bijwerken": "Update",
+"Nieuwe versie beschikbaar": "New version available",
+"Geen verbinding, probeer het later opnieuw": "No connection, please try again later",
 "LEVENS": "LIVES",
 "Zoveel punten heb je nodig om Killer te worden, en zoveel levens heb je.": "That's how many points you need to become a Killer, and how many lives you have.",
 "PUNTEN PER RAAK": "POINTS PER HIT",
@@ -2363,6 +2399,8 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+ [/^Doodgegooid! Terug naar (\d+)$/,'Bust! Back to $1'],[/^(\d+) kan niet met 3 pijlen$/,"$1 can't be scored with 3 darts"],
+ [/^Nu bijwerken naar v(\d+)$/,'Update now to v$1'],[/^Je hebt de nieuwste versie \(v(\d+)\)$/,'You have the latest version (v$1)'],
  [/^(\d+) levens$/,'$1 lives'],[/^(\d+) teams$/,'$1 teams'],[/^Team ([A-D])$/,'Team $1'],[/^Gooit voor (.+)$/,'Throws for $1'],[/^voor (.+)$/,'for $1'],[/^(.+) is Killer$/,'$1 is Killer'],
  [/^van (\d+)$/,'of $1'],[/^van (\d+) ·$/,'of $1 ·'],[/^(\d+) pnt · (\d+)\/(\d+) uit$/,'$1 pts · $2/$3 out'],[/^(\d+)\/(\d+) uit$/,'$1/$2 out'],[/^Bereik (.+)$/,'Range $1'],[/^(\d+) pijlen$/,'$1 darts'],
  [/^Ingelogd als (.+)$/,'Logged in as $1'],[/^(\d+) vrienden?$/,function(m){return m[1]+(m[1]==='1'?' friend':' friends');}],
@@ -2718,7 +2756,9 @@ function _tr1(n){
       <button class="st-item" onclick="stOpen('data')"><span class="st-ic" style="background:#6E7781"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span><span class="st-txt"><b>Gegevens</b><span id="st-sum-data"></span></span><span class="st-badge" id="st-badge-data" hidden></span><svg class="st-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
     <div style="text-align:center;margin-top:18px;padding-bottom:8px">
-    <span id="app-version" style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px"></span>
+    <div id="upd-status" style="font-size:12px;color:var(--muted);margin-bottom:8px;min-height:15px"></div>
+    <button id="upd-btn" class="btn btn-sm" style="justify-content:center;min-width:200px" onclick="updBtnClick()">Controleren op updates</button>
+    <div style="margin-top:10px"><span id="app-version" style="font-size:11px;color:var(--muted);opacity:.45;font-weight:500;letter-spacing:.3px"></span></div>
   </div>
   </div>
   <div class="st-page" data-page="account" hidden>
@@ -3278,18 +3318,24 @@ function _tr1(n){
  <div class="g-wrap">
   <div class="g-head"><div class="g-head-l"><span class="g-head-sub" id="rco-sub">Random Checkout</span><span class="g-head-main">Beurt <span id="rco-player">—</span></span></div><div class="g-head-r" id="rco-count-wrap">Checkout<b id="rco-count">1</b></div></div>
   <div class="g-target">
-    <span class="g-target-lbl">Gooi uit</span>
+    <span class="g-target-lbl" id="rco-lbl">Gooi uit</span>
     <div id="rco-target" class="g-target-big" style="font-size:84px">0</div>
+    <div id="rco-from" style="font-size:13px;font-weight:700;color:var(--muted);min-height:16px"></div>
     <div id="rco-hint" class="g-chips" style="min-height:28px"></div>
     <div class="g-darts" style="margin-top:6px;gap:14px"><span id="rco-bracket"></span><span>Pijlen over <b id="rco-darts" style="color:var(--text)">9</b></span></div>
   </div>
   <div id="rco-players" class="g-rows"></div>
   <div class="g-input">
-    <div style="display:grid;grid-template-columns:3fr 2fr;gap:8px">
-      <button class="g-hit" style="min-height:64px" onclick="rcoResult(true)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Uitgegooid</button>
-      <button class="g-miss" style="min-height:64px" onclick="rcoResult(false)">Mislukt</button>
+    <div class="rco-disp"><span>Score deze beurt</span><b id="rco-typed">—</b></div>
+    <div class="g-keys rco-keys" id="rco-keys">
+      <button onclick="rcoKey('1')">1</button><button onclick="rcoKey('2')">2</button><button onclick="rcoKey('3')">3</button><button onclick="rcoKey('del')" aria-label="Wissen">⌫</button>
+      <button onclick="rcoKey('4')">4</button><button onclick="rcoKey('5')">5</button><button onclick="rcoKey('6')">6</button><button onclick="rcoKey('0')">0</button>
+      <button onclick="rcoKey('7')">7</button><button onclick="rcoKey('8')">8</button><button onclick="rcoKey('9')">9</button><button class="rco-ok" id="rco-ok" onclick="rcoKey('ok')">OK</button>
     </div>
-    <button class="g-sec" id="rco-visit" onclick="rcoVisit()">Beurt gegooid, nog niet uit</button>
+    <div style="display:grid;grid-template-columns:3fr 2fr;gap:8px">
+      <button class="g-hit" style="min-height:52px" onclick="rcoResult(true)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Uitgegooid</button>
+      <button class="g-miss" style="min-height:52px" onclick="rcoResult(false)">Mislukt</button>
+    </div>
     <button class="g-sec" id="rco-finish" onclick="rcoEnd()" style="display:none">Spel afronden</button>
   </div>
  </div>
@@ -4446,7 +4492,7 @@ function renderSettingsMenu(){
   _stSum('data',groupCode?('Groep: '+groupCode):'Groep niet verbonden · export/import');
   if(typeof renderSettingsPlayers==='function'){var keep=document.getElementById('sp-sheet-list');renderSettingsPlayers();}
 }
-function _frNavBadge(){var t=document.getElementById('pn-settings');if(t)t.classList.toggle('has-badge',!!(acctUser&&Object.keys(frIn||{}).length));}
+function _frNavBadge(){var t=document.getElementById('pn-settings');if(t)t.classList.toggle('has-badge',!!((acctUser&&Object.keys(frIn||{}).length)||(typeof _updAvail!=='undefined'&&_updAvail>APP_VERSION)));}
 
 function saveDB(db){
   dbCache = db;
@@ -4726,6 +4772,7 @@ function showScreen(id){
   _ac.scrollTop=0;
   // Pill nav: show on home/stats/leaderboard/history/settings; update active tab
   if(id==='screen-settings'&&typeof showAppVersion==='function')showAppVersion();
+  if(typeof _updSetUI==='function')_updSetUI();
   var _pillScreens=['screen-home','screen-stats','screen-leaderboard','screen-history','screen-settings','screen-setup','screen-trn-setup'];
   var _pn=document.getElementById('pill-nav');
   if(_pn){
@@ -5918,21 +5965,64 @@ function _rcoNewAttempt(){
   var p=rco.ps[rco.cur];
   if(rco.mode==='random')p.bi=Math.floor(Math.random()*rco.brk.length);
   rco.target=_rcoPick(p.bi,rco.target);
+  rco.rest=rco.target;rco.typed='';
   rco.visitsLeft=rco.darts?rco.darts/3:Infinity;
 }
-function _rcoSnap(){rco.snaps.push(JSON.stringify({cur:rco.cur,target:rco.target,visitsLeft:rco.visitsLeft===Infinity?-1:rco.visitsLeft,ps:rco.ps,history:rco.history}));if(rco.snaps.length>60)rco.snaps.shift();}
+// Beurtscore invullen (v221): rest loopt af; doodgegooid = terug naar het startgetal
+var RCO_IMPOSSIBLE=[163,166,169,172,173,175,176,178,179];
+function rcoKey(k){
+  if(!rco)return;
+  if(k==='del'){rco.typed=rco.typed.slice(0,-1);_rcoTypedUI();return;}
+  if(k==='ok'){if(rco.typed!=='')rcoScore(parseInt(rco.typed,10));return;}
+  if(rco.typed.length>=3)return;
+  var t=(rco.typed==='0'?'':rco.typed)+k;
+  if(parseInt(t,10)>180){showToast('Maximaal 180','warning');return;}
+  rco.typed=t;_rcoTypedUI();
+}
+function _rcoTypedUI(){
+  var d=document.getElementById('rco-typed');if(d)d.textContent=rco.typed===''?'—':rco.typed;
+  var ok=document.getElementById('rco-ok');if(ok)ok.disabled=rco.typed==='';
+}
+function rcoScore(v){
+  if(!rco||isNaN(v))return;
+  if(v>180||RCO_IMPOSSIBLE.indexOf(v)>=0){showToast(v+' kan niet met 3 pijlen','warning');return;}
+  var left=rco.rest-v;
+  if(left===0){
+    openGameSheet('Uitgegooid?',
+      '<div style="font-size:14px;color:var(--muted);margin-bottom:14px;text-align:center">Was het op een <b style="color:var(--accent)">double</b>?</div>'+
+      '<div style="display:grid;grid-template-columns:2fr 3fr;gap:8px"><button class="g-miss" onclick="closeGameSheet();_rcoApply('+v+',false)">✕ Nee</button><button class="g-hit" onclick="closeGameSheet();_rcoApply('+v+',true)">✓ Ja!</button></div>');
+    return;
+  }
+  _rcoApply(v,null);
+}
+function _rcoApply(v,dbl){
+  _rcoSnap();
+  rco.typed='';
+  var left=rco.rest-v;
+  if(left===0&&dbl){_rcoFinishAttempt(true);return;}
+  if(left<2){ // doodgegooid (onder 0, op 1 of niet op een double uit)
+    rco.rest=rco.target;playSound('bust');showToast('Doodgegooid! Terug naar '+rco.target,'error');
+  } else {rco.rest=left;playSound('score');}
+  rco.visitsLeft--;
+  if(rco.visitsLeft<=0){_rcoFinishAttempt(false);return;}
+  renderRandomCheckout();
+}
+function _rcoSnap(){rco.snaps.push(JSON.stringify({cur:rco.cur,target:rco.target,rest:rco.rest,visitsLeft:rco.visitsLeft===Infinity?-1:rco.visitsLeft,ps:rco.ps,history:rco.history}));if(rco.snaps.length>60)rco.snaps.shift();}
 function rcoUndo(){
   if(!rco||!rco.snaps.length)return;
   var s=JSON.parse(rco.snaps.pop());
-  rco.cur=s.cur;rco.target=s.target;rco.visitsLeft=s.visitsLeft<0?Infinity:s.visitsLeft;rco.ps=s.ps;rco.history=s.history;
+  rco.cur=s.cur;rco.target=s.target;rco.rest=s.rest!=null?s.rest:s.target;rco.typed='';rco.visitsLeft=s.visitsLeft<0?Infinity:s.visitsLeft;rco.ps=s.ps;rco.history=s.history;
   state.currentPlayer=rco.cur;renderRandomCheckout();
 }
 function renderRandomCheckout(){
   if(!rco)return;
   var cur=rco.cur,p=rco.ps[cur],b=RCO_BRACKETS[rco.brk[p.bi]];
   document.getElementById('rco-player').textContent=state.players[cur];
-  document.getElementById('rco-target').textContent=rco.target;
-  var co=getCheckout(rco.target);
+  if(rco.rest==null)rco.rest=rco.target;
+  document.getElementById('rco-target').textContent=rco.rest;
+  document.getElementById('rco-from').textContent=rco.rest!==rco.target?'van '+rco.target:'';
+  _rcoTypedUI();
+  var co=getCheckout(rco.rest);
   document.getElementById('rco-hint').innerHTML=co?co.split(' ').map(function(d){return '<span class="g-chip">'+d+'</span>';}).join(''):'';
   document.getElementById('rco-bracket').innerHTML='Bereik <b style="color:var(--text)">'+b[0]+'–'+Math.min(170,b[1])+'</b> · '+b[2]+' pnt';
   document.getElementById('rco-darts').textContent=rco.visitsLeft===Infinity?'∞':rco.visitsLeft*3;
@@ -5947,8 +6037,6 @@ function renderRandomCheckout(){
     d.innerHTML='<div class="g-prow-top"><span class="g-prow-name">'+(i===cur?'● ':'')+_esc(n)+'</span><span class="g-prow-meta">'+q.hits+'/'+q.attempts+' uit'+(rco.mode!=='random'?' · '+qb[0]+'–'+Math.min(170,qb[1]):'')+'</span><span class="g-prow-score">'+q.pts+'</span></div>';
     rows.appendChild(d);
   });
-  var multiVisit=rco.visitsLeft>1;
-  document.getElementById('rco-visit').style.display=multiVisit?'':'none';
   document.getElementById('rco-finish').style.display=(rco.mode!=='race'&&!rco.count)?'':'none';
 }
 function rcoVisit(){
@@ -10260,7 +10348,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=219;
+var APP_VERSION=221;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -10271,6 +10359,49 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js?v='+APP_VERSION).catch(function(){});
   });
 }
+// ═══ Nieuwe versie laden zonder de app te sluiten (v220) ═══
+// Haalt index.html vers van de server, leest APP_VERSION en herlaadt de app als er een nieuwere is.
+// Spelgegevens staan in localStorage en blijven bij herladen gewoon staan.
+var _updAvail=0,_updLastCheck=0,_updBusy=false;
+(function(){try{if(/[?&]u=\d+/.test(location.search))history.replaceState(null,'',location.pathname+location.hash);}catch(e){}})();
+function _updSetUI(){
+  var st=document.getElementById('upd-status'),b=document.getElementById('upd-btn');
+  if(b){
+    if(_updAvail>APP_VERSION){b.textContent='Nu bijwerken naar v'+_updAvail;b.style.background='var(--accent)';b.style.color='#fff';b.style.borderColor='transparent';}
+    else{b.textContent=_updBusy?'Controleren…':'Controleren op updates';b.style.background='';b.style.color='';b.style.borderColor='';}
+  }
+  if(st&&_updAvail>APP_VERSION)st.textContent='Nieuwe versie beschikbaar';
+  var bn=document.getElementById('upd-banner');
+  if(bn){var ok=_updAvail>APP_VERSION&&['screen-home','screen-stats','screen-leaderboard','screen-history'].indexOf(_curScreen)>=0;bn.style.display=ok?'flex':'none';}
+  var t=document.getElementById('pn-settings');if(t&&_updAvail>APP_VERSION)t.classList.add('has-badge');
+}
+function checkForUpdate(manual){
+  if(_updBusy)return Promise.resolve();
+  if(!manual&&Date.now()-_updLastCheck<10*60*1000)return Promise.resolve();
+  _updBusy=true;_updLastCheck=Date.now();_updSetUI();
+  return fetch('./index.html?nc='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text();}).then(function(txt){
+    var m=/var APP_VERSION=(\d+);/.exec(txt),v=m?+m[1]:0;
+    _updBusy=false;
+    if(v>APP_VERSION){_updAvail=v;}
+    else if(manual){var st=document.getElementById('upd-status');if(st)st.textContent='Je hebt de nieuwste versie (v'+APP_VERSION+')';}
+    _updSetUI();
+  }).catch(function(){
+    _updBusy=false;_updSetUI();
+    if(manual){var st=document.getElementById('upd-status');if(st)st.textContent='Geen verbinding, probeer het later opnieuw';}
+  });
+}
+function applyUpdate(){
+  var b=document.getElementById('upd-btn');if(b)b.textContent='Bijwerken…';
+  var go=function(){location.replace(location.pathname+'?u='+(_updAvail||Date.now()));};
+  setTimeout(go,2500); // nooit blijven hangen
+  try{
+    if(!('serviceWorker' in navigator))return go();
+    navigator.serviceWorker.register('./sw.js?v='+(_updAvail||APP_VERSION)).then(function(reg){return reg.update().catch(function(){});}).then(go,go);
+  }catch(e){go();}
+}
+function updBtnClick(){if(_updAvail>APP_VERSION)applyUpdate();else checkForUpdate(true);}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkForUpdate(false);});
+window.addEventListener('load',function(){setTimeout(function(){checkForUpdate(false);},4000);});
 
 // Wake Lock — scherm aan houden tijdens gebruik
 var _wakeLock=null;
@@ -11757,6 +11888,7 @@ body { -webkit-font-smoothing: antialiased; }
 }
 </style>
 <!-- ═══ PILL NAV HTML ═══ -->
+<div id="upd-banner" onclick="applyUpdate()" style="display:none;position:fixed;left:16px;right:16px;top:calc(env(safe-area-inset-top) + 10px);z-index:9000;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-radius:16px;background:var(--accent);color:#fff;font-size:14px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);cursor:pointer"><span style="flex:1">Nieuwe versie beschikbaar</span><span style="background:rgba(255,255,255,.22);padding:6px 12px;border-radius:10px;font-size:13px">Bijwerken</span></div>
 <div id="pill-nav">
   <span id="pn-ind" aria-hidden="true"></span>
   <button class="pn-tab active" id="pn-home" onclick="showScreen('screen-home')" aria-label="Home">
