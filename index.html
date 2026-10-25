@@ -4458,8 +4458,43 @@ function saveDB(db){
   // Write each player doc to Firestore (privé- en verborgen spelers niet)
   Object.keys(db).forEach(function(name){
     if(_isBlockedForGroup(name))return;
-    fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(db[name]).catch(function(e){console.error('FB save error',e);});
+    _grpWrite(name,db[name]);
   });
+}
+// ═══ Groep-sync zonder gegevensverlies (v219) ═══
+// Vroeger verving de groep-listener de lokale speler door de server-versie. Was een potje nog niet
+// op de server aangekomen (geen internet, app snel dicht), dan verdween het bij de volgende start.
+// Nu worden lokale en server-potjes samengevoegd; verwijderde potjes worden onthouden in p.deleted.
+var _grpSent={},_grpPushT={},_grpLocalDirty=false;
+function _mkey(e){if(!e)return '';if(e.gid)return 'g:'+e.gid;return 'k:'+[e.ts||'',e.date||'',e.gameType||'',e.darts||0,e.score||0,e.won?1:0,(e.opponents||[]).join('/'),e.legResult||''].join('|');}
+function _grpHash(o){try{return _hash(JSON.stringify(o));}catch(e){return '';}}
+function _grpWrite(name,data){
+  if(!groupCode||!data)return;
+  var h=_grpHash(data);
+  if(_grpSent[name]===h)return; // niets veranderd: niet opnieuw schrijven (voorkomt dat een oude kopie anderen overschrijft)
+  _grpSent[name]=h;
+  fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(data).catch(function(e){delete _grpSent[name];console.error('FB save error',e);});
+}
+function _grpPushLater(name){
+  clearTimeout(_grpPushT[name]);
+  _grpPushT[name]=setTimeout(function(){if(dbCache[name]&&!_isBlockedForGroup(name))_grpWrite(name,dbCache[name]);},1200);
+}
+function _grpMerge(loc,rem){
+  var remoteHash=_grpHash(rem);
+  if(!loc||!rem||!Array.isArray(loc.gameHistory)||!Array.isArray(rem.gameHistory))return {p:rem,push:false,remoteHash:remoteHash};
+  var tomb={};(rem.deleted||[]).concat(loc.deleted||[]).forEach(function(k){tomb[k]=1;});
+  var remKeys={},out=JSON.parse(JSON.stringify(rem)),removed=[],added=[];
+  out.gameHistory=[];
+  rem.gameHistory.forEach(function(e){var k=_mkey(e);remKeys[k]=1;if(tomb[k])removed.push(e);else out.gameHistory.push(e);});
+  loc.gameHistory.forEach(function(e){var k=_mkey(e);if(!remKeys[k]&&!tomb[k]){out.gameHistory.push(e);added.push(e);}});
+  var tl=Object.keys(tomb);
+  if(!added.length&&!removed.length&&tl.length===(rem.deleted||[]).length)return {p:rem,push:false,remoteHash:remoteHash};
+  if(tl.length)out.deleted=tl.slice(-300);
+  added.forEach(function(e){out.games=(out.games||0)+1;if(e.won)out.wins=(out.wins||0)+1;out.totalDarts=(out.totalDarts||0)+(e.darts||0);out.totalScore=(out.totalScore||0)+(e.score||0);});
+  removed.forEach(function(e){out.games=Math.max(0,(out.games||0)-1);if(e.won)out.wins=Math.max(0,(out.wins||0)-1);});
+  if(added.length&&loc.doubleStats&&!out.doubleStats)out.doubleStats=loc.doubleStats;
+  _sortHistory(out);_trimHistory(out);
+  return {p:out,push:true,remoteHash:remoteHash};
 }
 
 function openGroupModal(){
@@ -4586,11 +4621,15 @@ function startFirebaseListener(){
       if(isPrivatePlayer(_id))return; // eigen privé-speler: lokale gegevens leidend, niet overschrijven of wissen
       if(change.type === 'added' || change.type === 'modified'){
         if(_groupHidden.indexOf(_id)>=0)return;
-        dbCache[_id] = change.doc.data();
+        var _rem=change.doc.data(),_m=_grpMerge(dbCache[_id],_rem);
+        dbCache[_id]=_m.p;_grpSent[_id]=_m.remoteHash;
+        if(_m.push)_grpPushLater(_id);
+        _grpLocalDirty=true;
       } else if(change.type === 'removed'){
         delete dbCache[_id];
       }
     });
+    if(_grpLocalDirty){_grpLocalDirty=false;try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){_storageFull(e);}}
     // Hide loading overlay on first load
     var loadEl = document.getElementById('fb-loading');
     if(loadEl && loadEl.style.display !== 'none') loadEl.style.display = 'none';
@@ -9651,7 +9690,7 @@ function _renderHistoryImpl(){
             '</div></div>';
         }).join('')+
       '</div>'+
-      '<button id="'+lid+'-btn" onclick="toggleLegDetail('+JSON.stringify(lid)+')" style="font-size:12px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
+      '<button id="'+lid+'-btn" onclick="toggleLegDetail(\''+lid+'\')" style="font-size:12px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
     }
     var detailId='gd-'+historySelectedPlayer.replace(/[^a-z0-9]/gi,'')+'-'+i;
     // Halve It specific detail
@@ -10187,7 +10226,8 @@ function deleteMatchEntry(playerName, index){
   if(!confirm('Deze wedstrijd verwijderen?'))return;
   var db=getDB();
   if(!db[playerName]||!db[playerName].gameHistory)return;
-  db[playerName].gameHistory.splice(index,1);
+  var _del=db[playerName].gameHistory.splice(index,1)[0];
+  if(_del){var _dl=db[playerName].deleted||[];_dl.push(_mkey(_del));db[playerName].deleted=_dl.slice(-300);}
   // Recalculate totals
   db[playerName].games=db[playerName].gameHistory.length;
   db[playerName].wins=db[playerName].gameHistory.filter(function(g){return g.won;}).length;
@@ -10220,7 +10260,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=218;
+var APP_VERSION=219;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
