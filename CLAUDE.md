@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v225** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v226** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -265,6 +265,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Donker** (standaard): `--bg #000`, kaarten `rgba(44,44,46,.75)`, tekst wit, `--muted #98989F`. Achtergrondverloop van zwart via `#381000` naar `#0f2e10`.
 - **Licht:** verloop `#e8b89e → #f4ebe4 → #fff`, tekst zwart, `--muted #6E6E73`.
 - Thema volgt het systeem, of `theme` uit de instellingen.
+  - **Regel voor thema-CSS:** een `@media (prefers-color-scheme:light)`-regel altijd beperken met `:root:not([data-theme="dark"])` (en `dark` met `:root:not([data-theme="light"])`), en daarnaast een losse `[data-theme="light"]`-regel. Anders lekt de systeemstand door als iemand in de app zelf een thema kiest. In v226 zaten hier zes lekken, o.a. een witte spelbalk met witte tekst bij app-donker + telefoon-licht.
+  - Test daarom ook de twee kruiscombinaties (app donker + systeem licht, app licht + systeem donker) via Playwright `colorScheme`.
 - **Font "Darts by Tom Flow"**, in CSS `'DBT Flow'`:
   - ingebouwd als base64-woff2 in een `@font-face` (alleen weight 700, `font-display:swap`), dus het werkt ook offline;
   - staat **overal**: `body` en `html` gebruiken `var(--ff-display)`, en ook de SVG-teksten (munt, grafiek) gebruiken het;
