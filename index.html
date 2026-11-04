@@ -213,6 +213,14 @@ body::before{
 #screen-game{padding:12px 14px 0;box-sizing:border-box;gap:10px}
 .x-card{padding:12px;border-radius:16px;background:var(--card);border:2px solid var(--border);min-width:0}
 .x-card.on{background:rgba(185,78,42,.16);border-color:#B94E2A}
+#sb-players.x-compact{gap:6px}
+#sb-players.x-compact .x-card{padding:7px 10px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"top score" "hint score" "meta score";align-items:center;column-gap:8px;border-radius:14px}
+#sb-players.x-compact .x-top{grid-area:top;min-width:0}
+#sb-players.x-compact .x-score{grid-area:score;margin:0}
+#sb-players.x-compact .co-hint{grid-area:hint;flex-wrap:nowrap !important;overflow:hidden;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+#sb-players.x-compact .x-last{display:none}
+#sb-players.x-compact .x-meta{grid-area:meta}
+@media(max-height:740px){#sb-players.x-many .x-meta,#sb-players.x-many .co-hint{display:none !important}#sb-players.x-many .x-card{padding:5px 10px}}
 .x-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
 .x-name{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .x-card.on .x-name{color:var(--accent);font-weight:800}
@@ -227,11 +235,11 @@ body::before{
 [data-theme="light"] .x-last{color:#1E5631;background:rgba(62,123,79,.16)}[data-theme="light"] .x-last.bust{color:#B3261E;background:rgba(179,38,30,.1)}
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .x-last{color:#1E5631;background:rgba(62,123,79,.16)}:root:not([data-theme="dark"]) .x-last.bust{color:#B3261E;background:rgba(179,38,30,.1)}}
 .x-meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.np-disp{height:54px;border-radius:14px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:6px;box-sizing:border-box}
+.np-disp{height:clamp(44px,calc(8vh - 10px),62px);border-radius:14px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:6px;box-sizing:border-box}
 .np-disp span{font-size:12px;font-weight:700;color:var(--muted);min-width:70px}
 #np-rest{text-align:right}
-.x01-input .btn-sm{height:38px;border-radius:10px !important}
-.x01-pad .btn{height:56px;padding:0 !important;border-radius:14px !important}
+.x01-input .btn-sm{height:clamp(32px,calc(6vh - 8px),44px);border-radius:10px !important}
+.x01-pad .btn{height:clamp(44px,calc(9vh - 13px),74px);padding:0 !important;border-radius:14px !important}
 /* gedeelde spelcomponenten */.sp-row{padding:10px 0;border-top:1px solid var(--border)}
 .sp-row:first-child{border-top:0;padding-top:2px}
 .sp-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
@@ -742,6 +750,9 @@ select{
 #screen-stats .metric .lbl{font-size:12px}
 #screen-stats .metric .val{font-size:20px}
 .lb-chip.active{background:#B94E2A;border-color:#B94E2A;color:#fff}
+.hs-r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
+.hs-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px);mask-image:linear-gradient(90deg,transparent,#000 40px)}
+.hs-l.hs-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent)}
 .lb-subrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:4px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
 .lb-subrow::-webkit-scrollbar{display:none}
 .lb-sub{flex:1 0 auto;height:36px;padding:0 12px;border:none;border-radius:10px;background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -6346,6 +6357,13 @@ function triggerAfgBullBot(){
 }
 
 // ─── TOAST SYSTEM ─────────────────────────────────────────────────────────────
+// Scrollrijen: zachte rand aan de kant waar nog meer staat (v227)
+var _HS_SEL='.lb-chiprow,.lb-subrow,.hs-row';
+function _hsUpdate(el){var m=el.scrollWidth-el.clientWidth;el.classList.toggle('hs-r',m>4&&el.scrollLeft<m-4);el.classList.toggle('hs-l',m>4&&el.scrollLeft>4);}
+function _hsAll(){document.querySelectorAll(_HS_SEL).forEach(_hsUpdate);}
+document.addEventListener('scroll',function(e){var t=e.target;if(t&&t.matches&&t.matches(_HS_SEL))_hsUpdate(t);},true);
+window.addEventListener('resize',_hsAll);
+(function(){var _t=null;try{new MutationObserver(function(){clearTimeout(_t);_t=setTimeout(_hsAll,60);}).observe(document.body,{childList:true,subtree:true});}catch(e){}})();
 function showToast(msg,type){
   // type: 'error'|'warning'|'success'|'info'
   var bg={error:'rgba(239,68,68,.96)',warning:'rgba(255,149,0,.96)',success:'rgba(34,197,94,.96)',info:'rgba(36,36,40,.93)'}[type]||'rgba(36,36,40,.93)';
@@ -7264,9 +7282,10 @@ function renderGame(){
   }
 
   // Scorekaarten (v196): legs als bolletjes in de kaart, gemiddelde en laatste beurt eronder
-  var scoreFontSize=n<=2?'48px':n<=4?'36px':'28px';
+  var scoreFontSize=n<=2?'clamp(42px,calc(13vh - 46px),84px)':n<=4?'clamp(26px,calc(9vh - 34px),52px)':'clamp(24px,calc(6vh - 14px),40px)'; // groeit mee op hoge schermen (v227)
   var sbGrid=document.getElementById('sb-players');
-  sbGrid.style.gridTemplateColumns=n<=2?'repeat('+n+',minmax(0,1fr))':n<=4?'repeat(2,minmax(0,1fr))':'repeat(3,minmax(0,1fr))';
+  sbGrid.style.gridTemplateColumns=n<=2?'repeat('+n+',minmax(0,1fr))':'repeat(2,minmax(0,1fr))';
+  sbGrid.classList.toggle('x-compact',n>2);sbGrid.classList.toggle('x-many',n>4); // 3+ spelers: compacte kaarten, score rechts (v227)
   sbGrid.innerHTML='';
   var _showLegs=hasLegs&&!state.trnMode;
   function legDotsFor(pi){
@@ -8425,7 +8444,7 @@ function renderHalveIt(){
   stripHdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:7px';
   // (kop staat nu bovenaan in .g-head)
   var chips=document.createElement('div');
-  chips.style.cssText='display:flex;gap:4px;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none';
+  chips.className='hs-row';chips.style.cssText='display:flex;gap:4px;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none';
   var remaining=state.hiSeq.length-state.hiRound-1;
   state.hiSeq.forEach(function(it,i){
     var isActive=i===state.hiRound,isDone=i<state.hiRound;
@@ -10391,7 +10410,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=226;
+var APP_VERSION=227;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

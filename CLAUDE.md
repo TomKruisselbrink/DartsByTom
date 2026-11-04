@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v226** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v227** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -275,6 +275,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
   - titels en grote getallen staan expliciet op weight 700 met `font-synthesis:none` (geen nep-vet).
 - **Componenten:**
   - tastbare knoppen `.btn` met een 3D-onderrand en indrukeffect (`haptic()`);
+  - **X01-scherm schaalt mee met de schermhoogte** (v227): numpad, snelknoppen, scoreregel en scoregetal gebruiken `clamp(min, calc(Nvh - x), max)`. Bij 3+ spelers krijgt `#sb-players` de klasse `x-compact` (score rechts, twee kolommen), bij 5+ `x-many` (op schermen ≤740px hoog zonder gemiddelde en checkout-hints). Na elke wijziging aan dit scherm meten: geen overlap met `#game-controls` bij 2/4/6 spelers op 375×667, 375×812, 390×844 en 430×932.
+  - Horizontale scrollrijen (`.lb-chiprow`, `.lb-subrow`, `.hs-row`) krijgen automatisch een vervagende rand aan de kant waar nog meer staat (`_hsUpdate`).
   - spelschermen in de stijl van 501: kop `.g-head`, spelerskaarten `.x-card(.on)`, invoer onderaan bij de duim, Ongedaan/Stop in de zwevende `#game-controls`;
   - onderbladen via `openGameSheet`;
   - meldingen via `showToast(msg,type)`.
