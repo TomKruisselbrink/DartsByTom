@@ -91,9 +91,9 @@
 
 /* ─── RESET & BASE ─── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%;overflow:hidden;background:#000000}body{height:100%;overflow:hidden}
+html{height:100%;overflow:hidden;background:#000000;font-family:var(--ff-display)!important}body{height:100%;overflow:hidden}
 body{
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;
+  font-family:var(--ff-display); /* v224: eigen font overal; ontbrekende tekens vallen terug op het systeemfont */
   background:var(--bg);
   color:var(--text);
   display:flex;
@@ -4932,16 +4932,16 @@ var _COIN_KOP='<svg viewBox="0 0 56 56" width="100%" height="100%" xmlns="http:/
   '<path d="M19,19 L19,31 Q19,38 28,42 Q37,38 37,31 L37,19 Z" fill="rgba(122,92,10,0.12)" stroke="#7A5C0A" stroke-width="1.5"/>'+
   '<line x1="22" y1="20" x2="34" y2="32" stroke="#7A5C0A" stroke-width="1.5"/><line x1="34" y1="20" x2="22" y2="32" stroke="#7A5C0A" stroke-width="1.5"/>'+
   '<circle cx="22" cy="20" r="2.2" fill="#D4A820" stroke="#7A5C0A" stroke-width="1"/><circle cx="34" cy="20" r="2.2" fill="#D4A820" stroke="#7A5C0A" stroke-width="1"/>'+
-  '<text x="28" y="53" text-anchor="middle" font-size="5" font-weight="900" fill="#5D4207" letter-spacing="2.5" font-family="sans-serif">KOP</text>'+
+  '<text x="28" y="53" text-anchor="middle" font-size="5" font-weight="900" fill="#5D4207" letter-spacing="2.5" font-family="DBT Flow, sans-serif">KOP</text>'+
   '</svg>';
 
 var _COIN_MUNT='<svg viewBox="0 0 56 56" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">'+
   '<circle cx="28" cy="4.5" r="1.3" fill="#7A5C0A"/><circle cx="46" cy="12" r="1.3" fill="#7A5C0A"/><circle cx="52" cy="28" r="1.3" fill="#7A5C0A"/><circle cx="4" cy="28" r="1.3" fill="#7A5C0A"/><circle cx="10" cy="12" r="1.3" fill="#7A5C0A"/><circle cx="10" cy="44" r="1.3" fill="#7A5C0A"/>'+
   '<path d="M8,19 Q10,13 15,16 Q17,11 20,14 Q22,10 25,13 L25,29 Q21,31 17,30 Q13,33 8,29 Z" fill="rgba(122,92,10,0.18)" stroke="#9A7020" stroke-width="0.8"/>'+
-  '<text x="39" y="34" text-anchor="middle" font-size="21" font-weight="900" fill="#5D4207" font-family="sans-serif">50</text>'+
-  '<text x="39" y="41.5" text-anchor="middle" font-size="5" font-weight="700" fill="#7A5C0A" letter-spacing="0.5" font-family="sans-serif">EURO</text>'+
-  '<text x="39" y="47.5" text-anchor="middle" font-size="5" font-weight="700" fill="#7A5C0A" letter-spacing="0.5" font-family="sans-serif">CENT</text>'+
-  '<text x="28" y="53" text-anchor="middle" font-size="5" font-weight="900" fill="#5D4207" letter-spacing="2" font-family="sans-serif">MUNT</text>'+
+  '<text x="39" y="34" text-anchor="middle" font-size="21" font-weight="900" fill="#5D4207" font-family="DBT Flow, sans-serif">50</text>'+
+  '<text x="39" y="41.5" text-anchor="middle" font-size="5" font-weight="700" fill="#7A5C0A" letter-spacing="0.5" font-family="DBT Flow, sans-serif">EURO</text>'+
+  '<text x="39" y="47.5" text-anchor="middle" font-size="5" font-weight="700" fill="#7A5C0A" letter-spacing="0.5" font-family="DBT Flow, sans-serif">CENT</text>'+
+  '<text x="28" y="53" text-anchor="middle" font-size="5" font-weight="900" fill="#5D4207" letter-spacing="2" font-family="DBT Flow, sans-serif">MUNT</text>'+
   '</svg>';
 
 var _COIN_GOLD='linear-gradient(145deg,#C8961A,#F0C040,#C8961A)';
@@ -9944,7 +9944,7 @@ function buildAvgGraph(name){
     var labelY=p[1]-8;
     var labelAnchor=i===0?'start':i===avgs.length-1?'end':'middle';
     return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5"/>'+
-      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="-apple-system,sans-serif">'+avgs[i]+'</text>';
+      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="DBT Flow, -apple-system, sans-serif">'+avgs[i]+'</text>';
   }).join('');
   return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Gemiddelde over tijd</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px">'+
@@ -10361,7 +10361,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=223;
+var APP_VERSION=224;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
