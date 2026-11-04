@@ -1,13 +1,13 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v224** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v225** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
 
 ## 1. Wat het is
 
-- PWA voor dartsscores, live op **www.dartsbytom.com** (GitHub Pages). Repo: `github.com/TomKruisselbrink/DartsByTom`.
+- PWA voor dartsscores, live op **tomkruisselbrink.github.io/DartsByTom/** (GitHub Pages). Het domein www.dartsbytom.com wordt niet gebruikt. Repo: `github.com/TomKruisselbrink/DartsByTom`.
 - **Eén bestand met alle code:** `index.html` (~685 KB, vanilla JS, geen build, geen framework, geen CDN behalve Firebase).
 - Overige bestanden: `sw.js` (service worker), `manifest.json` en iconen (`icon-*.png`, `icon-maskable-*.png`, `apple-touch-icon.png`, `favicon.*`, `icon.svg`).
 - Taal: Nederlands, met een volledige Engelse vertaling (zie §4).
@@ -19,7 +19,7 @@ Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet 
 
 - **Communiceer in het Nederlands.** Wees direct en eerlijk, zonder te verzachten of te vleien. Spreek aannames tegen en zeg het als iets een slecht idee is. Bij een smaakkeuze heeft Tom het laatste woord.
 - **Geschiedenis en statistieken blijven altijd intact.** Tom is al eens data kwijtgeraakt. Elke wijziging moet bestaande `darts_db`-data ongemoeid laten of veilig migreren (alleen aanvullen).
-- **Levering via git:** in een chat met push-toegang (repo gekoppeld met push) commit en push je zelf naar `main`. Push naar `main` = direct live op www.dartsbytom.com, dus alleen na de tests hieronder en met Toms akkoord voor die release.
+- **Levering via git:** in een chat met push-toegang (repo gekoppeld met push) commit en push je zelf naar `main`. Push naar `main` = direct live, dus alleen na de tests hieronder en met Toms akkoord voor die release.
   - Vóór elke push: `git fetch origin main` en rebase. Tom uploadt soms nog zelf via "Add files via upload"; overschrijf zijn wijzigingen nooit.
   - Grotere of riskante wijzigingen: eerst op een aparte branch, Tom test, daarna mergen.
 - **Zonder push-toegang** (push geeft 403): lever **één zip** met de bestanden **in de root** en hun eigen namen, bijv. `DartsByTom-v225.zip`. Tom uploadt die zelf. Na zijn upload zet je de repo gelijk:
@@ -192,7 +192,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
   ```
   - Bij potjes ouder dan de nieuwste **200** (`HISTORY_DETAIL_KEEP`) vervallen alleen `legBreakdown` en `hiRoundHistory`. Het potje zelf blijft.
   - Merge-sleutel `_mkey(e)`: `'g:'+gid`, of zonder gid een sleutel uit vaste velden. `_ekey(e)`: `'g:'+gid` of een hash van de entry.
-- **`darts_hidden_archive`**: `{ [naam]: Player }`. Spelers die een andere telefoon in de groep verborg, worden hier gearchiveerd in plaats van gewist. Je eigen accountspeler komt automatisch terug (`_restoreOwnFromArchive`).
+- **`darts_hidden_archive`**: `{ [naam]: Player }`. Spelers die een andere telefoon in de groep verborg **of wiste** (listener `removed`, sinds v225), worden hier gearchiveerd in plaats van gewist. Altijd via `_archivePlayer()`: die voegt een bestaande archiefkopie samen in plaats van te overschrijven. In Instellingen → Spelers onder "Archief"; terughalen zet de speler terug als privéspeler. Je eigen accountspeler komt automatisch terug (`_restoreOwnFromArchive`).
 - **`darts_db_before_restore`**: string-kopie van `darts_db`, gemaakt vlak vóór een herstel uit de cloud-back-up. Dit is een vangnet: laat het staan.
 
 **Groep / account / vrienden:**
@@ -243,9 +243,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 ## 9. Deploy en service worker
 
 - **Hosting:** GitHub Pages vanaf `main` (root). Na een upload draait "pages build and deployment". Wacht op het groene vinkje, pas daarna is de versie live.
-- **Custom domein:** www.dartsbytom.com, ingesteld in repo Settings → Pages. Er staat **geen `CNAME`-bestand** in de repo; de historie laat twee keer aanmaken en verwijderen zien.
-  - Valt het domein weg, controleer dan eerst Settings → Pages en de DNS.
-  - `manifest.json` heeft `start_url: "/DartsByTom/"`. Dat pad bestaat alleen op `tomkruisselbrink.github.io/DartsByTom/`, dus controleer welke URL echt live is (zie openstaand).
+- **Live-URL:** `tomkruisselbrink.github.io/DartsByTom/`. Geen custom domein en geen `CNAME`-bestand; voeg er ook geen toe zonder Toms akkoord.
+  - `manifest.json` `start_url: "/DartsByTom/"` klopt daarom. Niet veranderen: het geïnstalleerde icoon op de telefoons hangt ervan af.
 - **Versie bumpen:**
   - In `index.html` **alleen `var APP_VERSION=N;` ophogen.** `sw.js` hoeft niet aangepast te worden.
   - De SW wordt geregistreerd als `./sw.js?v=N`. Cache-naam `darts-vN`; oude caches worden bij `activate` verwijderd. `skipWaiting()` + `clients.claim()`.
@@ -292,7 +291,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Groepscode uitfaseren:** als alle vrienden een account hebben, de groepscode weghalen en de open catch-all-regel in Firestore dichtzetten.
 - **Toernooi bewaren:** `trn` naar localStorage, zodat een toernooi app-herstart overleeft.
 - **Eigen Halve It-volgorde** (`hiOwnSeq`) staat alleen in het geheugen en is na een herstart weg.
-- **`manifest.json`:** `name` is nog "Darts Scorer" en `start_url` is `/DartsByTom/`. Controleer de live-URL (eigen domein of github.io-pad) en pas aan, met Toms akkoord.
+- **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
 ## 12. Bekende bugs
 
@@ -300,7 +299,6 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Bot X01:** de lijst `impossible` in `botGenerateScore` bevat ook 159, 162, 165 en 168. Die zijn als beurtscore wél mogelijk (alleen niet als checkout), dus de bot gooit ze nooit.
 - **Bot checkout-kans (auto):** `getBotCheckoutRate()` gebruikt het dubbel-% van de eerste mens in het potje, niet van `botSelectedPlayer`. Het gemiddelde komt wel van de gekozen speler.
 - **Botnaam gelijk aan een speler:** heet een echte speler net als de bot, dan slaat `updatePlayerStat` die speler over. Er is geen controle op unieke namen.
-- **Groep, speler gewist op een ander toestel:** wist iemand een speler in de groep (`clearPlayer` verwijdert het Firestore-doc), dan verwijdert de listener (`change.type==='removed'`) die speler ook lokaal op alle verbonden telefoons. Er is geen archief.
 - **Import-dedupe is grof:** `importStats` ziet potjes met dezelfde datum, het type, winst/verlies en het aantal pijlen als dubbel en slaat ze over. Ook zet het `games` en `wins` gelijk aan de lengte van de historie, wat oude tellers verlaagt.
 - `deleteMatchEntry` zet `games` en `wins` ook gelijk aan de lengte van de historie. Bij oude spelers met `games > gameHistory.length` dalen de tellers daardoor.
 

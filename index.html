@@ -1672,6 +1672,8 @@ video {
 <body>
 <script>
 var I18N={
+"Archief": "Archive",
+"Iemand in de groep heeft deze spelers verborgen of gewist. Hun gegevens staan nog veilig op dit apparaat. Terughalen zet ze terug, alleen op deze telefoon.": "Someone in the group hid or deleted these players. Their data is still safe on this device. Restoring brings them back on this phone only.",
 "Opbouwen": "Building up",
 "Uitgegooid?": "Checked out?",
 "✕ Nee": "✕ No",
@@ -2400,6 +2402,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^(.+) gewist in groep, bewaard in archief$/,'$1 deleted in group, kept in archive'],
  [/^Afgooien · (\d+) levens( · teams)?$/,function(m){return 'Killer · '+m[1]+' lives'+(m[2]?' · teams':'');}],
  [/^Doodgegooid! Terug naar (\d+)$/,'Bust! Back to $1'],[/^(\d+) kan niet met 3 pijlen$/,"$1 can't be scored with 3 darts"],
  [/^Nu bijwerken naar v(\d+)$/,'Update now to v$1'],[/^Je hebt de nieuwste versie \(v(\d+)\)$/,'You have the latest version (v$1)'],
@@ -3513,8 +3516,8 @@ function _renderPlayersList(){
 }
 function _hiddenArchiveHtml(){
   var arc=_getHiddenArchive(),ks=Object.keys(arc);if(!ks.length)return '';
-  return '<div class="st-lbl" style="margin-top:14px">Verborgen door de groep</div>'+
-    '<div style="font-size:12px;color:var(--muted);margin:2px 0 8px">Iemand in de groep heeft deze spelers privé gezet. Hun gegevens staan nog veilig op dit apparaat.</div>'+
+  return '<div class="st-lbl" style="margin-top:14px">Archief</div>'+
+    '<div style="font-size:12px;color:var(--muted);margin:2px 0 8px">Iemand in de groep heeft deze spelers verborgen of gewist. Hun gegevens staan nog veilig op dit apparaat. Terughalen zet ze terug, alleen op deze telefoon.</div>'+
     ks.map(function(n){return '<div class="sp-row"><div class="sp-top"><b>'+n+'</b><button class="lb-chip" onclick="restoreHiddenPlayer(decodeURIComponent(\''+encodeURIComponent(n)+'\'))">Terughalen</button></div></div>';}).join('');
 }
 function setPlayerNickname(name,val){
@@ -3760,6 +3763,22 @@ function _restoreOwnFromArchive(){
   delete arc[me];
   try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}
   saveDB(db);showToast(me+' is teruggezet op deze telefoon','success');
+}
+// Speler veilig in het archief zetten. Bestaat er al een archiefkopie, dan worden beide samengevoegd (v225)
+function _archivePlayer(name,p){
+  if(!p)return;
+  var arc=_getHiddenArchive(),old=arc[name];
+  if(!old||!Array.isArray(old.gameHistory)||!Array.isArray(p.gameHistory)){arc[name]=(old&&!p.gameHistory)?old:JSON.parse(JSON.stringify(p));}
+  else{
+    var base=old.gameHistory.length>=p.gameHistory.length?old:p,other=base===old?p:old;
+    var out=JSON.parse(JSON.stringify(base)),seen={};
+    out.gameHistory.forEach(function(e){seen[_mkey(e)]=1;});
+    other.gameHistory.forEach(function(e){if(!seen[_mkey(e)]){out.gameHistory.push(e);out.games=(out.games||0)+1;if(e.won)out.wins=(out.wins||0)+1;out.totalDarts=(out.totalDarts||0)+(e.darts||0);out.totalScore=(out.totalScore||0)+(e.score||0);}});
+    if(!out.doubleStats&&other.doubleStats)out.doubleStats=other.doubleStats;
+    if(!out.nickname&&other.nickname)out.nickname=other.nickname;
+    _sortHistory(out);arc[name]=out;
+  }
+  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){_storageFull(e);}
 }
 function _getHiddenArchive(){try{var o=JSON.parse(localStorage.getItem('darts_hidden_archive')||'{}');return (o&&typeof o==='object')?o:{};}catch(e){return {};}}
 // Terughalen: speler komt terug op dit apparaat en wordt hier privé (blijft dus uit de groep)
@@ -4682,7 +4701,16 @@ function startFirebaseListener(){
         if(_m.push)_grpPushLater(_id);
         _grpLocalDirty=true;
       } else if(change.type === 'removed'){
+        // Iemand heeft deze speler uit de groep gewist (v225). Niet stil wissen: archiveren op dit apparaat.
+        delete _grpSent[_id];
+        var _ownP=acctProfile&&acctProfile.player;
+        if(!dbCache[_id])return;
+        if(_id===_ownP){_grpPushLater(_id);return;} // je eigen accountspeler blijft, en komt terug in de groep
+        _archivePlayer(_id,dbCache[_id]);
         delete dbCache[_id];
+        _grpLocalDirty=true;
+        try{showToast(_id+' gewist in groep, bewaard in archief','info');}catch(e){}
+        try{renderSettingsPlayers();}catch(e){}
       }
     });
     if(_grpLocalDirty){_grpLocalDirty=false;try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){_storageFull(e);}}
@@ -10361,7 +10389,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=224;
+var APP_VERSION=225;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
