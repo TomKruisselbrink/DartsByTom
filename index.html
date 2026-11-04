@@ -1672,6 +1672,7 @@ video {
 <body>
 <script>
 var I18N={
+"Opbouwen": "Building up",
 "Uitgegooid?": "Checked out?",
 "✕ Nee": "✕ No",
 "Was het op een": "Was it on a",
@@ -2399,6 +2400,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+ [/^Afgooien · (\d+) levens( · teams)?$/,function(m){return 'Killer · '+m[1]+' lives'+(m[2]?' · teams':'');}],
  [/^Doodgegooid! Terug naar (\d+)$/,'Bust! Back to $1'],[/^(\d+) kan niet met 3 pijlen$/,"$1 can't be scored with 3 darts"],
  [/^Nu bijwerken naar v(\d+)$/,'Update now to v$1'],[/^Je hebt de nieuwste versie \(v(\d+)\)$/,'You have the latest version (v$1)'],
  [/^(\d+) levens$/,'$1 lives'],[/^(\d+) teams$/,'$1 teams'],[/^Team ([A-D])$/,'Team $1'],[/^Gooit voor (.+)$/,'Throws for $1'],[/^voor (.+)$/,'for $1'],[/^(.+) is Killer$/,'$1 is Killer'],
@@ -3580,6 +3582,14 @@ function callerSay(text,interrupt){
     speechSynthesis.speak(u);
   }catch(e){}
 }
+// iOS speelt spraak pas af nadat er één keer direct vanuit een tik is gesproken. Aankondigingen via een
+// timer (zoals "you require") bleven daardoor in leg 1 stil, tot "Game shot!" de spraak ontgrendelde (v223).
+var _callerUnlocked=false;
+function _callerUnlock(){
+  if(_callerUnlocked||!callerEnabled||!window.speechSynthesis)return;
+  try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;u.rate=2;speechSynthesis.speak(u);_callerUnlocked=true;}catch(e){}
+}
+['touchend','click','keydown'].forEach(function(ev){document.addEventListener(ev,_callerUnlock,true);});
 var _callerLastKey='',_callerLastAt=0;
 function callerName(n){var db=getDB();return (db&&db[n]&&db[n].nickname)?db[n].nickname:n;}
 function callerRequire(){
@@ -4787,12 +4797,12 @@ function showScreen(id){
     _pnFollow();
   }
   // Show/hide game action bar
-  var _gameScreens=['screen-game','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit','screen-randomco'];
+  var _gameScreens=['screen-game','screen-afgooien','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit','screen-randomco'];
   var _inGame=_gameScreens.indexOf(id)>=0;
   var gb=document.getElementById('game-controls');
   if(gb){
     if(_inGame)gb.classList.add('show');else gb.classList.remove('show');
-    var _gTitles={'screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie','screen-randomco':'Random Checkout'};
+    var _gTitles={'screen-afgooien':'Afgooien','screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie','screen-randomco':'Random Checkout'};
     var gbt=document.getElementById('game-bar-title');if(gbt)gbt.textContent=_gTitles[id]||'';
     var _gs=document.getElementById('gc-stats'),_gss=document.getElementById('gc-stats-sep');
     var _infoLbl={'screen-game':'Stats','screen-halveit':'Rondes','screen-checkout121':'Pogingen'}[id];
@@ -6789,7 +6799,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.history=[];
     setTimeout(saveRematchConfig,0);
     renderGame();showScreen('screen-game');
-    if(state.botPlayerIndex===0){setTimeout(triggerBotTurn,800);}
+    if(state.botPlayerIndex>=0&&state.botPlayerIndex===state.firstPlayer){setTimeout(triggerBotTurn,800);}
   } else if(gameType==='atc'){
     state.atcTarget=players.map(function(){return 1});state.atcDarts=0;state.atcHistory=[];state.atcMode=atcMode;setTimeout(saveRematchConfig,0);renderATC();showScreen('screen-atc');
   } else if(gameType==='shanghai7'||gameType==='shanghai20'){
@@ -7671,6 +7681,7 @@ function saveRematchConfig(){
   if(!state.players||!state.players.length)return;
   rematchConfig={
     players:state.players.slice(),
+    botName:(state.botPlayerIndex>=0?state.players[state.botPlayerIndex]:null),
     gameType:state.gameType,
     doubleOut:state.doubleOut,
     doubleIn:state.doubleIn,
@@ -7721,7 +7732,8 @@ function _doRematch(startIdx){
   closeGameSheet();
   stopConfetti();
   var c=rematchConfig;
-  state.botPlayerIndex=-1;
+  // Bot blijft meedoen in de rematch (v223); zelfde niveau-instellingen als de vorige keer
+  state.botPlayerIndex=c.botName?c.players.indexOf(c.botName):-1;
   // Restore game-specific options
   if(c.atcMode)atcMode=c.atcMode;
   if(c.shHalve!==undefined)shHalveOpt=c.shHalve;
@@ -8015,6 +8027,7 @@ function confirmEndGame(){
   document.getElementById('end-cancel').onclick=function(){document.body.removeChild(overlay);};
   document.getElementById('end-confirm').onclick=function(){
     document.body.removeChild(overlay);
+    if(typeof _inGame!=='undefined')_inGame=false;
     // Save stats for any active game
     if(state.gameType==='checkout121')saveCo121Stats();
     if(state.trnMode){state.trnMode=false;state.trnMatchCallback=null;renderTrnOverview();showScreen('screen-trn-overview');}
@@ -9091,7 +9104,7 @@ function _renderStatsImpl(){
         }
         function sTile(val,lbl,clr){
           return'<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 6px;text-align:center">'+
-            '<div style="font-size:18px;font-weight:900;color:'+clr+';line-height:1.1">'+val+'</div>'+
+            '<div class="dv" style="font-size:18px;font-weight:900;color:'+clr+';line-height:1.1">'+val+'</div>'+
             '<div style="font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">'+lbl+'</div>'+
           '</div>';
         }
@@ -9905,10 +9918,10 @@ function buildPersonalRecords(name){
   });
   return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>Persoonlijke records</div>'+
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px">'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--warning)">'+bestAvg+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best gem.</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent)">'+bestHigh+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent2)">'+(bestCo?bestCo+'%':'—')+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--success)">'+maxStreak+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--warning)">'+bestAvg+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best gem.</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent)">'+bestHigh+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent2)">'+(bestCo?bestCo+'%':'—')+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--success)">'+maxStreak+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
     '</div>';
 }
 
@@ -10348,7 +10361,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=221;
+var APP_VERSION=223;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -11260,17 +11273,14 @@ function renderAfgooien(){
   var numLabel = p.number==='bull' ? 'Bull' : String(p.number);
 
   root.innerHTML = '';
-  root.style.cssText = 'position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)';
-
-  // ── Glow overlay ──
-  var glow = document.createElement('div');
-  glow.style.cssText = 'position:absolute;top:0;left:0;right:0;height:260px;pointer-events:none;z-index:0;'+
-    'background:radial-gradient(120% 100% at 50% 0%, rgba(185,78,42,.28), transparent 70%)';
-  root.appendChild(glow);
+  root.style.cssText = 'position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden';
 
   // ── Scrollable content (above action bar) ──
   var content = document.createElement('div');
-  content.style.cssText = 'flex:1;min-height:0;display:flex;flex-direction:column;position:relative;z-index:1;overflow-y:auto;padding-top:12px';
+  content.style.cssText = 'flex:1;min-height:0;display:flex;flex-direction:column;position:relative;z-index:1;overflow-y:auto;padding-top:2px';
+  var head=document.createElement('div');head.className='g-head';head.style.margin='0 16px 10px';
+  head.innerHTML='<div class="g-head-l"><span class="g-head-sub">Afgooien · '+_afg.target+' levens'+(_afg.teams?' · teams':'')+'</span><span class="g-head-main">'+(isAfg?'Killer':'Opbouwen')+'</span></div><div class="g-head-r">Beurt<b>'+(_afg.turnNum+1)+'</b></div>';
+  content.appendChild(head);
   root.appendChild(content);
 
   // ── 1. PLAYER CARDS ──
@@ -11280,10 +11290,9 @@ function renderAfgooien(){
   _afg.players.forEach(function(q){
     var isMe = q.name===p.name;
     var card = document.createElement('div');
-    card.style.cssText = 'background:var(--surface);border-radius:14px;padding:10px 12px;'+
-      'border:'+(isMe?'1.5px solid var(--accent)':'1px solid rgba(255,255,255,.08)')+';'+
-      (q.eliminated?'opacity:.4;':(!isMe?'opacity:.6;':''));
-    var dotColor = isMe?'var(--accent)':'rgba(255,255,255,.2)';
+    card.className='x-card'+(isMe?' on':'');
+    card.style.cssText = 'padding:10px 12px;'+(q.eliminated?'opacity:.4;':'');
+    var dotColor = isMe?'var(--accent)':'rgba(127,127,127,.35)';
     var scoreColor = isMe?'var(--accent)':'var(--text)';
     card.innerHTML=
       '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'+
@@ -11291,7 +11300,7 @@ function renderAfgooien(){
         '<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'+(q.eliminated?'text-decoration:line-through':'')+'">'+q.name+(q.score>=_afg.target&&!q.eliminated?' <span class="afg-kbadge">KILLER</span>':'')+'</div>'+
       '</div>'+
       '<div style="display:flex;align-items:baseline;gap:5px">'+
-        '<div style="font-size:30px;font-weight:900;line-height:1;color:'+scoreColor+'">'+q.score+'</div>'+
+        '<div class="x-score" style="font-size:32px;margin:2px 0 0;color:'+scoreColor+'">'+q.score+'</div>'+
         '<div style="font-size:11px;color:var(--muted);font-weight:600">van '+_afg.target+' · <b style="color:var(--text)">'+(q.number==='bull'?'Bull':q.number)+'</b></div>'+
       '</div>';
     playerGrid.appendChild(card);
@@ -11301,13 +11310,12 @@ function renderAfgooien(){
   // ── 2. TARGET CARD (scoring) or ATTACK CARD ──
   if(!isAfg){
     var targetCard = document.createElement('div');
-    targetCard.style.cssText = 'margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);'+
-      'border-radius:20px;padding:20px 16px 16px;text-align:center;flex-shrink:0';
-    var dDots=''; for(var d=1;d<=3;d++) dDots+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d<=_afg.dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
+    targetCard.className='g-target';
+    targetCard.style.cssText = 'margin:0 16px 10px;flex-shrink:0';
+    var dDots=''; for(var d=1;d<=3;d++) dDots+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d<=_afg.dartsLeft?'var(--accent)':'rgba(127,127,127,.3)')+'"></div>';
     targetCard.innerHTML=
       '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+thrower+' gooit op</div>'+(_afg.teams?'<div style="font-size:11px;color:var(--muted);margin:-2px 0 2px">voor '+p.name+'</div>':'')+
-      '<div style="font-size:96px;font-weight:900;color:var(--accent);line-height:1;letter-spacing:-4px;'+
-           'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 6px;animation:afgNumBounce .35s cubic-bezier(.34,1.4,.64,1) both">'+numLabel+'</div>'+
+      '<div class="g-target-big" style="margin:2px 0 6px;animation:afgNumBounce .35s cubic-bezier(.34,1.4,.64,1) both">'+numLabel+'</div>'+
       '<div style="display:flex;align-items:center;justify-content:center;gap:8px">'+
         '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
         '<div style="display:flex;gap:5px">'+dDots+'</div>'+
@@ -11320,33 +11328,33 @@ function renderAfgooien(){
       ? [{label:'Bull buiten',val:'25',pts:1},{label:'Bull',val:'50',pts:2}]
       : [{label:'Enkel',val:p.number,pts:1},{label:'Dubbel',val:p.number*2,pts:2},{label:'Triple',val:p.number*3,pts:3}];
     var btnArea = document.createElement('div');
-    btnArea.style.cssText = 'padding:0 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0';
+    btnArea.style.cssText = 'padding:0 16px;display:flex;flex-direction:column;gap:6px;flex-shrink:0';
     var grid = document.createElement('div');
-    grid.style.cssText = 'display:grid;grid-template-columns:'+opts.map(function(){return'1fr';}).join(' ')+';gap:8px';
+    grid.style.cssText = 'display:grid;grid-template-columns:'+opts.map(function(){return'1fr';}).join(' ')+';gap:6px';
     opts.forEach(function(opt){
       var btn = document.createElement('button');
-      btn.style.cssText = 'background:var(--surface);border:1.5px solid var(--border);border-radius:14px;'+
-        'padding:14px 4px;min-height:62px;cursor:pointer;text-align:center;color:var(--text);box-shadow:var(--shadow)';
-      btn.innerHTML='<div style="font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+opt.label+'</div>'+
-        '<div style="font-size:26px;font-weight:900;line-height:1.15">'+opt.val+'</div>';
+      btn.className='btn';
+      btn.style.cssText = 'flex-direction:column;gap:2px;padding:14px 4px;min-height:76px;text-align:center';
+      btn.innerHTML='<div style="font-size:11px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted)">'+opt.label+'</div>'+
+        '<div style="font-size:28px;font-weight:800;line-height:1.1">'+opt.val+'</div>';
       btn.addEventListener('click',(function(pts){return function(){afgScore(pts);};})(opt.pts));
       grid.appendChild(btn);
     });
     btnArea.appendChild(grid);
     var misBtn = document.createElement('button');
-    misBtn.style.cssText = 'border:1.5px solid var(--border);background:var(--surface);border-radius:14px;padding:11px;'+
-      'font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.3px;cursor:pointer;min-height:44px;width:100%';
+    misBtn.className='btn';
+    misBtn.style.cssText = 'width:100%;justify-content:center;padding:15px;font-size:17px;font-weight:700;color:var(--muted)';
     misBtn.textContent='Mis';
     misBtn.addEventListener('click',function(){afgScore(0);});
     btnArea.appendChild(misBtn);
-    content.appendChild(btnArea);
+    var inputEl=btnArea;
 
   } else {
     // Attack mode
     var atkCard = document.createElement('div');
-    atkCard.style.cssText = 'margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);'+
-      'border-radius:20px;padding:16px;flex-shrink:0';
-    var dDots2=''; for(var d2=1;d2<=3;d2++) dDots2+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d2<=_afg.dartsLeft?'#fff':'rgba(255,255,255,.18)')+'"></div>';
+    atkCard.style.cssText = 'margin:0 16px 10px;background:var(--card);border:1px solid var(--border);'+
+      'border-radius:18px;padding:14px 16px;flex-shrink:0';
+    var dDots2=''; for(var d2=1;d2<=3;d2++) dDots2+='<div style="width:9px;height:9px;border-radius:50%;background:'+(d2<=_afg.dartsLeft?'var(--accent)':'rgba(127,127,127,.3)')+'"></div>';
     var hdr=document.createElement('div');
     hdr.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px';
     hdr.innerHTML='<div style="font-size:16px;font-weight:800">'+thrower+' is Killer'+(_afg.teams?' <span style="font-size:12px;color:var(--muted);font-weight:700">('+p.name+')</span>':'')+'</div>'+
@@ -11367,8 +11375,8 @@ function renderAfgooien(){
       btns.style.cssText='display:flex;gap:6px';
       (_afg.bySeg?[-1,-2,-3]:[-1]).forEach(function(delta){
         var b=document.createElement('button');
-        b.className='btn gc-btn';
-        b.style.cssText='font-size:13px;min-height:36px';
+        b.className='btn';
+        b.style.cssText='font-size:17px;font-weight:800;min-width:52px;min-height:46px;padding:0 12px;justify-content:center';
         b.textContent=_afg.bySeg?delta:'Raak';
         b.addEventListener('click',(function(n,d){return function(){afgAttack(n,Math.abs(d));};})(t.name,delta));
         btns.appendChild(b);
@@ -11377,12 +11385,12 @@ function renderAfgooien(){
       atkCard.appendChild(row);
     });
     var misBtn2=document.createElement('button');
-    misBtn2.style.cssText='border:1.5px solid var(--border);background:var(--surface);border-radius:14px;padding:11px;'+
-      'font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.3px;cursor:pointer;min-height:44px;width:100%;margin-top:10px';
+    misBtn2.className='btn';
+    misBtn2.style.cssText='width:100%;justify-content:center;padding:15px;font-size:16px;font-weight:700;color:var(--muted);margin-top:12px';
     misBtn2.textContent='Mis — volgende pijl';
     misBtn2.addEventListener('click',function(){afgScore(0);});
     atkCard.appendChild(misBtn2);
-    content.appendChild(atkCard);
+    var inputEl=atkCard;
   }
 
   // ── 4. TURN HISTORY ──
@@ -11407,7 +11415,7 @@ function renderAfgooien(){
     // Current partial turn
     if(_afg.currentThrows.length>0){
       var curRow=document.createElement('div');
-      curRow.style.cssText='background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:10px 12px;'+
+      curRow.style.cssText='background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:10px 12px;'+
         'display:flex;align-items:center;justify-content:space-between';
       curRow.innerHTML='<div style="display:flex;align-items:center;gap:9px">'+
         '<div style="font-size:10px;font-weight:800;color:var(--accent);width:14px">✦</div>'+
@@ -11421,7 +11429,7 @@ function renderAfgooien(){
     allTurns.forEach(function(turn,idx){
       var row=document.createElement('div');
       var isOld=idx>=3;
-      row.style.cssText='background:var(--surface);border-radius:12px;padding:10px 12px;'+
+      row.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;'+
         'display:flex;align-items:center;justify-content:space-between;'+(isOld?'opacity:.55':'');
       var tNumLabel=turn.target==='bull'?'Bull':String(turn.target);
       var throwStr=turn.throws.join(' · ');
@@ -11442,26 +11450,13 @@ function renderAfgooien(){
   histWrap.appendChild(histList);
   content.appendChild(histWrap);
 
-  // ── 5. ACTION BAR ──
-  var actionBar=document.createElement('div');
-  actionBar.style.cssText='flex-shrink:0;padding:12px 16px 26px;display:flex;gap:8px;'+
-    'background:linear-gradient(to top,var(--bg) 60%,transparent);position:relative;z-index:1';
-  var undoBtn=document.createElement('button');
-  undoBtn.style.cssText='flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;'+
-    'padding:13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text)';
-  undoBtn.textContent='↩ Ongedaan';
-  undoBtn.addEventListener('click',afgooienUndo);
-  var stopBtn=document.createElement('button');
-  stopBtn.style.cssText='flex:1;background:rgba(185,78,42,.14);border:1px solid rgba(185,78,42,.4);'+
-    'border-radius:14px;padding:13px;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer';
-  stopBtn.textContent='■ Stop';
-  stopBtn.addEventListener('click',function(){
-    _inGame=false;
-    showScreen('screen-home');
-  });
-  actionBar.appendChild(undoBtn);
-  actionBar.appendChild(stopBtn);
-  root.appendChild(actionBar);
+  // Invoer onderaan bij je duim, Ongedaan / Stop in de gewone zwevende spelbalk (zoals bij 501), v223
+  inputEl.style.margin='0';inputEl.style.padding=isAfg?'14px 16px':'0 16px';
+  var bottom=document.createElement('div');
+  bottom.style.cssText='flex-shrink:0;padding:8px 0 4px;position:relative;z-index:1';
+  if(isAfg){inputEl.style.margin='0 16px';}
+  bottom.appendChild(inputEl);
+  root.appendChild(bottom);
 }
 
 function afgScore(pts){
@@ -11660,7 +11655,7 @@ function _afgWin(winner){
 #screen-leaderboard > h2,
 #screen-history > h2,
 #screen-stats > h2 {
-  font-size:20px !important;
+  font-size:26px !important;
   font-weight:800 !important;
   letter-spacing:-.4px !important;
   margin-bottom:16px !important;
@@ -11684,6 +11679,13 @@ function _afgWin(winner){
 * { -webkit-tap-highlight-color: transparent; }
 body { -webkit-font-smoothing: antialiased; }
 
+/* ── Darts by Tom Flow (v222): eigen display-font voor titels en grote getallen ──
+   Alleen hoofdletters, cijfers en een paar leestekens; lopende tekst blijft in het systeemfont. */
+@font-face{font-family:'DBT Flow';src:url(data:font/woff2;base64,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) format('woff2');font-weight:700;font-style:normal;font-display:swap}
+:root{--ff-display:'DBT Flow',-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif}
+.home-hero-title,.page-head,.home-tile>span:first-of-type,.qt-score,.g-head-main,.g-target-big,.g-prow-score,.x-score,#numpad-display,#rco-typed,.win-title,.metric .val,.dv,.home-quick-tile>div:first-child,.st-phead h2{
+  font-family:var(--ff-display)!important;font-weight:700!important;font-synthesis:none;letter-spacing:.01em!important}
+.home-hero-title{padding-right:.12em} /* schuine letters niet afknippen door de verloop-tekst */
 /* ── 2. HOME: titel gradient ── */
 .home-hero-title {
   font-size: 28px;
