@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v227** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v228** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -270,12 +270,16 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Font "Darts by Tom Flow"**, in CSS `'DBT Flow'`:
   - ingebouwd als base64-woff2 in een `@font-face` (alleen weight 700, `font-display:swap`), dus het werkt ook offline;
   - staat **overal**: `body` en `html` gebruiken `var(--ff-display)`, en ook de SVG-teksten (munt, grafiek) gebruiken het;
-  - smal, cursief, **alleen hoofdletters** (kleine letters worden als hoofdletters getekend), 70 tekens: `A–Z a–z 0–9 ! + - . / : ·` en spatie;
-  - ontbrekende tekens (`? % & ( ) é ' " × , –` enz.) vallen terug op het systeemfont;
+  - smal, cursief, **alleen hoofdletters** (kleine letters worden als hoofdletters getekend);
+  - **versie 1.1** (v228): `A–Z a–z 0–9 ! ? + - – — − . , : · / ' "` en spatie, plus accenten `é è ê ë` op A, E, I, O, U (hoofd- en kleine letters, dus ook ï ö ü á à);
+  - bron in de repo, map `font/`: `DartsByTom-Flow-v1.ttf` (origineel uit de lettertype-chat), `add_glyphs.py` (voegt accenten en leestekens toe) en het resultaat `DartsByTom-Flow.ttf/.woff2`. Wijzigen = `add_glyphs.py` aanpassen, `python3 font/add_glyphs.py` draaien (nodig: fonttools + brotli), daarna de woff2 als base64 in de `@font-face` zetten;
+  - het oorspronkelijke bouwscript (fontTools + shapely, uit de lettertype-chat) zit niet in de repo;
+  - ontbrekende tekens (`% & ( ) × ç` enz.) vallen terug op het systeemfont;
   - titels en grote getallen staan expliciet op weight 700 met `font-synthesis:none` (geen nep-vet).
 - **Componenten:**
   - tastbare knoppen `.btn` met een 3D-onderrand en indrukeffect (`haptic()`);
   - **X01-scherm schaalt mee met de schermhoogte** (v227): numpad, snelknoppen, scoreregel en scoregetal gebruiken `clamp(min, calc(Nvh - x), max)`. Bij 3+ spelers krijgt `#sb-players` de klasse `x-compact` (score rechts, twee kolommen), bij 5+ `x-many` (op schermen ≤740px hoog zonder gemiddelde en checkout-hints). Na elke wijziging aan dit scherm meten: geen overlap met `#game-controls` bij 2/4/6 spelers op 375×667, 375×812, 390×844 en 430×932.
+  - **Uitgooi bij X01** (v228): `#checkout-strip` staat in `#x01-mid`, een flexvlak tussen scorekaarten en invoer met `container-type:size`. De chips schalen met `cqh` mee met de vrije ruimte (groot op hoge telefoons, leesbaar vanaf de oche); onder 96px hoog wordt het weer één compacte rij.
   - Horizontale scrollrijen (`.lb-chiprow`, `.lb-subrow`, `.hs-row`) krijgen automatisch een vervagende rand aan de kant waar nog meer staat (`_hsUpdate`).
   - spelschermen in de stijl van 501: kop `.g-head`, spelerskaarten `.x-card(.on)`, invoer onderaan bij de duim, Ongedaan/Stop in de zwevende `#game-controls`;
   - onderbladen via `openGameSheet`;
@@ -286,7 +290,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 
 ## 11. Openstaand
 
-- **Font aanvullen:** `% & ? ( ) é ' "` en `×` ontbreken nog in Flow (Tom maakt/levert het font). Daarna de nieuwe woff2 base64 vervangen in de `@font-face`.
+- **Font aanvullen:** `% & ( )` en `×` ontbreken nog in Flow (via `font/add_glyphs.py`).
+- **Tekstfont "Flow Text":** Tom wil een eigen tweede font voor kleine tekst (rechtop, met kleine letters, leesbaar op 11–13px). Nog niet begonnen.
 - **Kleine tekst:** met Flow overal zijn ondertitels en uitleg klein. Tom bepaalt of alles een stap groter moet.
 - **Caller op iPhone in leg 1:** de fix (`_callerUnlock`) is alleen in de testbrowser getest. Tom moet bevestigen dat het op zijn iPhone werkt.
 - **Gebruikersnaam wijzigen**: een knop in Account. Nog niet gebouwd; Tom vond het eerder "later".

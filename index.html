@@ -201,6 +201,13 @@ body::before{
 [data-theme="light"] #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}}
 #game-controls.show{display:flex}
+#x01-mid{flex:1 1 0;min-height:48px;container-type:size;display:flex;align-items:center;justify-content:center;padding:2px 0 6px}
+#checkout-strip{box-sizing:border-box;width:100%;max-height:100%;flex-direction:column;align-items:center;justify-content:center;gap:clamp(4px,5cqh,14px);padding:clamp(8px,8cqh,22px) 12px;background:rgba(62,123,79,.14);border:1px solid rgba(143,203,156,.25);border-radius:18px}
+#checkout-strip .co-lbl{font-size:clamp(11px,7cqh,17px);font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+#checkout-strip .co-row{display:flex;align-items:center;justify-content:center;gap:clamp(2px,2cqh,8px);flex-wrap:nowrap}
+#checkout-strip .co-big{display:inline-flex;align-items:center;color:#fff;font-weight:800;white-space:nowrap;letter-spacing:.02em;font-size:clamp(15px,26cqh,54px);padding:.18em .55em;border-radius:999px;line-height:1.05}
+#checkout-strip .co-arr{color:var(--muted);font-size:clamp(14px,14cqh,30px);font-weight:300}
+@container (max-height:96px){#checkout-strip{flex-direction:row;justify-content:flex-start;gap:8px;padding:6px 12px}#checkout-strip .co-row{gap:4px}}
 .co-lbl{color:#8FCB9C}[data-theme="light"] .co-lbl{color:#2F6B40}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .co-lbl{color:#2F6B40}}
 /* ═══ Spelschermen (v196) ═══ */
@@ -3224,11 +3231,11 @@ function _tr1(n){
   <input type="number" id="score-input" min="0" max="180"
     style="position:absolute;opacity:0;pointer-events:none;width:0;height:0"
     onkeydown="if(event.key==='Enter')submitScore()" oninput="onScoreInput(this)">
-  <div class="x01-input" style="margin-top:auto;flex-shrink:0">
+  <!-- Uitgooi: vult de vrije ruimte tussen scorekaarten en invoer, groot leesbaar vanaf de oche (v228) -->
+  <div id="x01-mid"><div id="checkout-strip" style="display:none"></div></div>
+  <div class="x01-input" style="flex-shrink:0">
     <!-- Score display -->
     <div class="np-disp"><span id="np-who"></span><div id="numpad-display" style="font-size:30px;font-weight:900;color:var(--accent);letter-spacing:.04em">—</div><span id="np-rest"></span></div>
-    <!-- Checkout strip — only visible when on a finish -->
-    <div id="checkout-strip" style="display:none;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:5px;padding:9px 12px;background:rgba(62,123,79,.14);border:1px solid rgba(143,203,156,.25);border-radius:14px;margin-bottom:8px"></div>
     <!-- Quick scores -->
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:7px">
       <button class="btn btn-sm" onclick="quickScore(0)" style="color:var(--muted);padding:7px 2px;font-size:12px">0</button>
@@ -7403,8 +7410,8 @@ function buildCheckoutBadgesLarge(co){
     var bg=dartBadgeColor(d);
     var prefix=d.charAt(0)==='D'?'D':d.charAt(0)==='T'?'T':'';
     var label=d;
-    return '<span style="display:inline-flex;flex-direction:column;align-items:center;background:'+bg+';color:#fff;font-size:15px;font-weight:800;padding:5px 12px;border-radius:20px;white-space:nowrap;letter-spacing:.3px">'+label+'</span>';
-  }).join('<span style="color:var(--muted);font-size:14px;margin:0 3px;font-weight:300">→</span>');
+    return '<span class="co-big" style="background:'+bg+'">'+label+'</span>';
+  }).join('<span class="co-arr">→</span>');
 }
 function updateCheckoutStrip(){
   var strip=document.getElementById('checkout-strip');
@@ -7415,8 +7422,7 @@ function updateCheckoutStrip(){
   if(co){
     strip.style.display='flex';
     strip.innerHTML=
-      '<span class="co-lbl" style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;flex-shrink:0;margin-right:6px">Uitgooi</span>'+
-      buildCheckoutBadgesLarge(co);
+      '<span class="co-lbl">Uitgooi</span><span class="co-row">'+buildCheckoutBadgesLarge(co)+'</span>';
   } else {
     strip.style.display='none';
   }
@@ -10410,7 +10416,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=227;
+var APP_VERSION=228;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -11730,7 +11736,7 @@ body { -webkit-font-smoothing: antialiased; }
 
 /* ── Darts by Tom Flow (v222): eigen display-font voor titels en grote getallen ──
    Alleen hoofdletters, cijfers en een paar leestekens; lopende tekst blijft in het systeemfont. */
-@font-face{font-family:'DBT Flow';src:url(data:font/woff2;base64,d09GMgABAAAAAAfMAAsAAAAAGTgAAAd9AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG4Q8BmAAgVwKpQSeCgE2AiQDgTQLXAAEIAV1B3wboBQR1aQbAPw8sI2lDlfCMMUmDXn2U043CFhFKjSOxcyH3k18dxcCxYNKVS3UPEzdwtxYf6f2ZRaex27vbgd60BZZekAtDKzI00Tj2mL8W215oglcDauKB7JsmNm6vb5Vt9X6ELvFbLYJg2NZEMPTk4rIg/OuvdqkxClbBmGIZCtkjcjlY5oyKeIR5V9KeH+ApIBJzY2Fx+cn3N6Un7B7jZ9/vCVLi1RxP/ItQQBayQrRsXNEKeN5/feRMuIAeHVY4rj/+UhpoOWrwaEARu8Ukg3ChQOo7cpUr9ewRbsINT07Nw+fgFQqvmThFIkxyfXeqakYPdBg3pqWjvAxb4ekuFkS0gQS1FD1luHw4hweACVKBbcGBlfW0E3wXkBo6BkJXHxCwpJRHD09yseHCQsjkiUjqAR6FceYIkJAhAsRPqQSyiFytuiLUqnSMFQEBzjKTVDjAQAUg7AA5cDXtwIU91wHZqHVVAE9ehEbO4+wJMlSpKJ4NjaEPUWUBzFJiJOCVFIpf0NGHgRAm8i0+DAEhXRhjgor/zVWXknOlpqBdSDVO+RJFlKEwWNN/V0D+u1rKOSQMZsHpPyxOG8AHMwYXliWSi1GTFoSdYwnFQWEZMnRoNWoBcuOoLUBUFrumQQxso9wAMxtANr7zzLnEGbns7eUf3E0tHQSpAsQWFgF2dg5OLm4hXh4+fh5CKAcgJOXqQL+BvUjQRpgZBQKyJXRFh+GYloax8PLGAYzcr42lF27tdcytTa0VsH4TgaagsYgWAuCKbFyVsGGoeyGwA3OSmPasczuom2VrVwSxcql83bONNoM9lphN3LdehSowKavywp6kOc1uDeGriP67uJ7juC4qVf3V1O2HQwx+yCNjcDSsXks3xFA05H0bpeQXr0UuorS9Ha+Yt+2EFQONgg+Wkoq9RCbgPBOUNsTQ77zPZMf3ow4TJgPjJzHAIdgJGiWn2BlimBs14v5EAywTd9FThuYoLGTeOBdy5erPDfnrUDcnogEBBQ8WlgxerakpWHCTA0mZFoFSIq+2Fs5t4anfOCCbDxm7MbBC6tImU1gssRoSpbxaOx5sQrMvQQi07poI4JBhYJjTuqtNmhHlSmJNd6SZYjkzGImfC/QDf+kfrkhViave9lSjBYiyMWFUUqHgoG1JDgfg2A/l1fV9glek95v12DiIDWy0nH/hAS3mBVGWvsaWqZRbC52yonED5Q2jF4xCQNSLNYKewjGJuTy5WOICEQjsMYwIvCNPXa4150AI+ZezEhaaiP7yGQUyCMBSXtp+wPPvaLlVcSyYxjNGzntts9Rs4xFBlobmtP++fihvWbO3nEr6fdxAJ5PKSkaGpyf98zvLopDLS2lqY62K3nSfaJePmlvPzJSWuZM0OyeLC1k3LXpuig/H6DPYSMLvCDGpGr2h8TzNMuGJqUnLA7MajtS7JQ9V/8giBh92nUaZ9c5xFvQT1LHMWlbH4MjxTEoJX84e9mjZkaqHmObv735dAmZP4tR/rvN2nqvt25qaozVzMzit/aD+/JZpE0LfA4TLL2W9dvu55vk5oKQlOZOvKa2bPC9/O9w9c2WW+7cU8Z4A9nf/+Bwc4vdyatP7phuiTotaZNl3MYbLq/1w9gvTPOIF9QYgekl0GMxTyrOOiLbv5R/oefqAMekaZiOvcbAQ+b+fMUR3v+xcvyoUYd7tSe+3t6Yg/LUXTKPkfkBMoI9sQwP4AlE5bj8BsTfFeWq2sd+OY1vdtmAcxJ3znZmMTfp4SbaGeZeL/p5rm4UxCeCVH4EOrEtHSvPi7qibl0EbSenGmmeDi8cfvbYZ6UHdHpEQWy8layN8fU6MWnuhrmToH/Tcfcdp045btdxbP5czVx5OvrjYBz9Yzd2/8tgIpJ5ErHIzYiP4+SW0x7rN7wwK4jtB+uRktS2aDm+6q8kz0XaAZVVD100H0FboPIiC1j8dRDEJovn74EXpbWxaFk/iwcWxUfy4tJRXsiYY0xSDQZ5HTz1xNefEsSn0HuumuyYFyTT1MmRsJh24mponrSkk9bct9h0Ij9h5+N1Lah597+UT7CU9qtZwsty3Fzzfdl11/Bdu/cMla6cUHsEvCRlKxZ5S3O4HW49JKNNHKQmp+WX+MUTh1lvnO8NbEvWLQl8i+WMz0XFKw0YanFzKkXVcotj5Y3/Btr/Q+eFghgxb9pKC74s+vIYcAOQS/Knmjuq+eY5U/VvGsa+A+Bbg6CU76KoQlpOPwAwUEn15w+KaCEHUNLKJ5455SK93wDIS3QImu3yyuSXzXWstO70Xr601dxEtdH7ANNMVNb4it4A4CIrWqjiZy/wquuBn8gi52gsIcjivGqTt3hqrtArU3le5obrmG+REL8y4Cu9RVDnLFd//3EYSL/yYU98cpwCpkCRNHAo/YwNFNT1KgquBbCluAQQJLJDHwoNysa/RFs9vLP1f9GQH6d8QTRjAfuQcICQRRyNkGHsYAshrdg8eh2JRuzsRAQUiVWOtRmsn+4w9ak/HfV+0qTLlCVbrjz5ChQqUqJUmXIZchSrUKlKtRpmAr+XP92WYwEAAA==) format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'DBT Flow';src:url(data:font/woff2;base64,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) format('woff2');font-weight:700;font-style:normal;font-display:swap}
 :root{--ff-display:'DBT Flow',-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif}
 .home-hero-title,.page-head,.home-tile>span:first-of-type,.qt-score,.g-head-main,.g-target-big,.g-prow-score,.x-score,#numpad-display,#rco-typed,.win-title,.metric .val,.dv,.home-quick-tile>div:first-child,.st-phead h2{
   font-family:var(--ff-display)!important;font-weight:700!important;font-synthesis:none;letter-spacing:.01em!important}
