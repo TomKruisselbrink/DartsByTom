@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v233** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v234** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -133,7 +133,7 @@ Volgorde in het bestand (globaal):
 | **Shanghai** (`shanghai7`, `shanghai20`) | 7 of 20 rondes. Ronde n = doel n; enkel/dubbel/triple = n×1/2/3. Optie "halveren": een beurt zonder punten halveert je totaal (anders 0 voor die ronde). Hoogste totaal wint. ⚠️ Zie bekende bugs: directe winst bij een Shanghai zit er niet in. |
 | **Halve It** (`halveit`) | Reeks doelen: standaard (`DEFAULT_SEQ`: 20, Double, 19, Triple, 18, 3 verschillende kleuren, 17, 3 dezelfde kleuren, 16, 1 van 3 getallen, 15, Bull), willekeurig, of een eigen volgorde (slepen en vegen om te verwijderen; doeltypen ook D/T/B/eigen opdracht). Raak = punten; een ronde zonder raak halveert je totaal. De bot kan meedoen. |
 | **121 Checkout** (`checkout121`) | Start 121 (instelbaar), 9 pijlen per poging (instelbaar). Gelukt: doel + stap (standaard +5). Safehouse-regel `none` / `3dart` / `6dart` / `3row` / `5row` / `always`. Mislukt: terug naar het safehouse, of naar de start. Geen einde: stats worden opgeslagen bij Stop (`saveCo121Stats`). |
-| **Random Checkout** (`randomco`) | Willekeurige checkout uit gekozen bereiken (`RCO_BRACKETS`: 2–40 = 1 pnt, 41–60 = 2, 61–80 = 3, 81–90 = 4, 91–100 = 5, 101–130 = 8, 131–170 = 10; bogey-getallen worden overgeslagen). Pijlen per poging (standaard 9, 0 = onbeperkt) en aantal checkouts (standaard 10, 0 = onbeperkt + knop "Spel afronden"). Modi: **Standaard** (gelukt = bereik omhoog, mislukt = omlaag), **Willekeurig**, **Race** (eerste die het hoogste bereik uitgooit wint). Beurtscore invullen: de rest loopt af. Doodgegooid (onder 0, op 1, of 0 zonder double) = terug naar het startgetal; de beurt telt wel. Snelknoppen Uitgegooid/Mislukt blijven beschikbaar. |
+| **Random Checkout** (`randomco`) | Willekeurige checkout uit gekozen bereiken (`RCO_BRACKETS`: 2–40 = 1 pnt, 41–60 = 2, 61–80 = 3, 81–90 = 4, 91–100 = 5, 101–130 = 8, 131–170 = 10; bogey-getallen worden overgeslagen). Pijlen per poging (standaard 9, 0 = onbeperkt) en aantal checkouts (standaard 10, 0 = onbeperkt + knop "Spel afronden"). Modi: **Standaard** (gelukt = bereik omhoog, mislukt = omlaag), **Willekeurig** (optie **Zelfde checkout**, `rcoSame`/`darts_rco_same`, v234: per ronde trekt de eerste speler één checkout en iedereen krijgt die; alleen bij Willekeurig en 2+ spelers), **Race** (eerste die het hoogste bereik uitgooit wint). Beurtscore invullen: de rest loopt af. Doodgegooid (onder 0, op 1, of 0 zonder double) = terug naar het startgetal; de beurt telt wel. Snelknoppen Uitgegooid/Mislukt blijven beschikbaar. |
 
 Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één speler).
 
@@ -224,7 +224,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_last_game` | laatst gekozen `gameType` |
 | `darts_last_players` | `[naam]` (zonder "Bot") |
 | `darts_afg_lives` / `darts_afg_byseg` / `darts_afg_assign` | Afgooien: getal / `'0'`·`'1'` / `manual`·`random` |
-| `darts_rco_brk` / `darts_rco_mode` / `darts_rco_darts` / `darts_rco_count` | Random Checkout: `[bereik-index]` / `default`·`random`·`race` / getal / getal |
+| `darts_rco_brk` / `darts_rco_mode` / `darts_rco_darts` / `darts_rco_count` / `darts_rco_same` | Random Checkout: `[bereik-index]` / `default`·`random`·`race` / getal / getal / `'1'`·`'0'` |
 | `darts_install_dismissed` | `'1'` als de iOS-installatiebanner weggeklikt is |
 
 Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
@@ -289,6 +289,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
   - titels en grote getallen staan expliciet op weight 700 met `font-synthesis:none` (geen nep-vet).
 - **Componenten:**
   - tastbare knoppen `.btn` met een 3D-onderrand en indrukeffect (`haptic()`);
+  - **Alle knoppen hebben `touch-action:manipulation`** (v234). Zonder dat ziet iOS twee snelle tikken op dezelfde toets als dubbeltik-zoom en slikt hij de tweede in ("100" werd "10" op het Random Checkout-numpad). Niet weghalen.
   - **X01-scherm schaalt mee met de schermhoogte** (v227): numpad, snelknoppen, scoreregel en scoregetal gebruiken `clamp(min, calc(Nvh - x), max)`. Bij 3+ spelers krijgt `#sb-players` de klasse `x-compact` (score rechts, twee kolommen), bij 5+ `x-many` (op schermen ≤740px hoog zonder gemiddelde en checkout-hints). Na elke wijziging aan dit scherm meten: geen overlap met `#game-controls` bij 2/4/6 spelers op 375×667, 375×812, 390×844 en 430×932.
   - **Uitgooi bij X01** (v228): `#checkout-strip` staat in `#x01-mid`, een flexvlak tussen scorekaarten en invoer met `container-type:size`. De chips schalen met `cqh` mee met de vrije ruimte (groot op hoge telefoons, leesbaar vanaf de oche); onder 96px hoog wordt het weer één compacte rij.
   - Horizontale scrollrijen (`.lb-chiprow`, `.lb-subrow`, `.hs-row`) krijgen automatisch een vervagende rand aan de kant waar nog meer staat (`_hsUpdate`).

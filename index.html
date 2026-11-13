@@ -420,6 +420,9 @@ body::before{
 .g-keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .g-keys button{height:56px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:21px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
 .g-keys button:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+/* v234: iOS ziet twee snelle tikken op dezelfde knop als dubbeltik-zoom en slikt de tweede in ('100' werd '10'). Voor alle knoppen uit. */
+button,[onclick],.g-keys button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.g-keys button{-webkit-user-select:none;user-select:none}
 .rco-keys button{height:48px;font-size:20px}
 .rco-keys .rco-ok{background:var(--accent);color:#fff;border-color:transparent;font-size:17px}
 .rco-keys .rco-ok:disabled{opacity:.4;text-decoration:none}
@@ -1705,6 +1708,12 @@ video {
 <body>
 <script>
 var I18N={
+"ZELFDE CHECKOUT": "SAME CHECKOUT",
+"Ieder een eigen": "Each their own",
+"Iedereen dezelfde": "Everyone the same",
+"Per ronde wordt één checkout getrokken die iedereen moet uitgooien.": "Each round one checkout is drawn that everyone has to finish.",
+"Iedere speler krijgt een eigen checkout.": "Every player gets their own checkout.",
+"zelfde checkout": "same checkout",
 "Eerste 9": "First 9",
 "Hoogste": "Highest",
 "Busts": "Busts",
@@ -5535,6 +5544,12 @@ function renderSetupRules(){
       '<div class="seg-ctrl" style="grid-template-columns:repeat(6,1fr);margin-bottom:14px">'+
         [3,6,9,12,15,0].map(function(v){return '<button class="seg-btn seg-btn-num'+(rcoDarts===v?' active':'')+'" onclick="setRcoDarts('+v+')">'+(v||'∞')+'</button>';}).join('')+
       '</div>'+
+      (rcoMode==='random'?'<span class="setup-section-label">ZELFDE CHECKOUT</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:repeat(2,1fr);margin-bottom:6px">'+
+        '<button class="seg-btn'+(rcoSame?'':' active')+'" onclick="setRcoSame(false)">Ieder een eigen</button>'+
+        '<button class="seg-btn'+(rcoSame?' active':'')+'" onclick="setRcoSame(true)">Iedereen dezelfde</button>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--su-muted);margin-bottom:14px">'+(rcoSame?'Per ronde wordt één checkout getrokken die iedereen moet uitgooien.':'Iedere speler krijgt een eigen checkout.')+'</div>':'')+
       (rcoMode==='race'?'':'<span class="setup-section-label">AANTAL CHECKOUTS</span>'+
       '<div class="seg-ctrl" style="grid-template-columns:repeat(3,1fr)">'+
         [10,25,0].map(function(v){return '<button class="seg-btn seg-btn-num'+(rcoCount===v?' active':'')+'" onclick="setRcoCount('+v+')">'+(v||'∞')+'</button>';}).join('')+
@@ -5651,7 +5666,7 @@ function buildRulesSummary(){
   else if(g==='atc'){return 'ATC · '+(atcMode==='basic'?'Standaard':'Punten');}
   else if(g==='checkout121'){return '121 Checkout';}
   else if(g==='afgooien'){return 'Afgooien · '+afgLives+' levens'+(afgTeams?' · '+afgTeams+' teams':'')+(afgAssign==='random'?' · automatisch':'');}
-  else if(g==='randomco'){return 'Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rcoMode])+' · '+(rcoDarts?rcoDarts+' pijlen':'onbeperkt');}
+  else if(g==='randomco'){return 'Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rcoMode])+(rcoMode==='random'&&rcoSame?' · zelfde checkout':'')+' · '+(rcoDarts?rcoDarts+' pijlen':'onbeperkt');}
   else if(g==='eliminatie'){return 'Eliminatie';}
   return g;
 }
@@ -6099,6 +6114,8 @@ var RCO_BRACKETS=[[2,40,1],[41,60,2],[61,80,3],[81,90,4],[91,100,5],[101,130,8],
 var RCO_BOGEY=[159,162,163,165,166,168,169];
 var rcoBrackets=(function(){try{var a=JSON.parse(localStorage.getItem('darts_rco_brk')||'null');return Array.isArray(a)&&a.length?a:[0,1,2,3,4,5,6];}catch(e){return [0,1,2,3,4,5,6];}})();
 var rcoMode=(function(){try{return localStorage.getItem('darts_rco_mode')||'default';}catch(e){return 'default';}})();
+var rcoSame=(function(){try{return localStorage.getItem('darts_rco_same')==='1';}catch(e){return false;}})(); // v234: iedereen per ronde dezelfde checkout (alleen Willekeurig)
+function setRcoSame(v){rcoSame=!!v;try{localStorage.setItem('darts_rco_same',v?'1':'0');}catch(e){}renderSetupRules();updateSetupActionBar();}
 var rcoDarts=(function(){try{var v=localStorage.getItem('darts_rco_darts');return v==null?9:parseInt(v);}catch(e){return 9;}})();
 var rcoCount=(function(){try{var v=localStorage.getItem('darts_rco_count');return v==null?10:parseInt(v);}catch(e){return 10;}})();
 function _rcoSave(){try{localStorage.setItem('darts_rco_brk',JSON.stringify(rcoBrackets));localStorage.setItem('darts_rco_mode',rcoMode);localStorage.setItem('darts_rco_darts',String(rcoDarts));localStorage.setItem('darts_rco_count',String(rcoCount));}catch(e){}}
@@ -6114,6 +6131,7 @@ function _rcoPick(bi,prev){
 }
 function launchRandomCheckout(players){
   rco={brk:rcoBrackets.slice(),mode:rcoMode,darts:rcoDarts,count:rcoCount,cur:0,snaps:[],history:[],
+    same:rcoSame&&rcoMode==='random'&&players.length>1,roundBi:null,roundTarget:null,
     ps:players.map(function(){return {pts:0,attempts:0,hits:0,bi:0,darts:0};})};
   state.players=players.slice();state.currentPlayer=0;state.gameType='randomco';
   _rcoNewAttempt();
@@ -6122,6 +6140,14 @@ function launchRandomCheckout(players){
 }
 function _rcoNewAttempt(){
   var p=rco.ps[rco.cur];
+  if(rco.same){
+    // zelfde checkout (v234): de eerste speler van de ronde trekt, de rest krijgt hetzelfde getal
+    if(rco.cur===0||rco.roundTarget==null){rco.roundBi=Math.floor(Math.random()*rco.brk.length);rco.roundTarget=_rcoPick(rco.roundBi,rco.roundTarget);}
+    p.bi=rco.roundBi;rco.target=rco.roundTarget;
+    rco.rest=rco.target;rco.typed='';
+    rco.visitsLeft=rco.darts?rco.darts/3:Infinity;
+    return;
+  }
   if(rco.mode==='random')p.bi=Math.floor(Math.random()*rco.brk.length);
   rco.target=_rcoPick(p.bi,rco.target);
   rco.rest=rco.target;rco.typed='';
@@ -6166,11 +6192,12 @@ function _rcoApply(v,dbl){
   if(rco.visitsLeft<=0){_rcoFinishAttempt(false);return;}
   renderRandomCheckout();
 }
-function _rcoSnap(){rco.snaps.push(JSON.stringify({cur:rco.cur,target:rco.target,rest:rco.rest,visitsLeft:rco.visitsLeft===Infinity?-1:rco.visitsLeft,ps:rco.ps,history:rco.history}));if(rco.snaps.length>60)rco.snaps.shift();}
+function _rcoSnap(){rco.snaps.push(JSON.stringify({cur:rco.cur,target:rco.target,rest:rco.rest,visitsLeft:rco.visitsLeft===Infinity?-1:rco.visitsLeft,ps:rco.ps,history:rco.history,roundBi:rco.roundBi,roundTarget:rco.roundTarget}));if(rco.snaps.length>60)rco.snaps.shift();}
 function rcoUndo(){
   if(!rco||!rco.snaps.length)return;
   var s=JSON.parse(rco.snaps.pop());
   rco.cur=s.cur;rco.target=s.target;rco.rest=s.rest!=null?s.rest:s.target;rco.typed='';rco.visitsLeft=s.visitsLeft<0?Infinity:s.visitsLeft;rco.ps=s.ps;rco.history=s.history;
+  if(s.roundTarget!==undefined){rco.roundBi=s.roundBi;rco.roundTarget=s.roundTarget;}
   state.currentPlayer=rco.cur;renderRandomCheckout();
 }
 function renderRandomCheckout(){
@@ -6185,7 +6212,7 @@ function renderRandomCheckout(){
   document.getElementById('rco-hint').innerHTML=co?co.split(' ').map(function(d){return '<span class="g-chip">'+d+'</span>';}).join(''):'';
   document.getElementById('rco-bracket').innerHTML='Bereik <b style="color:var(--text)">'+b[0]+'–'+Math.min(170,b[1])+'</b> · '+b[2]+' pnt';
   document.getElementById('rco-darts').textContent=rco.visitsLeft===Infinity?'∞':rco.visitsLeft*3;
-  document.getElementById('rco-sub').textContent='Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rco.mode])+' · '+(rco.darts?rco.darts+' pijlen':'onbeperkt');
+  document.getElementById('rco-sub').textContent='Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rco.mode])+(rco.same?' · zelfde checkout':'')+' · '+(rco.darts?rco.darts+' pijlen':'onbeperkt');
   var cw=document.getElementById('rco-count-wrap');
   if(rco.mode==='race')cw.innerHTML='Bereik<b>'+(p.bi+1)+' / '+rco.brk.length+'</b>';
   else cw.innerHTML='Checkout<b>'+(p.attempts+1)+(rco.count?' / '+rco.count:'')+'</b>';
@@ -10580,7 +10607,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=233;
+var APP_VERSION=234;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
