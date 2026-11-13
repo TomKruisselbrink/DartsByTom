@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v228** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v229** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -73,6 +73,7 @@ Volgorde in het bestand (globaal):
    - Groep: `groupCode`, `startFirebaseListener()`, `saveDB()`, `_grpMerge`, `_grpWrite`.
    - Privé/verborgen spelers.
    - Account + cloud-back-up: `_acct*`, `ACCT_DOMAIN='@dartsbytom.app'`.
+   - **Account-sync tussen apparaten (v229):** hetzelfde account op twee apparaten (telefoon + kantinescherm) deelt de potjes. `_acctMerge(bk)` voegt per potje samen via `_grpMerge(backupSpeler, lokaleSpeler)` (basis = lokaal, dus oude tellers dalen nooit; tombstones worden gerespecteerd; doubleStats = maximum per dubbel). `_acctPull(force)` haalt de back-up op: bij inloggen (force), live via `onSnapshot` op `backup/meta` (`_acctWatch`), bij terugkeren naar de app (max 1× per 30 s) en vóór elke back-up (`acctBackupNow` = eerst pull, dan `_acctWrite`). De meta krijgt `dev:DEVICE_ID`, zodat een apparaat zijn eigen back-up niet opnieuw ophaalt.
    - Vrienden + potjes doorsturen: `fr*`, `_frSync`, `_outboxFlush`, `_inboxApply`.
    - Scope "Deze telefoon / Vrienden" voor stats, ranglijst en geschiedenis.
 7. **UI-infrastructuur.**
@@ -208,6 +209,8 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_inbox_applied` | `[inbox-doc-id]` (laatste 300); al verwerkte binnengekomen potjes |
 | `darts_hist_sent` | `{ 'uid|naam': 1 }`; hele geschiedenis al eens meegestuurd |
 | `darts_pending_invite` | gebruikersnaam uit een uitnodigingslink `?vriend=…` |
+| `darts_acct_seen` | ms-timestamp van de laatst samengevoegde account-back-up |
+| `darts_acct_removed` | `{ [naam]: ms }`; spelers die hier gewist zijn: de account-sync haalt hun potjes van vóór dat moment niet terug |
 
 **Instellingen:**
 
@@ -236,7 +239,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - `friendRequests/{van}_{naar}`, `usernames/{naam}`.
 - De regels beschermen users, usernames, friendRequests, public, friends en inbox. Een catch-all houdt de rest (o.a. `groups`) open.
 
-**Herstel-regel:** account-herstel (`_acctMerge`) voegt alleen toe of vult aan, met de speler met de méeste potjes leidend. Er wordt nooit lokaal iets weggegooid. De groepssync (`_grpMerge`) voegt lokale en server-potjes samen en respecteert tombstones.
+**Herstel-regel:** account-sync en -herstel (`_acctMerge`) voegen alleen potjes toe (behalve potjes met een tombstone van een ander apparaat). Er wordt nooit lokaal iets weggegooid. De groepssync (`_grpMerge`) voegt lokale en server-potjes samen en respecteert tombstones.
 
 ---
 
@@ -303,6 +306,9 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
 ## 12. Bekende bugs
+
+- **Afgooien, dubbele nummers in de bullronde:** raken twee spelers hetzelfde vak (bijv. allebei 20), of de een Bull en de ander Bull buiten, dan krijgen ze hetzelfde nummer. Er is nog niet afgesproken wat de regel moet zijn (opnieuw gooien? volgende vrije nummer?). Eerst aan Tom vragen.
+- **Afgooien, geen winstscherm (gemeld 13-11):** in de testbrowser komt het winstscherm altijd (bullronde, willekeurig, ongedaan, telefoon en groot scherm). Nog niet gereproduceerd; wacht op Toms info (welk apparaat, welke versie, wat er precies stond).
 
 - **Shanghai:** de uitleg zegt "Shanghai (single + dubbel + triple) wint direct", maar `shScore` / `shEndTurn` hebben die regel niet. Alleen het hoogste totaal na de laatste ronde wint.
 - **Bot X01:** de lijst `impossible` in `botGenerateScore` bevat ook 159, 162, 165 en 168. Die zijn als beurtscore wél mogelijk (alleen niet als checkout), dus de bot gooit ze nooit.

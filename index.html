@@ -2127,7 +2127,7 @@ var I18N={
 "Ongedaan": "Undo",
 "Ongeldige code — controleer of je de volledige code hebt geplakt.": "Invalid code — check that you pasted the whole code.",
 "Ongeldige score (0–180)": "Invalid score (0–180)",
-"Ontbrekende spelers worden toegevoegd en spelers met meer potjes in de back-up worden aangevuld. Er wordt niets van deze telefoon verwijderd.": "Missing players are added and players with more games in the backup are filled in. Nothing is removed from this phone.",
+"Ontbrekende spelers en potjes worden toegevoegd. Er wordt niets van deze telefoon verwijderd.": "Missing players and games are added. Nothing is removed from this phone.",
 "Op basis van stats": "Based on stats",
 "Op deze telefoon:": "On this phone:",
 "Op stats": "By stats",
@@ -2422,6 +2422,8 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^(\d+) potjes? van een ander apparaat binnengehaald$/,'$1 game(s) synced from another device'],
+[/^(\d+) potjes? hersteld$/,'$1 game(s) restored'],
 [/^(.+) gewist in groep, bewaard in archief$/,'$1 deleted in group, kept in archive'],
  [/^Afgooien · (\d+) levens( · teams)?$/,function(m){return 'Killer · '+m[1]+' lives'+(m[2]?' · teams':'');}],
  [/^Doodgegooid! Terug naar (\d+)$/,'Bust! Back to $1'],[/^(\d+) kan niet met 3 pijlen$/,"$1 can't be scored with 3 darts"],
@@ -3859,15 +3861,16 @@ if(fbAuth){
     var same=!!(u&&acctUser&&acctUser.uid===u.uid);
     acctUser=u||null;if(!same){acctProfile=null;acctBackupMeta=null;}_acctReady=!u;
     renderAccountCard();
-    if(!u){frStop();renderFriendsCard();_refreshScopeScreens();_frHandlePendingInvite();return;}
+    if(!u){_acctUnwatch();frStop();renderFriendsCard();_refreshScopeScreens();_frHandlePendingInvite();return;}
     _acctUserRef().get().then(function(doc){
       var d=(doc&&doc.exists)?doc.data():null;
       acctProfile=d?Object.assign({},acctProfile||{},d):(acctProfile||{});
       return _acctLoadMeta();
     }).then(function(){
       _acctReady=true;
-      return _acctAutoRestore();
+      return _acctPull(true);
     }).then(function(){
+      _acctWatch();
       _restoreOwnFromArchive();
       renderAccountCard();
       frStart();
@@ -3887,45 +3890,108 @@ function _acctReadBackup(){
   });
 }
 function _games(p){return (p&&Array.isArray(p.gameHistory))?p.gameHistory.length:0;}
-// Samenvoegen: ontbrekende spelers toevoegen, spelers met méér potjes in de back-up aanvullen. Nooit verwijderen.
-function _acctMerge(bk){
-  var db=getDB(),added=[],updated=[];
-  var players=(bk&&bk.db)||{};
+// ═══ Account-sync tussen apparaten (v229) ═══
+// Vroeger was het account alleen een back-up: een tweede apparaat haalde alleen spelers op die er nog niet
+// stonden, en een speler werd als geheel vervangen. Potjes van het ene apparaat kwamen zo nooit op het andere.
+// Nu: samenvoegen per potje (op gid, met tombstones, zoals de groepssync), bij inloggen, live via de
+// meta-doc, bij terugkeren naar de app en vóór elke back-up (lezen-samenvoegen-schrijven). Nooit verwijderen,
+// behalve potjes die je op een ander apparaat zelf hebt gewist (tombstone).
+var _acctSeenTs=(function(){try{return +localStorage.getItem('darts_acct_seen')||0;}catch(e){return 0;}})();
+var _acctPullBusy=false,_acctMetaUnsub=null,_acctPullT=null,_acctLastVisPull=0;
+function _acctSeen(ts){if(ts&&ts>_acctSeenTs){_acctSeenTs=ts;try{localStorage.setItem('darts_acct_seen',String(ts));}catch(e){}}}
+function _acctRemoved(){return _ls('darts_acct_removed',{});}
+function _acctMerge(bk,safetyCopy){
+  var db=dbCache,added=[],updated=[],newGames=0,changed=false;
+  var players=(bk&&bk.db)||{},arc=_getHiddenArchive(),rm=_acctRemoved();
+  var botName=(state&&state.botPlayerIndex>=0&&state.players)?state.players[state.botPlayerIndex]:null;
+  var before=null;
   Object.keys(players).forEach(function(n){
-    if(!db[n]){db[n]=players[n];added.push(n);}
-    else if(_games(players[n])>_games(db[n])){var nick=db[n].nickname;db[n]=players[n];if(nick&&!db[n].nickname)db[n].nickname=nick;updated.push(n);}
+    var bp=players[n];
+    if(!bp||!Array.isArray(bp.gameHistory)||n===botName)return;
+    if(rm[n]){ // hier gewist: oude potjes van die naam niet terughalen
+      bp=JSON.parse(JSON.stringify(bp));
+      bp.gameHistory=bp.gameHistory.filter(function(e){return (e.ts||0)>rm[n];});
+      if(!bp.gameHistory.length)return;
+    }
+    if(before===null){try{before=localStorage.getItem('darts_db')||'{}';}catch(e){before='{}';}}
+    if(!db[n]){
+      if(arc[n])return; // staat in het archief: daar laten
+      db[n]=JSON.parse(JSON.stringify(bp));
+      if(rm[n]){db[n].games=bp.gameHistory.length;db[n].wins=bp.gameHistory.filter(function(e){return e.won;}).length;}
+      added.push(n);newGames+=bp.gameHistory.length;changed=true;return;
+    }
+    var had=_games(db[n]);
+    var r=_grpMerge(bp,db[n]); // basis = lokale speler, aangevuld met potjes uit de back-up
+    if(!r.push)return;
+    var m=r.p,bds=bp.doubleStats||{},ds=Object.assign({},m.doubleStats||{});
+    Object.keys(bds).forEach(function(k){if((bds[k]||0)>(ds[k]||0))ds[k]=bds[k];});
+    if(Object.keys(ds).length)m.doubleStats=ds;
+    if(!m.nickname&&bp.nickname)m.nickname=bp.nickname;
+    db[n]=m;changed=true;
+    var d=_games(m)-had;if(d>0){updated.push(n);newGames+=d;}
   });
-  if(added.length||updated.length){
-    try{localStorage.setItem('darts_db_before_restore',localStorage.getItem('darts_db')||'{}');}catch(e){}
-    if(bk&&bk.links&&typeof bk.links==='object'&&!Object.keys(getFriendLinks()).length){
-      _lsSet('darts_friend_links',bk.links);
-    }
-    if(bk&&Array.isArray(bk.private)){
-      var pv=getPrivatePlayers();bk.private.forEach(function(n){if(pv.indexOf(n)<0)pv.push(n);});
-      try{localStorage.setItem('darts_private',JSON.stringify(pv));}catch(e){}
-    }
-    saveDB(db);
+  if(bk&&Array.isArray(bk.private)){
+    var pv=getPrivatePlayers(),pc=false;bk.private.forEach(function(n){if(pv.indexOf(n)<0&&db[n]){pv.push(n);pc=true;}});
+    if(pc){try{localStorage.setItem('darts_private',JSON.stringify(pv));}catch(e){}}
   }
-  return {added:added,updated:updated};
+  if(bk&&bk.links&&typeof bk.links==='object'&&!Object.keys(getFriendLinks()).length&&Object.keys(bk.links).length){
+    _lsSet('darts_friend_links',bk.links);
+  }
+  if(changed){
+    if(safetyCopy&&before!==null){try{localStorage.setItem('darts_db_before_restore',before);}catch(e){}}
+    saveDB(db);
+    var _act=document.querySelector('.screen.active');
+    if(!(_act&&/^screen-(game|afgooien|atc|shanghai|checkout121|cricket|eliminatie|halveit|randomco)/.test(_act.id))){try{_refreshScopeScreens();}catch(e){}try{renderSettingsPlayers();}catch(e){}}
+  }
+  return {added:added,updated:updated,newGames:newGames,changed:changed};
 }
-// Na inloggen: als er lokaal spelers ontbreken die wél in de back-up staan, die er automatisch bij zetten.
-function _acctAutoRestore(){
-  if(!acctBackupMeta)return Promise.resolve();
-  var local=getDB();
-  var missing=(acctBackupMeta.players||[]).some(function(n){return !local[n];});
-  if(!missing)return Promise.resolve();
-  return _acctReadBackup().then(function(bk){
-    if(!bk)return;
-    var r=_acctMerge(bk);
-    if(r.added.length)showToast(r.added.length+(r.added.length===1?' speler':' spelers')+' teruggezet uit je back-up','success');
-  });
+// Back-up uit de cloud ophalen en samenvoegen. force = ook als de laatste back-up van dit apparaat is.
+function _acctPull(force){
+  if(!acctUser||!_acctReady||_acctPullBusy)return Promise.resolve(null);
+  _acctPullBusy=true;
+  return _acctLoadMeta().then(function(){
+    var m=acctBackupMeta;
+    if(!m||!m.chunks)return null;
+    if(!force&&(m.dev===DEVICE_ID||(m.ts&&m.ts<=_acctSeenTs)))return null;
+    return _acctReadBackup().then(function(bk){
+      if(!bk)return null; // halverwege een schrijfactie gelezen: volgende keer opnieuw
+      var r=_acctMerge(bk,force);
+      _acctSeen(m.ts);
+      if(r.newGames>0)showToast(r.newGames+(r.newGames===1?' potje':' potjes')+' van een ander apparaat binnengehaald','success');
+      return r;
+    });
+  }).catch(function(e){console.error('Account-sync mislukt',e);return null;}).then(function(r){_acctPullBusy=false;return r;});
 }
+// Live: zodra een ander apparaat een back-up schrijft, hier binnenhalen
+function _acctWatch(){
+  _acctUnwatch();
+  if(!acctUser)return;
+  try{
+    _acctMetaUnsub=_acctUserRef().collection('backup').doc('meta').onSnapshot(function(d){
+      var m=(d&&d.exists)?d.data():null;
+      if(!m||m.dev===DEVICE_ID||!m.ts||m.ts<=_acctSeenTs)return;
+      clearTimeout(_acctPullT);_acctPullT=setTimeout(function(){_acctPull(false);},1200);
+    },function(e){console.error('Account meekijken mislukt',e);});
+  }catch(e){console.error(e);}
+}
+function _acctUnwatch(){if(_acctMetaUnsub){try{_acctMetaUnsub();}catch(e){}_acctMetaUnsub=null;}clearTimeout(_acctPullT);}
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState!=='visible'||!acctUser)return;
+  if(Date.now()-_acctLastVisPull<30000)return;
+  _acctLastVisPull=Date.now();_acctPull(false);
+});
 function _acctScheduleBackup(delay){
   if(!acctUser||!_acctReady)return;
   clearTimeout(_acctBackupTimer);
   _acctBackupTimer=setTimeout(acctBackupNow,delay||4000);
 }
 function acctBackupNow(manual){
+  if(!acctUser)return Promise.resolve();
+  if(_acctBackupBusy){_acctBackupAgain=true;return Promise.resolve();}
+  // Eerst wat een ander apparaat schreef samenvoegen, anders overschrijven de apparaten elkaars potjes (v229)
+  return _acctPull(false).then(function(){return _acctWrite(manual);});
+}
+function _acctWrite(manual){
   if(!acctUser)return Promise.resolve();
   if(_acctBackupBusy){_acctBackupAgain=true;return Promise.resolve();}
   var db=getDB();
@@ -3945,7 +4011,7 @@ function acctBackupNow(manual){
   chunks.forEach(function(c,i){b.set(ref.doc('c'+i),{d:c});});
   var old=(acctBackupMeta&&acctBackupMeta.chunks)||0;
   for(var j=chunks.length;j<old;j++)b.delete(ref.doc('c'+j));
-  var meta={ts:Date.now(),chunks:chunks.length,players:names,games:games,app:APP_VERSION};
+  var meta={ts:Date.now(),chunks:chunks.length,players:names,games:games,app:APP_VERSION,dev:DEVICE_ID};
   // Openbaar voor vrienden: alleen jouw eigen speler, privé-spelers als "Gast"
   var me=acctProfile&&acctProfile.player;
   meta.pubChunks=(acctBackupMeta&&acctBackupMeta.pubChunks)||0;
@@ -3960,7 +4026,7 @@ function acctBackupNow(manual){
   }
   b.set(ref.doc('meta'),meta);
   return b.commit().then(function(){
-    acctBackupMeta=meta;
+    acctBackupMeta=meta;_acctSeen(meta.ts);
     if(manual)showToast('Back-up gemaakt','success');
     _acctRefreshStatus();
   }).catch(function(e){
@@ -4056,7 +4122,7 @@ function openAcctRestore(){
       '<div class="ac-row" style="border-top:0"><span>Back-up van</span><b>'+_fmtTs(m.ts)+'</b></div>'+
       '<div class="ac-row"><span>Spelers</span><b>'+(m.players||[]).length+'</b></div>'+
       '<div class="ac-row"><span>Potjes</span><b>'+(m.games||0)+'</b></div>'+
-      '<div class="ac-note" style="margin-top:10px">Ontbrekende spelers worden toegevoegd en spelers met meer potjes in de back-up worden aangevuld. Er wordt niets van deze telefoon verwijderd.</div>'+
+      '<div class="ac-note" style="margin-top:10px">Ontbrekende spelers en potjes worden toegevoegd. Er wordt niets van deze telefoon verwijderd.</div>'+
       '<button class="g-hit" style="width:100%" onclick="acctRestoreNow()">Herstellen</button>');
   }).catch(function(e){showToast(_acctErr(e),'error');});
 }
@@ -4064,9 +4130,9 @@ function acctRestoreNow(){
   _acctReadBackup().then(function(bk){
     closeGameSheet();
     if(!bk){showToast('Back-up kon niet worden gelezen','error');return;}
-    var r=_acctMerge(bk);
-    if(!r.added.length&&!r.updated.length)showToast('Alles was al up-to-date','info');
-    else showToast((r.added.length+r.updated.length)+(r.added.length+r.updated.length===1?' speler':' spelers')+' hersteld','success');
+    var r=_acctMerge(bk,true);
+    if(!r.newGames)showToast('Alles was al up-to-date','info');
+    else showToast(r.newGames+(r.newGames===1?' potje':' potjes')+' hersteld','success');
     renderSettingsPlayers();renderAccountCard();
   }).catch(function(e){showToast(_acctErr(e),'error');});
 }
@@ -9269,6 +9335,7 @@ function clearPlayer(name){
   var db=getDB();
   delete db[name];
   dbCache=db;
+  var _rm=_acctRemoved();_rm[name]=Date.now();_lsSet('darts_acct_removed',_rm); // niet terughalen via account-sync (v229)
   // Ook de lokale kopie bijwerken, anders komt de speler na herstart terug (v198)
   try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
   if(statsSelectedPlayer===name)statsSelectedPlayer=null;
@@ -10416,7 +10483,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=228;
+var APP_VERSION=229;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
