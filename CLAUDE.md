@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v229** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v230** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -9,7 +9,7 @@ Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet 
 
 - PWA voor dartsscores, live op **tomkruisselbrink.github.io/DartsByTom/** (GitHub Pages). Het domein www.dartsbytom.com wordt niet gebruikt. Repo: `github.com/TomKruisselbrink/DartsByTom`.
 - **Eén bestand met alle code:** `index.html` (~685 KB, vanilla JS, geen build, geen framework, geen CDN behalve Firebase).
-- Overige bestanden: `sw.js` (service worker), `manifest.json` en iconen (`icon-*.png`, `icon-maskable-*.png`, `apple-touch-icon.png`, `favicon.*`, `icon.svg`).
+- Overige bestanden: `sw.js` (service worker), `manifest.json`, `DartsByTom.apk` (Android-app, zie §9) en iconen (`icon-*.png`, `icon-maskable-*.png`, `apple-touch-icon.png`, `favicon.*`, `icon.svg`).
 - Taal: Nederlands, met een volledige Engelse vertaling (zie §4).
 - Backend: Firebase compat **10.12.0** (Auth + Firestore), project `ons-app-65e13`. De Firebase-scripts worden door de SW gecachet, zodat de app ook offline start.
 
@@ -248,6 +248,11 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Hosting:** GitHub Pages vanaf `main` (root). Na een upload draait "pages build and deployment". Wacht op het groene vinkje, pas daarna is de versie live.
 - **Live-URL:** `tomkruisselbrink.github.io/DartsByTom/`. Geen custom domein en geen `CNAME`-bestand; voeg er ook geen toe zonder Toms akkoord.
   - `manifest.json` `start_url: "/DartsByTom/"` klopt daarom. Niet veranderen: het geïnstalleerde icoon op de telefoons hangt ervan af.
+  - `orientation: "natural"` (v230): telefoons staand, de liggende Evolve liggend. PWABuilder neemt dit over in de APK.
+- **Android-app (`DartsByTom.apk`, v230):** een TWA gemaakt met PWABuilder (pakket `io.github.tomkruisselbrink.twa`, fallback Custom Tabs). Hij laadt de live site, dus updates van `index.html` komen vanzelf binnen; de APK hoeft alleen opnieuw bij een andere naam, icoon of draaistand.
+  - Instellingen → **App downloaden** (`openAppDownload`, `_updAppItem`): Android = Chrome-installatie als `beforeinstallprompt` er is, plus de APK-link; iPhone = uitleg Zet op beginscherm; verborgen als de app al geïnstalleerd draait (standalone of `document.referrer` begint met `android-app://`).
+  - Nieuwe APK: in PWABuilder **Signing key → Use mine** met Toms eigen `signing.keystore`, en **Version code** ophogen, anders installeert hij niet over de oude heen en klopt `assetlinks.json` niet meer. **De keystore nooit in de repo** (openbaar).
+  - Adresbalk weg: `assetlinks.json` (sha256 `0B:7C:5C:38:…:D7:DA`) moet op `tomkruisselbrink.github.io/.well-known/assetlinks.json`, dus in een aparte repo `TomKruisselbrink.github.io`, mét een leeg `.nojekyll` (anders slaat Pages `.well-known` over). Die repo bestond op 13-11 nog niet.
 - **Versie bumpen:**
   - In `index.html` **alleen `var APP_VERSION=N;` ophogen.** `sw.js` hoeft niet aangepast te worden.
   - De SW wordt geregistreerd als `./sw.js?v=N`. Cache-naam `darts-vN`; oude caches worden bij `activate` verwijderd. `skipWaiting()` + `clients.claim()`.
