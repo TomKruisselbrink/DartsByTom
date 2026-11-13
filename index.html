@@ -201,6 +201,14 @@ body::before{
 [data-theme="light"] #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}}
 #game-controls.show{display:flex}
+#rco-mid{flex:1 1 0;min-height:44px;container-type:size;display:flex;align-items:center;justify-content:center}
+#rco-players.rco-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+#rco-players.rco-grid .g-prow{min-height:0;padding:5px 10px}
+#rco-players.rco-grid .g-prow-top{flex-wrap:wrap;row-gap:0}
+#rco-players.rco-grid .g-prow-meta{order:3;width:100%;font-size:11px}
+#rco-hint{display:flex;align-items:center;justify-content:center;gap:clamp(3px,3cqh,10px);flex-wrap:nowrap;max-width:100%}
+#rco-hint .co-big{display:inline-flex;align-items:center;color:#fff;font-weight:800;white-space:nowrap;letter-spacing:.02em;font-size:clamp(17px,44cqh,58px);padding:.16em .55em;border-radius:999px;line-height:1.05}
+#rco-hint .co-arr{color:var(--muted);font-size:clamp(14px,24cqh,32px);font-weight:300}
 #x01-mid{flex:1 1 0;min-height:48px;container-type:size;display:flex;align-items:center;justify-content:center;padding:2px 0 6px}
 #checkout-strip{box-sizing:border-box;width:100%;max-height:100%;flex-direction:column;align-items:center;justify-content:center;gap:clamp(4px,5cqh,14px);padding:clamp(8px,8cqh,22px) 12px;background:rgba(62,123,79,.14);border:1px solid rgba(143,203,156,.25);border-radius:18px}
 #checkout-strip .co-lbl{font-size:clamp(11px,7cqh,17px);font-weight:800;letter-spacing:.12em;text-transform:uppercase}
@@ -431,7 +439,6 @@ button,[onclick],.g-keys button{touch-action:manipulation;-webkit-tap-highlight-
 #screen-randomco .g-wrap{gap:7px}
 #screen-randomco .g-target{padding:8px 12px 8px;gap:2px}
 #screen-randomco #rco-target{font-size:54px!important}
-#screen-randomco #rco-hint{min-height:22px!important}
 #screen-randomco .g-prow{min-height:34px;padding:4px 12px}
 #screen-randomco .g-rows{gap:4px}
 #screen-randomco .g-input{gap:6px}
@@ -1708,6 +1715,10 @@ video {
 <body>
 <script>
 var I18N={
+"Hoogste checkout": "Highest checkout",
+"Meeste punten": "Most points",
+"Uitgegooid per bereik": "Checked out per range",
+"Uitgooi-percentages worden bijgehouden vanaf je volgende potje.": "Checkout percentages are tracked from your next game.",
 "ZELFDE CHECKOUT": "SAME CHECKOUT",
 "Ieder een eigen": "Each their own",
 "Iedereen dezelfde": "Everyone the same",
@@ -2457,6 +2468,9 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^(\d+)\/(\d+) uit$/,'$1/$2 out'],
+[/^hoogste (\d+)$/,'highest $1'],
+[/^(\d+) pnt$/,'$1 pts'],
 [/^Uit met (\d+)( \((.+)\))?$/,function(m){return 'Out with '+m[1]+(m[3]?' ('+m[3]+')':'');}],
 [/^(\d+) beurten?$/,function(m){return m[1]+(m[1]==='1'?' turn':' turns');}],
 [/^uit met (\d+)( \((.+)\))?$/,function(m){return 'out with '+m[1]+(m[3]?' ('+m[3]+')':'');}],
@@ -3392,11 +3406,12 @@ function _tr1(n){
     <span class="g-target-lbl" id="rco-lbl">Gooi uit</span>
     <div id="rco-target" class="g-target-big" style="font-size:84px">0</div>
     <div id="rco-from" style="font-size:13px;font-weight:700;color:var(--muted);min-height:16px"></div>
-    <div id="rco-hint" class="g-chips" style="min-height:28px"></div>
     <div class="g-darts" style="margin-top:6px;gap:14px"><span id="rco-bracket"></span><span>Pijlen over <b id="rco-darts" style="color:var(--text)">9</b></span></div>
   </div>
   <div id="rco-players" class="g-rows"></div>
-  <div class="g-input">
+  <!-- Uitgooi-route groot in de vrije ruimte, leesbaar vanaf de oche (v235) -->
+  <div id="rco-mid"><div id="rco-hint"></div></div>
+  <div class="g-input" style="margin-top:0">
     <div class="rco-disp"><span>Score deze beurt</span><b id="rco-typed">—</b></div>
     <div class="g-keys rco-keys" id="rco-keys">
       <button onclick="rcoKey('1')">1</button><button onclick="rcoKey('2')">2</button><button onclick="rcoKey('3')">3</button><button onclick="rcoKey('del')" aria-label="Wissen">⌫</button>
@@ -4880,6 +4895,7 @@ function updatePlayerStat(name,gameType,data){
   if(data.matchFormat)entry.matchFormat=data.matchFormat;
   if(data.highScore!=null)entry.highScore=data.highScore;
   if(data.hiStats)entry.hiStats=data.hiStats;
+  if(data.rcoStats)entry.rcoStats=data.rcoStats;
   if(data.hiRoundHistory)entry.hiRoundHistory=data.hiRoundHistory;
   p.gameHistory.unshift(entry);
   _trimHistory(p);
@@ -6209,7 +6225,7 @@ function renderRandomCheckout(){
   document.getElementById('rco-from').textContent=rco.rest!==rco.target?'van '+rco.target:'';
   _rcoTypedUI();
   var co=getCheckout(rco.rest);
-  document.getElementById('rco-hint').innerHTML=co?co.split(' ').map(function(d){return '<span class="g-chip">'+d+'</span>';}).join(''):'';
+  document.getElementById('rco-hint').innerHTML=co?buildCheckoutBadgesLarge(co):''; // groot en in dartbordkleuren, net als bij 501 (v235)
   document.getElementById('rco-bracket').innerHTML='Bereik <b style="color:var(--text)">'+b[0]+'–'+Math.min(170,b[1])+'</b> · '+b[2]+' pnt';
   document.getElementById('rco-darts').textContent=rco.visitsLeft===Infinity?'∞':rco.visitsLeft*3;
   document.getElementById('rco-sub').textContent='Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rco.mode])+(rco.same?' · zelfde checkout':'')+' · '+(rco.darts?rco.darts+' pijlen':'onbeperkt');
@@ -6217,6 +6233,7 @@ function renderRandomCheckout(){
   if(rco.mode==='race')cw.innerHTML='Bereik<b>'+(p.bi+1)+' / '+rco.brk.length+'</b>';
   else cw.innerHTML='Checkout<b>'+(p.attempts+1)+(rco.count?' / '+rco.count:'')+'</b>';
   var rows=document.getElementById('rco-players');rows.innerHTML='';
+  rows.classList.toggle('rco-grid',state.players.length>2); // 3+ spelers: twee kolommen, anders vallen de knoppen onder de spelbalk (v235)
   state.players.forEach(function(n,i){
     var q=rco.ps[i],qb=RCO_BRACKETS[rco.brk[q.bi]];
     var d=document.createElement('div');d.className='g-prow'+(i===cur?' on':'');
@@ -6250,6 +6267,20 @@ function _rcoFinishAttempt(ok){
   _rcoNewAttempt();
   renderRandomCheckout();
 }
+// Per speler: uitgegooid/pogingen, per bereik, hoogste uitgegooide checkout (v235)
+function _rcoBrkOf(t){for(var k=0;k<RCO_BRACKETS.length;k++){if(t>=RCO_BRACKETS[k][0]&&t<=Math.min(170,RCO_BRACKETS[k][1]))return k;}return -1;}
+function _rcoStatsFor(i){
+  var st={hits:0,att:0,best:0,brk:{},mode:rco.mode,darts:rco.darts};
+  if(rco.same)st.same=true;
+  rco.history.forEach(function(h){
+    if(h.player!==i)return;
+    var k=_rcoBrkOf(h.target),lbl=k>=0?RCO_BRACKETS[k][0]+'–'+Math.min(170,RCO_BRACKETS[k][1]):'?';
+    var b=st.brk[lbl]||(st.brk[lbl]=[0,0]);
+    b[1]++;st.att++;
+    if(h.ok){b[0]++;st.hits++;if(h.target>st.best)st.best=h.target;}
+  });
+  return st;
+}
 function rcoEnd(raceWinner){
   if(!rco)return;
   var order=state.players.map(function(n,i){return i;}).sort(function(a,b){return raceWinner!=null?(a===raceWinner?-1:b===raceWinner?1:rco.ps[b].pts-rco.ps[a].pts):(rco.ps[b].pts-rco.ps[a].pts)||(rco.ps[b].hits-rco.ps[a].hits);});
@@ -6258,7 +6289,7 @@ function rcoEnd(raceWinner){
   state.botPlayerIndex=-1;
   state.players.forEach(function(n,i){
     var q=rco.ps[i];
-    updatePlayerStat(n,'randomco',{won:!solo&&i===win,darts:q.darts,score:q.pts,highScore:q.pts});
+    updatePlayerStat(n,'randomco',{won:!solo&&i===win,darts:q.darts,score:q.pts,highScore:q.pts,rcoStats:_rcoStatsFor(i)});
   });
   var rows=order.map(function(i){var q=rco.ps[i];return '<div class="stat-row"><span>'+_esc(state.players[i])+'</span><strong>'+q.pts+' pnt · '+q.hits+'/'+q.attempts+' uit</strong></div>';}).join('');
   var sub='Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rco.mode]);
@@ -9349,6 +9380,7 @@ function _renderStatsImpl(){
       }
     }
 
+    if(activeFilter==='randomco')otherBlock=buildRcoStats(name);
     // History rows for filtered games (show 5, expandable)
     var _histAll=filtered;
     var _histShow=_histAll.slice(0,5);
@@ -10000,6 +10032,8 @@ function _renderHistoryImpl(){
       if(ds.count180)info.push(ds.count180+'×180');
     }
     if(g.hiStats)info.push(g.hiStats.hits+'/'+(g.hiStats.hits+g.hiStats.misses)+' raak ('+g.hiStats.pct+'%)');
+    if(g.rcoStats){info.push(g.rcoStats.hits+'/'+g.rcoStats.att+' uit');if(g.rcoStats.best)info.push('hoogste '+g.rcoStats.best);}
+    if(g.gameType==='randomco'&&g.score!=null)info.push(g.score+' pnt');
     if(g.matchFormat)info.push(g.matchFormat);
     var legHtml='';
     if(g.legBreakdown&&g.legBreakdown.length){
@@ -10513,6 +10547,37 @@ function recordDoubleHit(playerName,dbl){
   db[playerName].doubleStats[dbl]=(db[playerName].doubleStats[dbl]||0)+1;
   saveDB(db);
 }
+// Random Checkout-statistieken (v235); potjes van vóór v235 tellen alleen mee voor de puntentotalen
+function buildRcoStats(name){
+  var p=getDB()[name];if(!p)return '';
+  var gs=(p.gameHistory||[]).filter(function(g){return g.gameType==='randomco';});if(!gs.length)return '';
+  var hits=0,att=0,best=0,bestPts=0,brk={};
+  gs.forEach(function(g){
+    var pts=g.highScore!=null?g.highScore:(g.score||0);if(pts>bestPts)bestPts=pts;
+    var r=g.rcoStats;if(!r)return;
+    hits+=r.hits||0;att+=r.att||0;if((r.best||0)>best)best=r.best;
+    Object.keys(r.brk||{}).forEach(function(k){var b=brk[k]||(brk[k]=[0,0]);b[0]+=r.brk[k][0];b[1]+=r.brk[k][1];});
+  });
+  var tile=function(v,l,c){return '<div style="background:var(--card);border-radius:var(--radius-sm);padding:9px 6px;text-align:center"><div class="dv" style="font-size:22px;font-weight:900;color:'+c+'">'+v+'</div><div style="font-size:12px;color:var(--muted);margin-top:2px">'+l+'</div></div>';};
+  var h='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">'+
+    tile(att?Math.round(hits/att*100)+'%':'—','Uitgegooid','var(--accent)')+
+    tile(best||'—','Hoogste checkout','var(--accent2)')+
+    tile(bestPts,'Meeste punten','var(--success)')+'</div>';
+  var keys=RCO_BRACKETS.map(function(b){return b[0]+'–'+Math.min(170,b[1]);}).filter(function(k){return brk[k]&&brk[k][1];});
+  if(keys.length){
+    h+='<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:4px 0 6px">Uitgegooid per bereik</div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px">'+
+      keys.map(function(k){var b=brk[k],pct=Math.round(b[0]/b[1]*100);
+        return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">'+
+          '<div style="font-size:12px;font-weight:700;min-width:62px;color:var(--accent2)">'+k+'</div>'+
+          '<div style="flex:1;background:var(--surface);border-radius:20px;height:8px;overflow:hidden"><div style="width:'+pct+'%;background:var(--accent2);height:100%;border-radius:20px"></div></div>'+
+          '<div style="font-size:12px;color:var(--muted);min-width:64px;text-align:right">'+pct+'% ('+b[0]+'/'+b[1]+')</div></div>';
+      }).join('')+'</div>';
+  } else if(!att){
+    h+='<div style="font-size:12px;color:var(--muted);margin:-4px 0 10px">Uitgooi-percentages worden bijgehouden vanaf je volgende potje.</div>';
+  }
+  return h;
+}
 function buildDoubleStats(name){
   var db=getDB();var p=db[name];if(!p||!p.doubleStats)return'';
   var ds=p.doubleStats;
@@ -10607,7 +10672,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=234;
+var APP_VERSION=235;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

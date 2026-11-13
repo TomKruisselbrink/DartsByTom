@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v234** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v235** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -189,6 +189,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
     legBreakdown?: [{ legNum, winner, start?, co?, dbl?, playerStats: { [naam]: { avg, darts, high, count180, f9?, c100?, c140?, busts?, left? } } }],  // X01; velden met ? sinds v233 (start=startscore, co=uitgooi-score, dbl=uitgooi-dubbel, f9=gem. eerste 3 beurten, left=rest)
     legResult?, setResult?, matchFormat?, highScore?,
     hiStats?, hiRoundHistory?,   // Halve It
+    rcoStats?,                   // Random Checkout (v235): { hits, att, best, brk:{'41–60':[raak,pogingen]}, mode, darts, same? }
     via?                         // naam van de vriend die dit potje stuurde
   }
   ```
@@ -291,6 +292,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
   - tastbare knoppen `.btn` met een 3D-onderrand en indrukeffect (`haptic()`);
   - **Alle knoppen hebben `touch-action:manipulation`** (v234). Zonder dat ziet iOS twee snelle tikken op dezelfde toets als dubbeltik-zoom en slikt hij de tweede in ("100" werd "10" op het Random Checkout-numpad). Niet weghalen.
   - **X01-scherm schaalt mee met de schermhoogte** (v227): numpad, snelknoppen, scoreregel en scoregetal gebruiken `clamp(min, calc(Nvh - x), max)`. Bij 3+ spelers krijgt `#sb-players` de klasse `x-compact` (score rechts, twee kolommen), bij 5+ `x-many` (op schermen ≤740px hoog zonder gemiddelde en checkout-hints). Na elke wijziging aan dit scherm meten: geen overlap met `#game-controls` bij 2/4/6 spelers op 375×667, 375×812, 390×844 en 430×932.
+  - **Random Checkout** (v235): de uitgooi-route staat groot in `#rco-mid` (vrije ruimte, `cqh`-schaling, dartbordkleuren via `buildCheckoutBadgesLarge`). Bij 3+ spelers staan de spelersrijen in twee kolommen (`.rco-grid`), anders vallen Uitgegooid/Mislukt onder de spelbalk. Statistieken: `buildRcoStats` (Statistieken, filter Random Checkout) en regels in Geschiedenis.
   - **Uitgooi bij X01** (v228): `#checkout-strip` staat in `#x01-mid`, een flexvlak tussen scorekaarten en invoer met `container-type:size`. De chips schalen met `cqh` mee met de vrije ruimte (groot op hoge telefoons, leesbaar vanaf de oche); onder 96px hoog wordt het weer één compacte rij.
   - Horizontale scrollrijen (`.lb-chiprow`, `.lb-subrow`, `.hs-row`) krijgen automatisch een vervagende rand aan de kant waar nog meer staat (`_hsUpdate`).
   - spelschermen in de stijl van 501: kop `.g-head`, spelerskaarten `.x-card(.on)`, invoer onderaan bij de duim, Ongedaan/Stop in de zwevende `#game-controls`;
