@@ -339,6 +339,18 @@ body::before{
 .ws-row b{text-align:right;color:var(--text);font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ws-row b.best{color:var(--accent)}
 .ws-head b{font-size:12px;color:var(--muted);font-weight:800}
+.leg-tbl{margin-bottom:10px}
+.leg-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 2px 5px}
+.leg-w{color:var(--success);display:inline-flex;align-items:center;gap:4px}
+.leg-w svg{display:inline-block}
+.leg-card{padding:2px 12px}
+.leg-card .ws-row{padding:4px 0;font-size:12px}
+.leg-card .ws-row b{font-size:14px}
+.leg-co{margin-left:auto;color:var(--text)}
+.best-leg{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:9px 12px;margin:-4px 0 10px}
+.best-leg-k{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.best-leg-v{font-size:17px;font-weight:800;margin-top:2px}
+.best-leg-s{font-size:12px;color:var(--muted);margin-top:2px}
 .win-actions{width:100%;display:flex;flex-direction:column;gap:8px;margin-top:10px}
 .win-btn{min-height:52px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .win-btn.primary{background:#B94E2A;border-color:#B94E2A;color:#fff;box-shadow:0 6px 20px rgba(185,78,42,.4)}
@@ -1693,6 +1705,10 @@ video {
 <body>
 <script>
 var I18N={
+"Eerste 9": "First 9",
+"Hoogste": "Highest",
+"Busts": "Busts",
+"Beste leg · 501": "Best leg · 501",
 "App downloaden": "Download app",
 "Op je beginscherm zetten": "Add to your home screen",
 "Als app op je telefoon of scherm": "As an app on your phone or screen",
@@ -2432,6 +2448,11 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Uit met (\d+)( \((.+)\))?$/,function(m){return 'Out with '+m[1]+(m[3]?' ('+m[3]+')':'');}],
+[/^(\d+) beurten?$/,function(m){return m[1]+(m[1]==='1'?' turn':' turns');}],
+[/^uit met (\d+)( \((.+)\))?$/,function(m){return 'out with '+m[1]+(m[3]?' ('+m[3]+')':'');}],
+[/^tegen (.+)$/,'vs $1'],
+[/^Nieuwe beste leg! (\d+) beurten$/,'New best leg! $1 turns'],
 [/^· (\d+) beurten?$/,function(m){return '· '+m[1]+(m[1]==='1'?' turn':' turns');}],
 [/^(\d+) potjes? van een ander apparaat binnengehaald$/,'$1 game(s) synced from another device'],
 [/^(\d+) potjes? hersteld$/,'$1 game(s) restored'],
@@ -8049,21 +8070,40 @@ function setsNeededToWin(){
 
 function saveLegData(winnerName){
   if(!state.legsData)state.legsData=[];
-  var legData={legNum:state.currentLeg,winner:winnerName,playerStats:{}};
+  var legData={legNum:state.currentLeg,winner:winnerName,playerStats:{},start:state.x01Start||501}; // start: voor 'beste leg' per startscore (v233)
   state.players.forEach(function(name,i){
     var turns=state.history.filter(function(h){return h.player===i&&!h.bust;});
+    var all=state.history.filter(function(h){return h.player===i;}); // incl. busts, in volgorde
     var total=turns.reduce(function(s,h){return s+h.score;},0);
     var n=turns.length;
     var turnAvg=n>0?Math.round(total/n*10)/10:0;
     var high=turns.reduce(function(m,h){return h.score>m?h.score:m;},0);
-    legData.playerStats[name]={avg:turnAvg,darts:state.dartCount[i]||0,high:high,count180:turns.filter(function(h){return h.score===180;}).length};
+    var f=all.slice(0,3),f9=f.length?Math.round(f.reduce(function(s,h){return s+(h.bust?0:h.score);},0)/f.length*10)/10:0;
+    legData.playerStats[name]={avg:turnAvg,darts:state.dartCount[i]||0,high:high,count180:turns.filter(function(h){return h.score===180;}).length,
+      f9:f9, // gemiddelde eerste 3 beurten (v233)
+      c100:turns.filter(function(h){return h.score>=100&&h.score<140;}).length,
+      c140:turns.filter(function(h){return h.score>=140&&h.score<180;}).length,
+      busts:all.length-turns.length,
+      left:state.scores[i]||0};
+    if(name===winnerName&&turns.length)legData.co=turns[turns.length-1].score; // uitgooi-score
   });
   state.legsData.push(legData);
 }
+function _legPbCheck(winnerName){
+  var l=state.legsData&&state.legsData[state.legsData.length-1];if(!l||l.start!==501)return;
+  if(state.botPlayerIndex>=0&&state.players[state.botPlayerIndex]===winnerName)return;
+  var me=l.playerStats[winnerName];if(!me||!me.darts)return;
+  var prev=bestLeg(winnerName,501),prevT=prev?prev.turns:Infinity;
+  state.legsData.slice(0,-1).forEach(function(x){if(x.winner===winnerName&&x.start===501&&x.playerStats[winnerName]&&x.playerStats[winnerName].darts<prevT)prevT=x.playerStats[winnerName].darts;});
+  // alleen als er al een eerdere beste leg was: de allereerste gewonnen leg is geen 'verbetering'
+  if(prevT!==Infinity&&me.darts<prevT)setTimeout(function(){showToast('Nieuwe beste leg! '+me.darts+' beurten','success');},400);
+}
+function _legSetDbl(dbl){var l=state.legsData&&state.legsData[state.legsData.length-1];if(l&&dbl)l.dbl=dbl;}
 
 function endGame501(winnerName){
   // Save leg stats first (needed for both normal and tournament mode)
   saveLegData(winnerName);
+  try{_legPbCheck(winnerName);}catch(e){}
   if(state.trnMode&&state.trnMatchCallback){
     var cb=state.trnMatchCallback;state.trnMode=false;state.trnMatchCallback=null;
     state.botPlayerIndex=-1;
@@ -8075,7 +8115,7 @@ function endGame501(winnerName){
   var winnerIsBot=botIdx>=0&&state.players[botIdx]===winnerName;
   if(state.doubleOut&&!winnerIsBot){
     showDoubleSelectModal(winnerName,function(dbl){
-      if(dbl)recordDoubleHit(winnerName,dbl);
+      if(dbl){recordDoubleHit(winnerName,dbl);_legSetDbl(dbl);}
       finishEndGame501(winnerName);
     });
   } else if(state.doubleOut&&winnerIsBot){
@@ -9862,6 +9902,34 @@ function _renderLeaderboardImpl(tab){
 var historySelectedPlayer=null;
 
 function renderHistory(){_scoped(_renderHistoryImpl,'screen-history','history-content',arguments);}
+// ═══ Leg-details als tabel (v233) ═══
+// Oude legs hebben alleen avg/darts/high/count180; rijen zonder gegevens worden overgeslagen.
+var _TROPHY='<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>';
+function _legTable(leg,li){
+  var ps=leg.playerStats||{},names=Object.keys(ps);
+  if(!names.length)return '';
+  var rows=[ // [label, veld, hoger beter?]
+    ['Gem.','avg',true],['Eerste 9','f9',true],['Beurten','darts',null],['Hoogste','high',true],
+    ['100+','c100',true],['140+','c140',true],['180','count180',true],['Busts','busts',false],['Rest','left',null]];
+  var body=rows.map(function(r){
+    var vals=names.map(function(n){var v=ps[n][r[1]];return (typeof v==='number')?v:null;});
+    if(vals.every(function(v){return v===null;}))return '';
+    if(/^(c100|c140|count180|busts)$/.test(r[1])&&vals.every(function(v){return !v;}))return ''; // overal 0: weglaten
+    if(r[1]==='left'&&names.every(function(n){return n===leg.winner||!ps[n].left;}))return '';
+    var nums=vals.filter(function(v){return v!==null;}),best=null;
+    if(r[2]!==null&&names.length>1&&nums.length>1){best=r[2]?Math.max.apply(null,nums):Math.min.apply(null,nums);if(r[2]&&best<=0)best=null;if(nums.every(function(v){return v===best;}))best=null;}
+    return '<div class="ws-row"><span>'+r[0]+'</span>'+names.map(function(n,i){
+      var v=vals[i];if(r[1]==='left'&&n===leg.winner)v=null;
+      return '<b class="'+(v!==null&&v===best?'best':'')+'">'+(v===null?'—':v)+'</b>';}).join('')+'</div>';
+  }).join('');
+  var co=leg.co?'Uit met '+leg.co+(leg.dbl?' ('+leg.dbl+')':''):'';
+  return '<div class="leg-tbl">'+
+    '<div class="leg-h"><span>Leg '+(li+1)+'</span>'+(leg.winner?'<span class="leg-w">'+_TROPHY+' '+_esc(leg.winner)+'</span>':'')+(co?'<span class="leg-co">'+co+'</span>':'')+'</div>'+
+    '<div class="win-card leg-card" style="--cols:'+names.length+'">'+
+      '<div class="ws-row ws-head"><span></span>'+names.map(function(n){return '<b style="color:'+(n===leg.winner?'var(--success)':'var(--muted)')+'">'+_esc(n)+'</b>';}).join('')+'</div>'+
+      body+
+    '</div></div>';
+}
 function _renderHistoryImpl(){
   var db=getDB();
   var el=document.getElementById('history-content');
@@ -9910,22 +9978,7 @@ function _renderHistoryImpl(){
     if(g.legBreakdown&&g.legBreakdown.length){
       var lid='ld-'+historySelectedPlayer.replace(/[^a-z0-9]/gi,'')+'-'+i;
       legHtml='<div id="'+lid+'" style="display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:8px">'+
-        g.legBreakdown.map(function(leg,li){
-          var pStats=leg.playerStats||{};
-          var players=Object.keys(pStats);
-          return'<div style="margin-bottom:6px">'+
-            '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Leg '+(li+1)+(leg.winner?' · <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px;vertical-align:middle\"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>'+leg.winner:'')+'</div>'+
-            '<div style="display:flex;gap:5px;flex-wrap:wrap">'+
-            players.map(function(pn){var ps=pStats[pn];
-              return'<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px">'+
-                '<strong style="color:'+(pn===leg.winner?'var(--success)':'var(--text)')+'">'+pn+'</strong>'+
-                ' · gem <strong>'+ps.avg+'</strong>'+
-                (ps.count180?' · '+ps.count180+'×180':'')+
-                ' · '+ps.darts+(ps.darts===1?' beurt':' beurten')+ // dartCount telt bij X01 beurten, geen pijlen (v232)
-              '</div>';
-            }).join('')+
-            '</div></div>';
-        }).join('')+
+        g.legBreakdown.map(_legTable).join('')+
       '</div>'+
       '<button id="'+lid+'-btn" onclick="toggleLegDetail(\''+lid+'\')" style="font-size:12px;color:var(--accent2);background:none;border:none;padding:2px 0 0;cursor:pointer">▶ Leg details ('+g.legBreakdown.length+')</button>';
     }
@@ -10035,6 +10088,36 @@ function buildH2HBlock(filteredGames){
 // ═══════════════════════════════════════════
 // PERSOONLIJK RECORD + GRAFIEK in renderStats
 // ═══════════════════════════════════════════
+// ═══ Beste leg ooit (v233) ═══
+// Minste beurten in een gewonnen leg vanaf 501 (bij gelijk: hoogste gemiddelde). Alleen potjes met legBreakdown
+// (de nieuwste 200 bewaren die). Startscore uit leg.start (sinds v233) of anders uit het speltype.
+function bestLeg(name,start){
+  var p=getDB()[name];if(!p||!p.gameHistory)return null;
+  start=start||501;var best=null;
+  p.gameHistory.forEach(function(g){
+    if(!g.legBreakdown||!g.legBreakdown.length)return;
+    var gs=g.gameType==='301'?301:(g.gameType==='501'||g.gameType==='trn-501')?501:null;
+    g.legBreakdown.forEach(function(l){
+      if(l.winner!==name)return;
+      var st=l.start||gs;if(st!==start)return;
+      var me=l.playerStats&&l.playerStats[name];if(!me||!me.darts)return;
+      if(!best||me.darts<best.turns||(me.darts===best.turns&&(me.avg||0)>best.avg)){
+        best={turns:me.darts,avg:me.avg||0,co:l.co||null,dbl:l.dbl||null,date:g.date,ts:g.ts,
+          opp:Object.keys(l.playerStats).filter(function(n){return n!==name;})};
+      }
+    });
+  });
+  return best;
+}
+function _bestLegCard(name){
+  var b=bestLeg(name,501);if(!b)return '';
+  var bits=[b.turns+(b.turns===1?' beurt':' beurten'),'gem '+b.avg];
+  if(b.co)bits.push('uit met '+b.co+(b.dbl?' ('+b.dbl+')':''));
+  var sub=(b.opp.length?'tegen '+b.opp.map(_esc).join(', ')+' · ':'')+(b.date||'');
+  return '<div class="best-leg"><div class="best-leg-k">Beste leg · 501</div>'+
+    '<div class="best-leg-v">'+bits.join(' · ')+'</div>'+
+    '<div class="best-leg-s">'+sub+'</div></div>';
+}
 function buildPersonalRecords(name){
   var db=getDB();var p=db[name];if(!p)return'';
   var x01=p.gameHistory.filter(function(g){return g.detailedStats});
@@ -10058,7 +10141,7 @@ function buildPersonalRecords(name){
       '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent)">'+bestHigh+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
       '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent2)">'+(bestCo?bestCo+'%':'—')+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
       '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--success)">'+maxStreak+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
-    '</div>';
+    '</div>'+_bestLegCard(name);
 }
 
 function buildAvgGraph(name){
@@ -10497,7 +10580,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=232;
+var APP_VERSION=233;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

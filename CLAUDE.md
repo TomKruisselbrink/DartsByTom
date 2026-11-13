@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v232** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v233** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -95,6 +95,7 @@ Volgorde in het bestand (globaal):
    - geluid (Web Audio, geen bestanden), confetti;
    - `renderLeaderboard(tab)`, `renderHistory()` (`_renderHistoryImpl`), head-to-head, records + grafiek, uitdaginglink;
    - dubbels bijhouden; `deleteMatchEntry()`.
+   - **Leg-details** in Geschiedenis als tabel (`_legTable`, v233); oude legs tonen alleen wat er is. **Beste leg** (`bestLeg(naam,501)`, `_bestLegCard`) = minste beurten in een gewonnen 501-leg, bij gelijk hoogste gemiddelde; staat bij Persoonlijke records. Tijdens een potje: toast "Nieuwe beste leg!" (`_legPbCheck`) alleen als er al een eerdere beste leg was.
 15. **Init + versie.**
    - `initApp()` laadt `darts_db` uit localStorage en verbindt stil met de groep;
    - `APP_VERSION`, registratie van de SW, `checkForUpdate()` / `applyUpdate()`;
@@ -185,7 +186,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
     won, darts, score, opponents?: [naam],   // LET OP: bij X01 is `darts` het aantal BEURTEN (state.dartCount telt +1 per beurt), niet pijlen. Niet 'repareren' in de data; alleen labels moeten 'beurten' zeggen
     detailedStats?: { avg3, avg1, count180, count160, count140, count120, count100, count80, count60, count0,
                       highTurn, highFinish, turns, checkoutAttempts, checkoutHits, checkoutPct },   // X01
-    legBreakdown?: [{ legNum, winner, playerStats: { [naam]: { avg, darts, high, count180 } } }],  // X01
+    legBreakdown?: [{ legNum, winner, start?, co?, dbl?, playerStats: { [naam]: { avg, darts, high, count180, f9?, c100?, c140?, busts?, left? } } }],  // X01; velden met ? sinds v233 (start=startscore, co=uitgooi-score, dbl=uitgooi-dubbel, f9=gem. eerste 3 beurten, left=rest)
     legResult?, setResult?, matchFormat?, highScore?,
     hiStats?, hiRoundHistory?,   // Halve It
     via?                         // naam van de vriend die dit potje stuurde
