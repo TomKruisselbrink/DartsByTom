@@ -10496,7 +10496,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=230;
+var APP_VERSION=231;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -10737,7 +10737,7 @@ window.addEventListener('appinstalled',function(){_dismissInstall();_updAppItem(
 // ═══ App downloaden in Instellingen (v230) ═══
 // Android: eerst Chrome's eigen installatie (geen onbekende bronnen nodig), anders de APK (TWA die de live site laadt).
 // iPhone: uitleg "Zet op beginscherm". Verborgen als de app al geïnstalleerd draait (standalone of in de APK).
-var APK_URL='DartsByTom.apk';
+var APK_URL='DartsByTom.apk?v=2'; // ?v = versiecode van de APK, ophogen bij een nieuwe APK (omzeilt de cache van GitHub Pages)
 var _isAndroid=/android/i.test(navigator.userAgent);
 var _inTWA=(function(){var r=(document.referrer||'').indexOf('android-app://')===0;try{if(r)sessionStorage.setItem('dbt_twa','1');return r||sessionStorage.getItem('dbt_twa')==='1';}catch(e){return r;}})();
 function _appInstalled(){

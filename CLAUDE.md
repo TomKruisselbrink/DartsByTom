@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v230** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v231** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -251,6 +251,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
   - `orientation: "natural"` (v230): telefoons staand, de liggende Evolve liggend. PWABuilder neemt dit over in de APK.
 - **Android-app (`DartsByTom.apk`, v230):** een TWA gemaakt met PWABuilder (pakket `io.github.tomkruisselbrink.twa`, fallback Custom Tabs). Hij laadt de live site, dus updates van `index.html` komen vanzelf binnen; de APK hoeft alleen opnieuw bij een andere naam, icoon of draaistand.
   - Instellingen → **App downloaden** (`openAppDownload`, `_updAppItem`): Android = Chrome-installatie als `beforeinstallprompt` er is, plus de APK-link; iPhone = uitleg Zet op beginscherm; verborgen als de app al geïnstalleerd draait (standalone of `document.referrer` begint met `android-app://`).
+  - Huidige APK: versiecode **2**, orientation `natural`. Bij een nieuwe APK ook `APK_URL='DartsByTom.apk?v=N'` in `index.html` ophogen.
+  - PWABuilder onthoudt de manifest: zet `?v=N` achter de Manifest URL in de opties, anders bouwt hij met de oude instellingen.
   - Nieuwe APK: in PWABuilder **Signing key → Use mine** met Toms eigen `signing.keystore`, en **Version code** ophogen, anders installeert hij niet over de oude heen en klopt `assetlinks.json` niet meer. **De keystore nooit in de repo** (openbaar).
   - Adresbalk weg: `assetlinks.json` (sha256 `0B:7C:5C:38:…:D7:DA`) moet op `tomkruisselbrink.github.io/.well-known/assetlinks.json`, dus in een aparte repo `TomKruisselbrink.github.io`, mét een leeg `.nojekyll` (anders slaat Pages `.well-known` over). Staat sinds 13-11 live in repo `TomKruisselbrink.github.io` (met `.nojekyll` en een `index.html` die doorstuurt naar `/DartsByTom/`).
 - **Versie bumpen:**
