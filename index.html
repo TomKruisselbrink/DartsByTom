@@ -2432,6 +2432,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^· (\d+) beurten?$/,function(m){return '· '+m[1]+(m[1]==='1'?' turn':' turns');}],
 [/^(\d+) potjes? van een ander apparaat binnengehaald$/,'$1 game(s) synced from another device'],
 [/^(\d+) potjes? hersteld$/,'$1 game(s) restored'],
 [/^(.+) gewist in groep, bewaard in archief$/,'$1 deleted in group, kept in archive'],
@@ -9920,7 +9921,7 @@ function _renderHistoryImpl(){
                 '<strong style="color:'+(pn===leg.winner?'var(--success)':'var(--text)')+'">'+pn+'</strong>'+
                 ' · gem <strong>'+ps.avg+'</strong>'+
                 (ps.count180?' · '+ps.count180+'×180':'')+
-                ' · '+ps.darts+'p'+
+                ' · '+ps.darts+(ps.darts===1?' beurt':' beurten')+ // dartCount telt bij X01 beurten, geen pijlen (v232)
               '</div>';
             }).join('')+
             '</div></div>';
@@ -10496,7 +10497,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=231;
+var APP_VERSION=232;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

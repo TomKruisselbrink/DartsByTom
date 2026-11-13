@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v231** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v232** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -182,7 +182,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
     gid,              // DEVICE_ID+'-'+tijd+teller+random; uniek per potje
     ts, date,         // ms-timestamp en 'd-m-jjjj' (nl-NL)
     gameType,         // 'x01','501','301','cricket','eliminatie','afgooien','atc','shanghai7','shanghai20','halveit','checkout121','randomco','trn-501'
-    won, darts, score, opponents?: [naam],
+    won, darts, score, opponents?: [naam],   // LET OP: bij X01 is `darts` het aantal BEURTEN (state.dartCount telt +1 per beurt), niet pijlen. Niet 'repareren' in de data; alleen labels moeten 'beurten' zeggen
     detailedStats?: { avg3, avg1, count180, count160, count140, count120, count100, count80, count60, count0,
                       highTurn, highFinish, turns, checkoutAttempts, checkoutHits, checkoutPct },   // X01
     legBreakdown?: [{ legNum, winner, playerStats: { [naam]: { avg, darts, high, count180 } } }],  // X01
