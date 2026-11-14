@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v236** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v237** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -97,7 +97,7 @@ Volgorde in het bestand (globaal):
    - geluid (Web Audio, geen bestanden), confetti;
    - `renderLeaderboard(tab)`, `renderHistory()` (`_renderHistoryImpl`), head-to-head, records + grafiek, uitdaginglink;
    - dubbels bijhouden; `deleteMatchEntry()`.
-   - **Leg-details** in Geschiedenis als tabel (`_legTable`, v233); oude legs tonen alleen wat er is. **Beste leg** (`bestLeg(naam,501)`, `_bestLegCard`) = minste beurten in een gewonnen 501-leg, bij gelijk hoogste gemiddelde; staat bij Persoonlijke records. Tijdens een potje: toast "Nieuwe beste leg!" (`_legPbCheck`) alleen als er al een eerdere beste leg was.
+   - **Leg-details** in Geschiedenis als tabel (`_legTable`, v233); oude legs tonen alleen wat er is. **Beste leg** (`bestLeg(naam,501)`, `_bestLegCard`) = minste beurten in een gewonnen 501-leg, bij gelijk hoogste gemiddelde; staat bij Persoonlijke records. Legs van type `x01` van vóór v233 hebben geen `start`: dan geldt de leg als 501 als `avg × beurten` ≈ 501 (v237), want de winnaar gooit precies de startscore weg. Tijdens een potje: toast "Nieuwe beste leg!" (`_legPbCheck`) alleen als er al een eerdere beste leg was.
 15. **Init + versie.**
    - `initApp()` laadt `darts_db` uit localStorage en verbindt stil met de groep;
    - `APP_VERSION`, registratie van de SW, `checkForUpdate()` / `applyUpdate()`;

@@ -10186,8 +10186,12 @@ function bestLeg(name,start){
     var gs=g.gameType==='301'?301:(g.gameType==='501'||g.gameType==='trn-501')?501:null;
     g.legBreakdown.forEach(function(l){
       if(l.winner!==name)return;
-      var st=l.start||gs;if(st!==start)return;
       var me=l.playerStats&&l.playerStats[name];if(!me||!me.darts)return;
+      // Potjes van type 'x01' van vóór v233 hebben geen startscore per leg. De winnaar gooit precies
+      // de startscore weg, dus gemiddelde × beurten ≈ startscore (gemiddelde is op 0,1 afgerond).
+      var st=l.start||gs;
+      if(!st&&me.avg){var est=me.avg*me.darts;if(Math.abs(est-start)<=Math.max(2,me.darts*0.06))st=start;}
+      if(st!==start)return;
       if(!best||me.darts<best.turns||(me.darts===best.turns&&(me.avg||0)>best.avg)){
         best={turns:me.darts,avg:me.avg||0,co:l.co||null,dbl:l.dbl||null,date:g.date,ts:g.ts,
           opp:Object.keys(l.playerStats).filter(function(n){return n!==name;})};
@@ -10698,7 +10702,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=236;
+var APP_VERSION=237;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
