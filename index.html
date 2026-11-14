@@ -1716,6 +1716,8 @@ video {
 <body>
 <script>
 var I18N={
+"+ Nieuwe speler…": "+ New player…",
+"Kies eerst welke speler jij bent. Pas dan zien vrienden je statistieken en komen hun potjes bij jou binnen.": "First choose which player you are. Only then can friends see your stats and do their games reach you.",
 "Koppelen": "Link",
 "Hoogste checkout": "Highest checkout",
 "Meeste punten": "Most points",
@@ -2470,6 +2472,9 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Er staat 1 potje van vrienden voor je klaar\. Die komen bij deze speler\.$/,'1 game from friends is waiting for you. It will be added to this player.'],
+[/^Er staan (\d+) potjes van vrienden voor je klaar\. Die komen bij deze speler\.$/,'$1 games from friends are waiting for you. They will be added to this player.'],
+[/^Jij bent nu (.+)$/,'You are now $1'],
 [/^(.+) is niet gekoppeld: potjes op deze telefoon gaan niet naar zijn account\.$/,'$1 is not linked: games on this phone don\'t go to their account.'],
 [/^(\d+)\/(\d+) uit$/,'$1/$2 out'],
 [/^hoogste (\d+)$/,'highest $1'],
@@ -4116,7 +4121,7 @@ function renderAccountCard(){
   if(me&&names.indexOf(me)<0)names.unshift(me);
   el.innerHTML='<div class="ac-row" style="border-top:0"><span>Ingelogd als</span><b>'+_esc(me||uname)+(me?' <span style="font-weight:600;color:var(--muted)">@'+_esc(uname)+'</span>':'')+'</b></div>'+
     '<div class="ac-row"><span>Jij bent</span><select onchange="acctSetPlayer(this.value)" style="height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-weight:700;padding:0 10px;max-width:60%">'+
-      (me?'':'<option value="">Kies je speler</option>')+names.map(function(n){return '<option value="'+_esc(n)+'"'+(n===me?' selected':'')+'>'+_esc(n)+'</option>';}).join('')+'</select></div>'+
+      (me?'':'<option value="">Kies je speler</option>')+names.map(function(n){return '<option value="'+_esc(n)+'"'+(n===me?' selected':'')+'>'+_esc(n)+'</option>';}).join('')+'<option value="__new">+ Nieuwe speler…</option></select></div>'+
     '<div class="ac-row"><span>Laatste back-up</span><b id="ac-last">'+(_acctReady?_fmtTs(acctBackupMeta&&acctBackupMeta.ts):'laden…')+'</b></div>'+
     '<div class="ac-btns"><button class="btn btn-primary btn-sm" onclick="acctBackupNow(true)">Back-up</button><button class="btn btn-sm" onclick="openAcctRestore()">Herstellen</button><button class="btn btn-sm" onclick="acctLogout()">Uitloggen</button></div>';
 }
@@ -4165,11 +4170,36 @@ function acctLogin(){
 }
 function acctSetPlayer(n){
   if(!acctUser)return;
+  if(n==='__new'){renderAccountCard();acctPickNew();return;}
   acctProfile=acctProfile||{};acctProfile.player=n;
   _acctUserRef().set({player:n},{merge:true}).catch(function(e){showToast(_acctErr(e),'error');});
   _restoreOwnFromArchive();
   renderAccountCard();renderFriendsCard();_acctScheduleBackup(500);_refreshKnownNames();
   if(n)_inboxRecheck();
+}
+// Speler kiezen die nog niet op deze telefoon staat (bijv. een vriend die alleen op andermans telefoon speelde)
+function _acctSuggestName(){
+  var as={};(_inboxDocs||[]).forEach(function(d){var a=d&&d.data&&d.data.as;if(a)as[a]=(as[a]||0)+((d.data.games||[]).length||1);});
+  var best=Object.keys(as).sort(function(a,b){return as[b]-as[a];})[0];
+  if(best)return best;
+  var u=_myUsername()||'';return u?u.charAt(0).toUpperCase()+u.slice(1):'';
+}
+function _acctChoosePlayer(){
+  var names=Object.keys(dbCache).sort(function(a,b){return a.localeCompare(b);});
+  if(!names.length){acctPickNew();return;}
+  openGameSheet('Welke speler ben jij?','<div class="fr-list card">'+names.map(function(n){return '<button class="fr-item" onclick="closeGameSheet();acctSetPlayer(decodeURIComponent(\''+encodeURIComponent(n)+'\'))">'+_frAv(n)+'<span class="fr-who"><b>'+_esc(n)+'</b></span></button>';}).join('')+'</div><button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="closeGameSheet();setTimeout(acctPickNew,250)">+ Nieuwe speler…</button>');
+}
+function acctPickNew(){
+  var sug=_acctSuggestName(),n=(_inboxDocs||[]).reduce(function(t,d){return t+((d.data&&d.data.games)||[]).length;},0);
+  openGameSheet('Welke speler ben jij?',
+    (n?'<div class="ac-note">Er '+(n===1?'staat 1 potje':'staan '+n+' potjes')+' van vrienden voor je klaar. Die komen bij deze speler.</div>':'')+
+    '<div class="fr-add"><input id="ac-newp" maxlength="24" placeholder="Naam" value="'+_esc(sug)+'" onkeydown="if(event.key===\'Enter\')acctPickNewOk()"><button class="btn btn-primary btn-sm" onclick="acctPickNewOk()">Opslaan</button></div>');
+  setTimeout(function(){var i=document.getElementById('ac-newp');if(i){i.focus();i.select();}},50);
+}
+function acctPickNewOk(){
+  var i=document.getElementById('ac-newp'),n=i?i.value.trim():'';if(!n)return;
+  if(!dbCache[n]){dbCache[n]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};saveDB(dbCache);}
+  closeGameSheet();acctSetPlayer(n);showToast('Jij bent nu '+n,'success');
 }
 function acctLogout(){
   openGameSheet('Uitloggen?','<div class="ac-note">Je gegevens blijven gewoon op deze telefoon staan. Er wordt alleen geen back-up meer gemaakt tot je weer inlogt.</div>'+
@@ -4475,7 +4505,7 @@ function renderFriendsCard(){
   }
   var inp=document.getElementById('fr-name'),keep=inp?inp.value:'',foc=inp&&document.activeElement===inp;
   var me=acctProfile&&acctProfile.player,h='';
-  if(!me)h+='<div class="ac-note" style="margin:0 4px 12px;color:#E0A055">Kies bij Account eerst welke speler jij bent. Pas dan zien vrienden je statistieken en komen hun potjes bij jou binnen.</div>';
+  if(!me)h+='<div class="ac-note" style="margin:0 4px 12px;color:#E0A055">Kies eerst welke speler jij bent. Pas dan zien vrienden je statistieken en komen hun potjes bij jou binnen.</div><button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-bottom:14px" onclick="_acctChoosePlayer()">Kies je speler</button>';
   var ins=Object.keys(frIn);
   if(ins.length){
     h+='<div class="fr-req"><div class="fr-lbl">'+(ins.length===1?'Nieuw vriendverzoek':'Nieuwe vriendverzoeken')+'</div>'+ins.map(function(id){var r=frIn[id];
@@ -4529,6 +4559,14 @@ function _friendsViewDB(){
     var f=_frData[uid];if(!f||!f.data||!frFriends[uid])return;
     var k=f.player||f.username;if(v[k])k=k+' ('+f.username+')';
     v[k]=_frWithLocal(uid,f.data);_frViewKeys[k]=1;
+  });
+  // Gekoppelde vriend die (nog) niets deelt: toon wat deze telefoon van hem heeft
+  Object.keys(frFriends).forEach(function(uid){
+    if(_frData[uid]&&_frData[uid].data)return;
+    var loc=_linkedLocalFor(uid),lp=loc&&dbCache[loc];if(!lp||loc===me)return;
+    var k=v[loc]?loc+' ('+(frFriends[uid].username||'')+')':loc;
+    var pm=_privMap();delete pm[loc];
+    v[k]=_frSanitize(lp,pm);_frViewKeys[k]=1;
   });
   return v;
 }
@@ -10702,7 +10740,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=237;
+var APP_VERSION=238;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

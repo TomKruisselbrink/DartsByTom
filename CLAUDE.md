@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v237** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v238** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -78,6 +78,8 @@ Volgorde in het bestand (globaal):
    - Scope "Deze telefoon / Vrienden" voor stats, ranglijst en geschiedenis.
      - De Vrienden-weergave leest `users/{uid}/public`, en die schrijft de vriend pas bij zijn eigen back-up (dus nadat zijn app de inbox heeft verwerkt). Daarom voegt `_frWithLocal(uid,data)` (v236) de potjes die deze telefoon al van de **gekoppelde** speler heeft er voor de weergave bij (`_grpMerge`, dedupe op gid). Er wordt niets opgeslagen.
      - `_whoTag` toont in de Vrienden-weergave "vriend" bij iedereen uit `_frViewKeys`. Een vriend met dezelfde naam als een lokale, niet-gekoppelde speler krijgt een melding met knop Koppelen (`_frUnlinked`, `frLinkSame`). Niet-gekoppeld = potjes op deze telefoon gaan niet naar zijn account.
+     - Gekoppelde vriend zonder gedeelde stats: de Vrienden-weergave toont dan wat deze telefoon van hem heeft (v238).
+     - **Eigen speler kiezen** (v238): binnengekomen potjes blijven in de inbox tot `acctProfile.player` gekozen is. Een nieuwe gebruiker heeft vaak nog geen lokale speler; daarom heeft Account → "Jij bent" de optie "+ Nieuwe speler…" (`acctPickNew`, naamsuggestie uit `as` van de inbox via `_acctSuggestName`) en staat in Vrienden een knop "Kies je speler" (`_acctChoosePlayer`).
 7. **UI-infrastructuur.**
    - geschiedenis zonder limiet (`_trimHistory`, `_sortHistory`);
    - knopgevoel/haptics (`haptic()`);
