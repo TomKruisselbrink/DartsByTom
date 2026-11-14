@@ -305,6 +305,7 @@ body::before{
 .fr-x{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
 .scope-slot .seg-ctrl{margin:0 0 12px}
 .fr-note{font-size:12px;color:var(--muted);margin:-4px 0 10px}
+.fr-unl{display:flex;align-items:center;gap:10px;justify-content:space-between}.fr-unl .btn{flex-shrink:0}
 .ac-btns .btn{justify-content:center;padding-left:6px;padding-right:6px}
 
 [data-theme="light"] .sp-tag{color:#1E5631}
@@ -1715,6 +1716,7 @@ video {
 <body>
 <script>
 var I18N={
+"Koppelen": "Link",
 "Hoogste checkout": "Highest checkout",
 "Meeste punten": "Most points",
 "Uitgegooid per bereik": "Checked out per range",
@@ -2468,6 +2470,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^(.+) is niet gekoppeld: potjes op deze telefoon gaan niet naar zijn account\.$/,'$1 is not linked: games on this phone don\'t go to their account.'],
 [/^(\d+)\/(\d+) uit$/,'$1/$2 out'],
 [/^hoogste (\d+)$/,'highest $1'],
 [/^(\d+) pnt$/,'$1 pts'],
@@ -4518,16 +4521,38 @@ function frShowStats(uid){
   showScreen('screen-stats');
 }
 // Statistieken / Ranglijst / Geschiedenis: "Deze telefoon" of "Vrienden"
+var _frViewKeys={};
 function _friendsViewDB(){
-  var v={},me=acctProfile&&acctProfile.player;
+  var v={},me=acctProfile&&acctProfile.player;_frViewKeys={};
   if(me&&dbCache[me])v[me]=dbCache[me];
   Object.keys(_frData).forEach(function(uid){
     var f=_frData[uid];if(!f||!f.data||!frFriends[uid])return;
     var k=f.player||f.username;if(v[k])k=k+' ('+f.username+')';
-    v[k]=f.data;
+    v[k]=_frWithLocal(uid,f.data);_frViewKeys[k]=1;
   });
   return v;
 }
+// Alleen voor de weergave: potjes die deze telefoon al van een gekoppelde vriend heeft, maar die nog niet
+// in zijn gedeelde statistieken staan (zijn app verwerkt ze pas als hij hem opent), tellen al mee.
+// Er wordt niets opgeslagen; dezelfde gid = hetzelfde potje, dus niets dubbel.
+function _frWithLocal(uid,data){
+  var loc=_linkedLocalFor(uid),lp=loc&&dbCache[loc];
+  if(!lp||!Array.isArray(lp.gameHistory)||!lp.gameHistory.length||!Array.isArray(data.gameHistory))return data;
+  try{
+    var pm=_privMap();delete pm[loc];
+    var r=_grpMerge({gameHistory:_frSanitize(lp.gameHistory.filter(function(e){return e&&e.gid;}),pm),deleted:[]},data);
+    return r.p||data;
+  }catch(e){return data;}
+}
+// Vrienden die op deze telefoon een speler met dezelfde naam hebben, maar niet gekoppeld zijn
+function _frUnlinked(){
+  var me=acctProfile&&acctProfile.player,L=getFriendLinks();
+  return Object.keys(frFriends).filter(function(uid){
+    var d=_frData[uid],n=d&&d.player;
+    return n&&n!==me&&dbCache[n]&&!_linkedLocalFor(uid)&&!L[n];
+  });
+}
+function frLinkSame(uid){var d=_frData[uid];if(d&&d.player)frLink(uid,d.player);_refreshScopeScreens();}
 function _scopeAvailable(){return !!(acctUser&&Object.keys(frFriends).length);}
 function setStatsScope(sc){
   _statsScope=sc==='friends'?'friends':'local';
@@ -4551,7 +4576,7 @@ function _scoped(impl,screenId,elId,args){
   var slot=scr.querySelector('.scope-slot');
   if(!slot){var hd=scr.querySelector('.page-head');if(hd){slot=document.createElement('div');slot.className='scope-slot';hd.parentNode.insertBefore(slot,hd.nextSibling);}}
   var _noData=fr&&!_frLoading?Object.keys(frFriends).filter(function(u){return !(_frData[u]&&_frData[u].data);}).map(function(u){return _frName(u);}):[];
-  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':'')+(_noData.length?'<div class="fr-note">Nog geen statistieken gedeeld: '+_noData.map(_esc).join(', ')+'. Die vriend moet bij Account kiezen welke speler hij is.</div>':''):'';
+  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':'')+(_noData.length?'<div class="fr-note">Nog geen statistieken gedeeld: '+_noData.map(_esc).join(', ')+'. Die vriend moet bij Account kiezen welke speler hij is.</div>':'')+(fr&&!_frLoading?_frUnlinked().map(function(u){var n=_frData[u].player;return '<div class="fr-note fr-unl"><span>'+_esc(n)+' is niet gekoppeld: potjes op deze telefoon gaan niet naar zijn account.</span><button class="btn btn-sm" onclick="frLinkSame(\''+u+'\')">Koppelen</button></div>';}).join(''):''):'';
   if(fr){var el=document.getElementById(elId);if(el)el.querySelectorAll('.st-danger,[onclick*="deleteMatchEntry"],[onclick*="generateChallenge"]').forEach(function(b){b.parentNode&&b.parentNode.removeChild(b);});}
 }
 
@@ -6075,6 +6100,7 @@ function _pfgNo(uid,inputId){
 function _whoTag(n){
   if(!acctUser)return '';
   if(acctProfile&&acctProfile.player===n)return '<span class="who-tag me">jij</span>';
+  if(_viewDB&&_frViewKeys[n])return '<span class="who-tag fr">vriend</span>';
   var L=getFriendLinks();
   if(L[n]&&frFriends[L[n].uid])return '<span class="who-tag fr">vriend</span>';
   return '';
@@ -10672,7 +10698,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=235;
+var APP_VERSION=236;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

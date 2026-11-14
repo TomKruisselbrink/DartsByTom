@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v235** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v236** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -76,6 +76,8 @@ Volgorde in het bestand (globaal):
    - **Account-sync tussen apparaten (v229):** hetzelfde account op twee apparaten (telefoon + kantinescherm) deelt de potjes. `_acctMerge(bk)` voegt per potje samen via `_grpMerge(backupSpeler, lokaleSpeler)` (basis = lokaal, dus oude tellers dalen nooit; tombstones worden gerespecteerd; doubleStats = maximum per dubbel). `_acctPull(force)` haalt de back-up op: bij inloggen (force), live via `onSnapshot` op `backup/meta` (`_acctWatch`), bij terugkeren naar de app (max 1× per 30 s) en vóór elke back-up (`acctBackupNow` = eerst pull, dan `_acctWrite`). De meta krijgt `dev:DEVICE_ID`, zodat een apparaat zijn eigen back-up niet opnieuw ophaalt.
    - Vrienden + potjes doorsturen: `fr*`, `_frSync`, `_outboxFlush`, `_inboxApply`.
    - Scope "Deze telefoon / Vrienden" voor stats, ranglijst en geschiedenis.
+     - De Vrienden-weergave leest `users/{uid}/public`, en die schrijft de vriend pas bij zijn eigen back-up (dus nadat zijn app de inbox heeft verwerkt). Daarom voegt `_frWithLocal(uid,data)` (v236) de potjes die deze telefoon al van de **gekoppelde** speler heeft er voor de weergave bij (`_grpMerge`, dedupe op gid). Er wordt niets opgeslagen.
+     - `_whoTag` toont in de Vrienden-weergave "vriend" bij iedereen uit `_frViewKeys`. Een vriend met dezelfde naam als een lokale, niet-gekoppelde speler krijgt een melding met knop Koppelen (`_frUnlinked`, `frLinkSame`). Niet-gekoppeld = potjes op deze telefoon gaan niet naar zijn account.
 7. **UI-infrastructuur.**
    - geschiedenis zonder limiet (`_trimHistory`, `_sortHistory`);
    - knopgevoel/haptics (`haptic()`);
