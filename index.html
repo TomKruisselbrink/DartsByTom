@@ -262,6 +262,9 @@ body::before{
 .sp-tag{font-size:11px;font-weight:800;padding:2px 8px;border-radius:7px;background:rgba(62,123,79,.2);color:#8FCB9C}
 .sp-tag.priv{background:rgba(127,127,127,.2);color:var(--muted)}
 .sp-bottom{display:flex;align-items:center;gap:8px}
+.x-team{display:inline-block;font-size:10px;font-weight:800;padding:1px 5px;border-radius:6px;margin-right:5px;vertical-align:1px;color:#fff;background:var(--accent)}.x-team.t1{background:#3E7B4F}
+.sp-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sp-actions .btn{justify-content:center}.sp-actions .sp-del{color:var(--danger)}
+.mg-list{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow:auto}.mg-list button{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:15px;font-weight:700;text-align:left}.mg-list button.sug{border-color:var(--accent)}.mg-list small{color:var(--muted);font-weight:600;font-size:12px}
 .sp-nick{flex:1;min-width:0;height:42px;box-sizing:border-box;padding:0 12px;border-radius:11px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px}
 .sp-say{width:42px;height:42px;flex-shrink:0;border-radius:11px;border:1px solid var(--border);background:var(--card);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .sp-say svg{display:block}
@@ -1720,6 +1723,20 @@ video {
 <body>
 <script>
 var I18N={
+"SPELERS": "PLAYERS",
+"Ieder voor zich": "Every player for themselves",
+"2 tegen 2": "2 vs 2",
+"Team 1 = speler 1 en 2, Team 2 = speler 3 en 4. Eén score per team, om de beurt: 1 → 3 → 2 → 4. Je eigen beurten tellen voor je eigen gemiddelde, de uitslag telt voor jullie allebei.": "Team 1 = players 1 and 2, Team 2 = players 3 and 4. One score per team, taking turns: 1 → 3 → 2 → 4. Your own turns count towards your own average, the result counts for both of you.",
+"Voor 2 tegen 2 heb je precies 4 spelers nodig.": "2 vs 2 needs exactly 4 players.",
+"winnen!": "win!",
+"Team 1": "Team 1",
+"Team 2": "Team 2",
+"Samenvoegen met…": "Merge with…",
+"Verwijderen": "Delete",
+"Samenvoegen": "Merge",
+"Samenvoegen?": "Merge?",
+"Samenvoegen lukte niet": "Merge failed",
+"Geen andere spelers": "No other players",
 "Bob's 27": "Bob's 27",
 "Dubbels trainen: D1 t/m D20 en Bull": "Train doubles: D1 to D20 and Bull",
 "ONDER 0": "BELOW 0",
@@ -2491,6 +2508,10 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^met (.+)$/,'with $1'],
+[/^(.+) samengevoegd met (.+) \(\+(\d+) potjes\)$/,'$1 merged into $2 (+$3 games)'],
+[/^(\d+) potjes$/,'$1 games'],[/^1 potje$/,'1 game'],
+[/^Alle potjes en statistieken van (.+) gaan naar de speler die je kiest\. Daarna verdwijnt (.+)\.$/,'All games and stats of $1 move to the player you pick. Then $2 is removed.'],
 [/^raak \+(\d+) per pijl · niets raak −(\d+)$/,'hit +$1 per dart · no hits −$2'],
 [/^Ronde (\d+) \/ 21$/,'Round $1 / 21'],
 [/^Bob's 27 · onder 0 = uit$/,"Bob's 27 · below 0 = out"],
@@ -3660,7 +3681,8 @@ function _renderPlayersList(){
         '<input type="text" class="sp-nick" placeholder="Bijnaam" value="'+_esc(nk)+'" data-n="'+en+'" onchange="setPlayerNickname(decodeURIComponent(this.getAttribute(\'data-n\')),this.value);renderSettingsPlayers()">'+
         '<button class="sp-say" aria-label="Laat horen" onclick="var i=this.parentNode.querySelector(\'.sp-nick\');callerSay((i.value.trim()||decodeURIComponent(\''+en+'\'))+\', you require 32\',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>'+
         '<label class="sp-share"><span>Delen</span><input type="checkbox" class="ios-toggle"'+(pv?'':' checked')+' onchange="setPlayerPrivate(decodeURIComponent(\''+en+'\'),!this.checked);renderSettingsPlayers()"></label>'+
-      '</div>';
+      '</div>'+
+      '<div class="sp-actions"><button class="btn btn-sm" onclick="spMergePick(\''+en+'\')">Samenvoegen met…</button><button class="btn btn-sm sp-del" onclick="spDelete(\''+en+'\')">Verwijderen</button></div>';
     return h+'</div>';
   }).join('')+_hiddenArchiveHtml();
 }
@@ -3669,6 +3691,67 @@ function _hiddenArchiveHtml(){
   return '<div class="st-lbl" style="margin-top:14px">Archief</div>'+
     '<div style="font-size:12px;color:var(--muted);margin:2px 0 8px">Iemand in de groep heeft deze spelers verborgen of gewist. Hun gegevens staan nog veilig op dit apparaat. Terughalen zet ze terug, alleen op deze telefoon.</div>'+
     ks.map(function(n){return '<div class="sp-row"><div class="sp-top"><b>'+n+'</b><button class="lb-chip" onclick="restoreHiddenPlayer(decodeURIComponent(\''+encodeURIComponent(n)+'\'))">Terughalen</button></div></div>';}).join('');
+}
+// ═══ Spelers samenvoegen (v241) ═══
+// Alle potjes van src gaan naar dst (dubbele potjes via _grpMerge eruit), namen in andermans potjes
+// (tegenstanders, leg-details) worden omgezet, daarna verdwijnt src. Kopie van src in darts_merge_backup.
+function spDelete(en){var n=decodeURIComponent(en);clearPlayer(n);if(!dbCache[n]){_spOpen='';renderSettingsPlayers();}}
+function spMergePick(en){
+  var src=decodeURIComponent(en),l=src.toLowerCase(),db=dbCache;
+  var names=Object.keys(db).filter(function(n){return n!==src;}).sort(function(a,b){
+    var sa=a.toLowerCase()===l?0:1,sb=b.toLowerCase()===l?0:1;return (sa-sb)||a.localeCompare(b);});
+  if(!names.length){showToast('Geen andere spelers','error');return;}
+  openGameSheet('Samenvoegen',
+    '<div class="ac-note">Alle potjes en statistieken van '+_esc(src)+' gaan naar de speler die je kiest. Daarna verdwijnt '+_esc(src)+'.</div>'+
+    '<div class="mg-list" style="margin-top:10px">'+names.map(function(n){var p=db[n],sug=n.toLowerCase()===l;
+      return '<button class="'+(sug?'sug':'')+'" onclick="spMergeDo(\''+en+'\',\''+encodeURIComponent(n)+'\')"><span>'+_esc(n)+_whoTag(n)+'</span><small>'+((p.gameHistory||[]).length===1?'1 potje':(p.gameHistory||[]).length+' potjes')+'</small></button>';}).join('')+'</div>');
+}
+function spMergeDo(en,dn){
+  var src=decodeURIComponent(en),dst=decodeURIComponent(dn);
+  if(!confirm(_tr('Samenvoegen?')+'\n\n'+src+' → '+dst))return;
+  var n=mergePlayers(src,dst);closeGameSheet();
+  if(n<0){showToast('Samenvoegen lukte niet','error');return;}
+  _spOpen=dst;renderSettingsPlayers();
+  try{renderStats();renderHistory();}catch(e){}
+  showToast(src+' samengevoegd met '+dst+' (+'+n+' potjes)','success');
+}
+function _renameInEntry(e,a,b){
+  var c=JSON.parse(JSON.stringify(e));
+  if(Array.isArray(c.opponents))c.opponents=c.opponents.map(function(x){return x===a?b:x;});
+  if(Array.isArray(c.partners))c.partners=c.partners.map(function(x){return x===a?b:x;});
+  if(Array.isArray(c.legBreakdown))c.legBreakdown.forEach(function(l){
+    if(l.winner===a)l.winner=b;
+    if(l.playerStats&&l.playerStats[a]&&!l.playerStats[b]){var o={};Object.keys(l.playerStats).forEach(function(k){o[k===a?b:k]=l.playerStats[k];});l.playerStats=o;}
+  });
+  return c;
+}
+function mergePlayers(src,dst){
+  var db=dbCache,S=db[src],T=db[dst];if(!S||!T||src===dst)return -1;
+  try{var bk={};try{bk=JSON.parse(localStorage.getItem('darts_merge_backup')||'{}');}catch(e){}
+    bk[src+' @'+Date.now()]=S;var ks=Object.keys(bk);if(ks.length>10)delete bk[ks[0]];localStorage.setItem('darts_merge_backup',JSON.stringify(bk));}catch(e){}
+  var sh=S.gameHistory||[],tLen=(T.gameHistory||[]).length,tWonH=(T.gameHistory||[]).filter(function(g){return g.won;}).length;
+  var moved=sh.map(function(e){return _renameInEntry(e,src,dst);});
+  var r=_grpMerge({gameHistory:moved,deleted:[],games:0,wins:0,totalDarts:0,totalScore:0},T);
+  var P=r.p,added=(P.gameHistory||[]).length-tLen,addedWon=(P.gameHistory||[]).filter(function(g){return g.won;}).length-tWonH;
+  var extraG=Math.max(0,(S.games||0)-sh.length),extraW=Math.max(0,(S.wins||0)-sh.filter(function(g){return g.won;}).length);
+  P.games=(T.games||0)+added+extraG;P.wins=(T.wins||0)+addedWon+extraW;
+  P.totalDarts=(T.totalDarts||0)+(S.totalDarts||0);P.totalScore=(T.totalScore||0)+(S.totalScore||0);
+  if(S.doubleStats){P.doubleStats=Object.assign({},T.doubleStats||{});Object.keys(S.doubleStats).forEach(function(k){P.doubleStats[k]=(P.doubleStats[k]||0)+S.doubleStats[k];});}
+  if(!P.nickname&&S.nickname)P.nickname=S.nickname;
+  db[dst]=P;
+  // Namen in potjes van andere spelers omzetten (head-to-head, leg-details)
+  Object.keys(db).forEach(function(n){if(n===src||n===dst)return;var p=db[n];if(!Array.isArray(p.gameHistory))return;
+    p.gameHistory=p.gameHistory.map(function(e){var hit=(e.opponents&&e.opponents.indexOf(src)>=0)||(e.partners&&e.partners.indexOf(src)>=0)||(e.legBreakdown&&JSON.stringify(e.legBreakdown).indexOf('"'+src+'"')>=0);return hit?_renameInEntry(e,src,dst):e;});});
+  // Vriendenkoppeling meenemen
+  var L=getFriendLinks();if(L[src]){if(!L[dst])L[dst]=L[src];delete L[src];try{localStorage.setItem('darts_friend_links',JSON.stringify(L));}catch(e){}}
+  if(acctProfile&&acctProfile.player===src){try{acctSetPlayer(dst);}catch(e){}}
+  delete db[src];
+  var _rm=_acctRemoved();_rm[src]=Date.now();_lsSet('darts_acct_removed',_rm);
+  if(groupCode){try{fbDb.collection('groups').doc(groupCode).collection('players').doc(src).delete().catch(function(){});}catch(e){}}
+  if(statsSelectedPlayer===src)statsSelectedPlayer=dst;
+  if(typeof historySelectedPlayer!=='undefined'&&historySelectedPlayer===src)historySelectedPlayer=dst;
+  saveDB(db);
+  return added;
 }
 function setPlayerNickname(name,val){
   var db=getDB();if(!db[name])return;
@@ -4665,7 +4748,21 @@ function _refreshScopeScreens(){
   else if(a.id==='screen-history')renderHistory();
   else if(a.id==='screen-leaderboard')renderLeaderboard(currentLbTab||'avg');
 }
+// Horizontale scrollrijen (spelerskeuze e.d.) houden hun positie bij opnieuw tekenen (v241)
+function _scrollSnap(root){
+  var out=[];if(!root)return out;
+  root.querySelectorAll('div,nav').forEach(function(el){if(el.scrollLeft>0){var cls=String(el.className||'').split(/\s+/).filter(function(c){return c&&c!=='hs-l'&&c!=='hs-r';}).join(' '),same=root.querySelectorAll(cls?'.'+String(cls).trim().split(/\s+/).join('.'):el.tagName);out.push({cls:cls,tag:el.tagName,i:Array.prototype.indexOf.call(same,el),x:el.scrollLeft});}});
+  return out;
+}
+function _scrollRestore(root,snap){
+  if(!root||!snap.length)return;
+  snap.forEach(function(r){try{var same=root.querySelectorAll(r.cls?'.'+String(r.cls).trim().split(/\s+/).join('.'):r.tag),el=same[r.i];if(el)el.scrollLeft=r.x;}catch(e){}});
+}
 function _scoped(impl,screenId,elId,args){
+  var _scr0=document.getElementById(screenId),_snap=_scrollSnap(_scr0);
+  try{return _scopedInner(impl,screenId,elId,args);}finally{_scrollRestore(document.getElementById(screenId),_snap);}
+}
+function _scopedInner(impl,screenId,elId,args){
   var avail=_scopeAvailable();
   if(!avail&&_statsScope==='friends')_statsScope='local';
   var fr=_statsScope==='friends';
@@ -5010,7 +5107,7 @@ function updatePlayerStat(name,gameType,data){
   var p=db[name];p.games++;if(data.won)p.wins++;
   p.totalDarts+=(data.darts||0);p.totalScore+=(data.score||0);
   if(!p.gameHistory)p.gameHistory=[];
-  var _opp=state.players.filter(function(n){return n!==name;});
+  var _opp=Array.isArray(data.opponents)?data.opponents:state.players.filter(function(n){return n!==name;});
   var entry={gid:_newGid(),ts:Date.now(),date:new Date().toLocaleDateString('nl-NL'),gameType:gameType,won:data.won,darts:data.darts,score:data.score,opponents:_opp.length?_opp:undefined};
   if(data.detailedStats)entry.detailedStats=data.detailedStats;
   if(data.legBreakdown)entry.legBreakdown=data.legBreakdown;
@@ -5022,6 +5119,7 @@ function updatePlayerStat(name,gameType,data){
   if(data.rcoStats)entry.rcoStats=data.rcoStats;
   if(data.shanghai)entry.shanghai=true;
   if(data.bobStats)entry.bobStats=data.bobStats;
+  if(Array.isArray(data.partners)&&data.partners.length)entry.partners=data.partners;
   if(data.hiRoundHistory)entry.hiRoundHistory=data.hiRoundHistory;
   p.gameHistory.unshift(entry);
   _trimHistory(p);
@@ -5478,6 +5576,12 @@ function renderSetupRules(){
         '<button class="seg-btn seg-btn-num" id="x01-score-301" onclick="setX01Score(301)">301</button>'+
         '<button class="seg-btn seg-btn-num" id="x01-score-custom" onclick="setX01ScoreCustom()">Eigen</button>'+
       '</div>'+
+      '<span class="setup-section-label" style="margin-top:14px">SPELERS</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:1fr 1fr">'+
+        '<button class="seg-btn'+(x01Teams?'':' active')+'" onclick="setX01Teams(false)">Ieder voor zich</button>'+
+        '<button class="seg-btn'+(x01Teams?' active':'')+'" onclick="setX01Teams(true)">2 tegen 2</button>'+
+      '</div>'+
+      (x01Teams?'<div class="info-block-green" style="margin-top:10px">Team 1 = speler 1 en 2, Team 2 = speler 3 en 4. Eén score per team, om de beurt: 1 → 3 → 2 → 4. Je eigen beurten tellen voor je eigen gemiddelde, de uitslag telt voor jullie allebei.</div>':'')+
       '<input type="number" id="x01-score-custom-val" min="101" max="9999" value="1001" style="display:none;width:100%;height:46px;font-size:15px;font-weight:700;padding:0 12px;background:var(--su-w05);border:1px solid var(--su-w1);border-radius:12px;color:var(--su-text);margin-bottom:8px;box-sizing:border-box" oninput="x01CustomScore=parseInt(this.value)||1001">'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="setup-two-col">'+
@@ -6216,9 +6320,15 @@ function _whoTag(n){
   if(L[n]&&frFriends[L[n].uid])return '<span class="who-tag fr">vriend</span>';
   return '';
 }
+// Bestaande speler met dezelfde naam maar andere hoofdletters? Dan die gebruiken (v241: "jeroen" → "Jeroen").
+function _canonName(name){
+  if(!name||dbCache[name])return name;var l=name.toLowerCase();
+  var hit=Object.keys(dbCache).filter(function(k){return k.toLowerCase()===l;});
+  return hit.length===1?hit[0]:name;
+}
 function addPlayer(){
   var input=document.getElementById('player-name-input');
-  var name=input.value.trim();if(!name)return;
+  var name=_canonName(input.value.trim());if(!name)return;
   if(setupPlayers.indexOf(name)>=0){document.getElementById('player-error').textContent='Al toegevoegd.';return;}
   setupPlayers.push(name);input.value='';
   document.getElementById('player-error').textContent='';
@@ -6234,6 +6344,7 @@ function renderSetupPlayers(){
     var row=document.createElement('div');
     row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--su-w08)';
     row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:50%;background:var(--setup-accent,#B94E2A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">'+(i+1)+'</span><span style="font-size:15px;font-weight:600;color:var(--su-text)">'+n+_whoTag(n)+'</span>'+((selectedGame==='afgooien'&&afgTeams)?'<button class="team-badge" style="--tc:'+AFG_TEAM_COLORS[_afgTeamIdx(n)]+'" onclick="cycleAfgTeam('+i+')">'+_afgTeamLabel(_afgTeamIdx(n))+'</button>':'')+'</div><button style="background:transparent;border:none;color:var(--su-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;min-height:36px" onclick="removePlayer('+i+')">✕</button>';
+    if(x01Teams&&_isX01Type(selectedGame)&&i<4){var tg=document.createElement('span');tg.className='x-team t'+(i<2?0:1);tg.textContent='Team '+(i<2?1:2);tg.style.marginLeft='auto';tg.style.marginRight='10px';row.insertBefore(tg,row.lastChild);}
     el.appendChild(row);
   });
   var lbl=document.getElementById('setup-players-label');
@@ -6434,8 +6545,27 @@ function rcoEnd(raceWinner){
   showWin(solo?'Eindstand':state.players[win],sub,rows);
 }
 
+// ═══ Teams 2 tegen 2 bij X01 (v241) ═══
+// state.teamOf=[0,1,0,1]: spelers staan om en om (T1a,T2a,T1b,T2b). Teamgenoten delen één score; elke
+// wijziging wordt naar de teamgenoot gekopieerd (_syncTeam). Legs/sets ook. Opslaan: eigen beurten, teamuitslag.
+var x01Teams=false,_pendingTeams=null;
+function setX01Teams(v){x01Teams=!!v;renderSetupRules();try{renderSetupPlayers();}catch(e){}updateSetupActionBar();}
+function _isX01Type(g){return g==='x01'||g==='501'||g==='301';}
+function _mates(i){if(!state.teamOf)return [];var t=state.teamOf[i],o=[];state.teamOf.forEach(function(x,j){if(x===t&&j!==i)o.push(j);});return o;}
+function _syncTeam(i){_mates(i).forEach(function(j){state.scores[j]=state.scores[i];});}
+function _teamName(i){if(!state.teamOf)return state.players[i];var t=state.teamOf[i];return state.players.filter(function(n,j){return state.teamOf[j]===t;}).join(' & ');}
 function startGame(){
   var err=document.getElementById('setup-error');
+  if(x01Teams&&_isX01Type(selectedGame)){
+    if(setupPlayers.length!==4){err.textContent='Voor 2 tegen 2 heb je precies 4 spelers nodig.';return;}
+    err.textContent='';state.trnMode=false;state.trnMatchCallback=null;state.botPlayerIndex=-1;
+    var sp=setupPlayers,ord=[sp[0],sp[2],sp[1],sp[3]],map={0:0,2:1,1:2,3:3};
+    var si=(typeof setupStartPlayer==='number'&&setupStartPlayer>=0&&setupStartPlayer<4)?map[setupStartPlayer]:0;
+    var sc=undefined;if(selectedGame==='x01')sc=x01StartScore!==null?x01StartScore:(parseInt((document.getElementById('x01-score-custom-val')||{}).value)||x01CustomScore);
+    _pendingTeams=[0,1,0,1];
+    launchGame(selectedGame,ord,doubleOut,matchFormat,matchN,matchSets,sc,si);
+    return;
+  }
   if(setupPlayers.length<1){err.textContent='Voeg minimaal één speler toe.';return;}
   if(selectedGame==='halveit'&&hiSequence.length<1){err.textContent='Voeg minimaal één doel toe.';return;}
   if(selectedGame==='afgooien'&&afgTeams){
@@ -6888,7 +7018,7 @@ function setTrnGroups(v){
 }
 function trnAddPlayer(){
   var input=document.getElementById('trn-player-input');
-  var name=input.value.trim();if(!name)return;
+  var name=_canonName(input.value.trim());if(!name)return;
   if(trnPlayers.indexOf(name)>=0){document.getElementById('trn-setup-error').textContent='Al toegevoegd.';return;}
   trnPlayers.push(name);input.value='';
   document.getElementById('trn-setup-error').textContent='';renderTrnPlayers();
@@ -7131,6 +7261,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
   _prevScores={};
 
   state.gameType=gameType;state.doubleOut=dblOut;state.players=players.slice();
+  state.teamOf=(_pendingTeams&&_isX01Type(gameType)&&players.length===_pendingTeams.length)?_pendingTeams.slice():null;_pendingTeams=null;
   state.firstPlayer=(startIdx&&startIdx<players.length)?startIdx:0;
   state.currentPlayer=state.firstPlayer;state.round=1;
   state.dartCount=players.map(function(){return 0});
@@ -7506,9 +7637,10 @@ function renderGame(){
     var html='<div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-right:12px;white-space:nowrap">'+fmtLabel+'</div>';
 
     // One block per player
-    state.players.forEach(function(nm,pi){
-      var isActive=pi===cur;
-      if(pi>0){
+    (state.teamOf?[0,1]:state.players.map(function(n,i){return i;})).forEach(function(pi,k){
+      var nm=state.teamOf?_teamName(pi):state.players[pi];
+      var isActive=state.teamOf?state.teamOf[pi]===state.teamOf[cur]:pi===cur;
+      if(k>0){
         html+='<div style="font-size:18px;font-weight:300;color:var(--muted);padding:0 10px;align-self:center">–</div>';
       }
 
@@ -7627,7 +7759,7 @@ function renderGame(){
     var _scoreChanged=(_prevScores[pi]!==undefined&&_prevScores[pi]!==rem);
     _prevScores[pi]=rem;
     cell.innerHTML=
-      '<div class="x-top"><span class="x-name">'+(isActive?'● ':'')+name+lastChip(pi)+'</span>'+legDotsFor(pi)+'</div>'+
+      '<div class="x-top"><span class="x-name">'+(isActive?'● ':'')+(state.teamOf?'<span class="x-team t'+state.teamOf[pi]+'">T'+(state.teamOf[pi]+1)+'</span>':'')+name+lastChip(pi)+'</span>'+legDotsFor(pi)+'</div>'+
       '<div class="x-score" style="font-size:'+scoreFontSize+';'+(_scoreChanged?'animation:scoreRoll .3s cubic-bezier(.34,1.56,.64,1)':'')+'">'+rem+'</div>'+
       '<div class="co-hint" style="display:flex;flex-wrap:wrap;gap:2px;min-height:0">'+(co&&!isActive?buildCheckoutBadges(co):'')+'</div>'+
       '<div class="x-meta">'+(imp?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>';
@@ -8040,6 +8172,7 @@ function saveRematchConfig(){
     botName:(state.botPlayerIndex>=0?state.players[state.botPlayerIndex]:null),
     gameType:state.gameType,
     bobStop:state.bobStop,
+    teamOf:state.teamOf||null,
     doubleOut:state.doubleOut,
     doubleIn:state.doubleIn,
     matchN:state.matchN,
@@ -8094,6 +8227,7 @@ function _doRematch(startIdx){
   // Restore game-specific options
   if(c.atcMode)atcMode=c.atcMode;
   if(c.bobStop!==undefined)bobStopNeg=c.bobStop;
+  _pendingTeams=c.teamOf||null;
   if(c.shHalve!==undefined)shHalveOpt=c.shHalve;
   if(c.hiSeq)hiSequence=c.hiSeq.map(function(s){return Object.assign({},s)});
   launchGame(c.gameType,c.players,c.doubleOut,c.matchFormat,c.matchN,c.matchSets,c.x01Start,startIdx||0);
@@ -8166,7 +8300,7 @@ function submitScore(){
       return;
     }
     // Straight out — direct win
-    state.scores[cur]=0;
+    state.scores[cur]=0;_syncTeam(cur);
     state.dartCount[cur]++;state.allDartCount[cur]++;
     pushEntry({player:cur,score:score,remaining:remaining,bust:false,won:true,
       checkoutAttempt:true,checkoutHit:true});
@@ -8176,7 +8310,7 @@ function submitScore(){
   }
 
   // Normal score — track if this was a checkout attempt that was missed
-  state.scores[cur]=newScore;
+  state.scores[cur]=newScore;_syncTeam(cur);
   state.dartCount[cur]++;state.allDartCount[cur]++;
   if(score===180&&navigator.vibrate)navigator.vibrate([200]);
   var wasCheckout=!isImpossible(remaining)&&remaining<=170;
@@ -8192,7 +8326,7 @@ function confirmDouble(isDouble,remaining,score,cur){
   var _ov=document.getElementById('dbl-yn-overlay');if(_ov)_ov.parentNode.removeChild(_ov);
   setScoreFeedback('','');
   if(isDouble){
-    state.scores[cur]=0;
+    state.scores[cur]=0;_syncTeam(cur);
     state.dartCount[cur]++;state.allDartCount[cur]++;
     state.history.push({player:cur,score:score,remaining:remaining,bust:false,won:true,
       checkoutAttempt:true,checkoutHit:true});
@@ -8224,7 +8358,7 @@ function undoThrow(){
   if(!state.history.length)return;
   var last=state.history.pop();
   if(state.allHistory&&state.allHistory.length)state.allHistory.pop();
-  state.scores[last.player]=last.remaining;
+  state.scores[last.player]=last.remaining;_syncTeam(last.player);
   state.dartCount[last.player]=Math.max(0,state.dartCount[last.player]-1);
   state.allDartCount[last.player]=Math.max(0,(state.allDartCount[last.player]||0)-1);
   state.currentPlayer=last.player;
@@ -8272,7 +8406,8 @@ function setsNeededToWin(){
 
 function saveLegData(winnerName){
   if(!state.legsData)state.legsData=[];
-  var legData={legNum:state.currentLeg,winner:winnerName,playerStats:{},start:state.x01Start||501}; // start: voor 'beste leg' per startscore (v233)
+  var legData={legNum:state.currentLeg,winner:winnerName,playerStats:{},start:state.x01Start||501};
+  if(state.teamOf)legData.team=state.teamOf.slice(); // teamleg: telt niet mee voor 'beste leg' // start: voor 'beste leg' per startscore (v233)
   state.players.forEach(function(name,i){
     var turns=state.history.filter(function(h){return h.player===i&&!h.bust;});
     var all=state.history.filter(function(h){return h.player===i;}); // incl. busts, in volgorde
@@ -8292,7 +8427,7 @@ function saveLegData(winnerName){
   state.legsData.push(legData);
 }
 function _legPbCheck(winnerName){
-  var l=state.legsData&&state.legsData[state.legsData.length-1];if(!l||l.start!==501)return;
+  var l=state.legsData&&state.legsData[state.legsData.length-1];if(!l||l.start!==501||l.team)return;
   if(state.botPlayerIndex>=0&&state.players[state.botPlayerIndex]===winnerName)return;
   var me=l.playerStats[winnerName];if(!me||!me.darts)return;
   var prev=bestLeg(winnerName,501),prevT=prev?prev.turns:Infinity;
@@ -8336,25 +8471,29 @@ function finishEndGame501(winnerName){
   var setOver=false;
 
   if(state.matchSets>1){
+    _mates(wi).forEach(function(j){state.legsInSet[j]=state.legsInSet[wi];});
     if(state.legsInSet[wi]>=legsNeeded){
-      state.setWins[wi]++;
+      state.setWins[wi]++;_mates(wi).forEach(function(j){state.setWins[j]=state.setWins[wi];});
       state.legsInSet=state.players.map(function(){return 0});
       setOver=true;
       if(state.setWins[wi]>=setsNeeded)matchOver=true;
     }
   } else {
-    state.legWins[wi]++;
+    state.legWins[wi]++;_mates(wi).forEach(function(j){state.legWins[j]=state.legWins[wi];});
     if(state.legWins[wi]>=legsNeeded)matchOver=true;
   }
 
   if(matchOver){
-    var legResultStr=state.players.map(function(n,i){return state.legWins[i]||0}).join('–');
-    var setResultStr=state.matchSets>1?state.players.map(function(n,i){return state.setWins[i]||0}).join('–'):null;
+    var _reps=state.teamOf?[0,1]:state.players.map(function(n,i){return i;});
+    var legResultStr=_reps.map(function(i){return state.legWins[i]||0}).join('–');
+    var setResultStr=state.matchSets>1?_reps.map(function(i){return state.setWins[i]||0}).join('–'):null;
     var legsSnapshot=state.legsData?state.legsData.slice():[];
     state.players.forEach(function(n,i){
       var ds=calcDetailedStats(i);
-      updatePlayerStat(n,state.gameType,{
-        won:n===winnerName,
+      var _tw=state.teamOf?state.teamOf[i]===state.teamOf[wi]:n===winnerName;
+      var _tx=state.teamOf?{partners:_mates(i).map(function(j){return state.players[j];}),opponents:state.players.filter(function(x,j){return state.teamOf[j]!==state.teamOf[i];})}:{};
+      updatePlayerStat(n,state.gameType,Object.assign({
+        won:_tw,
         darts:state.allDartCount[i]||state.dartCount[i],
         score:0,
         detailedStats:ds,
@@ -8362,13 +8501,13 @@ function finishEndGame501(winnerName){
         legResult:legResultStr,
         setResult:setResultStr,
         matchFormat:(state.matchFormat==='firstto'?'FT':'BO')+state.matchN+(state.matchSets>1?' '+state.matchSets+'sets':'')
-      });
+      },_tx));
     });
     var sub='';
-    if(state.matchSets>1) sub='Sets: '+state.players.map(function(n,i){return n+' '+state.setWins[i]}).join(' – ');
-    else if(state.matchN>1) sub='Legs: '+state.players.map(function(n,i){return n+' '+state.legWins[i]}).join(' – ');
+    if(state.matchSets>1) sub='Sets: '+_reps.map(function(i){return _teamName(i)+' '+state.setWins[i]}).join(' – ');
+    else if(state.matchN>1) sub='Legs: '+_reps.map(function(i){return _teamName(i)+' '+state.legWins[i]}).join(' – ');
     else sub='Klaar in ronde '+state.round;
-    showWin(winnerName,sub,'');
+    showWin(state.teamOf?_teamName(wi):winnerName,sub,'');
   } else {
     var start=state.x01Start||501;
     state.scores=state.players.map(function(){return start});
@@ -9442,7 +9581,7 @@ function _winStatsTable(){
 }
 function showWin(winner,sub,extra){
   var isSoloEnd=(state.players&&state.players.length<=1)||winner==='Eindstand';
-  document.getElementById('win-title').innerHTML=isSoloEnd?'Eindstand':'<span class="win-name">'+winner+'</span> wint!';
+  document.getElementById('win-title').innerHTML=isSoloEnd?'Eindstand':'<span class="win-name">'+winner+'</span> '+(/ & /.test(winner)?'winnen!':'wint!');
   var kick=document.getElementById('win-kicker');
   if(kick)kick.textContent=isSoloEnd?'Goed gegooid':((state.gameType==='x01'||state.gameType==='501'||state.gameType==='301')?'Game shot and the match':'Gewonnen');
   var rbtn=document.getElementById('btn-rematch');
@@ -10326,7 +10465,7 @@ function _renderHistoryImpl(){
           '</div>')+
           '<div>'+
             '<div style="font-size:15px;font-weight:800">'+(GAME_TYPE_LABELS[g.gameType]||g.gameType)+'</div>'+
-            '<div style="font-size:12px;color:var(--muted)">'+(g.ts?_hhmm(g.ts)+' · ':'')+(g.opponents&&g.opponents.length?'tegen '+g.opponents.join(', '):'solo')+(g.legResult?' · '+g.legResult:'')+'</div>'+
+            '<div style="font-size:12px;color:var(--muted)">'+(g.ts?_hhmm(g.ts)+' · ':'')+(g.partners&&g.partners.length?'met '+g.partners.join(', ')+' · ':'')+(g.opponents&&g.opponents.length?'tegen '+g.opponents.join(', '):'solo')+(g.legResult?' · '+g.legResult:'')+'</div>'+
           '</div>'+
         '</div>'+
         '<div style="display:flex;align-items:center;gap:10px">'+
@@ -10403,7 +10542,7 @@ function bestLeg(name,start){
     if(!g.legBreakdown||!g.legBreakdown.length)return;
     var gs=g.gameType==='301'?301:(g.gameType==='501'||g.gameType==='trn-501')?501:null;
     g.legBreakdown.forEach(function(l){
-      if(l.winner!==name)return;
+      if(l.winner!==name||l.team||g.partners)return; // teamlegs tellen niet (v241)
       var me=l.playerStats&&l.playerStats[name];if(!me||!me.darts)return;
       // Potjes van type 'x01' van vóór v233 hebben geen startscore per leg. De winnaar gooit precies
       // de startscore weg, dus gemiddelde × beurten ≈ startscore (gemiddelde is op 0,1 afgerond).
@@ -10927,7 +11066,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=240;
+var APP_VERSION=241;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

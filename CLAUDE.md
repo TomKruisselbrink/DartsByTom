@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v240** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v241** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -86,6 +86,8 @@ Volgorde in het bestand (globaal):
    - knopgevoel/haptics (`haptic()`);
    - pill-nav-indicator;
    - instellingenmenu (`stOpen(page)` / `stClose()`; pagina's `account`, `friends`, `players`, `game`, `appearance`, `data`).
+   - **Spelers** (Instellingen → Spelers, v241): per speler **Samenvoegen met…** (`spMergePick` → `mergePlayers(src,dst)`: potjes via `_grpMerge`, tellers opgeteld, namen in andermans potjes omgezet via `_renameInEntry` (opponents, partners, legBreakdown), vriendenkoppeling meegenomen, src verdwijnt zoals bij `clearPlayer`; kopie van src in `darts_merge_backup`, max 10) en **Verwijderen** (`clearPlayer`). Nieuwe namen worden hoofdletterongevoelig gekoppeld aan een bestaande speler (`_canonName` in `addPlayer`/`trnAddPlayer`).
+   - Horizontale scrollrijen behouden hun positie bij opnieuw tekenen: `_scoped` maakt een snapshot (`_scrollSnap`, klassen zonder `hs-l`/`hs-r`) en zet die terug.
 8. **NAVIGATION.** `showScreen(id)` toont het scherm en regelt pill-nav en spelbalk. Spelschermen staan in `_gameScreens`, met de titel in `_gTitles`.
 9. **SETUP.** `selectGame()`, `goToSetupStep(n)`, `renderSetupRules()` (opties per spel), `renderSetupPlayers()` en `startGame()` → `launchGame(gameType, players, dblOut, fmt, n, sets, startScore, startIdx)`. Wie begint kies je via een lijst, zelf, of loting (munt bij 2 spelers, rad bij 3+).
 10. **Spelopties:** Afgooien-opties, Random Checkout (`RCO_BRACKETS`, `rco*`), 121-instellingen (`co121Setup*`), Eliminatie (`eliTarget`, `eliDoubleOut`).
@@ -132,6 +134,7 @@ Volgorde in het bestand (globaal):
 | Modus (`gameType`) | Regels |
 |---|---|
 | **X01** (`x01`, `501`, `301`) | Start 501, 301 of eigen getal. Double out of single out. Legs **first to** of **best of** N, optioneel sets (1 = geen sets). Invoer per beurt (0–180) via numpad of snelknoppen. Bust onder 0 of op 1 (bij double out). Bij uitgooien vraagt de app "Was het op een double?" en daarna welke dubbel (→ `doubleStats`). Checkout-hints uit de checkouttabel. De bot kan meedoen. |
+| **X01 teams 2 tegen 2** (v241) | Setup X01 → Spelers: "2 tegen 2" (`x01Teams`). Precies 4 spelers: 1+2 = Team 1, 3+4 = Team 2; volgorde in het spel om en om (`[p0,p2,p1,p3]`, `state.teamOf=[0,1,0,1]`, via `_pendingTeams` in `launchGame`). Eén score per team: elke scorewijziging wordt gekopieerd (`_syncTeam`), legs/sets ook (`_mates`). Eigen beurten → eigen `detailedStats`; `won` = teamuitslag; entry krijgt `partners:[naam]` en `opponents` = het andere team. Teamlegs (`legData.team`) tellen niet voor beste leg. Geen bot, geen toernooi. |
 | **Cricket** (`cricket`) | 15–20 en Bull. Drie marks sluit een vak. Extra marks scoren punten zolang een tegenstander het vak nog niet dicht heeft. Winst: alles dicht en score ≥ ieders score. |
 | **Eliminatie** (`eliminatie`) | Optellen naar een doel (standaard 301, of eigen). Boven het doel = bust. Kom je precies op de score van een tegenstander (>0), dan gaat die terug naar 0. Optioneel double out (bevestiging). |
 | **Afgooien** = Killer (`afgooien`) | Nummer verdelen: **bullronde** (één pijl op de bull; dichtstbij begint, het geraakte vak wordt je nummer, bij gelijkspel een sleepscherm) of **willekeurig** 1–20 (`afgAssign`). **Levens** 1–10 (`afgLives`) = punten nodig om Killer te worden. Opbouwen op je eigen nummer: **per vak 1·2·3** (`afgBySeg`) of **elke raak 1**. Als Killer raak je andermans nummer: −1/−2/−3 levens. Wie op 0 staat ligt eruit; de laatste die overblijft wint. **Teams** (2–4): delen nummer en levens, gooien om de beurt. **Twee spelers met hetzelfde nummer mag** (bijv. allebei 20, of Bull en Bull buiten): dat hoort bij het spel, niet "repareren". De bot kan meedoen (niet bij teams). |
@@ -199,6 +202,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
     rcoStats?,                   // Random Checkout (v235): { hits, att, best, brk:{'41–60':[raak,pogingen]}, mode, darts, same? }
     bobStats?,                   // Bob's 27 (v240): { hits, att, reached (rondes gespeeld, 21 = alles), out, stop }
     shanghai?,                   // true als het potje met een Shanghai gewonnen is (v240)
+    partners?: [naam],           // teamgenoot bij X01 2 tegen 2 (v241)
     via?                         // naam van de vriend die dit potje stuurde
   }
   ```
@@ -239,6 +243,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_lb_period` | ranglijst `all` / `month` |
 | `darts_live` | lopend potje (snapshot, v240); wordt gewist als het potje klaar of gestopt is |
 | `darts_trn_live` | lopend toernooi (v240) |
+| `darts_merge_backup` | `{ 'naam @ms': Player }`: kopie van samengevoegde spelers (vangnet, max 10). Niet opruimen. |
 | `darts_install_dismissed` | `'1'` als de iOS-installatiebanner weggeklikt is |
 
 Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
@@ -349,7 +354,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Nooit `gameHistory` inkorten of potjes weggooien om opslag te sparen.** Alleen detailvelden (`legBreakdown`, `hiRoundHistory`) van potjes na de nieuwste 200 mogen weg.
 - **Nooit `gid`, `ts` of `date` van bestaande entries wijzigen,** en de opbouw van `gid` / `DEVICE_ID` niet veranderen. Dedupe, vrienden-sync en tombstones hangen ervan af.
 - **Nooit de veldnamen van Player of Entry hernoemen.** Ook geen `gameType`-waarden veranderen: stats, filters, de ranglijst en vrienden lezen ze.
-- **Nooit `darts_hidden_archive` of `darts_db_before_restore` opruimen.** Het zijn vangnetten.
+- **Nooit `darts_hidden_archive`, `darts_db_before_restore` of `darts_merge_backup` opruimen.** Het zijn vangnetten.
 - **Nooit bij Stop, rematch of verbinding verbreken de lokale data leegmaken.** `disconnectGroup` moet de lokale DB laten staan.
 - **Nooit `deleteMatchEntry` of `clearPlayer` aanroepen zonder bevestiging door de gebruiker,** en ook nooit in tests tegen echte data.
 - **Nooit de cache-naam of `sw.js` zo aanpassen dat oude data weggaat.** Een SW raakt localStorage niet aan, en dat moet zo blijven: niets in `activate` behalve oude caches verwijderen.
