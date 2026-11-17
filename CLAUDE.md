@@ -318,6 +318,10 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
   - spelschermen in de stijl van 501: kop `.g-head`, spelerskaarten `.x-card(.on)`, invoer onderaan bij de duim, Ongedaan/Stop in de zwevende `#game-controls`;
   - onderbladen via `openGameSheet`;
   - meldingen via `showToast(msg,type)`.
+  - **Bevestigen via `_askConfirm(titel, uitleg, knop, gevaarlijk, onOk)`** (v241): eigen venster in app-stijl. Gebruik nooit `confirm()`/`alert()` (op iPhone staat er "… zegt" boven). Stop in een spel, verwijderen, samenvoegen, groep/toernooi verlaten en potje weggooien gebruiken het allemaal.
+  - **Oefenspellen** (Bob's 27, ATC, Shanghai, 121, v241): `.g-target` vult de vrije ruimte (`flex:1 1 0`, `container-type:size`; met `flex-basis:auto` werkt `cqh` niet), het doel schaalt met `cqh`/`cqw` en `--gt-n` (aantal tekens, gezet door een MutationObserver). Onder 700px hoog compactere spelersrijen. Gemeten: geen overlap met de spelbalk bij 1–4 spelers op 375×667 t/m 430×932.
+  - **Licht thema** (v241): kaarten en knoppen hebben een zachte schaduw, actieve speler (`.x-card.on`, `.g-prow.on`) een terracotta gloed.
+  - In Statistieken staat geen wisknop meer, alleen "Speler beheren" → Instellingen → Spelers.
 - **Iconen/logo:** het 20-segment van een dartbord (rode dubbel en triple 20, zwart, bull) op wit, met een subtiele dunne T. Geen tekst.
 
 ---
@@ -330,7 +334,6 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Caller op iPhone in leg 1:** de fix (`_callerUnlock`) is alleen in de testbrowser getest. Tom moet bevestigen dat het op zijn iPhone werkt.
 - **Gebruikersnaam wijzigen**: een knop in Account. Nog niet gebouwd; Tom vond het eerder "later".
 - **Waarschuwing bij iPhone-herinstallatie:** iOS wist localStorage als je de PWA verwijdert, dus advies om eerst in te loggen voor de cloud-back-up. Nog niet gebouwd.
-- **Glow licht thema:** kleine stijltweak, nog niet gedaan.
 - **Groepscode uitfaseren:** als alle vrienden een account hebben, de groepscode weghalen en de open catch-all-regel in Firestore dichtzetten.
 - **Eigen Halve It-volgorde** (`hiOwnSeq`) staat alleen in het geheugen en is na een herstart weg.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
