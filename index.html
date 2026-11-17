@@ -305,6 +305,10 @@ body::before{
 .fr-x{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
 .scope-slot .seg-ctrl{margin:0 0 12px}
 .fr-note{font-size:12px;color:var(--muted);margin:-4px 0 10px}
+.bob-keys{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}.bob-keys button{min-height:84px;flex-direction:column;gap:2px;display:flex;align-items:center;justify-content:center}.bob-keys b{font-size:30px;line-height:1;font-family:var(--ff-display);font-weight:700}.bob-keys small{font-size:12px;opacity:.85;font-weight:700}
+#bob-track span.x{opacity:.35;text-decoration:line-through}
+.lb-period{margin:0 0 10px}
+.live-card{display:flex;flex-direction:column;gap:3px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--border);margin-top:10px}.live-card span{font-size:13px;color:var(--muted)}.live-card b{font-size:16px}
 .fr-unl{display:flex;align-items:center;gap:10px;justify-content:space-between}.fr-unl .btn{flex-shrink:0}
 .ac-btns .btn{justify-content:center;padding-left:6px;padding-right:6px}
 
@@ -1716,6 +1720,30 @@ video {
 <body>
 <script>
 var I18N={
+"Bob's 27": "Bob's 27",
+"Dubbels trainen: D1 t/m D20 en Bull": "Train doubles: D1 to D20 and Bull",
+"ONDER 0": "BELOW 0",
+"Dan ben je uit": "You're out",
+"Doorspelen": "Keep playing",
+"Je begint met 27 punten. Per ronde gooi je 3 pijlen op één dubbel: D1, D2 … D20 en tot slot de Bull. Elke raak telt de waarde van die dubbel erbij op (D7 = 14). Geen enkele raak? Dan gaat de waarde er één keer af. Wie aan het eind de meeste punten heeft, wint.": "You start with 27 points. Each round you throw 3 darts at one double: D1, D2 … D20 and finally the Bull. Every hit adds the value of that double (D7 = 14). No hits at all? Then the value is subtracted once. Highest score at the end wins.",
+"Hoeveel pijlen raak?": "How many darts hit?",
+"Dubbels raak": "Doubles hit",
+"Uitgespeeld": "Completed",
+"Alles": "All time",
+"Deze maand": "This month",
+"Deze maand nog geen potjes": "No games this month yet",
+"Zet de ranglijst op Alles voor de totale stand.": "Switch to All time for the overall standings.",
+"klaar": "done",
+"Potje hervatten?": "Resume game?",
+"Je was nog bezig met een potje. Wil je verder waar je gebleven was?": "You were still in the middle of a game. Continue where you left off?",
+"Hervatten": "Resume",
+"Potje echt weggooien? Dit potje wordt niet opgeslagen.": "Really discard this game? It will not be saved.",
+"Toernooi echt weggooien?": "Really discard the tournament?",
+"Niet hervatten": "Don't resume",
+"Potje hervat": "Game resumed",
+"Hervatten lukte niet": "Could not resume",
+"Toernooi hervatten?": "Resume tournament?",
+"Toernooi hervat": "Tournament resumed",
 "+ Nieuwe speler…": "+ New player…",
 "Kies eerst welke speler jij bent. Pas dan zien vrienden je statistieken en komen hun potjes bij jou binnen.": "First choose which player you are. Only then can friends see your stats and do their games reach you.",
 "Koppelen": "Link",
@@ -1764,11 +1792,9 @@ var I18N={
 "Elke raak 1": "Every hit 1",
 "NUMMERS VERDELEN": "ASSIGN NUMBERS",
 "Gooien op de bull": "Throw at the bull",
-"Automatisch": "Automatic",
 "De app geeft iedereen een willekeurig nummer van 1 tot 20.": "The app gives everyone a random number from 1 to 20.",
 "Iedereen gooit één pijl op de bull: wie het dichtst bij zit begint, het geraakte vak wordt je nummer.": "Everyone throws one dart at the bull: closest starts, the segment you hit becomes your number.",
 "TEAMS": "TEAMS",
-"Uit": "Off",
 "Teamgenoten delen één nummer en één stel levens, en gooien om de beurt. Bij Spelers tik je op het team om iemand te verplaatsen.": "Teammates share one number and one set of lives, and take turns. Under Players, tap the team to move someone.",
 "Iedereen speelt voor zichzelf.": "Everyone plays for themselves.",
 "Aantal levens": "Number of lives",
@@ -1777,7 +1803,6 @@ var I18N={
 "begint": "starts",
 "Game on!": "Game on!",
 "KILLER": "KILLER",
-"Raak": "Hit",
 "CHECKOUTS": "CHECKOUTS",
 "Hoe moeilijker de checkout, hoe meer punten je krijgt als je hem uitgooit.": "The harder the checkout, the more points you get for finishing it.",
 "Gelukt? Een bereik omhoog. Mislukt? Een bereik omlaag.": "Made it? Up one range. Missed? Down one range.",
@@ -1795,10 +1820,6 @@ var I18N={
 "Checkout": "Checkout",
 "Random Checkout — Meeste punten": "Random Checkout — Most points",
 "onbeperkt": "unlimited",
-"Standaard": "Standard",
-"Willekeurig": "Random",
-"Gooi het muntje": "Flip the coin",
-"Draai het rad": "Spin the wheel",
 "Spel & geluid": "Game & sound",
 "Spel &amp; geluid": "Game & sound",
 "Niet ingelogd · maak een back-up in de cloud": "Not logged in · back up to the cloud",
@@ -1818,11 +1839,8 @@ var I18N={
 "Speelt op deze telefoon als": "Plays on this phone as",
 "Statistieken bekijken": "View statistics",
 "Vriend verwijderen": "Remove friend",
-"Geluid": "Sound",
 "aan": "on",
 "uit": "off",
-"Omroeper": "Caller",
-"Gegevens": "Data",
 "\"Tom, you require 121\", 180 en game shot": "\"Tom, you require 121\", 180 and game shot",
 "\"Voeg toe\"": "\"Add\"",
 "\"Zet op beginscherm\"": "\"Add to Home Screen\"",
@@ -2473,6 +2491,18 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^raak \+(\d+) per pijl · niets raak −(\d+)$/,'hit +$1 per dart · no hits −$2'],
+[/^Ronde (\d+) \/ 21$/,'Round $1 / 21'],
+[/^Bob's 27 · onder 0 = uit$/,"Bob's 27 · below 0 = out"],
+[/^Bob's 27 · doorspelen$/,"Bob's 27 · keep playing"],
+[/^(.+) is uit$/,'$1 is out'],
+[/^uit bij (D\d+|Bull)$/,'out at $1'],
+[/^score (-?\d+)$/,'score $1'],
+[/^(\d+)\/(\d+) raak$/,'$1/$2 hit'],
+[/^Shanghai op (\d+)! Direct gewonnen$/,'Shanghai on $1! Instant win'],
+[/^Laatst gespeeld om (.+)$/,'Last played at $1'],
+[/^Er loopt nog een toernooi \((\d+) spelers\)\. Wil je verder\?$/,'A tournament with $1 players is still in progress. Continue?'],
+[/^(.+) · toernooi$/,'$1 · tournament'],
 [/^Er staat 1 potje van vrienden voor je klaar\. Die komen bij deze speler\.$/,'1 game from friends is waiting for you. It will be added to this player.'],
 [/^Er staan (\d+) potjes van vrienden voor je klaar\. Die komen bij deze speler\.$/,'$1 games from friends are waiting for you. They will be added to this player.'],
 [/^Jij bent nu (.+)$/,'You are now $1'],
@@ -2965,6 +2995,7 @@ function _tr1(n){
 <!-- LEADERBOARD -->
 <div class="screen" id="screen-leaderboard">
   <h2 class="page-head"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="1.5" y="11" width="7" height="10" rx="1"/><rect x="9" y="5" width="6" height="16" rx="1"/><rect x="15.5" y="14" width="7" height="7" rx="1"/></svg> Ranglijst</h2>
+  <div class="seg-ctrl lb-period" id="lb-period" style="grid-template-columns:1fr 1fr"><button class="seg-btn" id="lb-per-all" onclick="setLbPeriod('all')">Alles</button><button class="seg-btn" id="lb-per-month" onclick="setLbPeriod('month')">Deze maand</button></div>
   <!-- Spelkeuze (horizontaal scrollen) -->
   <div class="lb-chiprow" role="tablist" aria-label="Spel">
     <button class="lb-chip active" id="lb-game-x01" onclick="showLbTab(lbX01Stat||'avg')">501 / 301</button>
@@ -2975,6 +3006,7 @@ function _tr1(n){
     <button class="lb-chip" id="lb-game-co121" onclick="showLbTab('co121')">121 Checkout</button>
     <button class="lb-chip" id="lb-game-rco" onclick="showLbTab('rco')">Random Checkout</button>
     <button class="lb-chip" id="lb-game-afg" onclick="showLbTab('afg')">Afgooien</button>
+    <button class="lb-chip" id="lb-game-bob" onclick="showLbTab('bob')">Bob's 27</button>
   </div>
   <!-- Statistiekkeuze, alleen bij 501 / 301 -->
   <div class="lb-subrow" id="lb-stat-row" role="tablist" aria-label="Statistiek">
@@ -3053,6 +3085,13 @@ function _tr1(n){
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
         </div>
         <div class="game-select-text"><div class="game-select-name">Around the Clock</div><div class="game-select-sub">Loop alle getallen door</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button onclick="selectGame('bobs27');goToSetupStep(2);" class="game-select-row">
+        <div class="game-select-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+        </div>
+        <div class="game-select-text"><div class="game-select-name">Bob's 27</div><div class="game-select-sub">Dubbels trainen: D1 t/m D20 en Bull</div></div>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--su-muted);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <button onclick="selectGame('shanghai7');goToSetupStep(2);" class="game-select-row">
@@ -3344,6 +3383,27 @@ function _tr1(n){
 </div>
 
 <!-- ATC -->
+<div class="screen" id="screen-bobs27">
+ <div class="g-wrap">
+  <div class="g-head"><div class="g-head-l"><span class="g-head-sub" id="bob-sub">Bob's 27</span><span class="g-head-main">Beurt <span id="bob-turn-name">—</span></span></div><span class="g-head-r" id="bob-round"></span></div>
+  <div class="g-target">
+    <span class="g-target-lbl"><span id="bob-who">—</span> gooit op</span>
+    <div id="bob-target" class="g-target-big">D1</div>
+    <span class="g-target-lbl" id="bob-stake"></span>
+    <div id="bob-track" class="g-track"></div>
+  </div>
+  <div id="bob-players" class="g-rows"></div>
+  <div class="g-input">
+    <span class="g-target-lbl" style="text-align:center;display:block;margin-bottom:6px">Hoeveel pijlen raak?</span>
+    <div class="bob-keys">
+      <button class="g-miss" onclick="bobThrow(0)"><b>0</b><small id="bob-k0"></small></button>
+      <button class="g-hit" onclick="bobThrow(1)"><b>1</b><small id="bob-k1"></small></button>
+      <button class="g-hit" onclick="bobThrow(2)"><b>2</b><small id="bob-k2"></small></button>
+      <button class="g-hit" onclick="bobThrow(3)"><b>3</b><small id="bob-k3"></small></button>
+    </div>
+  </div>
+ </div>
+</div>
 <div class="screen" id="screen-atc">
  <div class="g-wrap">
   <div class="g-head"><div class="g-head-l"><span class="g-head-sub" id="atc-sub">Around the Clock</span><span class="g-head-main">Beurt <span id="atc-turn-name">—</span></span></div><span id="atc-darts-turn" class="g-darts" style="padding-bottom:6px"></span></div>
@@ -4960,6 +5020,8 @@ function updatePlayerStat(name,gameType,data){
   if(data.highScore!=null)entry.highScore=data.highScore;
   if(data.hiStats)entry.hiStats=data.hiStats;
   if(data.rcoStats)entry.rcoStats=data.rcoStats;
+  if(data.shanghai)entry.shanghai=true;
+  if(data.bobStats)entry.bobStats=data.bobStats;
   if(data.hiRoundHistory)entry.hiRoundHistory=data.hiRoundHistory;
   p.gameHistory.unshift(entry);
   _trimHistory(p);
@@ -5035,12 +5097,12 @@ function showScreen(id){
     _pnFollow();
   }
   // Show/hide game action bar
-  var _gameScreens=['screen-game','screen-afgooien','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit','screen-randomco'];
+  var _gameScreens=['screen-game','screen-afgooien','screen-bobs27','screen-atc','screen-shanghai','screen-checkout121','screen-cricket','screen-eliminatie','screen-halveit','screen-randomco'];
   var _inGame=_gameScreens.indexOf(id)>=0;
   var gb=document.getElementById('game-controls');
   if(gb){
     if(_inGame)gb.classList.add('show');else gb.classList.remove('show');
-    var _gTitles={'screen-afgooien':'Afgooien','screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie','screen-randomco':'Random Checkout'};
+    var _gTitles={'screen-afgooien':'Afgooien','screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-bobs27':"Bob's 27",'screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie','screen-randomco':'Random Checkout'};
     var gbt=document.getElementById('game-bar-title');if(gbt)gbt.textContent=_gTitles[id]||'';
     var _gs=document.getElementById('gc-stats'),_gss=document.getElementById('gc-stats-sep');
     var _infoLbl={'screen-game':'Stats','screen-halveit':'Rondes','screen-checkout121':'Pogingen'}[id];
@@ -5356,7 +5418,7 @@ var _GAME_NAMES={
   'x01':'501 / 301','501':'501','301':'301','halveit':'Halve It',
   'checkout121':'121 Checkout','atc':'Around the Clock',
   'shanghai7':'Shanghai','shanghai20':'Shanghai 20',
-  'eliminatie':'Eliminatie','cricket':'Cricket','randomco':'Random Checkout',
+  'eliminatie':'Eliminatie','cricket':'Cricket','randomco':'Random Checkout','bobs27':"Bob's 27",
   'afgooien':'Afgooien','bull':'Bull'
 };
 // ═══════════════════════════════════════════
@@ -5518,6 +5580,15 @@ function renderSetupRules(){
       var off=document.getElementById('sh-halve-off');if(off)off.style.borderColor=!shHalveOpt?'var(--setup-accent,#B94E2A)':'transparent';
       var on=document.getElementById('sh-halve-on');if(on)on.style.borderColor=shHalveOpt?'var(--setup-accent,#B94E2A)':'transparent';
     },0);
+  } else if(g==='bobs27'){
+    html='<div class="setup-card">'+
+      '<span class="setup-section-label">ONDER 0</span>'+
+      '<div class="seg-ctrl" style="grid-template-columns:1fr 1fr">'+
+        '<button class="seg-btn'+(bobStopNeg?' active':'')+'" onclick="setBobStop(true)">Dan ben je uit</button>'+
+        '<button class="seg-btn'+(!bobStopNeg?' active':'')+'" onclick="setBobStop(false)">Doorspelen</button>'+
+      '</div>'+
+      '<div class="info-block-green" style="margin-top:12px">Je begint met 27 punten. Per ronde gooi je 3 pijlen op één dubbel: D1, D2 … D20 en tot slot de Bull. Elke raak telt de waarde van die dubbel erbij op (D7 = 14). Geen enkele raak? Dan gaat de waarde er één keer af. Wie aan het eind de meeste punten heeft, wint.</div>'+
+    '</div>';
   } else if(g==='atc'){
     html='<div class="setup-card">'+
       '<span class="setup-section-label">SCOREMODUS</span>'+
@@ -5744,6 +5815,7 @@ function buildRulesSummary(){
   } else if(g==='halveit'){return 'Halve It · '+({std:'standaard',rand:'willekeurig',own:'eigen volgorde'}[hiMode]||'')+' · '+(hiSequence?hiSequence.length:0)+' rondes';}
   else if(g==='shanghai7'||g==='shanghai20'){return 'Shanghai · '+(g==='shanghai7'?'7':'20')+' rondes';}
   else if(g==='atc'){return 'ATC · '+(atcMode==='basic'?'Standaard':'Punten');}
+  else if(g==='bobs27'){return "Bob's 27 · "+(bobStopNeg?'onder 0 = uit':'doorspelen');}
   else if(g==='checkout121'){return '121 Checkout';}
   else if(g==='afgooien'){return 'Afgooien · '+afgLives+' levens'+(afgTeams?' · '+afgTeams+' teams':'')+(afgAssign==='random'?' · automatisch':'');}
   else if(g==='randomco'){return 'Random Checkout · '+({default:'Standaard',random:'Willekeurig',race:'Race'}[rcoMode])+(rcoMode==='random'&&rcoSame?' · zelfde checkout':'')+' · '+(rcoDarts?rcoDarts+' pijlen':'onbeperkt');}
@@ -7079,6 +7151,11 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     setTimeout(saveRematchConfig,0);
     renderGame();showScreen('screen-game');
     if(state.botPlayerIndex>=0&&state.botPlayerIndex===state.firstPlayer){setTimeout(triggerBotTurn,800);}
+  } else if(gameType==='bobs27'){
+    state.bobScores=players.map(function(){return 27;});state.bobRound=players.map(function(){return 0;});
+    state.bobOut=players.map(function(){return false;});state.bobHits=players.map(function(){return 0;});
+    state.bobRounds=players.map(function(){return [];});state.bobHistory=[];state.bobStop=bobStopNeg;state.bobDone=false;
+    setTimeout(saveRematchConfig,0);renderBob();showScreen('screen-bobs27');
   } else if(gameType==='atc'){
     state.atcTarget=players.map(function(){return 1});state.atcDarts=0;state.atcHistory=[];state.atcMode=atcMode;setTimeout(saveRematchConfig,0);renderATC();showScreen('screen-atc');
   } else if(gameType==='shanghai7'||gameType==='shanghai20'){
@@ -7137,7 +7214,7 @@ function _trnHead(el,active){
   h.innerHTML='<div class="g-head"><div class="g-head-l"><span class="g-head-sub">Toernooi · '+_trnFormatLabel()+'</span><span class="g-head-main">'+(active==='stand'?'Stand':'Wedstrijden')+'</span></div>'+
     '<button class="trn-exit" aria-label="Toernooi verlaten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
     (hasStand?'<div class="g-seg trn-seg" style="grid-template-columns:1fr 1fr"><button class="'+(active!=='stand'?'on':'')+'" data-v="m">Wedstrijden</button><button class="'+(active==='stand'?'on':'')+'" data-v="s">Stand</button></div>':'');
-  h.querySelector('.trn-exit').onclick=function(){if(confirm('Toernooi verlaten?'))showScreen('screen-home');};
+  h.querySelector('.trn-exit').onclick=function(){if(confirm('Toernooi verlaten?')){if(typeof _trnClear==='function')_trnClear();showScreen('screen-home');}};
   h.querySelectorAll('.trn-seg button').forEach(function(b){b.onclick=function(){if(b.getAttribute('data-v')==='s'){renderStandings();showScreen('screen-trn-standings');}else{renderTrnOverview();showScreen('screen-trn-overview');}};});
   el.appendChild(h);
 }
@@ -7962,6 +8039,7 @@ function saveRematchConfig(){
     players:state.players.slice(),
     botName:(state.botPlayerIndex>=0?state.players[state.botPlayerIndex]:null),
     gameType:state.gameType,
+    bobStop:state.bobStop,
     doubleOut:state.doubleOut,
     doubleIn:state.doubleIn,
     matchN:state.matchN,
@@ -8015,6 +8093,7 @@ function _doRematch(startIdx){
   state.botPlayerIndex=c.botName?c.players.indexOf(c.botName):-1;
   // Restore game-specific options
   if(c.atcMode)atcMode=c.atcMode;
+  if(c.bobStop!==undefined)bobStopNeg=c.bobStop;
   if(c.shHalve!==undefined)shHalveOpt=c.shHalve;
   if(c.hiSeq)hiSequence=c.hiSeq.map(function(s){return Object.assign({},s)});
   launchGame(c.gameType,c.players,c.doubleOut,c.matchFormat,c.matchN,c.matchSets,c.x01Start,startIdx||0);
@@ -8344,6 +8423,75 @@ function atcTargetLabel(t){
 }
 function atcMaxTarget(){return 22;}
 
+// ═══ Bob's 27 (v240) ═══
+// 27 punten start; per ronde 3 pijlen op D1..D20 en Bull. Raak = +waarde per raak, niets raak = −waarde.
+var bobStopNeg=(function(){try{return localStorage.getItem('darts_bob_stop')!=='0';}catch(e){return true;}})();
+function setBobStop(v){bobStopNeg=!!v;try{localStorage.setItem('darts_bob_stop',v?'1':'0');}catch(e){}renderSetupRules();updateSetupActionBar();}
+function bobLabel(r){return r<20?'D'+(r+1):'Bull';}
+function bobVal(r){return r<20?(r+1)*2:50;}
+function _bobActive(i){return !state.bobOut[i]&&state.bobRound[i]<21;}
+function renderBob(){
+  var cur=state.currentPlayer,r=state.bobRound[cur]||0;
+  if(state.bobDone)return;
+  var el=document.getElementById('bob-players');el.innerHTML='';
+  state.players.forEach(function(name,i){
+    var on=i===cur,ri=state.bobRound[i],sc=state.bobScores[i];
+    var meta=state.bobOut[i]?'<b style="color:var(--danger)">uit</b> bij '+bobLabel(Math.max(0,ri-1)):(ri>=21?'klaar':'op <b style="color:var(--text)">'+bobLabel(ri)+'</b>')+' · '+state.bobHits[i]+'/'+(ri*3)+' raak';
+    var d=document.createElement('div');d.className='g-prow'+(on?' on':'');
+    d.innerHTML='<div class="g-prow-top"><span class="g-prow-name">'+(on?'● ':'')+_esc(name)+'</span><span class="g-prow-meta">'+meta+'</span><span class="g-prow-score"'+(sc<0?' style="color:var(--danger)"':'')+'>'+sc+'</span></div>';
+    el.appendChild(d);
+  });
+  var v=bobVal(r);
+  document.getElementById('bob-turn-name').textContent=state.players[cur];
+  document.getElementById('bob-who').textContent=state.players[cur];
+  document.getElementById('bob-target').textContent=bobLabel(r);
+  document.getElementById('bob-stake').textContent='raak +'+v+' per pijl · niets raak −'+v;
+  document.getElementById('bob-round').textContent='Ronde '+(r+1)+' / 21';
+  var sub=document.getElementById('bob-sub');if(sub)sub.textContent="Bob's 27 · "+(state.bobStop?'onder 0 = uit':'doorspelen');
+  ['0','1','2','3'].forEach(function(k){var e=document.getElementById('bob-k'+k);if(e)e.textContent=k==='0'?'−'+v:'+'+(v*+k);});
+  var tr=document.getElementById('bob-track');
+  if(tr){var h='',mine=state.bobRounds[cur]||[];for(var n=0;n<21;n++){var c=n<r?(mine[n]>0?'d':'x'):(n===r?'c':'');h+='<span class="'+c+'">'+(n<20?n+1:'B')+'</span>';}tr.innerHTML=h;}
+}
+function bobThrow(hits){
+  if(state.bobDone)return;
+  var i=state.currentPlayer;if(!_bobActive(i))return;
+  var r=state.bobRound[i],v=bobVal(r),delta=hits>0?hits*v:-v;
+  state.bobHistory.push({p:i,r:r,score:state.bobScores[i],hits:hits,out:state.bobOut[i]});
+  state.bobScores[i]+=delta;state.bobHits[i]+=hits;state.bobRounds[i][r]=hits;state.bobRound[i]=r+1;
+  state.dartCount[i]=(state.dartCount[i]||0)+3;
+  playSound(hits>0?(hits===3?'high':'score'):'bust');
+  if(state.bobStop&&state.bobScores[i]<0){state.bobOut[i]=true;showToast(state.players[i]+' is uit','error');}
+  var n=state.players.length,nx=-1;
+  for(var k=1;k<=n;k++){var j=(i+k)%n;if(_bobActive(j)){nx=j;break;}}
+  if(nx<0){_bobEnd();return;}
+  state.currentPlayer=nx;renderBob();
+}
+function bobUndo(){
+  if(!state.bobHistory.length||state.bobDone)return;
+  var h=state.bobHistory.pop(),i=h.p;
+  state.bobScores[i]=h.score;state.bobHits[i]-=h.hits;state.bobRound[i]=h.r;state.bobOut[i]=h.out;state.bobRounds[i].length=h.r;
+  state.dartCount[i]=Math.max(0,(state.dartCount[i]||0)-3);state.currentPlayer=i;renderBob();
+}
+function _bobEnd(){
+  state.bobDone=true;
+  var best=-1e9,w=0;state.bobScores.forEach(function(sc,i){if(sc>best){best=sc;w=i;}});
+  state.players.forEach(function(name,i){
+    var ri=state.bobRound[i];
+    updatePlayerStat(name,'bobs27',{won:i===w,darts:ri*3,score:state.bobScores[i],highScore:state.bobScores[i],
+      bobStats:{hits:state.bobHits[i],att:ri*3,reached:ri,out:!!state.bobOut[i],stop:!!state.bobStop}});
+  });
+  var rows=state.players.map(function(n,i){var ri=state.bobRound[i];return '<div class="stat-row"><span>'+_esc(n)+' <span style="color:var(--muted);font-weight:600">· '+state.bobHits[i]+'/'+(ri*3)+' raak'+(state.bobOut[i]?' · uit bij '+bobLabel(Math.max(0,ri-1)):'')+'</span></span><strong>'+state.bobScores[i]+'</strong></div>';}).join('');
+  showWin(state.players.length===1?'Eindstand':state.players[w],"Bob's 27",rows);
+}
+function buildBobStats(name){
+  var p=getDB()[name];if(!p)return '';
+  var gs=(p.gameHistory||[]).filter(function(g){return g.gameType==='bobs27';});if(!gs.length)return '';
+  var best=-1e9,sum=0,h=0,a=0,fin=0;
+  gs.forEach(function(g){var sc=g.score||0;if(sc>best)best=sc;sum+=sc;var b=g.bobStats;if(b){h+=b.hits||0;a+=b.att||0;if(!b.out&&b.reached>=21)fin++;}});
+  function tile(v,l,c){return '<div class="metric"><div class="val" style="color:'+(c||'var(--text)')+'">'+v+'</div><div class="lbl">'+l+'</div></div>';}
+  return '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">'+
+    tile(best,'Hoogste score','var(--accent)')+tile(Math.round(sum/gs.length),'Gemiddeld')+tile(a?Math.round(h/a*100)+'%':'—','Dubbels raak','var(--accent2)')+tile(fin+'×','Uitgespeeld')+'</div>';
+}
 function renderATC(){
   var cur=state.currentPlayer, max=atcMaxTarget();
   var el=document.getElementById('atc-players');el.innerHTML='';
@@ -8598,14 +8746,28 @@ function shScore(mult){
   if(state.shDarts>=3)return;
   var pts=state.shTarget*mult;
   playSound(pts>=100?'high':'score');
-  state.shHistory.push({player:state.currentPlayer,pts:pts,target:state.shTarget,darts:state.shDarts});
+  state.shHistory.push({player:state.currentPlayer,pts:pts,target:state.shTarget,darts:state.shDarts,mult:mult});
   state.shScores[state.currentPlayer]+=pts;state.shTurnPts+=pts;state.shDarts++;
+  if(state.shDarts>=3&&_shIsShanghai()){_shShanghaiWin();return;}
   if(state.shDarts>=3)shEndTurn();else renderShanghai();
 }
 function shMiss(){
   if(state.shDarts>=3)return;
   state.shHistory.push({player:state.currentPlayer,pts:0,target:state.shTarget,darts:state.shDarts,miss:true});
   state.shDarts++;if(state.shDarts>=3)shEndTurn();else renderShanghai();
+}
+// Shanghai (v240): single, dubbel én triple van het rondegetal in één beurt = direct gewonnen
+function _shIsShanghai(){
+  var h=state.shHistory.slice(-3);if(h.length<3)return false;
+  var m={};h.forEach(function(e){if(e.player===state.currentPlayer&&e.target===state.shTarget&&!e.miss&&!e.halved&&e.mult)m[e.mult]=1;});
+  return !!(m[1]&&m[2]&&m[3]);
+}
+function _shShanghaiWin(){
+  var w=state.currentPlayer;
+  state.dartCount[w]=(state.dartCount[w]||0)+3;
+  playSound('high');try{callerSay('Shanghai! '+callerName(state.players[w])+' wins the game!',true);}catch(e){}
+  if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===w,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0,shanghai:i===w});});}
+  showWin(state.players[w],'Shanghai op '+state.shTarget+'! Direct gewonnen',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+(i===w?' <span style="color:var(--accent);font-weight:700">· Shanghai</span>':'')+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));
 }
 function shEndTurn(){
   var allMissed=state.shTurnPts===0;
@@ -9301,7 +9463,7 @@ var statsVsFilter={};
 var statsSelectedPlayer=null;
 function selectStatsPlayer(n){statsSelectedPlayer=n;renderStats();}
 
-var GAME_TYPE_LABELS={'randomco':'Random Checkout','x01':'X01','501':'501','301':'301','atc':'Around the Clock','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien','eliminatie':'Eliminatie'};
+var GAME_TYPE_LABELS={'bobs27':"Bob's 27",'randomco':'Random Checkout','x01':'X01','501':'501','301':'301','atc':'Around the Clock','shanghai7':'Shanghai 1–7','shanghai20':'Shanghai 1–20','halveit':'Halve It','checkout121':'121 Checkout','trn-501':'Toernooi 501','cricket':'Cricket','afgooien':'Afgooien','eliminatie':'Eliminatie'};
 // Leeg-scherm met icoon, uitleg en (optioneel) knop naar Nieuw spel
 function emptyState(title,sub,cta){
   return '<div class="empty-state">'+
@@ -9446,6 +9608,7 @@ function _renderStatsImpl(){
     }
 
     if(activeFilter==='randomco')otherBlock=buildRcoStats(name);
+    if(activeFilter==='bobs27')otherBlock=buildBobStats(name);
     // History rows for filtered games (show 5, expandable)
     var _histAll=filtered;
     var _histShow=_histAll.slice(0,5);
@@ -9600,19 +9763,12 @@ function importStats(){
     if(!db[name]){
       db[name]=inc;newNames.push(name);
     } else {
-      var local=db[name];
-      var existingKeys=(local.gameHistory||[]).map(function(g){return g.date+'_'+g.gameType+'_'+(g.won?'W':'L')+'_'+(g.darts||0)});
-      var added=0;
-      (inc.gameHistory||[]).forEach(function(g){
-        var key=g.date+'_'+g.gameType+'_'+(g.won?'W':'L')+'_'+(g.darts||0);
-        if(existingKeys.indexOf(key)<0){local.gameHistory.push(g);added++;}
-      });
-      if(added>0){
-        _sortHistory(local);_trimHistory(local);
-        local.games=local.gameHistory.length;
-        local.wins=local.gameHistory.filter(function(g){return g.won}).length;
-        updatedNames.push(name+' (+'+added+')');
-      }
+      // v240: samenvoegen per potje (zelfde sleutel als de sync: gid, of vaste velden incl. tijdstip),
+      // tombstones van dit apparaat tellen mee, tellers gaan alleen omhoog.
+      var local=db[name],before=(local.gameHistory||[]).length;
+      var r=_grpMerge(Object.assign({},inc,{deleted:[]}),local);
+      var added=(r.p.gameHistory||[]).length-before;
+      if(added>0){db[name]=r.p;updatedNames.push(name+' (+'+added+')');}
     }
   });
 
@@ -9876,7 +10032,7 @@ function showLbTab(tab){
     var el=document.getElementById('lb-tab-'+t);
     if(el)el.className='lb-sub'+(t===tab?' active':'');
   });
-  ['x01','sh7','sh20','atc','hi','co121','rco','afg'].forEach(function(g){
+  ['x01','sh7','sh20','atc','hi','co121','rco','afg','bob'].forEach(function(g){
     var el=document.getElementById('lb-game-'+g);
     if(el)el.className='lb-chip'+((isX01?g==='x01':g===tab)?' active':'');
   });
@@ -9902,12 +10058,33 @@ function calcGameStats(name, gameTypeFilter){
 }
 
 function renderLeaderboard(tab){_scoped(_renderLeaderboardImpl,'screen-leaderboard','leaderboard-content',arguments);}
+// Ranglijst per periode (v240): "Deze maand" rekent alleen met potjes van de huidige kalendermaand.
+var _lbPeriod=(function(){try{return localStorage.getItem('darts_lb_period')==='month'?'month':'all';}catch(e){return 'all';}})(),_lbLastTab=null;
+function setLbPeriod(v){_lbPeriod=v;try{localStorage.setItem('darts_lb_period',v);}catch(e){}renderLeaderboard(_lbLastTab||'avg');}
+function _lbEntryTs(e){if(e.ts)return e.ts;var m=/^(\d{1,2})-(\d{1,2})-(\d{4})/.exec(e.date||'');return m?new Date(+m[3],+m[2]-1,+m[1]).getTime():0;}
+function _lbMonthDB(src){
+  var d=new Date(),from=new Date(d.getFullYear(),d.getMonth(),1).getTime(),out={};
+  Object.keys(src).forEach(function(n){
+    var p=src[n];if(!p||!Array.isArray(p.gameHistory))return;
+    var gh=p.gameHistory.filter(function(e){return e&&_lbEntryTs(e)>=from;});if(!gh.length)return;
+    out[n]=Object.assign({},p,{gameHistory:gh,games:gh.length,wins:gh.filter(function(e){return e.won;}).length,
+      totalDarts:gh.reduce(function(t,e){return t+(e.darts||0);},0),totalScore:gh.reduce(function(t,e){return t+(e.score||0);},0)});
+  });
+  return out;
+}
 function _renderLeaderboardImpl(tab){
+  _lbLastTab=tab;
+  var pa=document.getElementById('lb-per-all'),pm=document.getElementById('lb-per-month');
+  if(pa)pa.className='seg-btn'+(_lbPeriod==='all'?' active':'');if(pm)pm.className='seg-btn'+(_lbPeriod==='month'?' active':'');
+  if(_lbPeriod==='month')return _withView(_lbMonthDB(getDB()),function(){_renderLeaderboardBody(tab,true);});
+  _renderLeaderboardBody(tab,false);
+}
+function _renderLeaderboardBody(tab,month){
   var db=getDB();
   var el=document.getElementById('leaderboard-content');
   if(!el)return;
   var names=Object.keys(db);
-  if(!names.length){el.innerHTML=emptyState('Nog geen statistieken','Na je eerste potje zie je hier gemiddelden, checkouts en je beste beurten.',true);return;}
+  if(!names.length){el.innerHTML=month?emptyState('Deze maand nog geen potjes','Zet de ranglijst op Alles voor de totale stand.',false):emptyState('Nog geen statistieken','Na je eerste potje zie je hier gemiddelden, checkouts en je beste beurten.',true);return;}
 
   var medals=['🥇','🥈','🥉'];
 
@@ -9938,9 +10115,9 @@ function _renderLeaderboardImpl(tab){
   }
 
   // Other game tabs
-  if(tab==='sh7'||tab==='sh20'||tab==='atc'||tab==='hi'||tab==='co121'||tab==='rco'){
-    var gtMap={sh7:'shanghai7',sh20:'shanghai20',atc:'atc',hi:'halveit',co121:'checkout121',rco:'randomco'};
-    var labelMap={sh7:'Shanghai 1–7 — Hoogste score',sh20:'Shanghai 1–20 — Hoogste score',atc:'Around the Clock — Meeste segmenten',hi:'Halve It — Hoogste score',co121:'121 Checkout — Hoogste checkout bereikt',rco:'Random Checkout — Meeste punten'};
+  if(tab==='sh7'||tab==='sh20'||tab==='atc'||tab==='hi'||tab==='co121'||tab==='rco'||tab==='bob'){
+    var gtMap={sh7:'shanghai7',sh20:'shanghai20',atc:'atc',hi:'halveit',co121:'checkout121',rco:'randomco',bob:'bobs27'};
+    var labelMap={bob:"Bob's 27 — Hoogste score",sh7:'Shanghai 1–7 — Hoogste score',sh20:'Shanghai 1–20 — Hoogste score',atc:'Around the Clock — Meeste segmenten',hi:'Halve It — Hoogste score',co121:'121 Checkout — Hoogste checkout bereikt',rco:'Random Checkout — Meeste punten'};
     var gt=gtMap[tab];
     var rows=names.map(function(name){
       var s=calcGameStats(name,gt);
@@ -10099,6 +10276,8 @@ function _renderHistoryImpl(){
     if(g.hiStats)info.push(g.hiStats.hits+'/'+(g.hiStats.hits+g.hiStats.misses)+' raak ('+g.hiStats.pct+'%)');
     if(g.rcoStats){info.push(g.rcoStats.hits+'/'+g.rcoStats.att+' uit');if(g.rcoStats.best)info.push('hoogste '+g.rcoStats.best);}
     if(g.gameType==='randomco'&&g.score!=null)info.push(g.score+' pnt');
+    if(g.bobStats){info.push('score '+(g.score||0));info.push(g.bobStats.hits+'/'+g.bobStats.att+' raak');if(g.bobStats.out)info.push('uit bij '+bobLabel(Math.max(0,g.bobStats.reached-1)));}
+    if(g.shanghai)info.push('Shanghai!');
     if(g.matchFormat)info.push(g.matchFormat);
     var legHtml='';
     if(g.legBreakdown&&g.legBreakdown.length){
@@ -10679,6 +10858,7 @@ function gameBarUndo(){
   if(sid==='screen-afgooien'){afgooienUndo();return;}
   if(sid==='screen-game')undoThrow();
   else if(sid==='screen-atc')atcUndo();
+  else if(sid==='screen-bobs27')bobUndo();
   else if(sid==='screen-shanghai')shUndo();
   else if(sid==='screen-halveit')hiUndo();
   else if(sid==='screen-checkout121')co121Undo();
@@ -10709,9 +10889,15 @@ function deleteMatchEntry(playerName, index){
   if(!db[playerName]||!db[playerName].gameHistory)return;
   var _del=db[playerName].gameHistory.splice(index,1)[0];
   if(_del){var _dl=db[playerName].deleted||[];_dl.push(_mkey(_del));db[playerName].deleted=_dl.slice(-300);}
-  // Recalculate totals
-  db[playerName].games=db[playerName].gameHistory.length;
-  db[playerName].wins=db[playerName].gameHistory.filter(function(g){return g.won;}).length;
+  // Tellers met één verlagen (v240). Niet gelijkzetten aan de lengte van de historie: oude spelers hebben
+  // meer potjes in de tellers dan in de historie, en die zouden dan stil verdwijnen.
+  var _pp=db[playerName],_hl=_pp.gameHistory.length,_hw=_pp.gameHistory.filter(function(g){return g.won;}).length;
+  if(_del){
+    _pp.games=Math.max(_hl,(_pp.games||0)-1);
+    _pp.wins=Math.max(_hw,(_pp.wins||0)-(_del.won?1:0));
+    if(_del.darts)_pp.totalDarts=Math.max(0,(_pp.totalDarts||0)-_del.darts);
+    if(_del.score)_pp.totalScore=Math.max(0,(_pp.totalScore||0)-_del.score);
+  }
   // Save to Firestore (saveDB handles both cache and Firestore)
   saveDB(db);
   renderHistory();
@@ -10741,7 +10927,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=239;
+var APP_VERSION=240;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -11977,6 +12163,135 @@ function _afgWin(winner){
 }
 
 // afgooienUndo defined above in afgooien section
+
+// ═══ Lopend potje en toernooi bewaren (v240) ═══
+// iOS sluit een PWA op de achtergrond soms af; dan was het potje weg. Na elke render wordt de stand
+// (state + de spel-eigen objecten) in darts_live gezet, het toernooi in darts_trn_live. Bij het openen
+// van de app komt "Potje hervatten?". Wordt pas gewist als het potje echt klaar of gestopt is.
+var LIVE_KEY='darts_live',TRN_KEY='darts_trn_live',LIVE_MAX_AGE=48*3600*1000;
+var _LIVE_RENDER={'screen-game':'renderGame','screen-bobs27':'renderBob','screen-atc':'renderATC','screen-cricket':'renderCricket','screen-shanghai':'renderShanghai',
+  'screen-halveit':'renderHalveIt','screen-checkout121':'renderCo121','screen-randomco':'renderRandomCheckout','screen-eliminatie':'renderEliminatie',
+  'screen-afgooien':'renderAfgooien','screen-afgooien-bull':'renderAfgBull'};
+var _liveT=null,_liveOff=false;
+function _liveSnapshot(){
+  var scr=_curScreen;if(!_LIVE_RENDER[scr])return null;
+  return {v:1,ts:Date.now(),screen:scr,state:state,rco:rco,trn:state.trnMode?trn:null,rematch:rematchConfig,
+    afg:(scr.indexOf('afgooien')>=0)?{g:_afg,tieP:_afgTiePlayers,tieR:_afgTieResolved,re:_afgBullReRound,reP:_afgBullRePlayers,teams:afgTeams,teamOf:afgTeamOf}:null,
+    bot:{en:botEnabled,mode:botLevelMode,lvl:botManualLevel,sel:botSelectedPlayer}};
+}
+function _liveSaveNow(){
+  _liveT=null;if(_liveOff)return;
+  try{var s=_liveSnapshot();if(s)localStorage.setItem(LIVE_KEY,JSON.stringify(s));}catch(e){}
+}
+function _liveSave(){if(!_liveT)_liveT=setTimeout(_liveSaveNow,0);}
+function _liveClear(){try{localStorage.removeItem(LIVE_KEY);}catch(e){}}
+function _trnSave(){try{if(trn&&trn.format)localStorage.setItem(TRN_KEY,JSON.stringify({ts:Date.now(),trn:trn,screen:_curScreen==='screen-trn-standings'?'screen-trn-standings':'screen-trn-overview'}));}catch(e){}}
+function _trnClear(){try{localStorage.removeItem(TRN_KEY);}catch(e){}}
+// Na elke render opslaan
+Object.keys(_LIVE_RENDER).forEach(function(k){
+  var n=_LIVE_RENDER[k],f=window[n];if(typeof f!=='function')return;
+  window[n]=function(){var r=f.apply(this,arguments);_liveSave();return r;};
+});
+['renderTrnOverview','renderStandings'].forEach(function(n){
+  var f=window[n];if(typeof f!=='function')return;
+  window[n]=function(){var r=f.apply(this,arguments);_trnSave();return r;};
+});
+// Potje klaar = wissen. Een spelscherm verlaten (Stop, winst, terug naar toernooi) = wissen.
+(function(){
+  var sw=window.showWin;window.showWin=function(){_liveClear();return sw.apply(this,arguments);};
+  var ss=window.showScreen;window.showScreen=function(id){
+    var from=_curScreen,r=ss.apply(this,arguments);
+    if(_LIVE_RENDER[from]&&!_LIVE_RENDER[id]){if(_liveT){clearTimeout(_liveT);_liveT=null;}_liveClear();}
+    return r;
+  };
+})();
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&_LIVE_RENDER[_curScreen])_liveSaveNow();});
+window.addEventListener('pagehide',function(){if(_LIVE_RENDER[_curScreen])_liveSaveNow();});
+
+// Wedstrijd-object in het (opnieuw ingelezen) toernooi terugvinden
+function _trnFindMatch(cm){
+  if(!cm)return null;var hit=null;
+  (function walk(o){if(hit||!o||typeof o!=='object')return;
+    if(Array.isArray(o)){o.forEach(walk);return;}
+    if(o.p1===cm.p1&&o.p2===cm.p2&&!o.done&&(o.w1||0)===(cm.w1||0)&&(o.w2||0)===(cm.w2||0)&&o!==trn.currentMatch){hit=o;return;}
+    Object.keys(o).forEach(function(k){if(k!=='currentMatch')walk(o[k]);});
+  })(trn);
+  return hit;
+}
+function _liveRestoreTrn(t){
+  Object.keys(trn).forEach(function(k){delete trn[k];});Object.assign(trn,t);
+  var m=_trnFindMatch(t.currentMatch);trn.currentMatch=m||null;return m;
+}
+function _liveResume(s){
+  _liveOff=true;
+  try{
+    Object.keys(state).forEach(function(k){delete state[k];});Object.assign(state,s.state);
+    rco=s.rco||null;if(rco&&!rco.darts)rco.visitsLeft=Infinity;
+    if(s.rematch)rematchConfig=s.rematch;
+    if(s.bot){botEnabled=s.bot.en;botLevelMode=s.bot.mode;botManualLevel=s.bot.lvl;botSelectedPlayer=s.bot.sel;}
+    if(s.afg){Object.keys(_afg).forEach(function(k){delete _afg[k];});Object.assign(_afg,s.afg.g);
+      _afgTiePlayers=s.afg.tieP||[];_afgTieResolved=s.afg.tieR||[];_afgBullReRound=!!s.afg.re;_afgBullRePlayers=s.afg.reP||[];
+      afgTeams=s.afg.teams||0;afgTeamOf=s.afg.teamOf||{};}
+    if(s.trn&&state.trnMode){
+      var m=_liveRestoreTrn(s.trn);
+      if(m)state.trnMatchCallback=function(winnerName){trnRecordLegWin(m,winnerName);renderTrnOverview();showScreen('screen-trn-overview');};
+      else{state.trnMode=false;}
+    }
+    showScreen(s.screen);
+    window[_LIVE_RENDER[s.screen]]();
+  }finally{_liveOff=false;}
+  _liveSaveNow();
+  // Was de bot aan de beurt? Dan gaat hij verder.
+  setTimeout(function(){try{
+    if(s.screen==='screen-game'&&state.botPlayerIndex>=0&&state.currentPlayer===state.botPlayerIndex)triggerBotTurn();
+    else if(s.screen==='screen-halveit'&&_hiIsBot())triggerHiBotTurn();
+    else if(s.screen==='screen-afgooien'&&_afgIsBot())triggerAfgBotDart();
+  }catch(e){}},500);
+  showToast('Potje hervat','success');
+}
+function _liveDescribe(s){
+  var st=s.state||{},t=st.gameType||'',lbl=(typeof GAME_TYPE_LABELS!=='undefined'&&GAME_TYPE_LABELS[t])||(s.screen.indexOf('afgooien')>=0?'Afgooien':t);
+  var names=(s.afg&&s.afg.g&&s.afg.g.players)?s.afg.g.players.map(function(p){return p.name;}):(st.players||[]);
+  var d=new Date(s.ts),hm=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  var extra='';
+  if(s.screen==='screen-game'&&st.scores)extra=st.players.map(function(n,i){return _esc(n)+' '+st.scores[i];}).join(' · ');
+  return {title:lbl+(st.trnMode?' · toernooi':''),names:names.map(_esc).join(', '),extra:extra,time:hm};
+}
+function _liveOffer(){
+  var s=null,t=null;
+  try{s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');}catch(e){}
+  try{t=JSON.parse(localStorage.getItem(TRN_KEY)||'null');}catch(e){}
+  var now=Date.now();
+  if(s&&(!s.ts||now-s.ts>LIVE_MAX_AGE||!_LIVE_RENDER[s.screen]||!s.state)){_liveClear();s=null;}
+  if(t&&(!t.ts||now-t.ts>LIVE_MAX_AGE*3||!t.trn||!t.trn.format)){_trnClear();t=null;}
+  if(s){
+    var d=_liveDescribe(s);
+    openGameSheet('Potje hervatten?','<div class="ac-note">Je was nog bezig met een potje. Wil je verder waar je gebleven was?</div>'+
+      '<div class="live-card"><b>'+_esc(d.title)+'</b><span>'+d.names+'</span>'+(d.extra?'<span>'+d.extra+'</span>':'')+'<span>Laatst gespeeld om '+d.time+'</span></div>'+
+      '<button class="g-hit" style="width:100%;margin-top:12px" onclick="closeGameSheet();_liveResumeStored()">Hervatten</button>'+
+      '<button class="btn" style="width:100%;margin-top:8px;justify-content:center" onclick="_liveDiscard()">Niet hervatten</button>');
+    return;
+  }
+  if(t){
+    openGameSheet('Toernooi hervatten?','<div class="ac-note">Er loopt nog een toernooi ('+_esc((t.trn.players||[]).length+' spelers')+'). Wil je verder?</div>'+
+      '<button class="g-hit" style="width:100%;margin-top:12px" onclick="closeGameSheet();_trnResumeStored()">Hervatten</button>'+
+      '<button class="btn" style="width:100%;margin-top:8px;justify-content:center" onclick="_trnDiscard()">Niet hervatten</button>');
+  }
+}
+function _liveResumeStored(){try{var s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');if(s)_liveResume(s);}catch(e){showToast('Hervatten lukte niet','error');}}
+function _liveDiscard(){
+  if(!confirm(_tr('Potje echt weggooien? Dit potje wordt niet opgeslagen.')))return;
+  var s=null;try{s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');}catch(e){}
+  _liveClear();closeGameSheet();
+  if(s&&s.state&&s.state.trnMode&&s.trn){try{localStorage.setItem(TRN_KEY,JSON.stringify({ts:Date.now(),trn:s.trn,screen:'screen-trn-overview'}));}catch(e){}setTimeout(_liveOffer,350);}
+}
+function _trnResumeStored(){
+  try{var t=JSON.parse(localStorage.getItem(TRN_KEY)||'null');if(!t)return;_liveRestoreTrn(t.trn);trn.currentMatch=null;
+    if(t.screen==='screen-trn-standings'){renderStandings();showScreen('screen-trn-standings');}else{renderTrnOverview();showScreen('screen-trn-overview');}
+    showToast('Toernooi hervat','success');}catch(e){showToast('Hervatten lukte niet','error');}
+}
+function _trnDiscard(){if(!confirm(_tr('Toernooi echt weggooien?')))return;_trnClear();closeGameSheet();}
+setTimeout(_liveOffer,700);
 
 
 

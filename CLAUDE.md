@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v239** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v240** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -52,6 +52,7 @@ Volgorde in het bestand (globaal):
    - `screen-home`, `screen-setup` (stappen 1 spel → 2 regels → 3 spelers), `screen-settings`, `screen-stats`, `screen-history`, `screen-leaderboard`;
    - toernooi: `screen-trn-setup`, `screen-trn-overview`, `screen-trn-standings`;
    - spellen: `screen-game` (X01), `screen-atc`, `screen-shanghai`, `screen-halveit`, `screen-checkout121`, `screen-randomco`, `screen-cricket`, `screen-afgooien-bull`, `screen-afgooien`, `screen-eliminatie`;
+   - `screen-bobs27` (v240).
    - `screen-win`.
    Vaste elementen:
    - `#pill-nav`: onderste navigatie;
@@ -97,7 +98,7 @@ Volgorde in het bestand (globaal):
    - `showWin()`, `updatePlayerStat(name,gameType,data)` (de enige plek waar potjes worden opgeslagen), `calcPlayerAvgStats()`, `renderStats()`;
    - export/import (`exportStats` / `importStats`);
    - geluid (Web Audio, geen bestanden), confetti;
-   - `renderLeaderboard(tab)`, `renderHistory()` (`_renderHistoryImpl`), head-to-head, records + grafiek, uitdaginglink;
+   - `renderLeaderboard(tab)` (met periode **Alles / Deze maand**, `_lbPeriod`; maand = `_withView(_lbMonthDB(...))`, tellers opnieuw uit de gefilterde historie), `renderHistory()` (`_renderHistoryImpl`), head-to-head, records + grafiek, uitdaginglink;
    - dubbels bijhouden; `deleteMatchEntry()`.
    - **Leg-details** in Geschiedenis als tabel (`_legTable`, v233); oude legs tonen alleen wat er is. **Beste leg** (`bestLeg(naam,501)`, `_bestLegCard`) = minste beurten in een gewonnen 501-leg, bij gelijk hoogste gemiddelde; staat bij Persoonlijke records. Legs van type `x01` van vóór v233 hebben geen `start`: dan geldt de leg als 501 als `avg × beurten` ≈ 501 (v237), want de winnaar gooit precies de startscore weg. Tijdens een potje: toast "Nieuwe beste leg!" (`_legPbCheck`) alleen als er al een eerdere beste leg was.
 15. **Init + versie.**
@@ -106,6 +107,7 @@ Volgorde in het bestand (globaal):
    - wake lock, fullscreen, thema/taal (`applyTheme`);
    - Autodarts-bridge (alleen actief op localhost/LAN, websocket poort 8079);
    - installatiebanner (iOS).
+15b. **Lopend potje bewaren (v240)** staat helemaal achteraan het hoofdscript: na elke render van een spelscherm (`_LIVE_RENDER`: scherm → renderfunctie, de functies worden omwikkeld) gaat een snapshot naar `darts_live` (`state`, `rco`, `_afg` + tie-globals, `trn` bij toernooimodus, `rematchConfig`, botinstellingen). Ook bij `visibilitychange`/`pagehide`. Gewist door `showWin` en bij het verlaten van een spelscherm naar een niet-spelscherm (Stop, terug naar toernooi). Bij het starten (`_liveOffer`, 0,7 s na laden) verschijnt "Potje hervatten?"; `_liveResume` zet alles terug, bouwt `state.trnMatchCallback` opnieuw op (wedstrijd teruggevonden met `_trnFindMatch`, want JSON verbreekt de verwijzing) en laat de bot verdergaan als die aan de beurt was. Toernooi apart in `darts_trn_live` (bij elke `renderTrnOverview`/`renderStandings`), gewist bij "Toernooi verlaten". Max. leeftijd 48 uur (toernooi 6 dagen). Nieuw spel toevoegen = ook in `_LIVE_RENDER` zetten.
 16. **Afgooien** (Killer: bullronde, tie-break-sleepscherm, hoofdspel `renderAfgooien`, `afgScore`, `afgAttack`, `_afgNextTurn`, `_afgWin`) en **Eliminatie** (`eli*`) staan helemaal achteraan.
 
 **Opslaan van een potje:**
@@ -134,8 +136,9 @@ Volgorde in het bestand (globaal):
 | **Eliminatie** (`eliminatie`) | Optellen naar een doel (standaard 301, of eigen). Boven het doel = bust. Kom je precies op de score van een tegenstander (>0), dan gaat die terug naar 0. Optioneel double out (bevestiging). |
 | **Afgooien** = Killer (`afgooien`) | Nummer verdelen: **bullronde** (één pijl op de bull; dichtstbij begint, het geraakte vak wordt je nummer, bij gelijkspel een sleepscherm) of **willekeurig** 1–20 (`afgAssign`). **Levens** 1–10 (`afgLives`) = punten nodig om Killer te worden. Opbouwen op je eigen nummer: **per vak 1·2·3** (`afgBySeg`) of **elke raak 1**. Als Killer raak je andermans nummer: −1/−2/−3 levens. Wie op 0 staat ligt eruit; de laatste die overblijft wint. **Teams** (2–4): delen nummer en levens, gooien om de beurt. **Twee spelers met hetzelfde nummer mag** (bijv. allebei 20, of Bull en Bull buiten): dat hoort bij het spel, niet "repareren". De bot kan meedoen (niet bij teams). |
 | **Around the Clock** (`atc`) | 1–20, dan Bull, dan D-Bull (22 doelen). Modus *basis*: raak = +1. Modus *punten*: dubbel = +2, triple = +3 stappen. Wie het eerst klaar is wint. |
-| **Shanghai** (`shanghai7`, `shanghai20`) | 7 of 20 rondes. Ronde n = doel n; enkel/dubbel/triple = n×1/2/3. Optie "halveren": een beurt zonder punten halveert je totaal (anders 0 voor die ronde). Hoogste totaal wint. ⚠️ Zie bekende bugs: directe winst bij een Shanghai zit er niet in. |
+| **Shanghai** (`shanghai7`, `shanghai20`) | 7 of 20 rondes. Ronde n = doel n; enkel/dubbel/triple = n×1/2/3. Optie "halveren": een beurt zonder punten halveert je totaal (anders 0 voor die ronde). Hoogste totaal wint, **of direct**: single + dubbel + triple van het rondegetal in één beurt = Shanghai = gewonnen (`_shIsShanghai`, v240; entry krijgt `shanghai:true`). |
 | **Halve It** (`halveit`) | Reeks doelen: standaard (`DEFAULT_SEQ`: 20, Double, 19, Triple, 18, 3 verschillende kleuren, 17, 3 dezelfde kleuren, 16, 1 van 3 getallen, 15, Bull), willekeurig, of een eigen volgorde (slepen en vegen om te verwijderen; doeltypen ook D/T/B/eigen opdracht). Raak = punten; een ronde zonder raak halveert je totaal. De bot kan meedoen. |
+| **Bob's 27** (`bobs27`, v240) | Start 27. 21 rondes: D1…D20, dan Bull (50). Per ronde invoer = aantal pijlen raak (0–3): raak = +waarde per pijl, 0 raak = −waarde. Optie **onder 0** (`bobStopNeg`/`darts_bob_stop`): uit (standaard) of doorspelen. Meerdere spelers om de beurt; wie uit is slaat over. Hoogste eindscore wint. Stats: `bobStats` + `buildBobStats`, ranglijst-tab `bob`. |
 | **121 Checkout** (`checkout121`) | Start 121 (instelbaar), 9 pijlen per poging (instelbaar). Gelukt: doel + stap (standaard +5). Safehouse-regel `none` / `3dart` / `6dart` / `3row` / `5row` / `always`. Mislukt: terug naar het safehouse, of naar de start. Geen einde: stats worden opgeslagen bij Stop (`saveCo121Stats`). |
 | **Random Checkout** (`randomco`) | Willekeurige checkout uit gekozen bereiken (`RCO_BRACKETS`: 2–40 = 1 pnt, 41–60 = 2, 61–80 = 3, 81–90 = 4, 91–100 = 5, 101–130 = 8, 131–170 = 10; bogey-getallen worden overgeslagen). Pijlen per poging (standaard 9, 0 = onbeperkt) en aantal checkouts (standaard 10, 0 = onbeperkt + knop "Spel afronden"). Modi: **Standaard** (gelukt = bereik omhoog, mislukt = omlaag), **Willekeurig** (optie **Zelfde checkout**, `rcoSame`/`darts_rco_same`, v234: per ronde trekt de eerste speler één checkout en iedereen krijgt die; alleen bij Willekeurig en 2+ spelers), **Race** (eerste die het hoogste bereik uitgooit wint). Beurtscore invullen: de rest loopt af. Doodgegooid (onder 0, op 1, of 0 zonder double) = terug naar het startgetal; de beurt telt wel. Snelknoppen Uitgegooid/Mislukt blijven beschikbaar. |
 
@@ -152,7 +155,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
   - **group:** N groepen (`trnGroups`) round robin; de top 2 per groep gaat naar een geschudde knockout.
 - Elke wedstrijd begint met een keuze wie begint: zelf kiezen of munt (`trnFlipCoin`), daarna `launchTrnMatchWithStart`.
 - `trnRecordLegWin(match,winner)` telt legs. Bij een gewonnen wedstrijd schrijft `updatePlayerStat(…,'trn-501',…)` één entry voor de winnaar en één voor de verliezer.
-- **Toernooistatus staat alleen in het geheugen** (`trn`). App dicht = toernooi weg (zie openstaand).
+- **Toernooistatus wordt bewaard** in `darts_trn_live` (v240) en kan na een herstart hervat worden, ook midden in een leg.
 
 ---
 
@@ -186,7 +189,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
   Entry = {
     gid,              // DEVICE_ID+'-'+tijd+teller+random; uniek per potje
     ts, date,         // ms-timestamp en 'd-m-jjjj' (nl-NL)
-    gameType,         // 'x01','501','301','cricket','eliminatie','afgooien','atc','shanghai7','shanghai20','halveit','checkout121','randomco','trn-501'
+    gameType,         // 'x01','501','301','cricket','eliminatie','afgooien','atc','shanghai7','shanghai20','halveit','checkout121','randomco','bobs27','trn-501'
     won, darts, score, opponents?: [naam],   // LET OP: bij X01 is `darts` het aantal BEURTEN (state.dartCount telt +1 per beurt), niet pijlen. Niet 'repareren' in de data; alleen labels moeten 'beurten' zeggen
     detailedStats?: { avg3, avg1, count180, count160, count140, count120, count100, count80, count60, count0,
                       highTurn, highFinish, turns, checkoutAttempts, checkoutHits, checkoutPct },   // X01
@@ -194,6 +197,8 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
     legResult?, setResult?, matchFormat?, highScore?,
     hiStats?, hiRoundHistory?,   // Halve It
     rcoStats?,                   // Random Checkout (v235): { hits, att, best, brk:{'41–60':[raak,pogingen]}, mode, darts, same? }
+    bobStats?,                   // Bob's 27 (v240): { hits, att, reached (rondes gespeeld, 21 = alles), out, stop }
+    shanghai?,                   // true als het potje met een Shanghai gewonnen is (v240)
     via?                         // naam van de vriend die dit potje stuurde
   }
   ```
@@ -230,6 +235,10 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_last_players` | `[naam]` (zonder "Bot") |
 | `darts_afg_lives` / `darts_afg_byseg` / `darts_afg_assign` | Afgooien: getal / `'0'`·`'1'` / `manual`·`random` |
 | `darts_rco_brk` / `darts_rco_mode` / `darts_rco_darts` / `darts_rco_count` / `darts_rco_same` | Random Checkout: `[bereik-index]` / `default`·`random`·`race` / getal / getal / `'1'`·`'0'` |
+| `darts_bob_stop` | Bob's 27: `'1'` onder 0 = uit / `'0'` doorspelen |
+| `darts_lb_period` | ranglijst `all` / `month` |
+| `darts_live` | lopend potje (snapshot, v240); wordt gewist als het potje klaar of gestopt is |
+| `darts_trn_live` | lopend toernooi (v240) |
 | `darts_install_dismissed` | `'1'` als de iOS-installatiebanner weggeklikt is |
 
 Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
@@ -318,7 +327,6 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Waarschuwing bij iPhone-herinstallatie:** iOS wist localStorage als je de PWA verwijdert, dus advies om eerst in te loggen voor de cloud-back-up. Nog niet gebouwd.
 - **Glow licht thema:** kleine stijltweak, nog niet gedaan.
 - **Groepscode uitfaseren:** als alle vrienden een account hebben, de groepscode weghalen en de open catch-all-regel in Firestore dichtzetten.
-- **Toernooi bewaren:** `trn` naar localStorage, zodat een toernooi app-herstart overleeft.
 - **Eigen Halve It-volgorde** (`hiOwnSeq`) staat alleen in het geheugen en is na een herstart weg.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
@@ -326,12 +334,10 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 
 - **Afgooien, geen winstscherm (gemeld 13-11):** in de testbrowser komt het winstscherm altijd (bullronde, willekeurig, ongedaan, telefoon en groot scherm). Nog niet gereproduceerd; wacht op Toms info (welk apparaat, welke versie, wat er precies stond).
 
-- **Shanghai:** de uitleg zegt "Shanghai (single + dubbel + triple) wint direct", maar `shScore` / `shEndTurn` hebben die regel niet. Alleen het hoogste totaal na de laatste ronde wint.
 - **Bot X01:** de lijst `impossible` in `botGenerateScore` bevat ook 159, 162, 165 en 168. Die zijn als beurtscore wél mogelijk (alleen niet als checkout), dus de bot gooit ze nooit.
 - **Bot checkout-kans (auto):** `getBotCheckoutRate()` gebruikt het dubbel-% van de eerste mens in het potje, niet van `botSelectedPlayer`. Het gemiddelde komt wel van de gekozen speler.
 - **Botnaam gelijk aan een speler:** heet een echte speler net als de bot, dan slaat `updatePlayerStat` die speler over. Er is geen controle op unieke namen.
-- **Import-dedupe is grof:** `importStats` ziet potjes met dezelfde datum, het type, winst/verlies en het aantal pijlen als dubbel en slaat ze over. Ook zet het `games` en `wins` gelijk aan de lengte van de historie, wat oude tellers verlaagt.
-- `deleteMatchEntry` zet `games` en `wins` ook gelijk aan de lengte van de historie. Bij oude spelers met `games > gameHistory.length` dalen de tellers daardoor.
+- (Opgelost in v240: `importStats` voegt nu samen via `_grpMerge` (zelfde sleutels als de sync, tombstones gerespecteerd, tellers alleen omhoog); `deleteMatchEntry` verlaagt de tellers met 1 in plaats van ze gelijk te zetten aan de historie.)
 
 ---
 
