@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v238** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v239** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -283,6 +283,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - Thema volgt het systeem, of `theme` uit de instellingen.
   - **Regel voor thema-CSS:** een `@media (prefers-color-scheme:light)`-regel altijd beperken met `:root:not([data-theme="dark"])` (en `dark` met `:root:not([data-theme="light"])`), en daarnaast een losse `[data-theme="light"]`-regel. Anders lekt de systeemstand door als iemand in de app zelf een thema kiest. In v226 zaten hier zes lekken, o.a. een witte spelbalk met witte tekst bij app-donker + telefoon-licht.
   - Test daarom ook de twee kruiscombinaties (app donker + systeem licht, app licht + systeem donker) via Playwright `colorScheme`.
+- **Twee eigen fonts (v239):** Flow (`--ff-display`) alleen voor titels en grote getallen (selectorlijst bij `--ff-display`, met `!important`); **Flow Text** (`--ff-text`, `'DBT Flow Text'`) voor alle overige tekst via `html`/`body`.
+- **Font "Darts by Tom Flow Text"** (v239): rechtop, met kleine letters, grote x-hoogte (520 bij kap 700), zelfde hoekige rondingen als Flow, 0 met schuine streep, I met schreven, l met staartje, tabulaire cijfers. Regular (lijn 84) en Bold (118), als base64-woff2 in twee `@font-face` (gewicht 100–599 en 600–900). Bron: `font/flowtext.py` bouwt het font uit skeletlijnen (shapely + fontTools): `python3 font/flowtext.py font` → `DartsByTom-FlowText-Regular/Bold.ttf/.woff2`, daarna de woff2's opnieuw als base64 in de `@font-face`. Tekenset: A–Z a–z 0–9, leestekens incl. `% & ( ) × # @`, accenten op aeiou, ñ, ç.
 - **Font "Darts by Tom Flow"**, in CSS `'DBT Flow'`:
   - ingebouwd als base64-woff2 in een `@font-face` (alleen weight 700, `font-display:swap`), dus het werkt ook offline;
   - staat **overal**: `body` en `html` gebruiken `var(--ff-display)`, en ook de SVG-teksten (munt, grafiek) gebruiken het;
@@ -309,7 +311,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 ## 11. Openstaand
 
 - **Font aanvullen:** `% & ( )` en `×` ontbreken nog in Flow (via `font/add_glyphs.py`).
-- **Tekstfont "Flow Text":** Tom wil een eigen tweede font voor kleine tekst (rechtop, met kleine letters, leesbaar op 11–13px). Nog niet begonnen.
+- **Flow Text verder verfijnen** op Toms feedback (v239 = versie 0.2). Flow zelf: 0/O en 8/B lijken nog op elkaar (alleen relevant bij grote getallen).
 - **Kleine tekst:** met Flow overal zijn ondertitels en uitleg klein. Tom bepaalt of alles een stap groter moet.
 - **Caller op iPhone in leg 1:** de fix (`_callerUnlock`) is alleen in de testbrowser getest. Tom moet bevestigen dat het op zijn iPhone werkt.
 - **Gebruikersnaam wijzigen**: een knop in Account. Nog niet gebouwd; Tom vond het eerder "later".
