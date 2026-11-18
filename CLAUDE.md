@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v244** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v245** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -121,6 +121,16 @@ Volgorde in het bestand (globaal):
 - Bot-spelers worden overgeslagen: dat is de naam `state.players[state.botPlayerIndex]`.
 
 ---
+
+## 3b. Beveiliging (v245, roadmap fase 1)
+
+- **Alles wat van een gebruiker of van buiten komt (namen, bijnamen, gebruikersnamen, potjesvelden) gaat via `_esc()` de HTML in**, of via `textContent`. `_esc` escapet `& < > " '`.
+- **In `onclick`-strings altijd `_ue(x)`** met `decodeURIComponent('…')` aan de andere kant. `_ue` = `encodeURIComponent` dat ook `' ( ) ! *` codeert. Nooit `_esc` of `JSON.stringify` in een JS-string binnen een attribuut: de browser decodeert `&#39;` terug naar `'`.
+- **Invoerfilter** (sectie `// ═══ Invoer- en binnenkomstfilter (v245) ═══`): `_nameError(n)` weigert `< > " ' \`` en stuurtekens, max. `NAME_MAX` = 24. Alleen voor **nieuwe** namen (`addPlayer`, `trnAddPlayer`, `acctPickNewOk`); bestaande spelers (bijv. met een apostrof) blijven werken en worden **niet** hernoemd. Bijnaam en botnaam worden opgeschoond.
+- **Binnenkomstfilter:** `_remoteNameOk(n)` (spelernaam van buiten; ongeldige namen worden overgeslagen), `_safeId(id)` (Firestore-doc-id's), `_scrub(v)` / `_scrubPlayer(p)` (haalt `< > " \`` en stuurtekens uit strings en sleutels, niet-eindige getallen → 0). Toegepast op: groepslistener, vriendverzoeken/vrienden, `_frLoadAll`, inbox, `importStats`, `_acctMerge`. Lokale bestaande data wordt niet aangepast.
+- **CSP:** alleen `object-src 'none'; base-uri 'self'; form-action 'self'` (meta-tag). Een strenge `script-src` kan niet zolang er ~350 inline `onclick`'s zijn.
+- **Firestore-regels voor `groups/**`:** `firebase/groups.rules` + uitleg en testtabel in `firebase/README.md`. Tom zet ze zelf in de console; de catch-all moet dan weg, anders hebben ze geen effect.
+- Testscripts (buiten de repo): XSS-harnas met payloads in namen/velden, lokaal en via nep-Firestore. v244: 655 + 177 uitvoeringen, v245: 0 + 0.
 
 ## 4. Vertaling (NL/EN)
 
@@ -350,6 +360,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 ---
 
 ## 13. Nooit doen
+
+- **Nooit gebruikers- of serverdata ongeëscapet in HTML of in een `onclick`-string zetten** (zie §3b). Nooit `_scrub`/`_remoteNameOk` bij binnenkomende data weghalen.
 
 - **Nooit `darts_db` overschrijven met iets dat minder bevat dan er lokaal staat.** Geen `localStorage.clear()`, geen `removeItem('darts_db')`, geen reset of "schone start" en geen migratie die spelers of potjes weggooit. Migraties vullen alleen aan.
 - **Nooit server- of groepsdata blind boven lokale data zetten.** Altijd samenvoegen (`_grpMerge`, `_acctMerge`). Haal de merge-, tombstone- en `_grpSent`-logica niet weg en "vereenvoudig" die niet.
