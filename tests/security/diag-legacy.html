@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Darts by Tom – Diagnose oude data (alleen lezen)</title>
+<style>
+  :root{--accent:#B94E2A;--muted:#6E6E73;--ok:#3E7B4F;--bad:#B3261E}
+  body{font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;max-width:980px;margin:24px auto;padding:0 16px;color:#111;background:#faf7f5}
+  h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:28px 0 8px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+  .note{color:var(--muted);font-size:13px}
+  .box{background:#fff;border:1px solid #e3dcd7;border-radius:10px;padding:14px 16px;margin:10px 0}
+  label{display:block;font-weight:600;margin:10px 0 4px}
+  input[type=text]{width:100%;max-width:360px;padding:8px;border:1px solid #ccc;border-radius:8px;font:inherit}
+  textarea{width:100%;min-height:70px;padding:8px;border:1px solid #ccc;border-radius:8px;font:12px ui-monospace,monospace}
+  button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;margin:6px 6px 0 0}
+  button.sec{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+  pre{white-space:pre-wrap;background:#fff;border:1px solid #e3dcd7;border-radius:10px;padding:14px;font:12.5px/1.5 ui-monospace,monospace;max-height:70vh;overflow:auto}
+  .exp{display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:start;margin:8px 0}
+  .status{font-size:13px;margin-top:6px}
+  .ok{color:var(--ok)} .bad{color:var(--bad)}
+  details summary{cursor:pointer;font-weight:600}
+</style>
+</head>
+<body>
+<h1>Diagnose oude data – Darts by Tom</h1>
+<div class="note">Alleen lezen. Deze pagina draait volledig in je eigen browser. Er wordt niets opgeslagen, niets naar Firestore geschreven en niets verstuurd, behalve als je zelf op <b>Ophalen uit Firestore</b> klikt (dan alleen een leesverzoek). Sluit het tabblad om alles te wissen.</div>
+
+<h2>1. Firestore (groepsdata zoals die nu online staat)</h2>
+<div class="box">
+  <label for="code">Groepscode</label>
+  <input id="code" type="text" placeholder="bijv. JULLIECODE" autocomplete="off">
+  <div><button id="fetchBtn">Ophalen uit Firestore</button><button class="sec" id="saveBtn" style="display:none">Kopie opslaan (.json)</button></div>
+  <div class="note" style="margin-top:8px">Lukt ophalen niet (bijv. geblokkeerd door de browser)? Open dan de links hieronder zelf, sla elke pagina op als .json en kies de bestanden.</div>
+  <div class="note" id="links"></div>
+  <label for="fsFiles">Of: opgeslagen Firestore-JSON (één of meer pagina's + het groepsdocument)</label>
+  <input id="fsFiles" type="file" accept=".json,application/json" multiple>
+  <div class="status" id="fsStatus"></div>
+</div>
+
+<h2>2. Exports van de telefoons</h2>
+<div class="box">
+  <div class="note">Per telefoon: in de app Instellingen → Gegevens → Exporteren → Alle spelers → de code hier plakken (of het .txt-bestand kiezen). Geef elke telefoon een herkenbare naam.</div>
+  <div id="exports"></div>
+  <button class="sec" id="addExp">+ Nog een telefoon</button>
+  <div class="status" id="expStatus"></div>
+</div>
+
+<h2>3. Diagnose</h2>
+<div class="box">
+  <button id="runBtn">Diagnose uitvoeren</button>
+  <div class="note">Het rapport hieronder is geanonimiseerd: spelers heten P01, P02 … en potjes E-xxxxxx. Er staan geen namen, geen groepscode en geen tekstinhoud in, alleen welke tekens en welke velden verschillen. Dat rapport mag je delen.</div>
+</div>
+<div id="out" style="display:none">
+  <button id="copyBtn">Rapport kopiëren</button> <span class="status" id="copyStatus"></span>
+  <pre id="report"></pre>
+  <details class="box"><summary>Sleutel P-nummers ↔ namen (NIET delen, alleen voor jezelf)</summary><pre id="key"></pre></details>
+</div>
+
+<script>
+// ═══ Letterlijk overgenomen uit index.html v245 (commit fa714d0) ═══
+var _BAD_NAME=/[<>"'`\u0000-\u001f\u007f]/,_BAD_REMOTE=/[<>"`\u0000-\u001f\u007f]/g,NAME_MAX=24;
+function _remoteNameOk(n){return typeof n==='string'&&n.length>0&&n.length<=60&&n.trim()===n&&!/[<>"`\u0000-\u001f\u007f]/.test(n);}
+function _scrub(v,d){
+  d=d||0;if(d>12)return null;
+  if(typeof v==='string')return v.replace(_BAD_REMOTE,'').slice(0,4000);
+  if(typeof v==='number')return isFinite(v)?v:0;
+  if(typeof v==='boolean'||v===null)return v;
+  if(Array.isArray(v))return v.map(function(x){return _scrub(x,d+1);});
+  if(v&&typeof v==='object'){var o={};Object.keys(v).forEach(function(k){var ck=k.replace(_BAD_REMOTE,'');if(ck)o[ck]=_scrub(v[k],d+1);});return o;}
+  return null;
+}
+function _scrubPlayer(p){return (p&&typeof p==='object')?_scrub(p):p;}
+function _mkey(e){if(!e)return '';if(e.gid)return 'g:'+e.gid;return 'k:'+[e.ts||'',e.date||'',e.gameType||'',e.darts||0,e.score||0,e.won?1:0,(e.opponents||[]).join('/'),e.legResult||''].join('|');}
+// ═══ Einde overgenomen code ═══
+
+var PROJECT='ons-app-65e13';
+var FS_BASE='https://firestore.googleapis.com/v1/projects/'+PROJECT+'/databases/(default)/documents/';
+var rawPages=[], remote=null, groupDocFields=null, fsMeta={pages:0,fetchedAt:null,specialTypes:[]};
+var exportsList=[]; // {label, data, ts}
+
+// ---------- Firestore REST-formaat → gewone waarden ----------
+function fsVal(v,path){
+  if(v==null)return null;
+  if('stringValue' in v)return v.stringValue;
+  if('integerValue' in v)return Number(v.integerValue);
+  if('doubleValue' in v)return Number(v.doubleValue); // "NaN"/"Infinity" worden NaN/Infinity
+  if('booleanValue' in v)return v.booleanValue;
+  if('nullValue' in v)return null;
+  if('mapValue' in v){var o={},f=(v.mapValue&&v.mapValue.fields)||{};Object.keys(f).forEach(function(k){o[k]=fsVal(f[k],path.concat(k));});return o;}
+  if('arrayValue' in v){return ((v.arrayValue&&v.arrayValue.values)||[]).map(function(x,i){return fsVal(x,path.concat(i));});}
+  var t=Object.keys(v)[0]||'onbekend';
+  fsMeta.specialTypes.push({path:path,type:t});
+  return {__fsType:t};
+}
+function fsDocToObj(doc){var f=doc.fields||{},o={};Object.keys(f).forEach(function(k){o[k]=fsVal(f[k],[k]);});return o;}
+function docName(doc){var p=doc.name.split('/');return {last:decodeURIComponent(p[p.length-1]),coll:p[p.length-2]};}
+
+function ingestFsJson(j){
+  if(!j)return;
+  if(Array.isArray(j)){j.forEach(ingestFsJson);return;}
+  if(j.documents){remote=remote||{};fsMeta.pages++;j.documents.forEach(function(d){var n=docName(d);if(n.coll==='players')remote[n.last]=fsDocToObj(d);});return;}
+  if(j.name&&j.fields!==undefined){var n=docName(j);if(n.coll==='players'){remote=remote||{};remote[n.last]=fsDocToObj(j);}else if(n.coll==='groups'){groupDocFields=fsDocToObj(j);}return;}
+}
+
+function showLinks(){
+  var c=document.getElementById('code').value.trim(),el=document.getElementById('links');el.textContent='';
+  if(!c)return;
+  [['Spelers (pagina 1)',FS_BASE+'groups/'+encodeURIComponent(c)+'/players?pageSize=300'],['Groepsdocument',FS_BASE+'groups/'+encodeURIComponent(c)]].forEach(function(x){
+    var d=document.createElement('div'),a=document.createElement('a');a.href=x[1];a.target='_blank';a.rel='noopener';a.textContent=x[0];d.appendChild(a);el.appendChild(d);});
+  var d=document.createElement('div');d.textContent='Staat er onderaan een "nextPageToken", open dan dezelfde spelers-link met &pageToken=<token> erachter, tot hij ontbreekt.';el.appendChild(d);
+}
+document.getElementById('code').addEventListener('input',showLinks);
+
+document.getElementById('fetchBtn').onclick=async function(){
+  var c=document.getElementById('code').value.trim(),st=document.getElementById('fsStatus');
+  if(!c){st.textContent='Vul eerst de groepscode in.';st.className='status bad';return;}
+  st.textContent='Bezig…';st.className='status';
+  try{
+    remote={};rawPages=[];fsMeta={pages:0,fetchedAt:new Date().toISOString(),specialTypes:[]};
+    var tok='',guard=0;
+    do{
+      var r=await fetch(FS_BASE+'groups/'+encodeURIComponent(c)+'/players?pageSize=300'+(tok?'&pageToken='+encodeURIComponent(tok):''),{method:'GET',credentials:'omit'});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      var j=await r.json();rawPages.push(j);ingestFsJson({documents:j.documents||[]});tok=j.nextPageToken||'';
+    }while(tok&&++guard<50);
+    var g=await fetch(FS_BASE+'groups/'+encodeURIComponent(c),{method:'GET',credentials:'omit'});
+    if(g.ok){var gj=await g.json();rawPages.push(gj);groupDocFields=fsDocToObj(gj);}else groupDocFields=null;
+    document.getElementById('saveBtn').style.display='inline-block';
+    st.textContent='Opgehaald: '+Object.keys(remote).length+' spelers'+(groupDocFields?', groepsdocument gevonden':', groepsdocument niet gevonden (HTTP '+g.status+')')+'.';st.className='status ok';
+  }catch(e){st.textContent='Ophalen lukte niet ('+e.message+'). Gebruik de links en de bestandskeuze hieronder.';st.className='status bad';showLinks();}
+};
+document.getElementById('fsFiles').onchange=async function(ev){
+  var st=document.getElementById('fsStatus');remote=null;groupDocFields=null;fsMeta={pages:0,fetchedAt:'(bestanden)',specialTypes:[]};
+  try{for(var f of ev.target.files){ingestFsJson(JSON.parse(await f.text()));}
+    st.textContent='Ingelezen: '+(remote?Object.keys(remote).length:0)+' spelers uit '+ev.target.files.length+' bestand(en)'+(groupDocFields?', groepsdocument gevonden':'')+'.';st.className='status ok';}
+  catch(e){st.textContent='Kon een bestand niet lezen: '+e.message;st.className='status bad';}
+};
+
+// ---------- Exports ----------
+function addExportRow(){
+  var i=document.querySelectorAll('.exp').length+1,row=document.createElement('div');row.className='exp';
+  row.innerHTML='<div><input type="text" class="explabel" placeholder="Telefoon '+i+'" value="Telefoon '+i+'"><input type="file" class="expfile" accept=".txt,text/plain" style="margin-top:6px;font-size:12px"></div><textarea class="expcode" placeholder="Plak hier de exportcode"></textarea>';
+  row.querySelector('.expfile').onchange=async function(ev){if(ev.target.files[0])row.querySelector('.expcode').value=(await ev.target.files[0].text()).trim();};
+  document.getElementById('exports').appendChild(row);
+}
+document.getElementById('addExp').onclick=addExportRow;addExportRow();
+function decodeExport(code){var json=decodeURIComponent(escape(atob(code.replace(/\s+/g,''))));var o=JSON.parse(json);if(!o||!o.data)throw new Error('geen data');return o;}
+
+// ---------- Hulpfuncties ----------
+function canon(v){ // stabiele vergelijking, NaN/Infinity blijven onderscheidbaar
+  if(typeof v==='number'){return isFinite(v)?JSON.stringify(v):'#'+String(v);}
+  if(v===null||typeof v!=='object')return JSON.stringify(v);
+  if(Array.isArray(v))return '['+v.map(canon).join(',')+']';
+  return '{'+Object.keys(v).sort().map(function(k){return JSON.stringify(k)+':'+canon(v[k]);}).join(',')+'}';
+}
+function eq(a,b){return canon(a)===canon(b);}
+var SALT=Math.random().toString(36).slice(2);
+function h6(s){var x=2166136261;s=SALT+s;for(var i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619);}return ('000000'+(x>>>0).toString(16)).slice(-6);}
+var nameMap={},nameN=0;
+function pid(n){if(!(n in nameMap)){nameN++;nameMap[n]='P'+('0'+nameN).slice(-2);}return nameMap[n];}
+var knownNames={};
+function collectNames(db){Object.keys(db||{}).forEach(function(n){knownNames[n]=1;var p=db[n];(p&&p.gameHistory||[]).forEach(function(e){if(!e)return;(e.opponents||[]).concat(e.partners||[]).forEach(function(x){if(typeof x==='string')knownNames[x]=1;});if(typeof e.via==='string')knownNames[e.via]=1;
+  (e.legBreakdown||[]).forEach(function(l){if(l&&typeof l.winner==='string')knownNames[l.winner]=1;Object.keys((l&&l.playerStats)||{}).forEach(function(k){knownNames[k]=1;});});});});}
+function aPath(path){return path.map(function(s){if(typeof s==='number')return '['+s+']';if(knownNames[s])return pid(s);if(/^D\d{1,2}$|^BULL$|^[A-Za-z0-9_]{1,24}$/.test(s))return s;return '‹sleutel '+h6('k'+s)+'›';}).join('.').replace(/\.\[/g,'[');}
+function charClass(c){var cc=c.charCodeAt(0);if(c==='"')return '"';if(c==='<')return '<';if(c==='>')return '>';if(c==='`')return '`';if(cc===127)return 'DEL';return 'U+'+('000'+cc.toString(16).toUpperCase()).slice(-4);}
+function badChars(s){var m=s.match(/[<>"`\u0000-\u001f\u007f]/g)||[],c={};m.forEach(function(x){var k=charClass(x);c[k]=(c[k]||0)+1;});return c;}
+function fmtChars(c){return Object.keys(c).map(function(k){return k+'×'+c[k];}).join(' ');}
+function eid(e){return 'E-'+h6(_mkey(e));}
+function tsStr(t){if(!t)return '?';var d=new Date(t);return isNaN(d)?'?':d.toISOString().slice(0,16).replace('T',' ');}
+
+// Wat _scrub met een waarde doet: lijst van {path, cls, info}
+function scrubEffects(v,path,d,out){
+  d=d||0;
+  if(d>12){out.push({path:path,cls:'diepte>12 → null'});return;}
+  if(typeof v==='string'){var bc=badChars(v),n=Object.keys(bc).length;if(n)out.push({path:path,cls:'tekens verwijderd',info:fmtChars(bc)});
+    if(v.replace(_BAD_REMOTE,'').length>4000)out.push({path:path,cls:'tekst afgekapt op 4000',info:v.length+' tekens'});return;}
+  if(typeof v==='number'){if(!isFinite(v))out.push({path:path,cls:'niet-eindig getal → 0',info:String(v)});return;}
+  if(typeof v==='boolean'||v===null)return;
+  if(Array.isArray(v)){v.forEach(function(x,i){scrubEffects(x,path.concat(i),d+1,out);});return;}
+  if(v&&typeof v==='object'){
+    if(v.__fsType){out.push({path:path,cls:'Firestore-type '+v.__fsType+' → wordt gewone map'});return;}
+    var seen={};Object.keys(v).forEach(function(k){var ck=k.replace(_BAD_REMOTE,'');
+      if(!ck){out.push({path:path.concat(k),cls:'sleutel wordt leeg → veld weg'});return;}
+      if(ck!==k)out.push({path:path.concat(k),cls:'sleutel hernoemd',info:fmtChars(badChars(k))});
+      if(seen[ck])out.push({path:path.concat(k),cls:'sleutels vallen samen → één waarde gaat verloren'});seen[ck]=1;
+      scrubEffects(v[k],path.concat(k),d+1,out);});return;}
+  out.push({path:path,cls:'onbekend type → null',info:typeof v});
+}
+// Verschillende paden tussen a en b
+function diffPaths(a,b,path,out,lim){
+  if(out.length>=lim)return;
+  if(eq(a,b))return;
+  var ao=a&&typeof a==='object',bo=b&&typeof b==='object';
+  if(ao&&bo&&Array.isArray(a)===Array.isArray(b)){
+    var keys=Array.isArray(a)?Array.from({length:Math.max(a.length,b.length)},function(_,i){return i;}):Object.keys(Object.assign({},a,b));
+    keys.forEach(function(k){diffPaths(a[k],b[k],path.concat(k),out,lim);});return;}
+  var kind=(a===undefined)?'alleen in B':(b===undefined)?'alleen in A':(typeof a!==typeof b)?'ander type':(typeof a==='string')?'tekst anders':(typeof a==='number')?'getal anders':'anders';
+  var info='';if(typeof a==='string'&&typeof b==='string'){var ca=badChars(a),cb=badChars(b);if(a.replace(_BAD_REMOTE,'')===b.replace(_BAD_REMOTE,''))info='verschil zit alleen in tekens: A '+(fmtChars(ca)||'geen')+' / B '+(fmtChars(cb)||'geen');else info='lengte A '+a.length+', B '+b.length;}
+  if(typeof a==='number'&&typeof b==='number')info='A '+a+' / B '+b;
+  out.push({path:path,kind:kind,info:info});
+}
+
+// Classificeer één potje: A (lokaal/export) tegenover R (referentie, bv. Firestore)
+function classify(A,R){
+  if(eq(A,R))return {c:'gelijk'};
+  var sR=_scrub(R),sA=_scrub(A);
+  if(eq(A,sR)&&!eq(R,sR))return {c:'A = ingekorte versie van B (origineel staat in B)'};
+  if(eq(R,sA)&&!eq(A,sA))return {c:'B = ingekorte versie van A (origineel staat in A)'};
+  if(eq(sA,sR))return {c:'alleen verschil in v245-tekens, maar niet eenduidig wie ingekort is'};
+  var d=[];diffPaths(A,R,[],d,25);
+  return {c:'andere verschillen',d:d};
+}
+
+// ---------- Rapport ----------
+function run(){
+  var L=[],stE=document.getElementById('expStatus');
+  exportsList=[];nameMap={};nameN=0;knownNames={};
+  var rows=document.querySelectorAll('.exp');
+  for(var r of rows){var code=r.querySelector('.expcode').value.trim();if(!code)continue;var lab=(r.querySelector('.explabel').value||'Telefoon').trim();
+    try{var o=decodeExport(code);exportsList.push({label:lab,data:o.data,ts:o.ts});}catch(e){stE.textContent='Export "'+lab+'" is ongeldig: '+e.message;stE.className='status bad';return;}}
+  if(!remote&&!exportsList.length){stE.textContent='Lees eerst Firestore-data of een export in.';stE.className='status bad';return;}
+  stE.textContent='';
+  if(remote)collectNames(remote);exportsList.forEach(function(x){collectNames(x.data);});
+  Object.keys(knownNames).sort().forEach(pid);
+  var expLab=exportsList.map(function(x,i){return 'T'+(i+1);});
+  function out(s){L.push(s);}
+  var ans={q1:0,q2:0,q3:0,q4:{}};
+
+  out('DIAGNOSE OUDE DATA – darts-app (alleen lezen, geanonimiseerd)');
+  out('Gemaakt: '+new Date().toISOString().slice(0,16).replace('T',' ')+' UTC · referentie-code: v245 _scrub/_remoteNameOk/_mkey (fa714d0)');
+  out('');
+  out('== 0. Bronnen ==');
+  if(remote){var np=Object.keys(remote).length,ne=0;Object.values(remote).forEach(function(p){ne+=(p&&p.gameHistory||[]).length;});
+    out('Firestore: '+np+' spelers, '+ne+' potjes; pagina\'s: '+fsMeta.pages+'; opgehaald: '+(fsMeta.fetchedAt||'?'));
+    out('Groepsdocument: '+(groupDocFields?'velden = '+Object.keys(groupDocFields).sort().map(function(k){var v=groupDocFields[k];return k+(Array.isArray(v)?' (lijst, '+v.length+')':' ('+(v===null?'null':typeof v)+')');}).join(', '):'niet ingelezen'));
+  } else out('Firestore: niet ingelezen');
+  exportsList.forEach(function(x,i){var np=Object.keys(x.data).length,ne=0;Object.values(x.data).forEach(function(p){ne+=(p&&p.gameHistory||[]).length;});
+    out(expLab[i]+' = export (label staat in de sleutel): '+np+' spelers, '+ne+' potjes; export gemaakt '+tsStr(x.ts));});
+  out('');
+
+  if(remote){
+    out('== 1. Wat v245 (_scrub) zou veranderen aan de Firestore-data ==');
+    out('(Dit is wat een v245-telefoon bij ontvangst inkort. Firestore zelf bevat hier nog het origineel.)');
+    var tot=0,cls={};
+    Object.keys(remote).sort().forEach(function(n){var p=remote[n],eff=[];scrubEffects(p,[],0,eff);
+      if(!eff.length)return;
+      eff.forEach(function(x){cls[x.cls]=(cls[x.cls]||0)+1;tot++;
+        var gi=(x.path[0]==='gameHistory'&&typeof x.path[1]==='number'&&p.gameHistory[x.path[1]])?' '+eid(p.gameHistory[x.path[1]])+' ('+tsStr(p.gameHistory[x.path[1]].ts)+')':'';
+        out('  '+pid(n)+gi+' · '+aPath(x.path)+' · '+x.cls+(x.info?' · '+x.info:''));});});
+    if(!tot)out('  Niets: v245 verandert niets aan de huidige Firestore-data.');
+    else out('  Totaal '+tot+': '+Object.keys(cls).map(function(k){return k+' '+cls[k];}).join(', '));
+    ans.q4=cls;
+    out('');
+    out('== 2. Spelers die v245 overslaat (naam afgekeurd door _remoteNameOk) ==');
+    var sk=0;Object.keys(remote).sort().forEach(function(n){if(_remoteNameOk(n))return;sk++;var why=[];if(n.length>60)why.push('langer dan 60 ('+n.length+')');if(n.trim()!==n)why.push('spatie aan begin/eind');var bc=badChars(n);if(Object.keys(bc).length)why.push('tekens '+fmtChars(bc));if(!n.length)why.push('leeg');
+      var where=exportsList.map(function(x,i){return expLab[i]+':'+(x.data[n]?'aanwezig':'ONTBREEKT');}).join(' ');
+      out('  '+pid(n)+' · '+why.join(', ')+(where?' · '+where:''));});
+    if(!sk)out('  Geen.');
+    out('');
+  }
+
+  exportsList.forEach(function(x,i){
+    var ref=remote,refName='Firestore';
+    if(!ref)return;
+    out('== 3.'+(i+1)+' '+expLab[i]+' (A) tegenover Firestore (B) ==');
+    var names=Object.keys(Object.assign({},x.data,ref)).sort(),cnt={};
+    names.forEach(function(n){
+      var A=x.data[n],B=ref[n];
+      if(!A){out('  '+pid(n)+' · alleen in Firestore ('+((B.gameHistory||[]).length)+' potjes)'+(_remoteNameOk(n)?'':' · door v245 overgeslagen'));return;}
+      if(!B){out('  '+pid(n)+' · alleen op dit toestel ('+((A.gameHistory||[]).length)+' potjes)');return;}
+      var mA={},mB={};(A.gameHistory||[]).forEach(function(e){mA[_mkey(e)]=e;});(B.gameHistory||[]).forEach(function(e){mB[_mkey(e)]=e;});
+      var onlyA=Object.keys(mA).filter(function(k){return !(k in mB);}),onlyB=Object.keys(mB).filter(function(k){return !(k in mA);});
+      var lines=[];
+      Object.keys(mA).filter(function(k){return k in mB;}).forEach(function(k){var c=classify(mA[k],mB[k]);cnt[c.c]=(cnt[c.c]||0)+1;
+        if(c.c==='gelijk')return;
+        if(c.c.indexOf('A = ingekorte')===0){ans.q1++;ans.q2++;}
+        if(c.c.indexOf('B = ingekorte')===0){ans.q1++;}
+        if(c.c==='andere verschillen')ans.q3++;
+        lines.push('    '+eid(mA[k])+' ('+tsStr(mA[k].ts)+') · '+c.c);
+        (c.d||[]).forEach(function(dd){lines.push('        '+aPath(dd.path)+' · '+dd.kind+(dd.info?' · '+dd.info:''));});});
+      var top=[];['games','wins','totalDarts','totalScore'].forEach(function(f){if(!eq(A[f],B[f]))top.push(f+' A '+A[f]+' / B '+B[f]);});
+      if(!eq(A.nickname,B.nickname)){var c2=classify(A.nickname,B.nickname);top.push('bijnaam: '+c2.c);}
+      if(!eq(A.doubleStats,B.doubleStats)){var c3=classify(A.doubleStats||{},B.doubleStats||{});top.push('doubleStats: '+c3.c);}
+      if(!eq(A.deleted,B.deleted))top.push('tombstones A '+((A.deleted||[]).length)+' / B '+((B.deleted||[]).length));
+      var extra=Object.keys(Object.assign({},A,B)).filter(function(f){return ['games','wins','totalDarts','totalScore','nickname','doubleStats','deleted','gameHistory'].indexOf(f)<0&&!eq(A[f],B[f]);});
+      if(extra.length)top.push('overige velden anders: '+extra.map(function(f){return aPath([f]);}).join(', '));
+      if(!lines.length&&!top.length&&!onlyA.length&&!onlyB.length)return;
+      out('  '+pid(n)+(_remoteNameOk(n)?'':' (door v245 overgeslagen)')+': '+(onlyA.length?onlyA.length+' potjes alleen hier (nieuwste '+tsStr(Math.max.apply(null,onlyA.map(function(k){return mA[k].ts||0;})))+')':'')+(onlyA.length&&onlyB.length?', ':'')+(onlyB.length?onlyB.length+' potjes alleen in Firestore (nieuwste '+tsStr(Math.max.apply(null,onlyB.map(function(k){return mB[k].ts||0;})))+')':''));
+      top.forEach(function(t){out('    speler · '+t);});lines.forEach(out);
+    });
+    out('  Samenvatting gekoppelde potjes: '+Object.keys(cnt).map(function(k){return k+' '+cnt[k];}).join(', '));
+    out('');
+  });
+
+  if(exportsList.length>1){
+    out('== 4. Telefoons onderling ==');
+    for(var a=0;a<exportsList.length;a++)for(var b=a+1;b<exportsList.length;b++){
+      var A0=exportsList[a].data,B0=exportsList[b].data,cnt2={},lst=[];
+      Object.keys(A0).forEach(function(n){if(!B0[n])return;var mB={};(B0[n].gameHistory||[]).forEach(function(e){mB[_mkey(e)]=e;});
+        (A0[n].gameHistory||[]).forEach(function(e){var k=_mkey(e);if(!(k in mB))return;var c=classify(e,mB[k]);cnt2[c.c]=(cnt2[c.c]||0)+1;if(c.c!=='gelijk')lst.push('    '+pid(n)+' '+eid(e)+' ('+tsStr(e.ts)+') · '+c.c.replace(/\bA\b/g,expLab[a]).replace(/\bB\b/g,expLab[b]));});});
+      out('  '+expLab[a]+' (A) ↔ '+expLab[b]+' (B): '+Object.keys(cnt2).map(function(k){return k+' '+cnt2[k];}).join(', '));lst.slice(0,200).forEach(out);
+    }
+    out('');
+  }
+
+  out('== 5. Technische grenzen (voor WP2/WP3) ==');
+  var all={};if(remote)Object.keys(remote).forEach(function(n){all[n]=remote[n];});exportsList.forEach(function(x){Object.keys(x.data).forEach(function(n){if(!all[n])all[n]=x.data[n];});});
+  var lim=[];Object.keys(all).sort().forEach(function(n){var p=all[n]||{},w=[];
+    if(/\//.test(n))w.push('naam bevat / (kan niet naar Firestore)');if(n==='.'||n==='..')w.push('naam is . of ..');if(/^__.*__$/.test(n))w.push('naam __…__');if(n.length>24)w.push('naam '+n.length+' tekens');
+    if(typeof p.nickname==='string'&&(p.nickname.length>40||_BAD_REMOTE.test(p.nickname)))w.push('bijnaam '+p.nickname.length+' tekens'+(Object.keys(badChars(p.nickname)).length?', tekens '+fmtChars(badChars(p.nickname)):''));_BAD_REMOTE.lastIndex=0;
+    if(w.length)lim.push('  '+pid(n)+' · '+w.join(', '));});
+  var big=0,bigP='';Object.keys(all).forEach(function(n){var l=(all[n]&&all[n].gameHistory||[]).length;if(l>big){big=l;bigP=pid(n);}});
+  lim.forEach(out);if(!lim.length)out('  Geen namen of bijnamen buiten de grenzen.');
+  out('  Grootste speler: '+bigP+' met '+big+' potjes.');
+  if(fsMeta.specialTypes.length)out('  Firestore-typen die geen JSON zijn: '+fsMeta.specialTypes.length+' (bv. '+fsMeta.specialTypes.slice(0,5).map(function(t){return aPath(t.path)+' = '+t.type;}).join('; ')+')');
+  out('');
+
+  out('== 6. Antwoorden op de B4-vragen ==');
+  out('1. Lokale potjes mogelijk aangepast door v245 (ingekort t.o.v. Firestore of andersom): '+ans.q1);
+  out('2. Daarvan staat het origineel nog in Firestore: '+ans.q2);
+  out('3. Gekoppelde potjes met andere verschillen dan v245-tekens: '+ans.q3+'  (let op: potjes hebben alleen een aanmaaktijd (ts), geen wijzigingstijd; "nieuwer" is per potje niet vast te stellen, wel welke kant afwijkt en hoe)');
+  out('4. Wat _scrub verder zou veranderen dan tekens weghalen: '+(Object.keys(ans.q4).filter(function(k){return k!=='tekens verwijderd';}).map(function(k){return k+' '+ans.q4[k];}).join(', ')||'niets'));
+  out('');
+  out('Er is niets gewijzigd of verstuurd.');
+
+  var rep=L.join('\n');
+  // Laatste controle: geen bekende naam of groepscode in het rapport
+  function hit(t){t=t.trim();if(t.length<3)return false;return new RegExp('(^|[^\\p{L}\\p{N}])'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'($|[^\\p{L}\\p{N}])','u').test(rep);}
+  var leak=Object.keys(knownNames).filter(hit);exportsList.forEach(function(x){if(hit(x.label)&&!/^Telefoon \d+$/.test(x.label))leak.push('(label)');});
+  var code=document.getElementById('code').value.trim();if(code&&hit(code))leak.push('(groepscode)');
+  if(leak.length){rep='LET OP: het rapport bevat mogelijk herkenbare tekst ('+leak.length+'×). Controleer voor je het deelt.\n\n'+rep;}
+  document.getElementById('report').textContent=rep;
+  var key=Object.keys(nameMap).sort(function(a,b){return nameMap[a]<nameMap[b]?-1:1;}).map(function(n){return nameMap[n]+'  =  '+JSON.stringify(n);}).join('\n')+'\n\n'+exportsList.map(function(x,i){return expLab[i]+'  =  '+x.label;}).join('\n');
+  document.getElementById('key').textContent=key;
+  document.getElementById('out').style.display='block';
+}
+document.getElementById('runBtn').onclick=run;
+document.getElementById('saveBtn').onclick=function(){ // ruwe Firestore-antwoorden ongewijzigd bewaren als back-up
+  var blob=new Blob([JSON.stringify(rawPages,null,1)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='firestore-groep-'+new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);};
+document.getElementById('copyBtn').onclick=function(){var t=document.getElementById('report').textContent,s=document.getElementById('copyStatus');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){s.textContent='Gekopieerd.';},function(){var r=document.createRange();r.selectNode(document.getElementById('report'));getSelection().removeAllRanges();getSelection().addRange(r);s.textContent='Geselecteerd: druk Ctrl/Cmd+C.';});};
+</script>
+</body>
+</html>
