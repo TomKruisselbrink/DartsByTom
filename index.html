@@ -1742,6 +1742,7 @@ video {
 <body>
 <script>
 var I18N={
+"Mijn gebruikersnaam (nieuwe speler)": "My username (new player)",
 "Iedereen is uit": "Everyone is out",
 "Niemand wint": "Nobody wins",
 "Onder 0": "Below 0",
@@ -4145,6 +4146,8 @@ if(fbAuth){
       renderAccountCard();
       frStart();
       _acctScheduleBackup(1500);
+      // v243: nog geen eigen speler gekozen? Vraag het meteen (anders blijven vriendenpotjes in de inbox hangen)
+      if(!(acctProfile&&acctProfile.player))setTimeout(_acctAskPlayer,1800);
     }).catch(function(e){console.error('Account laden mislukt',e);_acctReady=true;renderAccountCard();});
   });
 }
@@ -4335,7 +4338,7 @@ function openAcctSheet(mode){
     '<div class="ac-field"><span>Wachtwoord</span><input id="ac-pw" type="password" autocomplete="'+(reg?'new-password':'current-password')+'" placeholder="minstens 6 tekens"></div>';
   if(reg){
     html+='<div class="ac-field"><span>Wachtwoord nog een keer</span><input id="ac-pw2" type="password" autocomplete="new-password"></div>';
-    if(names.length)html+='<div class="ac-field"><span>Welke speler ben jij?</span><select id="ac-player"><option value="">Later kiezen</option>'+names.map(function(n){return '<option value="'+_esc(n)+'">'+_esc(n)+'</option>';}).join('')+'</select></div>';
+    html+='<div class="ac-field"><span>Welke speler ben jij?</span><select id="ac-player"><option value="__auto" selected>Mijn gebruikersnaam (nieuwe speler)</option>'+names.map(function(n){return '<option value="'+_esc(n)+'">'+_esc(n)+'</option>';}).join('')+'<option value="">Later kiezen</option></select></div>';
     html+='<div class="ac-note">3 tot 20 tekens: letters, cijfers, punt, streepje of _. Onthoud je wachtwoord goed: zonder e-mailadres kan het niet worden teruggezet.</div>';
   }
   html+='<div class="ac-err" id="ac-err"></div><button class="g-hit" id="ac-go" style="width:100%" onclick="'+(reg?'acctRegister()':'acctLogin()')+'">'+(reg?'Account maken':'Inloggen')+'</button>';
@@ -4347,6 +4350,11 @@ function _acctShowErr(t){var e=document.getElementById('ac-err');if(e)e.textCont
 function acctRegister(){
   var u=_acctNorm(document.getElementById('ac-user').value),pw=document.getElementById('ac-pw').value,pw2=document.getElementById('ac-pw2').value;
   var pl=document.getElementById('ac-player');var player=pl?pl.value:'';
+  if(player==='__auto'){
+    // Bestaande speler met dezelfde naam (hoofdletters negeren)? Die. Anders een nieuwe met je gebruikersnaam.
+    var cap=u?u.charAt(0).toUpperCase()+u.slice(1):'';player=_canonName(cap);
+    if(player&&!dbCache[player]&&u){dbCache[player]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};saveDB(dbCache);}
+  }
   if(!_acctValid(u))return _acctShowErr('Gebruikersnaam: 3 tot 20 tekens, alleen letters, cijfers, . - _');
   if(pw.length<6)return _acctShowErr('Wachtwoord moet minstens 6 tekens zijn.');
   if(pw!==pw2)return _acctShowErr('De wachtwoorden zijn niet gelijk.');
@@ -4361,6 +4369,7 @@ function acctRegister(){
   }).then(function(){
     closeGameSheet();showToast('Account gemaakt','success');
     _acctReady=true;renderAccountCard();acctBackupNow(false);
+    if(player)acctSetPlayer(player);   // ook als de auth-listener het profiel tussendoor opnieuw laadde
   }).catch(function(e){console.error(e);_acctBusy(false,'Account maken');_acctShowErr(_acctErr(e));});
 }
 function acctLogin(){
@@ -4384,8 +4393,16 @@ function acctSetPlayer(n){
 function _acctSuggestName(){
   var as={};(_inboxDocs||[]).forEach(function(d){var a=d&&d.data&&d.data.as;if(a)as[a]=(as[a]||0)+((d.data.games||[]).length||1);});
   var best=Object.keys(as).sort(function(a,b){return as[b]-as[a];})[0];
-  if(best)return best;
-  var u=_myUsername()||'';return u?u.charAt(0).toUpperCase()+u.slice(1):'';
+  var u=_myUsername()||'',cap=u?u.charAt(0).toUpperCase()+u.slice(1):'';
+  if(best&&cap&&best.toLowerCase()===cap.toLowerCase())return _canonName(cap);
+  if(best)return best.charAt(0).toUpperCase()+best.slice(1);
+  return _canonName(cap);
+}
+function _acctAskPlayer(){
+  if(!acctUser||(acctProfile&&acctProfile.player))return;
+  if(document.querySelector('#game-sheet.open,.ask-ov'))return setTimeout(_acctAskPlayer,2500);   // eerst andere vensters (hervatten e.d.) laten afhandelen
+  if(_LIVE_RENDER&&_LIVE_RENDER[_curScreen])return;   // niet midden in een potje
+  _acctChoosePlayer();
 }
 function _acctChoosePlayer(){
   var names=Object.keys(dbCache).sort(function(a,b){return a.localeCompare(b);});
@@ -4400,7 +4417,7 @@ function acctPickNew(){
   setTimeout(function(){var i=document.getElementById('ac-newp');if(i){i.focus();i.select();}},50);
 }
 function acctPickNewOk(){
-  var i=document.getElementById('ac-newp'),n=i?i.value.trim():'';if(!n)return;
+  var i=document.getElementById('ac-newp'),n=i?_canonName(i.value.trim()):'';if(!n)return;
   if(!dbCache[n]){dbCache[n]={games:0,wins:0,totalDarts:0,totalScore:0,gameHistory:[]};saveDB(dbCache);}
   closeGameSheet();acctSetPlayer(n);showToast('Jij bent nu '+n,'success');
 }
@@ -11124,7 +11141,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=242;
+var APP_VERSION=243;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
