@@ -316,6 +316,7 @@ body::before{
 .fr-x{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer}
 .scope-slot .seg-ctrl{margin:0 0 12px}
 .fr-note{font-size:12px;color:var(--muted);margin:-4px 0 10px}
+.g-prow.out{opacity:.38;filter:grayscale(1)}.g-prow.out .g-prow-score{text-decoration:line-through}
 .bob-keys{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}.bob-keys button{min-height:84px;flex-direction:column;gap:2px;display:flex;align-items:center;justify-content:center}.bob-keys b{font-size:30px;line-height:1;font-family:var(--ff-display);font-weight:700}.bob-keys small{font-size:12px;opacity:.85;font-weight:700}
 #bob-track span.x{opacity:.35;text-decoration:line-through}
 .lb-period{margin:0 0 10px}
@@ -1741,6 +1742,11 @@ video {
 <body>
 <script>
 var I18N={
+"Iedereen is uit": "Everyone is out",
+"Niemand wint": "Nobody wins",
+"Onder 0": "Below 0",
+"Helaas": "Bad luck",
+"Uitgeschakeld": "Eliminated",
 "Speler beheren (samenvoegen of verwijderen)": "Manage player (merge or delete)",
 "Groep verlaten?": "Leave group?",
 "Je statistieken op deze telefoon blijven bewaard.": "Your stats on this phone are kept.",
@@ -2540,6 +2546,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Uit bij (D\d+|Bull)$/,'Out at $1'],
 [/^(.+) samenvoegen met (.+)\?$/,'Merge $1 into $2?'],
 [/^Alle potjes van (.+) gaan naar (.+)\. Daarna verdwijnt (.+)\.$/,'All games of $1 move to $2. Then $3 is removed.'],
 [/^(.+) verwijderen\?$/,'Delete $1?'],
@@ -8614,7 +8621,7 @@ function renderBob(){
   state.players.forEach(function(name,i){
     var on=i===cur,ri=state.bobRound[i],sc=state.bobScores[i];
     var meta=state.bobOut[i]?'<b style="color:var(--danger)">uit</b> bij '+bobLabel(Math.max(0,ri-1)):(ri>=21?'klaar':'op <b style="color:var(--text)">'+bobLabel(ri)+'</b>')+' · '+state.bobHits[i]+'/'+(ri*3)+' raak';
-    var d=document.createElement('div');d.className='g-prow'+(on?' on':'');
+    var d=document.createElement('div');d.className='g-prow'+(on?' on':'')+(state.bobOut[i]?' out':'');
     d.innerHTML='<div class="g-prow-top"><span class="g-prow-name">'+(on?'● ':'')+_esc(name)+'</span><span class="g-prow-meta">'+meta+'</span><span class="g-prow-score"'+(sc<0?' style="color:var(--danger)"':'')+'>'+sc+'</span></div>';
     el.appendChild(d);
   });
@@ -8651,13 +8658,19 @@ function bobUndo(){
 }
 function _bobEnd(){
   state.bobDone=true;
-  var best=-1e9,w=0;state.bobScores.forEach(function(sc,i){if(sc>best){best=sc;w=i;}});
+  // Wie uit is, kan niet winnen (v242). Winnaar = hoogste score van wie het eind haalde.
+  var best=-1e9,w=-1;state.bobScores.forEach(function(sc,i){if(!state.bobOut[i]&&sc>best){best=sc;w=i;}});
   state.players.forEach(function(name,i){
     var ri=state.bobRound[i];
     updatePlayerStat(name,'bobs27',{won:i===w,darts:ri*3,score:state.bobScores[i],highScore:state.bobScores[i],
       bobStats:{hits:state.bobHits[i],att:ri*3,reached:ri,out:!!state.bobOut[i],stop:!!state.bobStop}});
   });
   var rows=state.players.map(function(n,i){var ri=state.bobRound[i];return '<div class="stat-row"><span>'+_esc(n)+' <span style="color:var(--muted);font-weight:600">· '+state.bobHits[i]+'/'+(ri*3)+' raak'+(state.bobOut[i]?' · uit bij '+bobLabel(Math.max(0,ri-1)):'')+'</span></span><strong>'+state.bobScores[i]+'</strong></div>';}).join('');
+  if(w<0){
+    var solo=state.players.length===1,ri0=state.bobRound[0];
+    showWin('',"Bob's 27",rows,{lost:true,title:solo?'Uit bij '+bobLabel(Math.max(0,ri0-1)):'Iedereen is uit',kicker:solo?'Onder 0':'Niemand wint'});
+    return;
+  }
   showWin(state.players.length===1?'Eindstand':state.players[w],"Bob's 27",rows);
 }
 function buildBobStats(name){
@@ -9617,17 +9630,20 @@ function _winStatsTable(){
   }).join('');
   return '<div class="win-card" style="--cols:'+state.players.length+'">'+head+body+'</div>';
 }
-function showWin(winner,sub,extra){
-  var isSoloEnd=(state.players&&state.players.length<=1)||winner==='Eindstand';
-  document.getElementById('win-title').innerHTML=isSoloEnd?'Eindstand':'<span class="win-name">'+winner+'</span> '+(/ & /.test(winner)?'winnen!':'wint!');
+function showWin(winner,sub,extra,opts){
+  opts=opts||{};
+  var isSoloEnd=!opts.lost&&((state.players&&state.players.length<=1)||winner==='Eindstand');
+  document.getElementById('win-title').innerHTML=opts.lost?_esc(opts.title||'Uitgeschakeld'):(isSoloEnd?'Eindstand':'<span class="win-name">'+winner+'</span> '+(/ & /.test(winner)?'winnen!':'wint!'));
   var kick=document.getElementById('win-kicker');
-  if(kick)kick.textContent=isSoloEnd?'Goed gegooid':((state.gameType==='x01'||state.gameType==='501'||state.gameType==='301')?'Game shot and the match':'Gewonnen');
+  if(kick)kick.style.color=opts.lost?'var(--danger)':'';
+  if(kick)kick.textContent=opts.lost?(opts.kicker||'Helaas'):(isSoloEnd?'Goed gegooid':((state.gameType==='x01'||state.gameType==='501'||state.gameType==='301')?'Game shot and the match':'Gewonnen'));
   var rbtn=document.getElementById('btn-rematch');
   if(rbtn)rbtn.style.display=rematchConfig?'':'none';
   document.getElementById('win-sub').textContent=(sub||'').replace(/\s*🎯/g,'');
   var tbl=_winStatsTable();
   document.getElementById('win-stats').innerHTML=tbl+(extra?'<div class="win-card win-extra">'+extra+'</div>':'');
   showScreen('screen-win');
+  if(opts.lost){playSound('bust');var wb0=document.getElementById('win-icon-anim');if(wb0)wb0.classList.remove('play');return;}
   playSound('win');
   startConfetti();
   loadWinGif();
@@ -11108,7 +11124,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=241;
+var APP_VERSION=242;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
