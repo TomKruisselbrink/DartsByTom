@@ -2547,6 +2547,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Nog niet samen gespeeld op deze telefoon\. Kies (.+) gewoon bij een nieuw potje \(bij de spelers staat hij met het label vriend\), dan wordt hij vanzelf gekoppeld en gaan de potjes naar zijn account\.$/,'Not played together on this phone yet. Just pick $1 for a new game (marked as friend in the player list); they are linked automatically and the games go to their account.'],
 [/^Uit bij (D\d+|Bull)$/,'Out at $1'],
 [/^(.+) samenvoegen met (.+)\?$/,'Merge $1 into $2?'],
 [/^Alle potjes van (.+) gaan naar (.+)\. Daarna verdwijnt (.+)\.$/,'All games of $1 move to $2. Then $3 is removed.'],
@@ -4758,9 +4759,12 @@ function openFriendSheet(uid){
   var d=_frData[uid]||{};
   openGameSheet(_esc(nm),
     '<div class="fr-sheet-sub">@'+_esc(f.username||'')+(d.data&&d.data.games!=null?' · '+d.data.games+' potjes gespeeld':'')+'</div>'+
-    '<div class="st-cap">Speelt op deze telefoon als</div>'+
-    '<div class="fr-link" style="padding-bottom:4px"><select onchange="closeGameSheet();frLink(\''+uid+'\',this.value)">'+opts+'</select></div>'+
-    '<div class="ac-note" style="margin:6px 0 16px">Nieuwe potjes van deze speler komen dan ook in het account van '+_esc(nm)+'.</div>'+
+    // v244: nog nooit samen gespeeld op deze telefoon? Dan valt er niets te kiezen; leg uit dat het vanzelf gaat.
+    (linked||locals.filter(function(n){return n!==me&&!L[n];}).length?
+      '<div class="st-cap">Speelt op deze telefoon als</div>'+
+      '<div class="fr-link" style="padding-bottom:4px"><select onchange="closeGameSheet();frLink(\''+uid+'\',this.value)">'+opts+'</select></div>'+
+      '<div class="ac-note" style="margin:6px 0 16px">Nieuwe potjes van deze speler komen dan ook in het account van '+_esc(nm)+'.</div>'
+     :'<div class="ac-note" style="margin:6px 0 16px">Nog niet samen gespeeld op deze telefoon. Kies '+_esc(nm)+' gewoon bij een nieuw potje (bij de spelers staat hij met het label vriend), dan wordt hij vanzelf gekoppeld en gaan de potjes naar zijn account.</div>')+
     (d.data?'<button class="g-hit" style="width:100%" onclick="closeGameSheet();frShowStats(\''+uid+'\')">Statistieken bekijken</button>':'<div class="ac-note">'+_esc(nm)+' heeft nog geen statistieken gedeeld.</div>')+
     '<button class="fr-remove" onclick="frRemoveAsk(\''+uid+'\')">Vriend verwijderen</button>');
 }
@@ -11141,7 +11145,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=243;
+var APP_VERSION=244;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
