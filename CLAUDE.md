@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v249** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v250** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -89,7 +89,7 @@ Volgorde in het bestand (globaal):
    - **Spelers** (Instellingen → Spelers, v241): per speler **Samenvoegen met…** (`spMergePick` → `mergePlayers(src,dst)`: potjes via `_grpMerge`, tellers opgeteld, namen in andermans potjes omgezet via `_renameInEntry` (opponents, partners, legBreakdown), vriendenkoppeling meegenomen, src verdwijnt zoals bij `clearPlayer`; kopie van src in `darts_merge_backup`, max 10) en **Verwijderen** (`clearPlayer`). Nieuwe namen worden hoofdletterongevoelig gekoppeld aan een bestaande speler (`_canonName` in `addPlayer`/`trnAddPlayer`).
    - Horizontale scrollrijen behouden hun positie bij opnieuw tekenen: `_scoped` maakt een snapshot (`_scrollSnap`, klassen zonder `hs-l`/`hs-r`) en zet die terug.
 8. **NAVIGATION.** `showScreen(id)` toont het scherm en regelt pill-nav en spelbalk. Spelschermen staan in `_gameScreens`, met de titel in `_gTitles`.
-9. **SETUP.** `selectGame()`, `goToSetupStep(n)`, `renderSetupRules()` (opties per spel), `renderSetupPlayers()` en `startGame()` → `launchGame(gameType, players, dblOut, fmt, n, sets, startScore, startIdx)`. Wie begint kies je via een lijst, zelf, of loting (munt bij 2 spelers, rad bij 3+).
+9. **SETUP.** `selectGame()`, `goToSetupStep(n)`, `renderSetupRules()` (opties per spel), `renderSetupPlayers()` en `startGame()` → `launchGame(gameType, players, dblOut, fmt, n, sets, startScore, startIdx)`. Wie begint kies je via een lijst, zelf, of loting (munt bij 2 spelers, rad bij 3+). Elk spel moet `state.firstPlayer` (gezet door `launchGame` uit `startIdx`) respecteren; eigen launchers mogen `currentPlayer` niet op 0 zetten (v250-fix: Random Checkout `rco.first`, 121, Afgooien draait de spelerslijst naar de beginner, ook in de bullronde). Test: `tests/security/rematch-start.mjs`.
 10. **Spelopties:** Afgooien-opties, Random Checkout (`RCO_BRACKETS`, `rco*`), 121-instellingen (`co121Setup*`), Eliminatie (`eliTarget`, `eliDoubleOut`).
 11. **BOT.** §7.
 12. **TOERNOOI.** §6.
@@ -133,7 +133,7 @@ Volgorde in het bestand (globaal):
 - **Data van buiten wordt nooit aangepast en spelers worden niet overgeslagen om hun naam** (groep, account-back-up, import, vrienden, inbox). `_nameStorable(n)` = elke niet-lege tekst. `_shapeCheck(p,bron,naam)` controleert alleen de vorm; een potje dat geen object is, wordt in een kopie weggelaten en gemeld. `_safeId` blijft voor Firebase-uid's/doc-id's. (v245 had `_scrub`/`_remoteNameOk` die tekens weghaalden en namen oversloegen: verwijderd in v246.)
 - **Melden in plaats van stil overslaan:** `_compatNote(bron,naam,reden)` vult `_compat` (alleen in het geheugen) en Instellingen → Gegevens → **Synchronisatieproblemen** (`#st-sync-issues`, verborgen als er niets is). Bronnen: groep (naam kan geen Firestore-document zijn, schrijven geweigerd), back-up, import (ook in de importmelding: "Niet geïmporteerd: …"), vrienden.
 - **CSP:** alleen `object-src 'none'; base-uri 'self'; form-action 'self'` (meta-tag). Een strenge `script-src` kan pas na het ombouwen van de ~350 inline handlers naar event-delegatie (roadmap, later).
-- **Firestore-regels** (WP3, apart, nog niet toegepast): `firebase/`. Niemand gebruikt nog een groep; voorstel is `groups/**` helemaal op slot. Alleen met Toms akkoord, hij zet ze zelf in de console.
+- **Firestore-regels** (WP3, v250 voorstel, toepassen doet Tom zelf): `firebase/firestore.rules` + README (speeltuin-tabel). `groups/**` op slot, catch-all blijft voor andere tools behalve groups (Tom checkt de Data-tab; alleen darts-collecties = catch-all weg), `usernames` alleen get, geen vriendverzoek aan jezelf. Emulator kon hier niet gedownload worden (storage.googleapis.com geblokkeerd).
 - **Tests:** `tests/security/` (zie README daar). `html-sinks.mjs` is statisch en faalt op elke `'+x+'` in HTML of een handler die niet ge-escapet is of niet met reden in `html-sinks.allow.json` staat (sleutel `functie|expressie`). Nieuwe code met data in HTML: `_esc`; een getal of constante: met reden in de allowlist. De andere tests draaien met Playwright (geen afhankelijkheid voor de app).
 
 ## 4. Vertaling (NL/EN)
@@ -345,7 +345,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 ## 11. Openstaand
 
 - **Rondes corrigeren voor andere spellen:** alleen Halve It bewaart rondes; de rest heeft sinds v249 Eindstand corrigeren. Rondes gaan bewaren voor andere spellen is niet gekozen (v249). X01 kan niet gecorrigeerd worden.
-- **WP3 Firestore-regels** (apart, Toms akkoord): huidige regels van Tom nodig, `full.rules` zonder catch-all, emulator-test lokaal bij Tom (optie B).
+- **WP3 Firestore-regels:** voorstel klaar in `firebase/` (v250). Wacht op Tom: toepassen in de console + of andere tools dit project gebruiken (catch-all).
 
 - **Font aanvullen:** `% & ( )` en `×` ontbreken nog in Flow (via `font/add_glyphs.py`).
 - **Flow Text verder verfijnen** op Toms feedback (v239 = versie 0.2). Flow zelf: 0/O en 8/B lijken nog op elkaar (alleen relevant bij grote getallen).

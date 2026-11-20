@@ -1,0 +1,67 @@
+rules_version = '2';
+// Darts by Tom — Firestore-regels, voorstel WP3 (v250). Zelf plakken in de Firebase-console → Firestore → Regels.
+// Verschil met de huidige regels (20-11-2026):
+//   1. groups/** gaat op slot (niemand gebruikt nog een groepscode; iedereen heeft een account).
+//   2. De catch-all onderaan laat groups niet meer door. Andere collecties (andere tools in dit project) blijven open
+//      zoals nu. Staat er in de Data-tab niets anders dan de collecties van Darts by Tom: dat hele blok weghalen.
+//   3. usernames: alleen een naam opzoeken (get), niet de hele lijst met namen + uid's ophalen (list).
+//   4. friendRequests: geen verzoek aan jezelf.
+// Al het andere is letterlijk gelijk aan de huidige regels.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Gebruikersnamen: om vrienden op naam te vinden (de app doet alleen usernames/{naam}.get())
+    match /usernames/{name} {
+      allow get: if request.auth != null;
+      allow list: if false;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // Vriendverzoeken: id = {van}_{naar}
+    match /friendRequests/{id} {
+      allow read, delete: if request.auth != null
+        && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+      allow create: if request.auth != null
+        && request.resource.data.from == request.auth.uid
+        && request.resource.data.to != request.auth.uid
+        && id == request.auth.uid + '_' + request.resource.data.to;
+    }
+
+    match /users/{uid} {
+      // Alles van jezelf: alleen jij
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+      match /{rest=**} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+      // Jouw openbare stats: ook je vrienden mogen lezen
+      match /public/{doc} {
+        allow read: if request.auth != null
+          && exists(/databases/$(database)/documents/users/$(uid)/friends/$(request.auth.uid));
+      }
+      // Vriendschap: bij accepteren zet de ander zichzelf in jouw lijst (alleen met een openstaand verzoek van jou)
+      match /friends/{fid} {
+        allow create: if request.auth != null && request.auth.uid == fid
+          && exists(/databases/$(database)/documents/friendRequests/$(uid + '_' + fid));
+        allow delete: if request.auth != null && request.auth.uid == fid;
+      }
+      // Potjes van vrienden: alleen vrienden mogen er iets in zetten
+      match /inbox/{id} {
+        allow create: if request.auth != null
+          && request.resource.data.from == request.auth.uid
+          && exists(/databases/$(database)/documents/users/$(uid)/friends/$(request.auth.uid));
+      }
+    }
+
+    // Groepssync (oude groepscode): op slot. Niemand kan nog lezen of schrijven.
+    match /groups/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Andere tools in dit project blijven open zoals nu, behalve accounts en groepen.
+    // Gebruiken geen andere tools dit project (Data-tab: alleen groups, users, usernames, friendRequests)? Haal dit blok dan weg.
+    match /{coll}/{document=**} {
+      allow read, write: if coll != 'users' && coll != 'usernames' && coll != 'friendRequests' && coll != 'groups';
+    }
+  }
+}

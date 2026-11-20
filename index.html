@@ -6594,7 +6594,9 @@ function launchRandomCheckout(players){
   rco={brk:rcoBrackets.slice(),mode:rcoMode,darts:rcoDarts,count:rcoCount,cur:0,snaps:[],history:[],
     same:rcoSame&&rcoMode==='random'&&players.length>1,roundBi:null,roundTarget:null,
     ps:players.map(function(){return {pts:0,attempts:0,hits:0,bi:0,darts:0};})};
-  state.players=players.slice();state.currentPlayer=0;state.gameType='randomco';
+  // v250: wie begint (loting/keuze, ook bij rematch) telt; voorheen begon altijd speler 1
+  var _f=(state.firstPlayer>0&&state.firstPlayer<players.length)?state.firstPlayer:0;rco.cur=_f;rco.first=_f;
+  state.players=players.slice();state.currentPlayer=_f;state.gameType='randomco';
   _rcoNewAttempt();
   renderRandomCheckout();
   showScreen('screen-randomco');
@@ -6603,7 +6605,7 @@ function _rcoNewAttempt(){
   var p=rco.ps[rco.cur];
   if(rco.same){
     // zelfde checkout (v234): de eerste speler van de ronde trekt, de rest krijgt hetzelfde getal
-    if(rco.cur===0||rco.roundTarget==null){rco.roundBi=Math.floor(Math.random()*rco.brk.length);rco.roundTarget=_rcoPick(rco.roundBi,rco.roundTarget);}
+    if(rco.cur===(rco.first||0)||rco.roundTarget==null){rco.roundBi=Math.floor(Math.random()*rco.brk.length);rco.roundTarget=_rcoPick(rco.roundBi,rco.roundTarget);}
     p.bi=rco.roundBi;rco.target=rco.roundTarget;
     rco.rest=rco.target;rco.typed='';
     rco.visitsLeft=rco.darts?rco.darts/3:Infinity;
@@ -11150,7 +11152,7 @@ function launchCo121(players){
     dartsUsed:[]
   };});
   state.co121History=[];
-  state.currentPlayer=0;
+  state.currentPlayer=(state.firstPlayer>0&&state.firstPlayer<players.length)?state.firstPlayer:0; // v250: wie begint telt
   state.players=players.slice();
   renderCo121();
   showScreen('screen-checkout121');
@@ -11515,7 +11517,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=249;
+var APP_VERSION=250;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -12192,6 +12194,10 @@ function startAfgooien(){
     ents=ents.filter(function(e){return e.members.length;});
     ents.forEach(function(e){e.name=e.members.join(' & ');});
   } else ents=names.map(function(n){ return {name:n,members:[n],mIdx:0,number:null,score:0,eliminated:false}; });
+  // v250: wie begint = state.firstPlayer (setup én rematch); voorheen keek dit naar de setup-keuze, dus een rematch-loting telde niet
+  var _sn=names[(state.firstPlayer>0&&state.firstPlayer<names.length)?state.firstPlayer:0];
+  var _si=ents.findIndex(function(e){return e.members.indexOf(_sn)>=0;});
+  if(_si>0)ents=ents.slice(_si).concat(ents.slice(0,_si));
   _afg.players = ents;
   _afg.target = afgLives; _afg.bySeg = afgBySeg; _afg.teams = afgTeams>=2;
   _afg.bullHits = {}; _afg.bullIdx = 0; _afg.history = []; _afg.snapshots = [];
@@ -12202,8 +12208,6 @@ function startAfgooien(){
     var nums=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
     for(var i=nums.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=nums[i];nums[i]=nums[j];nums[j]=x;}
     ents.forEach(function(e,k){e.number=nums[k];});
-    var startName=(typeof startMode!=='undefined'&&startMode!=='first'&&setupPlayers[setupStartPlayer])?setupPlayers[setupStartPlayer]:null;
-    if(startName){var si=ents.findIndex(function(e){return e.members.indexOf(startName)>=0;});if(si>0)_afg.players=ents.slice(si).concat(ents.slice(0,si));}
     _afgFinalizeOrder();
     _afgShowNumbers();
     return;

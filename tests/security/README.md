@@ -31,3 +31,4 @@ de code opgebouwde HTML. Gebruikers- of serverdata hoort daar nooit in.
 - `finish-gate-eq.mjs`: met een referentie van vóór v248 `SKIP=eliminatie` meegeven (bewust verschil).
 - `x01-gate.mjs` (v249): X01 afrond-vraag niet na een tussenleg, niet bij double out, niet bij een uitgooi door de bot. De positieve gevallen (single out, legs, sets, teams, toernooi) staan in `finish-gate.mjs`.
 - `ec-correct.mjs` (v249): Eindstand corrigeren (Cricket, ATC, Afgooien, Shanghai met ontbrekende tegenstander, solo Bob's 27 met rare naam), tellers, tombstones, vangnet, knoppen, EN.
+- `rematch-start.mjs` (v250): Rematch → Zelf kiezen en Loting laten bij elk spel de gekozen speler beginnen (ook setup-pad Random Checkout/121, Afgooien willekeurig + bullronde, Random Checkout zelfde checkout per ronde).

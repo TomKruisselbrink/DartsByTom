@@ -1,62 +1,54 @@
-# Firestore-regels (fase 1, v245)
+# Firestore-regels (WP3, v250)
 
-De Firestore-regels staan in de Firebase-console, niet in deze repo. Dit mapje bevat het blok voor de
-groepssync (`groups.rules`) en hoe je het veilig toepast.
+De regels staan in de Firebase-console, niet in de app. `firestore.rules` is het voorstel; jij zet het er zelf in.
+Er verandert niets aan de app.
 
-## Waarom
+## Wat er verandert
 
-Tot v244 kon een spelersnaam met HTML-code (bijvoorbeeld `<img onerror=…>`) via de groepssync op elke
-telefoon in de groep code uitvoeren. In v245 is dat in de app zelf dichtgezet (alles wordt veilig
-weergegeven en data van buiten wordt schoongemaakt). Deze regels zijn de tweede laag: Firestore weigert
-zulke namen dan al bij het opslaan.
+| | Nu | Voorstel |
+|---|---|---|
+| `groups/**` (oude groepscode) | open voor iedereen, ook zonder login: lezen, schrijven, wissen | dicht |
+| andere collecties (andere tools in dit project) | open voor iedereen | ongewijzigd open (zie hieronder) |
+| `usernames` | iedere ingelogde gebruiker kan de hele lijst namen + uid's ophalen | alleen één naam opzoeken |
+| `friendRequests` | verzoek aan jezelf mogelijk | niet meer |
+| accounts, back-up, vrienden, inbox | beschermd | letterlijk gelijk |
 
-## Belangrijk: de catch-all
+**De catch-all.** Je huidige regels laten alles open behalve accounts ("groepen, andere tools"). Ik kan niet zien of
+andere tools van jou dit Firebase-project gebruiken. Daarom blijft de catch-all staan voor alles behalve groepen.
+Kijk in de console bij **Firestore Database → Data** welke collecties er links staan:
+- alleen `groups`, `users`, `usernames`, `friendRequests` → haal het laatste blok (`match /{coll}/{document=**}`) weg;
+- ook andere (van je andere tools) → laten staan. Die collecties zijn dan nog steeds voor iedereen open; dat is een
+  apart probleem van die tools.
 
-Firestore staat een schrijfactie toe zodra **één** regel hem toestaat. Zolang er een regel als deze staat:
-
-```
-match /{document=**} {
-  allow read, write: if true;
-}
-```
-
-doet het groepsblok niets. De catch-all moet dus weg of smaller. Kijk eerst in de console bij **Data**
-welke collecties er bestaan. De app gebruikt: `groups`, `users` (met `backup`, `public`, `friends`,
-`inbox`), `usernames` en `friendRequests`. Die laatste vier hebben al eigen regels. Staat er in de Data-tab
-niets anders, dan kan de catch-all weg zodra het groepsblok erin staat.
+**Groepscode in de app.** Wie nog een groepscode heeft ingesteld, krijgt na deze regels een melding dat schrijven
+naar de groep geweigerd wordt (Instellingen → Gegevens → Synchronisatieproblemen). Er gaat lokaal niets verloren.
+Volgens jou gebruikt niemand de groep meer.
 
 ## Toepassen (± 5 minuten)
 
 1. Firebase-console → project `ons-app-65e13` → Firestore Database → **Regels**.
-2. Kopieer de huidige regels eerst naar een tekstbestand (terugzetten = terug plakken).
-3. Plak de functies en het `match /groups/{code}`-blok uit `groups.rules` binnen
-   `match /databases/{database}/documents { … }`.
-4. Haal de catch-all weg (of beperk hem tot collecties die echt nog nodig zijn).
-5. Test in de **Regels-speeltuin** (Rules Playground) van de console:
+2. Kopieer de huidige regels naar een tekstbestand (terugzetten = terug plakken en publiceren).
+3. Plak de inhoud van `firestore.rules` eroverheen (eventueel zonder het laatste blok, zie boven).
+4. Test in de **Regels-speeltuin** (Rules Playground, knop rechtsboven in de editor). Zet "Authenticated" aan
+   met een verzonnen uid, bijvoorbeeld `uidA`, tenzij er "uit" staat:
 
-| Simulatie | Pad | Gegevens | Verwacht |
-|---|---|---|---|
-| create | `groups/TEST/players/Tom` | `{"games":1,"wins":0,"gameHistory":[]}` | toegestaan |
-| create | `groups/TEST/players/A<img>` | `{"games":1}` | geweigerd |
-| update | `groups/TEST/players/Tom` | `{"games":"veel"}` | geweigerd |
-| update | `groups/TEST/players/Tom` | `{"nickname":"<b>x</b>"}` | geweigerd |
-| get | `groups/TEST/players/Tom` | — | toegestaan |
-| update | `groups/TEST` | `{"hidden":["Piet"]}` | toegestaan |
-| delete | `groups/TEST` | — | geweigerd |
+| Type | Pad | Auth | Gegevens | Verwacht |
+|---|---|---|---|---|
+| get | `groups/TEST/players/Tom` | uit | — | geweigerd |
+| create | `groups/TEST/players/Tom` | uidA | `{"games":1}` | geweigerd |
+| get | `usernames/tom` | uidA | — | toegestaan |
+| list (query) | `usernames` | uidA | — | geweigerd |
+| get | `users/uidA/backup/meta` | uidA | — | toegestaan |
+| get | `users/uidB/backup/meta` | uidA | — | geweigerd |
+| create | `friendRequests/uidA_uidA` | uidA | `{"from":"uidA","to":"uidA"}` | geweigerd |
+| create | `friendRequests/uidA_uidB` | uidA | `{"from":"uidA","to":"uidB"}` | toegestaan |
 
-6. Publiceren. Open daarna de app op twee telefoons in de groep en speel een potje: het moet bij de ander
-   verschijnen zoals altijd.
+5. Publiceren.
+6. Controle in de app (op twee telefoons met een account): speel een potje met een gekoppelde vriend, kijk of het bij
+   de ander binnenkomt, en open Vrienden-weergave in Statistieken. Account-back-up: Instellingen → Account →
+   Back-up maken. Alles moet werken zoals voorheen.
 
-## Wat deze regels níet doen
+## Wat ik niet kon testen
 
-- Ze maken de groep niet privé: wie de groepscode heeft, kan nog steeds lezen en geldige data schrijven.
-  Dat lost pas het uitfaseren van de groepscode op (fase 6 van de roadmap), als iedereen een account heeft.
-- Firestore-regels kunnen geen lijsten doorlopen. Tekst binnen `gameHistory` (bijvoorbeeld `opponents`)
-  wordt dus niet gecontroleerd. Daarvoor zorgt de app zelf: alle binnenkomende data gaat door `_scrub()`.
-
-## Content-Security-Policy
-
-`index.html` heeft sinds v245 een CSP met alleen `object-src 'none'; base-uri 'self'; form-action 'self'`.
-Een CSP die ingevoegde inline event-handlers blokkeert (`script-src` zonder `'unsafe-inline'`) zou nu de
-hele app breken: de interface gebruikt 356 `onclick`-attributen. Dat kan pas nadat die zijn omgezet naar
-`addEventListener` (fase 4/5).
+De Firebase-emulator kan in mijn omgeving niet gedownload worden. De regels zijn dus niet in een emulator gedraaid;
+de speeltuin-tabel hierboven is de controle. De console weigert te publiceren als er een syntaxfout in staat.
