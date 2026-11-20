@@ -5,7 +5,7 @@ import path from 'path'; import { fileURLToPath } from 'url';
 const HERE = path.dirname(fileURLToPath(import.meta.url)); const ROOT = (process.env.ROOT || path.resolve(HERE, '../..')).replace(/\/?$/, '/'); const REF = (process.env.REF || '').replace(/\/?$/, '/');
 if (!process.env.REF) { console.log('finish-gate-eq: overgeslagen (zet REF=<map van de referentieversie>)'); process.exit(0); }
 const src = fs.readFileSync(path.join(HERE, 'finish-gate.mjs'), 'utf8');
-const casesSrc = src.slice(src.indexOf('const cases = {'), src.indexOf('};', src.indexOf('const cases = {')) + 2);
+const casesSrc = src.slice(src.indexOf('const cases = {'), src.indexOf('\n};', src.indexOf('const cases = {')) + 3);
 const P2 = ['Tom', 'Henk']; const cases = eval('(' + casesSrc.replace('const cases = ', '') .replace(/;$/, '') + ')');
 const pw = (await import(process.env.PLAYWRIGHT || 'playwright')).default; const b = await pw.chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
 async function run(root, c) {

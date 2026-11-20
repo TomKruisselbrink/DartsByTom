@@ -29,3 +29,5 @@ de code opgebouwde HTML. Gebruikers- of serverdata hoort daar nooit in.
 
 - `eli-save.mjs` (v248): Eliminatie slaat per speler 1 potje op (won, beurten, eindstand, matchFormat), ook bij double out, solo zonder winst; geschiedenis/statistieken NL/EN; rare namen ge-escapet.
 - `finish-gate-eq.mjs`: met een referentie van vóór v248 `SKIP=eliminatie` meegeven (bewust verschil).
+- `x01-gate.mjs` (v249): X01 afrond-vraag niet na een tussenleg, niet bij double out, niet bij een uitgooi door de bot. De positieve gevallen (single out, legs, sets, teams, toernooi) staan in `finish-gate.mjs`.
+- `ec-correct.mjs` (v249): Eindstand corrigeren (Cricket, ATC, Afgooien, Shanghai met ontbrekende tegenstander, solo Bob's 27 met rare naam), tellers, tombstones, vangnet, knoppen, EN.

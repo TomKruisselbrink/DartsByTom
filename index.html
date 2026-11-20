@@ -274,6 +274,7 @@ body::before{
 .hic-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 2px;border-bottom:1px solid var(--border);font-size:14px}
 .hic-in{width:84px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:16px;text-align:right}
 .hic-sum{font-size:13px;line-height:1.5;margin-top:6px}
+.ec-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ec-w{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);white-space:nowrap}.ec-w input{accent-color:var(--accent);width:18px;height:18px}
 .ask-box{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:askPop .2s cubic-bezier(.34,1.56,.64,1)}
 .ask-t{font-family:var(--ff-display);font-weight:700;font-size:21px;line-height:1.15;color:var(--text);margin-bottom:6px;font-synthesis:none}
 .ask-s{font-size:14px;color:var(--muted);line-height:1.4;margin-bottom:18px}
@@ -1751,6 +1752,12 @@ video {
 <body>
 <script>
 var I18N={
+"Eindstand corrigeren": "Correct final score",
+"Doelen gehaald": "Targets hit",
+"Wie heeft er gewonnen?": "Who won?",
+"Het potje wordt vervangen, ook op je andere apparaten. Vrienden die het al hebben, houden hun versie.": "The game will be replaced, on your other devices too. Friends who already have it keep their version.",
+"Dit potje kan niet gecorrigeerd worden": "This game can't be corrected",
+"Het potje is intussen veranderd. Open het opnieuw.": "The game has changed in the meantime. Open it again.",
 "Hoogste eindstand": "Highest final score",
 "Vul een naam in.": "Enter a name.",
 "Een naam mag geen onzichtbare tekens bevatten.": "A name can't contain invisible characters.",
@@ -2578,6 +2585,10 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^(Punten|Score|Doelen gehaald) per speler( en de winnaar\.|\.)$/,function(m){var l={Punten:'Points',Score:'Score','Doelen gehaald':'Targets hit'}[m[1]];return l+' per player'+(m[2]==='.'?'.':' and the winner.');}],
+[/^Winnaar kan hier niet aangepast worden: het potje van (.+) staat niet op dit apparaat\.$/,"The winner can't be changed here: the game of $1 isn't on this device."],
+[/^De potjes van (.+) staan niet op dit apparaat$/,"The games of $1 aren't on this device"],
+[/^Ongeldige waarde bij (.+)$/,'Invalid value for $1'],
 [/^eindstand (-?\d+)$/,'final score $1'],
 [/^tot (\d+)( · double out)?$/,function(m){return 'to '+m[1]+(m[2]?' · double out':'');}],
 [/^Eindscore (\d+) → (\d+)$/,'Final score $1 → $2'],
@@ -7788,6 +7799,7 @@ function updateGroupStandings(match){
 
 
 function renderGame(){
+  if(state._finishPending&&_finishReopen())return;
   var n=state.players.length;
   var cur=state.currentPlayer;
 
@@ -8497,6 +8509,8 @@ function submitScore(){
     pushEntry({player:cur,score:score,remaining:remaining,bust:false,won:true,
       checkoutAttempt:true,checkoutHit:true});
     clearNumpad();
+    // v249: single out (vrij spel en toernooi): beslist deze worp de wedstrijd, dan eerst "Potje afronden?"
+    if(_x01MatchEnds(cur)){_x01Finish({cur:cur});return;}
     endGame501(state.players[cur]);
     return;
   }
@@ -8512,6 +8526,34 @@ function submitScore(){
   setTimeout(function(){nextPlayer501()},400);
 }
 
+
+// ═══ X01: Potje afronden? (v249) ═══
+// Alleen na de worp die de hele wedstrijd beslist, en alleen bij single out (double out vraagt al "Was het op een double?").
+// Tussen de legs door geen vraag. Ongedaan gaat via de hervat-snapshot (zie _finishGate), dus ook legs/sets/toernooi exact terug.
+function _x01MatchEnds(wi){
+  if(state.trnMode&&trn&&trn.currentMatch){
+    var m=trn.currentMatch,need=Math.ceil(trn.bestOf/2),w=state.players[wi];
+    return ((w===m.p1?(m.w1||0):(m.w2||0))+1)>=need;
+  }
+  var legsNeeded=legsNeededToWin();
+  if(state.matchSets>1)return (state.legsInSet[wi]+1)>=legsNeeded&&(state.setWins[wi]+1)>=setsNeededToWin();
+  return (state.legWins[wi]+1)>=legsNeeded;
+}
+function _x01Finish(a){
+  var wi=a&&a.cur!=null?a.cur:state.currentPlayer,multi=state.trnMode||state.matchN>1||state.matchSets>1;
+  var reps=state.teamOf?[0,1]:state.players.map(function(n,i){return i;});
+  var rows=reps.map(function(i){
+    var me=state.teamOf?state.teamOf[i]===state.teamOf[wi]:i===wi,val;
+    if(!multi)val=state.scores[i];
+    else if(state.trnMode&&trn.currentMatch){var m=trn.currentMatch,n=state.players[i];val=(n===m.p1?(m.w1||0):(m.w2||0))+(me?1:0);}
+    else if(state.matchSets>1)val=(state.setWins[i]||0)+(me?1:0);
+    else val=(state.legWins[i]||0)+(me?1:0);
+    if(multi)val=val+(state.matchSets>1&&!state.trnMode?(val===1?' set':' sets'):(val===1?' leg':' legs'));
+    return '<div class="stat-row"><span>'+_esc(state.teamOf?_teamName(i):state.players[i])+'</span><strong>'+_esc(val)+'</strong></div>';
+  }).join('');
+  _finishGate('x01',{cur:wi},rows,function(){endGame501(state.players[wi]);});
+}
+_FINISH.x01=_x01Finish;
 
 function confirmDouble(isDouble,remaining,score,cur){
   // Remove the overlay
@@ -9778,13 +9820,13 @@ function _hiStatsFrom(rh,old){
   }
   return o;
 }
-// De potjes van de tegenstanders uit hetzelfde Halve It-potje (zelfde moment, elkaar als tegenstander).
+// De potjes van de tegenstanders uit hetzelfde potje (zelfde spel, zelfde moment ±10 s, elkaar als tegenstander). v249: elk spel.
 function _hiSiblings(name,g){
   var db=dbCache,out={},missing=[];
   (g.opponents||[]).forEach(function(opp){
     var best=null,bd=1e9;
     ((db[opp]&&db[opp].gameHistory)||[]).forEach(function(e){
-      if(!e||e.gameType!=='halveit'||!Array.isArray(e.opponents)||e.opponents.indexOf(name)<0)return;
+      if(!e||e.gameType!==g.gameType||e===g||!Array.isArray(e.opponents)||e.opponents.indexOf(name)<0)return;
       var d=Math.abs((e.ts||0)-(g.ts||0));if(d<=10000&&d<bd){bd=d;best=e;}
     });
     if(best)out[opp]=best;else missing.push(opp);
@@ -9854,6 +9896,78 @@ function hiCorrectSave(name,key){
     Object.keys(pl.flips).forEach(function(o){var e=S.sib[o];if(e)_hiReplaceEntry(o,e,{won:pl.flips[o]});});
     [name].concat(Object.keys(pl.flips)).forEach(function(n){_sortHistory(dbCache[n]);});
     saveDB(dbCache);
+    closeGameSheet();showToast('Potje gecorrigeerd','success');
+    try{renderHistory();}catch(e){}
+  });
+}
+
+// ═══ Eindstand corrigeren (v249) ═══
+// Voor spellen zonder bewaarde rondes: eindscore per speler en de winnaar aanpassen. Zelfde manier als Halve It:
+// het potje wordt vervangen (tombstone + kopie met nieuwe gid en corrected), nooit in place bewerkt.
+// Niet bij X01/toernooi (legs, gemiddelden en dubbels zouden niet meer kloppen) en niet bij Afgooien met teams.
+var EC_CFG={cricket:{f:'score',l:'Punten'},shanghai7:{f:'score',m:1,l:'Score'},shanghai20:{f:'score',m:1,l:'Score'},
+  bobs27:{f:'score',m:1,l:'Score',neg:1},eliminatie:{f:'score',m:1,l:'Score'},randomco:{f:'score',m:1,l:'Punten'},
+  halveit:{f:'score',m:1,l:'Score'},atc:{f:'highScore',l:'Doelen gehaald',max:22},afgooien:{f:null}};
+var _ecCtx=null;
+function _ecCan(g){
+  var c=g&&EC_CFG[g.gameType];if(!c)return false;
+  if(g.gameType==='halveit'&&Array.isArray(g.hiRoundHistory)&&g.hiRoundHistory.length)return false; // die heeft Rondes corrigeren
+  if(g.gameType==='afgooien'&&Array.isArray(g.team)&&g.team.length)return false;
+  if(!c.f&&!(g.opponents||[]).length)return false; // niets om aan te passen
+  return true;
+}
+function ecOpen(name,key){
+  var g=_hiFindEntry(name,key);if(!g||!_ecCan(g)){showToast('Dit potje kan niet gecorrigeerd worden','info');return;}
+  var c=EC_CFG[g.gameType],S=_hiSiblings(name,g),solo=!(g.opponents||[]).length,canWin=!solo&&!S.missing.length;
+  var names=[name].concat(Object.keys(S.sib)),ents=names.map(function(n){return n===name?g:S.sib[n];});
+  if(!c.f&&!canWin){showToast('De potjes van '+S.missing.join(', ')+' staan niet op dit apparaat','info');return;}
+  _ecCtx={name:name,key:key,names:names,canWin:canWin};
+  var rows=names.map(function(n,i){
+    var e=ents[i];
+    return '<div class="hic-row"><span class="ec-n">'+_esc(n)+'</span>'+
+      (c.f?'<input type="number" inputmode="numeric" step="1" class="hic-in ec-in" data-i="'+i+'" value="'+_esc(Number(e[c.f])||0)+'" aria-label="'+_esc(c.l)+'">':'')+
+      (canWin?'<label class="ec-w"><input type="radio" name="ec-win" value="'+i+'"'+(e.won?' checked':'')+'> Winnaar</label>':'')+
+    '</div>';
+  }).join('');
+  openGameSheet('Eindstand corrigeren',
+    '<div class="ac-note"><b>'+_esc(GAME_TYPE_LABELS[g.gameType]||g.gameType)+'</b> · '+_esc(g.date||'')+'<br>'+(c.f?_esc(c.l)+' per speler'+(canWin?' en de winnaar.':'.'):'Wie heeft er gewonnen?')+'</div>'+
+    (!solo&&!canWin?'<div class="ac-note" style="color:var(--muted)">Winnaar kan hier niet aangepast worden: het potje van '+_esc(S.missing.join(', '))+' staat niet op dit apparaat.</div>':'')+
+    '<div class="hic-list">'+rows+'</div><div class="hic-sum" id="ec-sum"></div>'+
+    '<button class="g-hit" style="width:100%;margin-top:10px" onclick="ecSave()">Opslaan</button>');
+  document.querySelectorAll('.ec-in,[name="ec-win"]').forEach(function(el){el.addEventListener('input',ecPreview);el.addEventListener('change',ecPreview);});
+  ecPreview();
+}
+function _ecPlan(){
+  var x=_ecCtx;if(!x)return null;var g=_hiFindEntry(x.name,x.key);if(!g)return null;
+  var c=EC_CFG[g.gameType],S=_hiSiblings(x.name,g),err=null,ch=[];
+  var ents=x.names.map(function(n){return n===x.name?g:S.sib[n];});
+  if(ents.some(function(e){return !e;}))return {err:'Het potje is intussen veranderd. Open het opnieuw.'};
+  var wr=document.querySelector('[name="ec-win"]:checked'),wi=wr?parseInt(wr.value,10):-1;
+  x.names.forEach(function(n,i){
+    var e=ents[i],patch={},txt=[];
+    if(c.f){
+      var el=document.querySelector('.ec-in[data-i="'+i+'"]'),raw=el?String(el.value).trim():'',v=Number(raw);
+      if(raw===''||!isFinite(v)||Math.round(v)!==v||(!c.neg&&v<0)||(c.max&&v>c.max)){err='Ongeldige waarde bij '+n;return;}
+      var old=Number(e[c.f])||0;if(v!==old){patch[c.f]=v;if(c.m)patch.highScore=v;txt.push(n+': '+old+' → '+v);}
+    }
+    if(x.canWin&&wi>=0){var w=(i===wi);if(w!==!!e.won){patch.won=w;txt.push(w?n+' wint nu':n+' wint niet meer');}}
+    if(Object.keys(patch).length)ch.push({n:n,e:e,patch:patch,txt:txt});
+  });
+  return {err:err,ch:ch};
+}
+function ecPreview(){
+  var pl=_ecPlan(),el=document.getElementById('ec-sum');if(!pl||!el)return;
+  if(pl.err){el.innerHTML='<span style="color:var(--danger)">'+_esc(pl.err)+'</span>';return;}
+  el.innerHTML=pl.ch.map(function(c){return c.txt.map(function(t){return '<div>'+_esc(t)+'</div>';}).join('');}).join('');
+}
+function ecSave(){
+  var pl=_ecPlan();if(!pl)return;
+  if(pl.err){showToast(pl.err,'error');return;}
+  if(!pl.ch.length){closeGameSheet();showToast('Niets veranderd','info');return;}
+  _askConfirm('Correctie opslaan?','Het potje wordt vervangen, ook op je andere apparaten. Vrienden die het al hebben, houden hun versie.','Opslaan',false,function(){
+    pl.ch.forEach(function(c){_hiReplaceEntry(c.n,c.e,c.patch);});
+    pl.ch.forEach(function(c){_sortHistory(dbCache[c.n]);});
+    saveDB(dbCache);_ecCtx=null;
     closeGameSheet();showToast('Potje gecorrigeerd','success');
     try{renderHistory();}catch(e){}
   });
@@ -10784,12 +10898,13 @@ function _renderHistoryImpl(){
         if(_statsScope!=='friends')hiDetailHtml+='<button class="btn btn-sm" style="width:100%;margin-top:8px;justify-content:center" data-n="'+_esc(historySelectedPlayer)+'" data-k="'+_esc(_mkey(g))+'" onclick="event.stopPropagation();hiCorrectOpen(this.dataset.n,this.dataset.k)">Rondes corrigeren</button>';
       }
     }
+    var ecHtml=(_statsScope!=='friends'&&_ecCan(g))?'<button class="btn btn-sm" style="width:100%;margin-top:4px;justify-content:center" data-n="'+_esc(historySelectedPlayer)+'" data-k="'+_esc(_mkey(g))+'" onclick="event.stopPropagation();ecOpen(this.dataset.n,this.dataset.k)">Eindstand corrigeren</button>':'';
     var detailHtml=
       hiDetailHtml+
       (info.length&&!g.hiStats?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'+
         info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:12px;color:var(--muted)">'+_esc(t)+'</span>';}).join('')+
       '</div>':'')+
-      legHtml;
+      legHtml+ecHtml;
     return _hdr+'<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden" class="fade-in">'+
       '<div onclick="toggleHistoryDetail(\''+detailId+'\')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
@@ -11400,7 +11515,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=248;
+var APP_VERSION=249;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;

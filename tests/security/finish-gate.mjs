@@ -12,12 +12,17 @@ const cases = {
   randomco: { launch: `rcoCount=1;rcoMode='default';launchRandomCheckout(${JSON.stringify(P2)});`, toEnd: `rcoResult(true);`, last: `rcoResult(false);`, screen: 'screen-randomco', want: 2 },
   afgooien: { launch: `afgAssign='random';afgLives=3;afgTeams=0;launchGame('afgooien',${JSON.stringify(['Tom','Henk','Piet'])},true,'firstto',1,1,501,0);`, toEnd: `_afg.players[2].eliminated=true;_afg.players.forEach(function(q){q.score=_afg.target;q.killer=true;});_afg.players[1].score=1;_afg.currentIdx=0;_afg.dartsLeft=3;renderAfgooien();`, last: `afgAttack('Henk',1);`, screen: 'screen-afgooien', want: 3 },
   eliminatie: { launch: `eliDoubleOut=false;eliTarget=301;launchGame('eliminatie',${JSON.stringify(P2)},true,'firstto',1,1,501,0);`, toEnd: `state.eliScores[state.currentPlayer]=state.eliTarget-20;renderEliminatie();`, last: `eliNumQuick(20);eliSubmit();`, screen: 'screen-eliminatie' },
+  x01: { launch: `launchGame('501',${JSON.stringify(P2)},false,'firstto',1,1,501,0);`, toEnd: `state.scores[state.currentPlayer]=40;renderGame();`, last: `document.getElementById('score-input').value='40';submitScore();`, screen: 'screen-game' },
+  x01Legs: { launch: `launchGame('501',${JSON.stringify(P2)},false,'bestof',3,1,501,0);`, toEnd: `state.legWins=[1,1];state.scores[state.currentPlayer]=40;renderGame();`, last: `document.getElementById('score-input').value='40';submitScore();`, screen: 'screen-game' },
+  x01Sets: { launch: `launchGame('501',${JSON.stringify(P2)},false,'firstto',2,2,501,0);`, toEnd: `state.setWins=[1,1];state.legsInSet=[1,1];state.scores[state.currentPlayer]=40;renderGame();`, last: `document.getElementById('score-input').value='40';submitScore();`, screen: 'screen-game' },
+  x01Teams: { launch: `_pendingTeams=[0,1,0,1];launchGame('501',['Tom','Piet','Henk','Kees'],false,'firstto',1,1,501,0);`, toEnd: `state.scores=state.scores.map(function(){return 40;});renderGame();`, last: `document.getElementById('score-input').value='40';submitScore();`, screen: 'screen-game', want: 4 },
+  trn: { launch: `trnPlayers=${JSON.stringify(P2)};trnFormat='roundrobin';trnBO=3;trnDoubleOut=false;trnGame=501;startTournament();var m=null;(function w(o){if(m||!o||typeof o!=='object')return;if(Array.isArray(o)){o.forEach(w);return;}if(o.p1&&o.p2&&!o.done&&o.w1!=null){m=o;return;}Object.keys(o).forEach(function(k){if(k!=='currentMatch')w(o[k]);});})(trn);m.w1=1;m.w2=1;launchTrnMatchWithStart(m,function(wn){trnRecordLegWin(m,wn);renderTrnOverview();showScreen('screen-trn-overview');},0);`, toEnd: `state.scores[state.currentPlayer]=40;renderGame();`, last: `document.getElementById('score-input').value='40';submitScore();`, screen: 'screen-game', endScreen: 'screen-trn-overview' },
 };
 const b = await browser(); const fails = []; const log = [];
 for (const [g, c] of Object.entries(cases)) {
   const { p, errs } = await page(b, { db: { Tom: { games: 0, wins: 0, totalDarts: 0, totalScore: 0, gameHistory: [] }, Henk: { games: 0, wins: 0, totalDarts: 0, totalScore: 0, gameHistory: [] } } });
   await open(p);
-  const cnt = () => p.evaluate(() => ['Tom','Henk','Piet'].reduce(function(s,n){return s+((dbCache[n]&&dbCache[n].gameHistory)||[]).length;},0));
+  const cnt = () => p.evaluate(() => ['Tom','Henk','Piet','Kees'].reduce(function(s,n){return s+((dbCache[n]&&dbCache[n].gameHistory)||[]).length;},0));
   await p.evaluate(c.launch); await p.waitForTimeout(200);
   await p.evaluate(c.toEnd); await p.waitForTimeout(150);
   const before = await p.evaluate(() => JSON.stringify(state));
@@ -47,7 +52,7 @@ for (const [g, c] of Object.entries(cases)) {
   await p.evaluate(() => document.getElementById('fin-ok').click()); await p.waitForTimeout(600);
   const r4 = await p.evaluate(() => ({ scr: _curScreen, live: localStorage.getItem('darts_live') }));
   const n = await cnt(), want = c.want != null ? c.want : (g === 'bob' ? 1 : 2);
-  if (r4.scr !== 'screen-win') fails.push(g + ': geen winscherm na Afronden (' + r4.scr + ')');
+  if (r4.scr !== (c.endScreen || 'screen-win')) fails.push(g + ': geen winscherm na Afronden (' + r4.scr + ')');
   if (n !== want) fails.push(g + `: ${n} potjes opgeslagen, verwacht ${want}`);
   if (r4.live) fails.push(g + ': darts_live niet gewist');
   log.push(`${g}: vraag=${r1.ov} rijen="${r1.rows.replace(/\n/g, ' ').slice(0, 50)}" opgeslagen=${n}`);
