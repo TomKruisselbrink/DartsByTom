@@ -304,6 +304,11 @@ function run(){
     out('');
   }
 
+  out('== 1b. Wat v245 (_scrub) zou raken in de exports zelf ==');
+  out('(Tekens en waarden die v245 zou weghalen als deze data via back-up of vrienden binnenkwam. 0 = deze data kan door v245 niet veranderd zijn.)');
+  exportsList.forEach(function(x,i){var eff=[],cls={};Object.keys(x.data).forEach(function(n){var e2=[];scrubEffects(x.data[n],[],0,e2);e2.forEach(function(y){cls[y.cls]=(cls[y.cls]||0)+1;eff.push(pid(n)+' · '+aPath(y.path)+' · '+y.cls+(y.info?' · '+y.info:''));});});
+    out('  '+expLab[i]+': '+(eff.length?eff.length+' plekken ('+Object.keys(cls).map(function(k){return k+' '+cls[k];}).join(', ')+')':'0 plekken'));eff.slice(0,100).forEach(function(l){out('    '+l);});});
+  out('');
   out('== 5. Technische grenzen (voor WP2/WP3) ==');
   var all={};if(remote)Object.keys(remote).forEach(function(n){all[n]=remote[n];});exportsList.forEach(function(x){Object.keys(x.data).forEach(function(n){if(!all[n])all[n]=x.data[n];});});
   var lim=[];Object.keys(all).sort().forEach(function(n){var p=all[n]||{},w=[];
@@ -317,10 +322,12 @@ function run(){
   out('');
 
   out('== 6. Antwoorden op de B4-vragen ==');
-  out('1. Lokale potjes mogelijk aangepast door v245 (ingekort t.o.v. Firestore of andersom): '+ans.q1);
-  out('2. Daarvan staat het origineel nog in Firestore: '+ans.q2);
-  out('3. Gekoppelde potjes met andere verschillen dan v245-tekens: '+ans.q3+'  (let op: potjes hebben alleen een aanmaaktijd (ts), geen wijzigingstijd; "nieuwer" is per potje niet vast te stellen, wel welke kant afwijkt en hoe)');
-  out('4. Wat _scrub verder zou veranderen dan tekens weghalen: '+(Object.keys(ans.q4).filter(function(k){return k!=='tekens verwijderd';}).map(function(k){return k+' '+ans.q4[k];}).join(', ')||'niets'));
+  var cmp=!!remote||exportsList.length>1;
+  if(!cmp)out('Let op: er is maar één bron ingelezen. Vraag 1–3 vergelijken twee bronnen en zijn hier dus NIET te bepalen; zie sectie 1b voor wat v245 in deze export zou raken.');
+  out('1. Lokale potjes mogelijk aangepast door v245 (ingekort t.o.v. Firestore of andersom): '+(cmp?ans.q1:'niet te bepalen'));
+  out('2. Daarvan staat het origineel nog in Firestore: '+(remote?ans.q2:'niet te bepalen (geen Firestore ingelezen)'));
+  out('3. Gekoppelde potjes met andere verschillen dan v245-tekens: '+(cmp?ans.q3:'niet te bepalen')+'  (let op: potjes hebben alleen een aanmaaktijd (ts), geen wijzigingstijd; "nieuwer" is per potje niet vast te stellen, wel welke kant afwijkt en hoe)');
+  out('4. Wat _scrub verder zou veranderen dan tekens weghalen (in Firestore-data): '+(!remote?'niet ingelezen; zie 1b voor de exports':((Object.keys(ans.q4).filter(function(k){return k!=='tekens verwijderd';}).map(function(k){return k+' '+ans.q4[k];}).join(', ')||'niets'))));
   out('');
   out('Er is niets gewijzigd of verstuurd.');
 
