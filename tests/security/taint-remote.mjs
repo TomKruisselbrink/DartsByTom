@@ -11,6 +11,9 @@ const R = { G: [P.html('Gh'), P.attrDq('Gd'), P.jsQ('Gj'), "O'Neil"], B: [P.attr
 const src = {}; for (const k in R) R[k].forEach((n, i) => { src[n] = player(k + i, i ? R[k][0] : 'Tom'); });
 const store = { 'groups/G': JSON.stringify({ hidden: [] }) }; R.G.forEach(n => { store['groups/G/players/' + n] = JSON.stringify(src[n]); });
 const friendPlayer = player('F', 'Tom'), friendName = P.jsQ('Fp');
+// getalvelden met tekst in de vriendendata (Vrienden-weergave)
+Object.assign(friendPlayer, { games: P.html('fgames'), wins: P.html('fwins'), totalDarts: P.html('ftd'), totalScore: P.html('fts') });
+friendPlayer.gameHistory.forEach(e => { e.score = P.html('fscore'); e.darts = P.html('fdarts'); e.detailedStats.avg3 = P.html('favg'); });
 store['users/u2/public/meta'] = JSON.stringify({ chunks: 1, username: ALL('un'), player: friendName, ts: 1 });
 store['users/u2/public/c0'] = JSON.stringify({ d: JSON.stringify(friendPlayer) });
 const inboxGame = E('501', ['Tom'], { via: 'x' });

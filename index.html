@@ -4468,7 +4468,7 @@ function openAcctRestore(){
     openGameSheet('Herstellen uit back-up',
       '<div class="ac-row" style="border-top:0"><span>Back-up van</span><b>'+_fmtTs(m.ts)+'</b></div>'+
       '<div class="ac-row"><span>Spelers</span><b>'+(m.players||[]).length+'</b></div>'+
-      '<div class="ac-row"><span>Potjes</span><b>'+(m.games||0)+'</b></div>'+
+      '<div class="ac-row"><span>Potjes</span><b>'+_esc(m.games||0)+'</b></div>'+
       '<div class="ac-note" style="margin-top:10px">Ontbrekende spelers en potjes worden toegevoegd. Er wordt niets van deze telefoon verwijderd.</div>'+
       '<button class="g-hit" style="width:100%" onclick="acctRestoreNow()">Herstellen</button>');
   }).catch(function(e){showToast(_acctErr(e),'error');});
@@ -5137,7 +5137,7 @@ function confirmGroupCode(skipAsk){
     document.getElementById('group-modal').style.display='none';
     openGameSheet('Wie wil je delen met de groep?',
       '<div style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.45">Uitgevinkte spelers blijven privé op deze telefoon. Je kunt dit later aanpassen in Instellingen.</div>'+
-      '<div class="pp-list">'+_local.map(function(n){return '<label class="pp-row"><span>'+n+'</span><input type="checkbox" class="ios-toggle" data-pp="'+_ue(n)+'"'+(isPrivatePlayer(n)?'':' checked')+'></label>';}).join('')+'</div>'+
+      '<div class="pp-list">'+_local.map(function(n){return '<label class="pp-row"><span>'+_esc(n)+'</span><input type="checkbox" class="ios-toggle" data-pp="'+_ue(n)+'"'+(isPrivatePlayer(n)?'':' checked')+'></label>';}).join('')+'</div>'+
       '<button class="g-hit" style="width:100%;margin-top:12px;background:#3E7B4F" onclick="_confirmShareChoice()">Verbinden</button>');
     return;
   }
@@ -5405,7 +5405,7 @@ function spinWheel(){
       _wheelSpinning=false;
       setupStartPlayer=winner;
       var color=WHEEL_COLORS[winner%WHEEL_COLORS.length];
-      if(result)result.innerHTML='<strong style="color:'+color+'">'+setupPlayers[winner]+'</strong> begint!';
+      if(result)result.innerHTML='<strong style="color:'+color+'">'+_esc(setupPlayers[winner])+'</strong> begint!';
     }
   }
   requestAnimationFrame(animate);
@@ -5495,7 +5495,7 @@ function flipCoin(){
     if(coin)_applyCoinFace(coin,side,setupPlayers[winner]);
     setupStartPlayer=winner;
     var winColor=_COIN_COLORS[winner];
-    if(result)result.innerHTML='<strong style="color:'+winColor+'">'+setupPlayers[winner]+'</strong> begint!';
+    if(result)result.innerHTML='<strong style="color:'+winColor+'">'+_esc(setupPlayers[winner])+'</strong> begint!';
     _coinFlipping=false;
   },1400);
 }
@@ -7504,7 +7504,7 @@ function matchHeader(match,label,isCurrent,isLocked){
       '<span class="trn-player-wins">'+match.w1+'</span>'+
     '</div>'+
     '<div class="trn-player-row'+(p2win?' winner':match.done?' loser':'')+'">'+
-      '<span class="trn-player-name">'+(match.p2||'Bye')+'</span>'+
+      '<span class="trn-player-name">'+_esc(match.p2||'Bye')+'</span>'+
       '<span class="trn-player-wins">'+match.w2+'</span>'+
     '</div>';
   if(isCurrent){
@@ -7822,8 +7822,8 @@ function renderGame(){
     function r(l,v,hi){
       var c=hi?'var(--accent)':'var(--text)';
       return'<div style="display:flex;justify-content:space-between;align-items:center;padding:1px 0">'+
-        '<span style="color:var(--muted)">'+l+'</span>'+
-        '<span style="color:'+c+';font-weight:700">'+v+'</span></div>';
+        '<span style="color:var(--muted)">'+_esc(l)+'</span>'+
+        '<span style="color:'+c+';font-weight:700">'+_esc(v)+'</span></div>';
     }
     return r('Gem',avg3>0?avg3:'—',false)+
            r('180\'s',hi180,hi180>0)+
@@ -8308,7 +8308,7 @@ function rematch(){
   var c=rematchConfig;
   if(!c.players||c.players.length<2){_doRematch(0);return;}
   var html='<div class="rm-list">'+c.players.map(function(n,i){
-    return '<button class="rm-pl" data-i="'+i+'" onclick="_doRematch('+i+')"><span class="rm-num">'+(i+1)+'</span><span class="rm-name">'+n+'</span><span class="rm-go">begint</span></button>';
+    return '<button class="rm-pl" data-i="'+i+'" onclick="_doRematch('+i+')"><span class="rm-num">'+(i+1)+'</span><span class="rm-name">'+_esc(n)+'</span><span class="rm-go">begint</span></button>';
   }).join('')+'</div>'+
   '<button class="g-hit" id="rm-draw" style="width:100%;margin-top:10px;background:#B94E2A" onclick="_rematchDraw()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Loting</button>';
   openGameSheet('Wie begint de rematch?',html);
@@ -8736,7 +8736,7 @@ function buildBobStats(name){
   var gs=(p.gameHistory||[]).filter(function(g){return g.gameType==='bobs27';});if(!gs.length)return '';
   var best=-1e9,sum=0,h=0,a=0,fin=0;
   gs.forEach(function(g){var sc=g.score||0;if(sc>best)best=sc;sum+=sc;var b=g.bobStats;if(b){h+=b.hits||0;a+=b.att||0;if(!b.out&&b.reached>=21)fin++;}});
-  function tile(v,l,c){return '<div class="metric"><div class="val" style="color:'+(c||'var(--text)')+'">'+v+'</div><div class="lbl">'+l+'</div></div>';}
+  function tile(v,l,c){return '<div class="metric"><div class="val" style="color:'+(c||'var(--text)')+'">'+_esc(v)+'</div><div class="lbl">'+_esc(l)+'</div></div>';}
   return '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">'+
     tile(best,'Hoogste score','var(--accent)')+tile(Math.round(sum/gs.length),'Gemiddeld')+tile(a?Math.round(h/a*100)+'%':'—','Dubbels raak','var(--accent2)')+tile(fin+'×','Uitgespeeld')+'</div>';
 }
@@ -8964,7 +8964,7 @@ function renderShanghai(){
   if(state.shMaxTarget>0&&state.shTarget>state.shMaxTarget){
     var _ms=Math.max.apply(null,state.shScores);var _wi=state.shScores.indexOf(_ms);
     if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===_wi,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
-    showWin(state.players.length===1?'Eindstand':state.players[_wi],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+n+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
+    showWin(state.players.length===1?'Eindstand':state.players[_wi],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
   }
   document.getElementById('sh-target2').textContent=state.shTarget;
   document.getElementById('sh-round-num').textContent=state.shRound;
@@ -9036,7 +9036,7 @@ function shEndTurn(){
       var maxScore=Math.max.apply(null,state.shScores);
       var winIdx=state.shScores.indexOf(maxScore);
       if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===winIdx,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
-      showWin(state.players[winIdx],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+n+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
+      showWin(state.players[winIdx],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
     }
   }
   renderShanghai();
@@ -9069,7 +9069,7 @@ function renderHalveIt(){
       var extras='';
       if(dpct!==null)extras+='<span style="color:var(--accent2);font-size:11px;margin-left:6px">D:'+dh+'/'+(dh+dm)+' ('+dpct+'%)</span>';
       if(tpct!==null)extras+='<span style="color:#f59e0b;font-size:11px;margin-left:6px">T:'+th+'/'+(th+tm)+' ('+tpct+'%)</span>';
-      return'<div class="stat-row"><span>'+n+'</span><strong>'+state.hiScores[i]+'</strong>'+
+      return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.hiScores[i]+'</strong>'+
         '<span style="color:var(--muted);font-size:11px;margin-left:8px">'+pct+'% raak</span>'+extras+'</div>';
     }).join('');
     showWin(state.players.length===1?'Eindstand':state.players[_wi],'Halve It eindstand',_sh);return;
@@ -9155,9 +9155,9 @@ function renderHalveIt(){
   targetCard.style.cssText='margin:0 16px 8px;background:var(--surface);border:1px solid var(--border);'+
     'border-radius:20px;padding:18px 16px 14px;text-align:center;flex-shrink:0';
   targetCard.innerHTML=
-    '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+(curIsBot?'🤖 ':'')+curName+' gooit op</div>'+
+    '<div style="font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">'+(curIsBot?'🤖 ':'')+_esc(curName)+' gooit op</div>'+
     '<div class="hi-tbig" style="font-size:'+fSize+';font-weight:900;color:'+targetColor+';line-height:1;letter-spacing:-3px;'+
-         'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 8px">'+labelText2+'</div>'+
+         'text-shadow:0 0 40px rgba(185,78,42,.45);margin:2px 0 8px">'+_esc(labelText2)+'</div>'+
     '<div style="display:flex;align-items:center;justify-content:center;gap:6px">'+
       '<div style="font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)">Pijlen</div>'+
       '<div style="display:flex;gap:6px">'+emojiDarts+'</div>'+
@@ -9265,9 +9265,9 @@ function _buildHiHistory(content){
         (idx>=6?'opacity:.55':'');
       var lft=document.createElement('div');
       lft.style.cssText='display:flex;align-items:center;gap:8px;min-width:0';
-      lft.innerHTML='<div style="font-size:11px;font-weight:800;color:var(--muted);min-width:28px;flex-shrink:0">'+roundLabel+'</div>'+
-        (state.players.length>1?'<div style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+playerName+'</div>':'')+
-        (throwStr?'<div style="font-size:11px;color:var(--muted);flex-shrink:0">'+throwStr+'</div>':'');
+      lft.innerHTML='<div style="font-size:11px;font-weight:800;color:var(--muted);min-width:28px;flex-shrink:0">'+_esc(roundLabel)+'</div>'+
+        (state.players.length>1?'<div style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+_esc(playerName)+'</div>':'')+
+        (throwStr?'<div style="font-size:11px;color:var(--muted);flex-shrink:0">'+_esc(throwStr)+'</div>':'');
       var rht=document.createElement('div');
       rht.style.cssText='font-size:14px;font-weight:900;flex-shrink:0;color:'+(h.halved?'#FF9F0A':'var(--accent2)');
       rht.textContent=h.halved?'gehalveerd':'+'+h.pts;
@@ -9312,7 +9312,7 @@ function renderHiInputArea(item){
     var _hitVal=item.type==='spec_double'?item.val*2:item.val*3;
     var _tl=item.type==='spec_double'?'D'+item.val:'T'+item.val;
     el.innerHTML=
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-align:center">Hoe vaak raak je '+_tl+' met 3 pijlen? ('+_hitVal+' pts per raak)</div>'+
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-align:center">Hoe vaak raak je '+_esc(_tl)+' met 3 pijlen? ('+_hitVal+' pts per raak)</div>'+
       '<div class="gap8">'+
       '<button class="btn" style="flex:1" onclick="state.hiTurnPts='+_hitVal+';hiEndTurn(true)">1 raak<br><span class="muted">'+_hitVal+'</span></button>'+
       '<button class="btn" style="flex:1" onclick="state.hiTurnPts='+(2*_hitVal)+';hiEndTurn(true)">2 raak<br><span class="muted">'+(2*_hitVal)+'</span></button>'+
@@ -9435,7 +9435,7 @@ function renderHiInputArea(item){
   } else if(item.type==='custom'){
     // Free score entry with numpad-style input
     el.innerHTML=
-      '<div style="background:rgba(185,78,42,.1);border:1px solid rgba(185,78,42,.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--accent)">'+item.label+'</div>'+
+      '<div style="background:rgba(185,78,42,.1);border:1px solid rgba(185,78,42,.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:var(--accent)">'+_esc(item.label)+'</div>'+
       '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">'+
         '<input type="number" id="hi-custom-score" min="0" max="180" placeholder="Score…"'+
         ' style="flex:1;font-size:20px;font-weight:800;text-align:center;padding:10px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);color:var(--text)"'+
@@ -9614,7 +9614,7 @@ function hiEndTurn(scored){
         var extras='';
         if(dpct!==null)extras+='<span style="color:var(--accent2);font-size:11px;margin-left:6px">D:'+dh+'/'+(dh+dm)+' ('+dpct+'%)</span>';
         if(tpct!==null)extras+='<span style="color:#f59e0b;font-size:11px;margin-left:6px">T:'+th+'/'+(th+tm)+' ('+tpct+'%)</span>';
-        return'<div class="stat-row"><span>'+n+'</span><strong>'+state.hiScores[i]+'</strong>'+
+        return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.hiScores[i]+'</strong>'+
           '<span style="color:var(--muted);font-size:11px;margin-left:8px">'+pct+'% raak</span>'+extras+'</div>';
       }).join('');
       state._hiDone=true;showWin(state.players[winIdx],'Halve It eindstand',statsHtml);return;
@@ -9679,7 +9679,7 @@ function _winStatsTable(){
   if(!(state.gameType==='x01'||state.gameType==='501'||state.gameType==='301'))return '';
   var rows=[['3-pijl gem.','avg3'],["180's",'count180'],['Hoogste beurt','highTurn'],['Hoogste finish','highFinish'],['Dubbel %','checkoutPct']];
   var st=state.players.map(function(n,i){try{return calcDetailedStats(i);}catch(e){return {};}});
-  var head='<div class="ws-row ws-head"><span></span>'+state.players.map(function(n){return '<b>'+n+'</b>';}).join('')+'</div>';
+  var head='<div class="ws-row ws-head"><span></span>'+state.players.map(function(n){return '<b>'+_esc(n)+'</b>';}).join('')+'</div>';
   var body=rows.map(function(r){
     var vals=st.map(function(x){var v=x[r[1]];return (v===null||v===undefined||v===0&&r[1]==='highFinish')?'—':(r[1]==='checkoutPct'?v+'%':v);});
     var nums=st.map(function(x){return typeof x[r[1]]==='number'?x[r[1]]:-1;});
@@ -9793,10 +9793,10 @@ function _renderStatsImpl(){
 
     var summaryHtml=
       '<div class="metrics" style="margin-bottom:10px">'+
-        '<div class="metric"><div class="val">'+fGames+'</div><div class="lbl">Gespeeld</div></div>'+
-        '<div class="metric"><div class="val">'+fWins+'</div><div class="lbl">Gewonnen</div></div>'+
-        '<div class="metric"><div class="val">'+(fGames-fWins)+'</div><div class="lbl">Verloren</div></div>'+
-        '<div class="metric"><div class="val">'+fWr+'%</div><div class="lbl">Win %</div></div>'+
+        '<div class="metric"><div class="val">'+_esc(fGames)+'</div><div class="lbl">Gespeeld</div></div>'+
+        '<div class="metric"><div class="val">'+_esc(fWins)+'</div><div class="lbl">Gewonnen</div></div>'+
+        '<div class="metric"><div class="val">'+_esc((fGames-fWins))+'</div><div class="lbl">Verloren</div></div>'+
+        '<div class="metric"><div class="val">'+_esc(fWr)+'%</div><div class="lbl">Win %</div></div>'+
       '</div>';
 
     // x01 avg block — only when filter is 501, 301, or alle
@@ -9809,19 +9809,19 @@ function _renderStatsImpl(){
         function srow2(lbl,val,hi){
           var c=hi?'var(--accent)':'var(--text)';var w=hi?'800':'700';
           return'<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:0.5px solid var(--separator)">'+
-            '<span style="font-size:13px;color:var(--muted)">'+lbl+'</span>'+
-            '<span style="font-size:13px;font-weight:'+w+';color:'+c+'">'+val+'</span></div>';
+            '<span style="font-size:13px;color:var(--muted)">'+_esc(lbl)+'</span>'+
+            '<span style="font-size:13px;font-weight:'+w+';color:'+c+'">'+_esc(val)+'</span></div>';
         }
         function sTile(val,lbl,clr){
           return'<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 6px;text-align:center">'+
-            '<div class="dv" style="font-size:18px;font-weight:900;color:'+clr+';line-height:1.1">'+val+'</div>'+
-            '<div style="font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">'+lbl+'</div>'+
+            '<div class="dv" style="font-size:18px;font-weight:900;color:'+clr+';line-height:1.1">'+_esc(val)+'</div>'+
+            '<div style="font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">'+_esc(lbl)+'</div>'+
           '</div>';
         }
         var hi140=avg.count180+(avg.count160||0)+(avg.count140||0);
         var hi100=hi140+(avg.count120||0)+(avg.count100||0);
         avgBlock=
-          '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">501/301 — '+avg.gamesX01+' wedstr.</div>'+
+          '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">501/301 — '+_esc(avg.gamesX01)+' wedstr.</div>'+
           '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px">'+
             sTile(avg.avg3,'3-pijl gem.','var(--accent)')+
             sTile(avg.avg1,'1-pijl gem.','var(--accent2)')+
@@ -9846,7 +9846,7 @@ function _renderStatsImpl(){
         otherBlock=
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
             '<div style="background:rgba(185,78,42,.08);border:1px solid rgba(185,78,42,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
-              '<div style="font-size:28px;font-weight:900;color:var(--accent)">'+gs.highScore+'</div>'+
+              '<div style="font-size:28px;font-weight:900;color:var(--accent)">'+_esc(gs.highScore)+'</div>'+
               '<div style="font-size:12px;color:var(--muted);margin-top:2px">'+(labelMap[activeFilter]||'Beste score')+'</div>'+
             '</div>'+
             '<div style="background:rgba(15,155,142,.08);border:1px solid rgba(15,155,142,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
@@ -9882,12 +9882,12 @@ function _renderStatsImpl(){
       return'<div style="padding:6px 0;border-bottom:1px solid var(--border)">'+
         '<div style="display:flex;justify-content:space-between;align-items:center">'+
           '<div>'+
-            '<span style="font-size:13px;font-weight:600">'+typeLabel+'</span>'+
-            '<span style="color:var(--muted);font-size:12px;margin-left:6px">'+g.date+'</span>'+
+            '<span style="font-size:13px;font-weight:600">'+_esc(typeLabel)+'</span>'+
+            '<span style="color:var(--muted);font-size:12px;margin-left:6px">'+_esc(g.date)+'</span>'+
           '</div>'+
           (!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+
         '</div>'+
-        (infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+
+        (infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+_esc(infoItems.join(' · '))+'</div>':'')+
       '</div>';
     }).join('');
 
@@ -9908,7 +9908,7 @@ function _renderStatsImpl(){
       buildH2HBlock(filtered)+
       '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Recente wedstrijden</div>'+
       (histRows||'<div class="empty">Geen wedstrijden gevonden</div>')+
-      (_histExtra.length?'<div id="stats-more-'+_ue(name)+'" style="display:none">'+_histExtra.map(function(g){var ds=g.detailedStats;var infoItems=[];if(g.setResult)infoItems.push('Sets '+g.setResult);else if(g.legResult)infoItems.push('Legs '+g.legResult);if(ds){infoItems.push('gem '+ds.avg3+(ds.count180?' · '+ds.count180+'×180':''));}var typeLabel=typeLabels[g.gameType]||g.gameType;return'<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-size:13px;font-weight:600">'+typeLabel+'</span><span style="color:var(--muted);font-size:12px;margin-left:6px">'+g.date+'</span></div>'+(!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+'</div>'+(infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+'</div>';}).join('')+'</div>'+
+      (_histExtra.length?'<div id="stats-more-'+_ue(name)+'" style="display:none">'+_histExtra.map(function(g){var ds=g.detailedStats;var infoItems=[];if(g.setResult)infoItems.push('Sets '+g.setResult);else if(g.legResult)infoItems.push('Legs '+g.legResult);if(ds){infoItems.push('gem '+ds.avg3+(ds.count180?' · '+ds.count180+'×180':''));}var typeLabel=typeLabels[g.gameType]||g.gameType;return'<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-size:13px;font-weight:600">'+_esc(typeLabel)+'</span><span style="color:var(--muted);font-size:12px;margin-left:6px">'+_esc(g.date)+'</span></div>'+(!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+'</div>'+(infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+_esc(infoItems.join(' · '))+'</div>':'')+'</div>';}).join('')+'</div>'+
       '<button onclick="var m=this.previousElementSibling;var open=m.style.display!==\'none\';m.style.display=open?\'none\':\'\';this.textContent=open?\'Toon meer ('+_histExtra.length+')\':\'Toon minder\';" style="width:100%;margin-top:6px;background:none;border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:7px;font-size:12px;color:var(--muted);cursor:pointer">Toon meer ('+_histExtra.length+')</button>':
       '')+
       '<button class="st-manage" data-n="'+_esc(name)+'" onclick="showScreen(\'screen-settings\');stOpen(\'players\');_spOpen=this.dataset.n;renderSettingsPlayers()">Speler beheren (samenvoegen of verwijderen)</button>';
@@ -9954,7 +9954,7 @@ function showExportPanel(){
   // Populate player dropdown
   var sel=document.getElementById('export-player-select');
   sel.innerHTML='<option value="__all__">Alle spelers</option>'+
-    names.map(function(n){return'<option value="'+n+'">'+n+'</option>';}).join('');
+    names.map(function(n){return'<option value="'+_esc(n)+'">'+_esc(n)+'</option>';}).join('');
 }
 
 function exportStats(){
@@ -10361,9 +10361,9 @@ function _renderLeaderboardBody(tab,month){
           '<div style="font-size:20px;min-width:28px;text-align:center">'+(medals[i]||'<span style="font-size:13px;color:var(--muted)">'+(i+1)+'</span>')+'</div>'+
           '<div style="flex:1">'+
             '<div style="font-size:14px;font-weight:700">'+_esc(r.name)+_whoTag(r.name)+'</div>'+
-            '<div style="font-size:11px;color:var(--muted)">'+r.games+' gespeeld · '+pct+'% winrate</div>'+
+            '<div style="font-size:11px;color:var(--muted)">'+_esc(r.games)+' gespeeld · '+_esc(pct)+'% winrate</div>'+
           '</div>'+
-          '<div style="font-size:22px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+r.wins+'</div>'+
+          '<div style="font-size:22px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+_esc(r.wins)+'</div>'+
         '</div>';
       }).join('');
     return;
@@ -10389,9 +10389,9 @@ function _renderLeaderboardBody(tab,month){
           '<div style="font-size:20px;min-width:28px;text-align:center">'+(medals[i]||'<span style="font-size:13px;color:var(--muted)">'+(i+1)+'</span>')+'</div>'+
           '<div style="flex:1">'+
             '<div style="font-size:14px;font-weight:700">'+_esc(r.name)+_whoTag(r.name)+'</div>'+
-            '<div style="font-size:11px;color:var(--muted)">'+r.games+' gespeeld · '+r.wins+' gewonnen</div>'+
+            '<div style="font-size:11px;color:var(--muted)">'+_esc(r.games)+' gespeeld · '+_esc(r.wins)+' gewonnen</div>'+
           '</div>'+
-          '<div style="font-size:22px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+r.val+'</div>'+
+          '<div style="font-size:22px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+_esc(r.val)+'</div>'+
         '</div>';
       }).join('');
     return;
@@ -10447,7 +10447,7 @@ function _renderLeaderboardBody(tab,month){
       return'<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:'+(i===0?'rgba(239,68,68,0.1)':'var(--surface)')+';border:1px solid '+(i===0?'rgba(239,68,68,0.3)':'var(--border)')+';border-radius:var(--radius-sm);margin-bottom:6px">'+
         '<div style="font-size:20px;min-width:28px;text-align:center">'+(medals[i]||'<span style="font-size:13px;color:var(--muted)">'+(i+1)+'</span>')+'</div>'+
         '<div style="flex:1;font-size:14px;font-weight:700">'+_esc(r.name)+_whoTag(r.name)+'</div>'+
-        '<div style="font-size:20px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+getValue(r)+'</div>'+
+        '<div style="font-size:20px;font-weight:900;color:'+(i===0?'var(--accent)':'var(--text)')+'">'+_esc(getValue(r))+'</div>'+
       '</div>';
     }).join('');
 }
@@ -10476,11 +10476,11 @@ function _legTable(leg,li){
     if(r[2]!==null&&names.length>1&&nums.length>1){best=r[2]?Math.max.apply(null,nums):Math.min.apply(null,nums);if(r[2]&&best<=0)best=null;if(nums.every(function(v){return v===best;}))best=null;}
     return '<div class="ws-row"><span>'+r[0]+'</span>'+names.map(function(n,i){
       var v=vals[i];if(r[1]==='left'&&n===leg.winner)v=null;
-      return '<b class="'+(v!==null&&v===best?'best':'')+'">'+(v===null?'—':v)+'</b>';}).join('')+'</div>';
+      return '<b class="'+(v!==null&&v===best?'best':'')+'">'+_esc((v===null?'—':v))+'</b>';}).join('')+'</div>';
   }).join('');
   var co=leg.co?'Uit met '+leg.co+(leg.dbl?' ('+leg.dbl+')':''):'';
   return '<div class="leg-tbl">'+
-    '<div class="leg-h"><span>Leg '+(li+1)+'</span>'+(leg.winner?'<span class="leg-w">'+_TROPHY+' '+_esc(leg.winner)+'</span>':'')+(co?'<span class="leg-co">'+co+'</span>':'')+'</div>'+
+    '<div class="leg-h"><span>Leg '+(li+1)+'</span>'+(leg.winner?'<span class="leg-w">'+_TROPHY+' '+_esc(leg.winner)+'</span>':'')+(co?'<span class="leg-co">'+_esc(co)+'</span>':'')+'</div>'+
     '<div class="win-card leg-card" style="--cols:'+names.length+'">'+
       '<div class="ws-row ws-head"><span></span>'+names.map(function(n){return '<b style="color:'+(n===leg.winner?'var(--success)':'var(--muted)')+'">'+_esc(n)+'</b>';}).join('')+'</div>'+
       body+
@@ -10517,7 +10517,7 @@ function _renderHistoryImpl(){
   }
   var gameRows=games.length?games.map(function(g,i){
     var _hdr='';
-    if(g.date!==_lastDay){_lastDay=g.date;_hdr='<div class="st-lbl" style="margin:14px 2px 6px">'+_dayLabel(g.date)+'</div>';}
+    if(g.date!==_lastDay){_lastDay=g.date;_hdr='<div class="st-lbl" style="margin:14px 2px 6px">'+_esc(_dayLabel(g.date))+'</div>';}
     var ds=g.detailedStats;
     var info=[];
     if(g.via)info.push('via '+g.via);
@@ -10548,21 +10548,21 @@ function _renderHistoryImpl(){
     if(g.hiStats){
       var hs=g.hiStats;
       var _dext='',_text2='';
-      if(hs.doublePct!==null&&hs.doublePct!==undefined)_dext='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:var(--accent2)">'+hs.doublePct+'%</div><div style="font-size:12px;color:var(--muted)">double</div><div style="font-size:12px;color:var(--muted)">'+hs.doubleHits+'/'+(hs.doubleHits+hs.doubleMisses)+'</div></div>';
-      if(hs.treblePct!==null&&hs.treblePct!==undefined)_text2='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:#f59e0b">'+hs.treblePct+'%</div><div style="font-size:12px;color:var(--muted)">triple</div><div style="font-size:12px;color:var(--muted)">'+hs.trebleHits+'/'+(hs.trebleHits+hs.trebleMisses)+'</div></div>';
+      if(hs.doublePct!==null&&hs.doublePct!==undefined)_dext='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:var(--accent2)">'+_esc(hs.doublePct)+'%</div><div style="font-size:12px;color:var(--muted)">double</div><div style="font-size:12px;color:var(--muted)">'+_esc(hs.doubleHits)+'/'+_esc((hs.doubleHits+hs.doubleMisses))+'</div></div>';
+      if(hs.treblePct!==null&&hs.treblePct!==undefined)_text2='<div style="text-align:center;border-left:1px solid var(--border);padding-left:10px"><div style="font-size:16px;font-weight:900;color:#f59e0b">'+_esc(hs.treblePct)+'%</div><div style="font-size:12px;color:var(--muted)">triple</div><div style="font-size:12px;color:var(--muted)">'+_esc(hs.trebleHits)+'/'+_esc((hs.trebleHits+hs.trebleMisses))+'</div></div>';
       hiDetailHtml+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;background:var(--card);border-radius:var(--radius-sm)">'
-        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+hs.pct+'%</div><div style="font-size:12px;color:var(--muted)">raak</div><div style="font-size:12px;color:var(--muted)">'+hs.hits+'/'+(hs.hits+hs.misses)+'</div></div>'
+        +'<div style="text-align:center"><div style="font-size:22px;font-weight:900;color:var(--accent)">'+_esc(hs.pct)+'%</div><div style="font-size:12px;color:var(--muted)">raak</div><div style="font-size:12px;color:var(--muted)">'+_esc(hs.hits)+'/'+_esc((hs.hits+hs.misses))+'</div></div>'
         +_dext+_text2
-        +'<div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:900;color:var(--text)">'+g.score+'</div><div style="font-size:12px;color:var(--muted)">eindscore</div></div>'
+        +'<div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:900;color:var(--text)">'+_esc(g.score)+'</div><div style="font-size:12px;color:var(--muted)">eindscore</div></div>'
         +'</div>';
       if(g.hiRoundHistory&&g.hiRoundHistory.length){
         hiDetailHtml+='<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Rondes</div>';
         hiDetailHtml+=g.hiRoundHistory.map(function(r){
           return'<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--separator)">'
-            +'<span style="font-size:12px;color:var(--text)">'+r.label+'</span>'
+            +'<span style="font-size:12px;color:var(--text)">'+_esc(r.label)+'</span>'
             +(r.halved
-              ?'<span style="font-size:12px;font-weight:700;color:var(--danger)">Gehalveerd → '+r.newScore+'</span>'
-              :'<span style="font-size:12px;font-weight:700;color:var(--success)">+'+r.pts+' → '+r.newScore+'</span>')
+              ?'<span style="font-size:12px;font-weight:700;color:var(--danger)">Gehalveerd → '+_esc(r.newScore)+'</span>'
+              :'<span style="font-size:12px;font-weight:700;color:var(--success)">+'+_esc(r.pts)+' → '+_esc(r.newScore)+'</span>')
             +'</div>';
         }).join('');
       }
@@ -10570,7 +10570,7 @@ function _renderHistoryImpl(){
     var detailHtml=
       hiDetailHtml+
       (info.length&&!g.hiStats?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'+
-        info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:12px;color:var(--muted)">'+t+'</span>';}).join('')+
+        info.map(function(t){return'<span style="background:var(--card);border-radius:20px;padding:2px 8px;font-size:12px;color:var(--muted)">'+_esc(t)+'</span>';}).join('')+
       '</div>':'')+
       legHtml;
     return _hdr+'<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden" class="fade-in">'+
@@ -10580,12 +10580,12 @@ function _renderHistoryImpl(){
             (g.won?'Win':'Verlies')+
           '</div>')+
           '<div>'+
-            '<div style="font-size:15px;font-weight:800">'+(GAME_TYPE_LABELS[g.gameType]||g.gameType)+'</div>'+
-            '<div style="font-size:12px;color:var(--muted)">'+(g.ts?_hhmm(g.ts)+' · ':'')+(g.partners&&g.partners.length?'met '+_esc(g.partners.join(', '))+' · ':'')+(g.opponents&&g.opponents.length?'tegen '+_esc(g.opponents.join(', ')):'solo')+(g.legResult?' · '+g.legResult:'')+'</div>'+
+            '<div style="font-size:15px;font-weight:800">'+_esc(GAME_TYPE_LABELS[g.gameType]||g.gameType)+'</div>'+
+            '<div style="font-size:12px;color:var(--muted)">'+(g.ts?_hhmm(g.ts)+' · ':'')+(g.partners&&g.partners.length?'met '+_esc(g.partners.join(', '))+' · ':'')+(g.opponents&&g.opponents.length?'tegen '+_esc(g.opponents.join(', ')):'solo')+(g.legResult?' · '+_esc(g.legResult):'')+'</div>'+
           '</div>'+
         '</div>'+
         '<div style="display:flex;align-items:center;gap:10px">'+
-          (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+ds.avg3+'</div><div style="font-size:12px;color:var(--muted)">gem</div></div>':'')+
+          (ds?'<div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--accent)">'+_esc(ds.avg3)+'</div><div style="font-size:12px;color:var(--muted)">gem</div></div>':'')+
           '<span id="'+detailId+'-arrow" style="font-size:12px;color:var(--muted);transition:transform .2s">▼</span>'+
         '</div>'+
       '</div>'+
@@ -10634,10 +10634,10 @@ function buildH2HBlock(filteredGames){
     var avgStr=d.avgCount>0?(Math.round(d.totalAvg/d.avgCount*10)/10)+'':'';
     return'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--separator);gap:8px">'+
       '<div style="flex:1;font-size:13px;font-weight:600;color:var(--text)">'+_esc(opp)+'</div>'+
-      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--success)">'+d.won+'</div><div style="font-size:12px;color:var(--muted)">W</div></div>'+
-      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--danger)">'+losses+'</div><div style="font-size:12px;color:var(--muted)">L</div></div>'+
-      '<div style="text-align:center;min-width:40px"><div style="font-size:13px;font-weight:800;color:'+(pct>=50?'var(--success)':'var(--danger)')+'">'+pct+'%</div><div style="font-size:12px;color:var(--muted)">Win%</div></div>'+
-      (avgStr?'<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--accent)">'+avgStr+'</div><div style="font-size:12px;color:var(--muted)">Gem.</div></div>':'<div style="min-width:36px"></div>')+
+      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--success)">'+_esc(d.won)+'</div><div style="font-size:12px;color:var(--muted)">W</div></div>'+
+      '<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--danger)">'+_esc(losses)+'</div><div style="font-size:12px;color:var(--muted)">L</div></div>'+
+      '<div style="text-align:center;min-width:40px"><div style="font-size:13px;font-weight:800;color:'+(pct>=50?'var(--success)':'var(--danger)')+'">'+_esc(pct)+'%</div><div style="font-size:12px;color:var(--muted)">Win%</div></div>'+
+      (avgStr?'<div style="text-align:center;min-width:36px"><div style="font-size:13px;font-weight:800;color:var(--accent)">'+_esc(avgStr)+'</div><div style="font-size:12px;color:var(--muted)">Gem.</div></div>':'<div style="min-width:36px"></div>')+
     '</div>';
   }).join('');
 
@@ -10677,9 +10677,9 @@ function _bestLegCard(name){
   var b=bestLeg(name,501);if(!b)return '';
   var bits=[b.turns+(b.turns===1?' beurt':' beurten'),'gem '+b.avg];
   if(b.co)bits.push('uit met '+b.co+(b.dbl?' ('+b.dbl+')':''));
-  var sub=(b.opp.length?'tegen '+b.opp.map(_esc).join(', ')+' · ':'')+(b.date||'');
+  var sub=(b.opp.length?'tegen '+b.opp.map(_esc).join(', ')+' · ':'')+_esc(b.date||'');
   return '<div class="best-leg"><div class="best-leg-k">Beste leg · 501</div>'+
-    '<div class="best-leg-v">'+bits.join(' · ')+'</div>'+
+    '<div class="best-leg-v">'+_esc(bits.join(' · '))+'</div>'+
     '<div class="best-leg-s">'+sub+'</div></div>';
 }
 function buildPersonalRecords(name){
@@ -10701,10 +10701,10 @@ function buildPersonalRecords(name){
   });
   return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>Persoonlijke records</div>'+
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px">'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--warning)">'+bestAvg+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best gem.</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent)">'+bestHigh+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent2)">'+(bestCo?bestCo+'%':'—')+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
-      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--success)">'+maxStreak+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--warning)">'+_esc(bestAvg)+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best gem.</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent)">'+_esc(bestHigh)+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Hoogste beurt</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--accent2)">'+_esc(bestCo?bestCo+'%':'—')+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Best dubbel %</div></div>'+
+      '<div style="background:var(--card);border-radius:var(--radius-sm);padding:7px;text-align:center"><div class="dv" style="font-size:17px;font-weight:800;color:var(--success)">'+_esc(maxStreak)+'</div><div style="font-size:12px;color:var(--muted);margin-top:1px">Win streak</div></div>'+
     '</div>'+_bestLegCard(name);
 }
 
@@ -10727,7 +10727,7 @@ function buildAvgGraph(name){
     var labelY=p[1]-8;
     var labelAnchor=i===0?'start':i===avgs.length-1?'end':'middle';
     return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5"/>'+
-      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="DBT Flow, -apple-system, sans-serif">'+avgs[i]+'</text>';
+      '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" fill="var(--text)" font-size="10" font-weight="700" text-anchor="'+labelAnchor+'" font-family="DBT Flow, -apple-system, sans-serif">'+_esc(avgs[i])+'</text>';
   }).join('');
   return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Gemiddelde over tijd</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px">'+
@@ -10741,7 +10741,7 @@ function buildAvgGraph(name){
         dots+
       '</svg>'+
       '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px">'+
-        '<span>'+x01[0].date+'</span><span>'+x01[x01.length-1].date+'</span>'+
+        '<span>'+_esc(x01[0].date)+'</span><span>'+_esc(x01[x01.length-1].date)+'</span>'+
       '</div>'+
     '</div>';
 }
@@ -11061,7 +11061,7 @@ function buildRcoStats(name){
     hits+=r.hits||0;att+=r.att||0;if((r.best||0)>best)best=r.best;
     Object.keys(r.brk||{}).forEach(function(k){var b=brk[k]||(brk[k]=[0,0]);b[0]+=r.brk[k][0];b[1]+=r.brk[k][1];});
   });
-  var tile=function(v,l,c){return '<div style="background:var(--card);border-radius:var(--radius-sm);padding:9px 6px;text-align:center"><div class="dv" style="font-size:22px;font-weight:900;color:'+c+'">'+v+'</div><div style="font-size:12px;color:var(--muted);margin-top:2px">'+l+'</div></div>';};
+  var tile=function(v,l,c){return '<div style="background:var(--card);border-radius:var(--radius-sm);padding:9px 6px;text-align:center"><div class="dv" style="font-size:22px;font-weight:900;color:'+c+'">'+_esc(v)+'</div><div style="font-size:12px;color:var(--muted);margin-top:2px">'+_esc(l)+'</div></div>';};
   var h='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">'+
     tile(att?Math.round(hits/att*100)+'%':'—','Uitgegooid','var(--accent)')+
     tile(best||'—','Hoogste checkout','var(--accent2)')+
@@ -11072,9 +11072,9 @@ function buildRcoStats(name){
       '<div style="background:var(--card);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px">'+
       keys.map(function(k){var b=brk[k],pct=Math.round(b[0]/b[1]*100);
         return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">'+
-          '<div style="font-size:12px;font-weight:700;min-width:62px;color:var(--accent2)">'+k+'</div>'+
-          '<div style="flex:1;background:var(--surface);border-radius:20px;height:8px;overflow:hidden"><div style="width:'+pct+'%;background:var(--accent2);height:100%;border-radius:20px"></div></div>'+
-          '<div style="font-size:12px;color:var(--muted);min-width:64px;text-align:right">'+pct+'% ('+b[0]+'/'+b[1]+')</div></div>';
+          '<div style="font-size:12px;font-weight:700;min-width:62px;color:var(--accent2)">'+_esc(k)+'</div>'+
+          '<div style="flex:1;background:var(--surface);border-radius:20px;height:8px;overflow:hidden"><div style="width:'+_esc(pct)+'%;background:var(--accent2);height:100%;border-radius:20px"></div></div>'+
+          '<div style="font-size:12px;color:var(--muted);min-width:64px;text-align:right">'+_esc(pct)+'% ('+_esc(b[0])+'/'+_esc(b[1])+')</div></div>';
       }).join('')+'</div>';
   } else if(!att){
     h+='<div style="font-size:12px;color:var(--muted);margin:-4px 0 10px">Uitgooi-percentages worden bijgehouden vanaf je volgende potje.</div>';
@@ -11092,14 +11092,14 @@ function buildDoubleStats(name){
   var bars=top.map(function(e){
     var pct=Math.round(e.val/total*100);
     return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">'+
-      '<div style="font-size:12px;font-weight:700;min-width:38px;color:var(--accent2)">'+e.key+'</div>'+
+      '<div style="font-size:12px;font-weight:700;min-width:38px;color:var(--accent2)">'+_esc(e.key)+'</div>'+
       '<div style="flex:1;background:var(--surface);border-radius:20px;height:8px;overflow:hidden">'+
-        '<div style="width:'+pct+'%;background:var(--accent2);height:100%;border-radius:20px;transition:width .4s"></div>'+
+        '<div style="width:'+_esc(pct)+'%;background:var(--accent2);height:100%;border-radius:20px;transition:width .4s"></div>'+
       '</div>'+
-      '<div style="font-size:12px;color:var(--muted);min-width:44px;text-align:right">'+pct+'% ('+e.val+'x)</div>'+
+      '<div style="font-size:12px;color:var(--muted);min-width:44px;text-align:right">'+_esc(pct)+'% ('+_esc(e.val)+'x)</div>'+
     '</div>';
   }).join('');
-  return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Favoriete dubbels ('+total+' checkouts)</div>'+
+  return'<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;display:flex;align-items:center"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Favoriete dubbels ('+_esc(total)+' checkouts)</div>'+
     '<div style="background:var(--card);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px">'+bars+'</div>';
 }
 
@@ -11781,7 +11781,7 @@ function _eliDoWin(val,newScore){
   var totalRounds=state.eliRound;
   state.eliHistory.push({round:totalRounds,player:cur,scored:val,result:'win',score:newScore});
   var statsHtml=players.map(function(n,i){
-    return '<div class="stat-row"><span>'+n+'</span><strong>'+state.eliScores[i]+
+    return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.eliScores[i]+
       ' <span style="color:var(--muted);font-size:11px;font-weight:600">('+state.eliTurns[i]+' beurt'+(state.eliTurns[i]!==1?'en':'')+')</span></strong></div>';
   }).join('');
   showWin(players[cur],'Eliminatie – exact '+state.eliTarget+' in ronde '+totalRounds+' 🎯',statsHtml);
@@ -11900,7 +11900,7 @@ function renderAfgBull(){
       '<div class="g-head"><div class="g-head-l"><span class="g-head-sub">'+_sub+'</span><span class="g-head-main">Wie begint?</span></div>'+
         '<div class="g-head-r">Speler<b>'+(_afg.bullIdx+1)+' / '+activePlayers.length+'</b></div></div>'+
       '<div class="g-target"><span class="g-target-lbl">Gooi op de bull</span>'+
-        '<div style="font-size:40px;font-weight:900;line-height:1.1;color:var(--text)">'+_afgThrower(p)+'</div>'+
+        '<div style="font-size:40px;font-weight:900;line-height:1.1;color:var(--text)">'+_esc(_afgThrower(p))+'</div>'+
         '<div class="g-note">'+(_afg.teams?'Gooit voor '+_esc(p.name)+' · ':'')+'Wat raakte de pijl?</div></div>'+
       '<div class="g-input">'+
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+

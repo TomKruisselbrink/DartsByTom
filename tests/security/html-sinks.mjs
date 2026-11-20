@@ -49,6 +49,14 @@ for (let i = start; i < lines.length; i++) {
     if (key in allow.html) continue;
     out.html.push({ line: i + 1, expr: e, key });
   }
+  // 3) rand van een string: '<b>'+x;  en  x+'</b>'  (expressie maar aan één kant tussen strings)
+  const edge = [
+    [/'\s*\+\s*([A-Za-z_$][\w$.]*(?:\[[^\]'"]*\])*(?:\([^()'"]*\))?)\s*(?=[;,)\]}]|$)/g, (l, m) => /<\/?[a-zA-Z]/.test(l.slice(Math.max(0, l.lastIndexOf("'", m.index - 1) - 200), m.index))],
+    [/(?:^|[=(,:?]|return)\s*([A-Za-z_$][\w$.]*(?:\[[^\]'"]*\])*(?:\([^()'"]*\))?)\s*\+\s*'/g, (l, m) => /^[^']*<\/?[a-zA-Z]/.test(l.slice(m.index + m[0].length, m.index + m[0].length + 120))],
+  ];
+  for (const [re, isHtml] of edge) { let m2; re.lastIndex = 0;
+    while ((m2 = re.exec(l))) { const e = norm(m2[1]); if (/^(var|return|_esc|_ue)\b/.test(e) || SAFE.some(r => r.test(e))) continue; if (!isHtml(l, m2)) continue;
+      const key = 'rand:' + fnAt[i] + '|' + e; if (key in allow.html) continue; out.html.push({ line: i + 1, expr: e, key }); } }
 }
 const uniq = a => [...new Map(a.map(x => [x.key, x])).values()];
 const H = uniq(out.html), K = uniq(out.handler);

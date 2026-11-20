@@ -18,6 +18,16 @@ const hist = o => [
 ];
 const pl = (o, i) => ({ games: 12, wins: 6, totalDarts: 240, totalScore: 3600, nickname: ALL('nick' + i), doubleStats: { [ALL('dsk' + i)]: 3, D20: 2 }, gameHistory: hist(o) });
 const db = { Tom: pl(N.h, 0) };
+// Getalvelden met tekst: data van buiten kan in elk veld tekst zetten (score, tellers, gemiddelden, dubbels, RCO, Bob, Halve It).
+const NUMX = k => P.html(k);
+const numEntry = (gt, x) => Object.assign(E(gt, ['Tom']), { darts: NUMX('ndarts'), score: NUMX('nscore'), highScore: NUMX('nhigh'),
+  detailedStats: { avg3: NUMX('navg3'), avg1: NUMX('navg1'), turns: NUMX('nturns'), checkoutAttempts: NUMX('ncoa'), checkoutHits: NUMX('ncoh'), checkoutPct: NUMX('ncop'), highTurn: NUMX('nht'), highFinish: NUMX('nhf'), count180: NUMX('n180'), count100: NUMX('n100'), count140: NUMX('n140') },
+  legBreakdown: [{ legNum: NUMX('nleg'), winner: 'Tom', start: NUMX('nstart'), co: NUMX('nco'), dbl: 'D20', playerStats: { Tom: { avg: NUMX('nlavg'), darts: NUMX('nldarts'), high: NUMX('nlhigh'), f9: NUMX('nf9'), count180: NUMX('nl180') } } }] }, x || {});
+db['NumTest'] = { games: NUMX('ngames'), wins: NUMX('nwins'), totalDarts: NUMX('ntd'), totalScore: NUMX('nts'), doubleStats: { D20: NUMX('ndsv') },
+  gameHistory: [numEntry('501'), numEntry('x01'), numEntry('halveit', { hiStats: { rounds: NUMX('nhr'), hits: NUMX('nhh'), misses: NUMX('nhm'), pct: NUMX('nhp'), doubleHits: NUMX('nhdh'), doubleMisses: 1, doublePct: NUMX('nhdp'), trebleHits: NUMX('nhth'), trebleMisses: 1, treblePct: NUMX('nhtp') }, hiRoundHistory: [{ round: 0, label: '20', pts: NUMX('nhrp'), halved: false, newScore: NUMX('nhrn') }] }),
+    numEntry('randomco', { rcoStats: { hits: NUMX('nrh'), att: NUMX('nra'), best: NUMX('nrb'), brk: { '41–60': [NUMX('nrb0'), NUMX('nrb1')] }, mode: 'random', darts: NUMX('nrd') } }),
+    numEntry('bobs27', { bobStats: { hits: NUMX('nbh'), att: NUMX('nba'), reached: NUMX('nbr'), out: true, stop: true } }), numEntry('checkout121', { co121Stats: { hits: NUMX('nch'), attempts: NUMX('nca'), pct: NUMX('ncp'), avgDarts: NUMX('ncd') } }),
+    numEntry('shanghai7'), numEntry('cricket'), numEntry('afgooien'), numEntry('trn-501')] };
 NAMES.forEach((n, i) => { db[n] = pl(i % 2 ? 'Tom' : NAMES[(i + 1) % NAMES.length], i + 1); });
 const live = { v: 1, ts: Date.now(), screen: 'screen-game', state: { gameType: '501', players: NAMES.slice(0, 4), scores: [1, 2, 3, 4] } };
 const ls = { darts_hidden_archive: JSON.stringify({ [P.html('arch')]: { games: 1, wins: 0, gameHistory: [] } }), darts_last_players: JSON.stringify(['Tom']) };
@@ -26,11 +36,12 @@ const clickText = (sel, re) => `document.querySelectorAll(${J(sel)}).forEach(fun
 const closeAsk = `document.querySelectorAll('.ask-ov').forEach(function(o){o.remove()});`;
 const steps = [
   ['home', `showScreen('screen-home')`],
-  ...NAMES.concat('Tom').map((n, i) => ['stats-' + i, `showScreen('screen-stats');statsSelectedPlayer=${J(n)};renderStats();`]),
+  ...NAMES.concat('Tom', 'NumTest').map((n, i) => ['stats-' + i, `showScreen('screen-stats');statsSelectedPlayer=${J(n)};renderStats();`]),
   ['stats-filters', clickText('#screen-stats button', '/501|Cricket|Bob|Halve|Random|Shanghai|Alles/')],
-  ['records', `try{document.getElementById('stats-content').insertAdjacentHTML('beforeend',buildPersonalRecords(${J(NAMES[0])}))}catch(e){}`],
+  ['records', `try{document.getElementById('stats-content').insertAdjacentHTML('beforeend',buildPersonalRecords(${J(NAMES[0])})+buildPersonalRecords('NumTest')+buildDoubleStats('NumTest'))}catch(e){}`],
+  ['stats-num-filters', `showScreen('screen-stats');statsSelectedPlayer='NumTest';renderStats();` + "document.querySelectorAll('#screen-stats [data-t]').forEach(function(b){try{b.click()}catch(e){}});"],
   ['doubles', `try{document.getElementById('stats-content').insertAdjacentHTML('beforeend',buildDoubleStats(${J(NAMES[1])}))}catch(e){}`],
-  ...NAMES.concat('Tom').map((n, i) => ['history-' + i, `showScreen('screen-history');historySelectedPlayer=${J(n)};renderHistory();document.querySelectorAll('#screen-history [onclick]').forEach(function(b){if(/toggle|Detail|open/i.test(b.getAttribute('onclick')||''))try{b.click()}catch(e){}});`]),
+  ...NAMES.concat('Tom', 'NumTest').map((n, i) => ['history-' + i, `showScreen('screen-history');historySelectedPlayer=${J(n)};renderHistory();document.querySelectorAll('#screen-history [onclick]').forEach(function(b){if(/toggle|Detail|open/i.test(b.getAttribute('onclick')||''))try{b.click()}catch(e){}});`]),
   ...['avg', 'wins', 'x01', 'co', 'hi', 'bob', 'sh7', 'atc', 'rco', 'afg', 'co121', 'h2h'].map(t => ['lb-' + t, `showScreen('screen-leaderboard');try{showLbTab('${t}')}catch(e){renderLeaderboard('${t}')}`]),
   ['lb-month', `try{setLbPeriod('month');setLbPeriod('all')}catch(e){}`],
   ['players', `showScreen('screen-settings');stOpen('players');`],
