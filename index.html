@@ -268,6 +268,8 @@ body::before{
 .st-manage{display:block;width:100%;margin:14px 0 4px;padding:12px;border-radius:12px;background:none;border:1px dashed var(--border);color:var(--muted);font-size:13px;font-weight:700}
 .ask-ov{position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;animation:askIn .16s ease-out}
 .ask-ov.out{opacity:0;transition:opacity .15s}
+.fin-rows{text-align:left;margin:4px 0 14px;max-height:40vh;overflow:auto;border-top:1px solid var(--border)}
+.fin-rows .stat-row{display:flex;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px solid var(--border);font-size:14px}
 .ask-box{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:askPop .2s cubic-bezier(.34,1.56,.64,1)}
 .ask-t{font-family:var(--ff-display);font-weight:700;font-size:21px;line-height:1.15;color:var(--text);margin-bottom:6px;font-synthesis:none}
 .ask-s{font-size:14px;color:var(--muted);line-height:1.4;margin-bottom:18px}
@@ -3930,6 +3932,7 @@ var atcMode='basic';      // 'basic' (raak/mis) or 'pts' (enkel/dubbel/triple)
 var shHalveOpt=false;     // halveer bij 3 misses
 var eliTarget=301;        // eliminatie doelscore
 
+var _FINISH={}; // v247: per spel de functie die "Potje afronden?" (opnieuw) stelt; zie _finishGate
 var state={
   gameType:null,doubleOut:true,players:[],currentPlayer:0,round:1,
   scores:[],history:[],allHistory:[], // allHistory persists across legs
@@ -6666,14 +6669,14 @@ function _rcoFinishAttempt(ok){
   p.attempts++;p.darts+=rco.darts?Math.max(1,usedVisits)*3:3;
   rco.history.push({player:cur,target:rco.target,ok:ok,pts:ok?b[2]:0});
   if(ok){p.hits++;p.pts+=b[2];playSound('checkout');
-    if(rco.mode==='race'&&p.bi>=rco.brk.length-1){rcoEnd(cur);return;}
+    if(rco.mode==='race'&&p.bi>=rco.brk.length-1){_rcoFinish(cur);return;}
     if(rco.mode!=='random')p.bi=Math.min(rco.brk.length-1,p.bi+1);
   } else {
     playSound('bust');
     if(rco.mode==='default'&&rco.darts)p.bi=Math.max(0,p.bi-1);
   }
   // klaar? (iedereen heeft het aantal checkouts gehad)
-  if(rco.mode!=='race'&&rco.count&&rco.ps.every(function(q){return q.attempts>=rco.count;})){rcoEnd();return;}
+  if(rco.mode!=='race'&&rco.count&&rco.ps.every(function(q){return q.attempts>=rco.count;})){_rcoFinish(null);return;}
   rco.cur=(rco.cur+1)%rco.ps.length;state.currentPlayer=rco.cur;
   _rcoNewAttempt();
   renderRandomCheckout();
@@ -6692,6 +6695,11 @@ function _rcoStatsFor(i){
   });
   return st;
 }
+function _rcoFinish(raceWinner){ // v247: eerst bevestigen
+  if(!rco)return;
+  _finishGate('rco',raceWinner,state.players.map(function(n,i){var q=rco.ps[i];return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc(q.pts)+' pnt</strong></div>';}).join(''),function(){rcoEnd(raceWinner);});
+}
+_FINISH.rco=_rcoFinish;
 function rcoEnd(raceWinner){
   if(!rco)return;
   var order=state.players.map(function(n,i){return i;}).sort(function(a,b){return raceWinner!=null?(a===raceWinner?-1:b===raceWinner?1:rco.ps[b].pts-rco.ps[a].pts):(rco.ps[b].pts-rco.ps[a].pts)||(rco.ps[b].hits-rco.ps[a].hits);});
@@ -8721,6 +8729,7 @@ function _bobActive(i){return !state.bobOut[i]&&state.bobRound[i]<21;}
 function renderBob(){
   var cur=state.currentPlayer,r=state.bobRound[cur]||0;
   if(state.bobDone)return;
+  if(state._finishPending&&_finishReopen())return;
   var el=document.getElementById('bob-players');el.innerHTML='';
   state.players.forEach(function(name,i){
     var on=i===cur,ri=state.bobRound[i],sc=state.bobScores[i];
@@ -8760,7 +8769,11 @@ function bobUndo(){
   state.bobScores[i]=h.score;state.bobHits[i]-=h.hits;state.bobRound[i]=h.r;state.bobOut[i]=h.out;state.bobRounds[i].length=h.r;
   state.dartCount[i]=Math.max(0,(state.dartCount[i]||0)-3);state.currentPlayer=i;renderBob();
 }
-function _bobEnd(){
+function _bobEnd(){ // v247: eerst bevestigen
+  _finishGate('bob',null,state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+(state.bobOut[i]?' <span style="color:var(--muted)">· uit</span>':'')+'</span><strong>'+_esc(state.bobScores[i])+'</strong></div>';}).join(''),_bobSave);
+}
+_FINISH.bob=_bobEnd;
+function _bobSave(){
   state.bobDone=true;
   // Wie uit is, kan niet winnen (v242). Winnaar = hoogste score van wie het eind haalde.
   var best=-1e9,w=-1;state.bobScores.forEach(function(sc,i){if(!state.bobOut[i]&&sc>best){best=sc;w=i;}});
@@ -8823,17 +8836,22 @@ function renderATC(){
   }
 }
 function atcHit(){atcHitMult(1);}
+function _atcFinish(){ // v247: eerst bevestigen
+  var cur=state.currentPlayer;
+  _finishGate('atc',null,state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc((i===cur?'klaar':'op '+atcTargetLabel(state.atcTarget[i])))+'</strong></div>';}).join(''),function(){
+    state.dartCount[cur]=(state.dartCount[cur]||0)+state.atcDarts;
+    state.players.forEach(function(name,i){updatePlayerStat(name,'atc',{won:i===cur,darts:state.dartCount[i]||0,score:0,highScore:state.atcTarget[i]-1})});
+    showWin(state.players[cur],'Around the Clock — 1 t/m 20, Bull en D-Bull geraakt!','');
+  });
+}
+_FINISH.atc=_atcFinish;
 function atcHitMult(mult){
   if(state.atcDarts>=3)return;
   var cur=state.currentPlayer;
   playSound('score');
   state.atcHistory.push({player:cur,target:state.atcTarget[cur],hit:true,mult:mult,darts:state.atcDarts});
   state.atcTarget[cur]+=mult;state.atcDarts++;
-  if(state.atcTarget[cur]>atcMaxTarget()){
-    state.dartCount[cur]=(state.dartCount[cur]||0)+state.atcDarts;
-    state.players.forEach(function(name,i){updatePlayerStat(name,'atc',{won:i===cur,darts:state.dartCount[i]||0,score:0,highScore:state.atcTarget[i]-1})});
-    showWin(state.players[cur],'Around the Clock — 1 t/m 20, Bull en D-Bull geraakt!','');return;
-  }
+  if(state.atcTarget[cur]>atcMaxTarget()){_atcFinish();return;}
   if(state.atcDarts>=3)atcEndTurn();else renderATC();
 }
 function atcMiss(){
@@ -8960,13 +8978,7 @@ function cricketHit(segIdx){
   state.crDarts++;
 
   var winner=cricketCheckWin();
-  if(winner>=0){
-    var tot=state.crDartCount.slice();tot[pi]+=state.crDarts;
-    state.players.forEach(function(name,i){
-      updatePlayerStat(name,'cricket',{won:i===winner,darts:tot[i],score:state.crScores[i]});
-    });
-    showWin(state.players[winner],'Cricket','Segmenten 15–20 & Bull gesloten!');return;
-  }
+  if(winner>=0){_crFinish(pi);return;}
   if(state.crDarts>=3)cricketEndTurn();else renderCricket();
 }
 
@@ -8985,6 +8997,17 @@ function cricketEndTurn(){
   renderCricket();
 }
 
+function _crFinish(pi){ // v247: eerst bevestigen
+  var winner=cricketCheckWin();if(winner<0)return;
+  _finishGate('cricket',pi,state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc(state.crScores[i])+'</strong></div>';}).join(''),function(){
+    var tot=state.crDartCount.slice();tot[pi]+=state.crDarts;
+    state.players.forEach(function(name,i){
+      updatePlayerStat(name,'cricket',{won:i===winner,darts:tot[i],score:state.crScores[i]});
+    });
+    showWin(state.players[winner],'Cricket','Segmenten 15–20 & Bull gesloten!');
+  });
+}
+_FINISH.cricket=_crFinish;
 function cricketUndo(){
   if(!state.crHistory.length)return;
   var last=state.crHistory.pop();
@@ -9007,6 +9030,7 @@ function cricketCheckWin(){
 // ═══════════════════════════════════════════
 function renderShanghai(){
   // Safety: if all rounds done, show win screen
+  if(state._finishPending&&_finishReopen())return;
   if(state.shMaxTarget>0&&state.shTarget>state.shMaxTarget){
     var _ms=Math.max.apply(null,state.shScores);var _wi=state.shScores.indexOf(_ms);
     if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===_wi,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
@@ -9056,13 +9080,27 @@ function _shIsShanghai(){
   var m={};h.forEach(function(e){if(e.player===state.currentPlayer&&e.target===state.shTarget&&!e.miss&&!e.halved&&e.mult)m[e.mult]=1;});
   return !!(m[1]&&m[2]&&m[3]);
 }
-function _shShanghaiWin(){
+function _shShanghaiWin(){ // v247: eerst bevestigen
+  var w=state.currentPlayer;
+  _finishGate('shw',null,state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc(state.shScores[i]||0)+'</strong></div>';}).join(''),_shShanghaiSave);
+}
+_FINISH.shw=_shShanghaiWin;
+function _shShanghaiSave(){
   var w=state.currentPlayer;
   state.dartCount[w]=(state.dartCount[w]||0)+3;
   playSound('high');try{callerSay('Shanghai! '+callerName(state.players[w])+' wins the game!',true);}catch(e){}
   if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===w,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0,shanghai:i===w});});}
   showWin(state.players[w],'Shanghai op '+state.shTarget+'! Direct gewonnen',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+(i===w?' <span style="color:var(--accent);font-weight:700">· Shanghai</span>':'')+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));
 }
+function _shFinish(){ // v247: eerst bevestigen (einde na de laatste ronde)
+  _finishGate('sh',null,state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc(state.shScores[i]||0)+'</strong></div>';}).join(''),function(){
+      var maxScore=Math.max.apply(null,state.shScores);
+      var winIdx=state.shScores.indexOf(maxScore);
+      if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===winIdx,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
+      showWin(state.players[winIdx],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));
+  });
+}
+_FINISH.sh=_shFinish;
 function shEndTurn(){
   var allMissed=state.shTurnPts===0;
   var halvPlayer=state.currentPlayer;
@@ -9078,11 +9116,7 @@ function shEndTurn(){
   var _fp=state.firstPlayer!==undefined?state.firstPlayer:0;var _shRoundDone=(state.players.length<=1)||(state.currentPlayer===_fp);
   if(_shRoundDone){
     state.shRound++;state.shTarget++;
-    if(state.shTarget>state.shMaxTarget||state.shRound>state.shMaxTarget){
-      var maxScore=Math.max.apply(null,state.shScores);
-      var winIdx=state.shScores.indexOf(maxScore);
-      if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===winIdx,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0});});}
-      showWin(state.players[winIdx],'Eindstand',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));return;
+    if(state.shTarget>state.shMaxTarget||state.shRound>state.shMaxTarget){_shFinish();return;
     }
   }
   renderShanghai();
@@ -9101,6 +9135,7 @@ function shUndo(){
 function hiSeqLabel(item){if(!item)return'—';if(item.type==='spec_double')return'D'+item.val;if(item.type==='spec_treble')return'T'+item.val;return item.label||item.type;}
 function hiCurItem(){return state.hiSeq[state.hiRound];}
 function renderHalveIt(){
+  if(state._finishPending&&!state._hiDone){_finishReopen();return;} // v247: vraag "Potje afronden?" staat open
   // Safety: game already ended — re-show win screen immediately
   if(state._hiDone||(state.hiSeq&&state.hiSeq.length>0&&state.hiRound>=state.hiSeq.length)){
     state._hiDone=true;
@@ -9586,45 +9621,8 @@ function hiRandom3Hit(score){
   state.hiTurnPts=score;
   hiEndTurn(true);
 }
-function hiEndTurn(scored){
-  if(state._hiDone)return;
-  var cur=state.currentPlayer,prev=state.hiScores[cur];
-  state.hiColorPijlen=[];state.hiColorDarts=[];state.hiColorPhase='number';state.hiColorSelectedNum=null;
-  state.hiDartsThrown=0;
-  var entry;
-  var _hiPts=state.hiTurnPts;
-  if(scored){
-    state.hiScores[cur]+=_hiPts;
-    entry={round:state.hiRound,pts:_hiPts,halved:false};
-    if(_hiPts>0){
-      playSound(_hiPts>=100?'high':'score');
-    }
-  } else {
-    var _prevHi=state.hiScores[cur];
-    state.hiScores[cur]=Math.floor(state.hiScores[cur]/2);
-    entry={round:state.hiRound,pts:0,halved:true};
-    playSound('bust');
-  }
-  state.hiRoundScores[cur].push(entry);
-  state.hiHistory.push({player:cur,round:state.hiRound,prevScore:prev,pts:state.hiTurnPts,halved:entry.halved,newScore:state.hiScores[cur],throws:(state.hiTurnThrows||[]).slice()});
-  state.hiTurnThrows=[];state.hiTurnDartPts=[];
-  // Track hits/misses per player
-  if(!state.hiHits)state.hiHits=state.players.map(function(){return 0;});
-  if(!state.hiMisses)state.hiMisses=state.players.map(function(){return 0;});
-  if(!state.hiDoubleHits)state.hiDoubleHits=state.players.map(function(){return 0;});
-  if(!state.hiDoubleMisses)state.hiDoubleMisses=state.players.map(function(){return 0;});
-  if(!state.hiTrebleHits)state.hiTrebleHits=state.players.map(function(){return 0;});
-  if(!state.hiTrebleMisses)state.hiTrebleMisses=state.players.map(function(){return 0;});
-  if(scored)state.hiHits[cur]++;else state.hiMisses[cur]++;
-  var _hiCurType=(state.hiSeq&&state.hiSeq[state.hiRound])?state.hiSeq[state.hiRound].type:'';
-  if(_hiCurType==='double'||_hiCurType==='spec_double'){if(scored)state.hiDoubleHits[cur]++;else state.hiDoubleMisses[cur]++;}
-  if(_hiCurType==='treble'||_hiCurType==='spec_treble'){if(scored)state.hiTrebleHits[cur]++;else state.hiTrebleMisses[cur]++;}
-  state.dartCount[cur]=(state.dartCount[cur]||0)+3;state.hiTurnPts=0;state.hiDartsThrown=0;
-  state.currentPlayer=(state.currentPlayer+1)%state.players.length;
-  var _hiRoundDone=(state.players.length<=1)||(state.currentPlayer===state.firstPlayer);
-  if(_hiRoundDone){
-    state.hiRound++;
-    if(state.hiRound>=state.hiSeq.length){
+function _hiFinish(){ // v247: eerst bevestigen; pas bij Afronden opslaan
+  _finishGate('hi',null,state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc(state.hiScores[i]||0)+'</strong></div>';}).join(''),function(){
       var maxScore=Math.max.apply(null,state.hiScores);var winIdx=state.hiScores.indexOf(maxScore);
       state.players.forEach(function(name,i){
         var hits=state.hiHits?state.hiHits[i]:0;
@@ -9663,8 +9661,49 @@ function hiEndTurn(scored){
         return'<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.hiScores[i]+'</strong>'+
           '<span style="color:var(--muted);font-size:11px;margin-left:8px">'+pct+'% raak</span>'+extras+'</div>';
       }).join('');
-      state._hiDone=true;showWin(state.players[winIdx],'Halve It eindstand',statsHtml);return;
+      state._hiDone=true;showWin(state.players[winIdx],'Halve It eindstand',statsHtml);
+  });
+}
+_FINISH.hi=_hiFinish;
+function hiEndTurn(scored){
+  if(state._hiDone)return;
+  var cur=state.currentPlayer,prev=state.hiScores[cur];
+  state.hiColorPijlen=[];state.hiColorDarts=[];state.hiColorPhase='number';state.hiColorSelectedNum=null;
+  state.hiDartsThrown=0;
+  var entry;
+  var _hiPts=state.hiTurnPts;
+  if(scored){
+    state.hiScores[cur]+=_hiPts;
+    entry={round:state.hiRound,pts:_hiPts,halved:false};
+    if(_hiPts>0){
+      playSound(_hiPts>=100?'high':'score');
     }
+  } else {
+    var _prevHi=state.hiScores[cur];
+    state.hiScores[cur]=Math.floor(state.hiScores[cur]/2);
+    entry={round:state.hiRound,pts:0,halved:true};
+    playSound('bust');
+  }
+  state.hiRoundScores[cur].push(entry);
+  state.hiHistory.push({player:cur,round:state.hiRound,prevScore:prev,pts:state.hiTurnPts,halved:entry.halved,newScore:state.hiScores[cur],throws:(state.hiTurnThrows||[]).slice()});
+  state.hiTurnThrows=[];state.hiTurnDartPts=[];
+  // Track hits/misses per player
+  if(!state.hiHits)state.hiHits=state.players.map(function(){return 0;});
+  if(!state.hiMisses)state.hiMisses=state.players.map(function(){return 0;});
+  if(!state.hiDoubleHits)state.hiDoubleHits=state.players.map(function(){return 0;});
+  if(!state.hiDoubleMisses)state.hiDoubleMisses=state.players.map(function(){return 0;});
+  if(!state.hiTrebleHits)state.hiTrebleHits=state.players.map(function(){return 0;});
+  if(!state.hiTrebleMisses)state.hiTrebleMisses=state.players.map(function(){return 0;});
+  if(scored)state.hiHits[cur]++;else state.hiMisses[cur]++;
+  var _hiCurType=(state.hiSeq&&state.hiSeq[state.hiRound])?state.hiSeq[state.hiRound].type:'';
+  if(_hiCurType==='double'||_hiCurType==='spec_double'){if(scored)state.hiDoubleHits[cur]++;else state.hiDoubleMisses[cur]++;}
+  if(_hiCurType==='treble'||_hiCurType==='spec_treble'){if(scored)state.hiTrebleHits[cur]++;else state.hiTrebleMisses[cur]++;}
+  state.dartCount[cur]=(state.dartCount[cur]||0)+3;state.hiTurnPts=0;state.hiDartsThrown=0;
+  state.currentPlayer=(state.currentPlayer+1)%state.players.length;
+  var _hiRoundDone=(state.players.length<=1)||(state.currentPlayer===state.firstPlayer);
+  if(_hiRoundDone){
+    state.hiRound++;
+    if(state.hiRound>=state.hiSeq.length){_hiFinish();return;}
   }
   renderHalveIt();
   if(_hiIsBot()){setTimeout(triggerHiBotTurn,1000);}
@@ -11825,7 +11864,12 @@ function eliSubmit(){
   eliNextPlayer();
 }
 
-function _eliDoWin(val,newScore){
+function _eliDoWin(val,newScore){ // v247: eerst bevestigen (bij double out is net al bevestigd: dan direct)
+  if(state.eliDoubleOut){_eliWinSave(val,newScore);return;}
+  _finishGate('eli',{val:val,score:newScore},state.players.map(function(n,i){return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+_esc(state.eliScores[i])+'</strong></div>';}).join(''),function(){_eliWinSave(val,newScore);});
+}
+_FINISH.eli=function(a){_eliDoWin(a&&a.val,a&&a.score);};
+function _eliWinSave(val,newScore){
   var cur=state.currentPlayer;
   var players=state.players;
   var totalRounds=state.eliRound;
@@ -12404,7 +12448,7 @@ function afgAttack(targetName, pts){
     playSound('score');
   }
   var active = _afgActive();
-  if(active.length===1){ _afgWin(active[0]); return; }
+  if(active.length===1){ _afgFinish(); return; }
   _afg.dartsLeft--;
   if(_afg.dartsLeft<=0) _afgNextTurn(); else renderAfgooien();
 }
@@ -12431,6 +12475,11 @@ function _afgNextTurn(){
   if(!_afgBotThinking&&_afgIsBot()){_afgBotThinking=true;setTimeout(triggerAfgBotDart,900);}
 }
 
+function _afgFinish(){ // v247: eerst bevestigen
+  var active=_afgActive();if(active.length!==1)return;
+  _finishGate('afg',null,_afg.players.map(function(q){return '<div class="stat-row"><span>'+_esc(q.name)+'</span><strong>'+_esc(q===active[0]?'Winnaar':(q.eliminated?'Afgegooid':(q.score||0)))+'</strong></div>';}).join(''),function(){_afgWin(active[0]);});
+}
+_FINISH.afg=_afgFinish;
 function _afgWin(winner){
   _inGame=false;
   var gb=document.getElementById('game-controls'); if(gb) gb.classList.remove('show');
@@ -12478,6 +12527,45 @@ function _afgWin(winner){
     fit();try{new MutationObserver(fit).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){}
   });
 })();
+// ═══ Potje afronden? (v247) ═══
+// Na de laatste invoer van een potje eerst bevestigen; pas bij Afronden wordt er opgeslagen. Ongedaan zet de stand
+// van vóór die laatste invoer terug uit de hervat-snapshot (darts_live, wordt na elke render bewaard), dus voor elk
+// spel even exact, zonder te leunen op de Ongedaan-functie per spel. Na een herstart komt de vraag terug (_FINISH).
+var _finishPrev=null,_finishFn=null;
+function _finishGate(kind,arg,rowsHtml,fn){
+  if(_finishPrev==null){try{_finishPrev=localStorage.getItem(LIVE_KEY);}catch(e){}}
+  state._finishPending=kind;state._finishArg=(arg==null?null:arg);_finishFn=fn;
+  try{_liveSaveNow();}catch(e){}
+  var old=document.getElementById('fin-ov');if(old&&old.parentNode)old.parentNode.removeChild(old);
+  var ov=document.createElement('div');ov.className='ask-ov';ov.id='fin-ov';
+  ov.innerHTML='<div class="ask-box" role="dialog" aria-modal="true" aria-labelledby="fin-t"><div class="ask-t" id="fin-t">Potje afronden?</div>'+
+    '<div class="ask-s">Klopt de eindstand? Vergist bij de laatste invoer? Tik op Ongedaan.</div>'+
+    (rowsHtml?'<div class="fin-rows">'+rowsHtml+'</div>':'')+
+    '<div class="ask-b"><button class="btn btn-full ask-no" id="fin-undo">Ongedaan</button><button class="btn btn-full ask-yes btn-primary" id="fin-ok">Afronden</button></div></div>';
+  document.body.appendChild(ov);
+  ov.querySelector('#fin-undo').onclick=_finishUndo;
+  ov.querySelector('#fin-ok').onclick=_finishDo;
+  setTimeout(function(){var b=document.getElementById('fin-ok');if(b)b.focus();},30);
+}
+function _finishClose(){var ov=document.getElementById('fin-ov');if(ov){ov.classList.add('out');setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},160);}}
+function _finishDo(){
+  var f=_finishFn;_finishFn=null;_finishPrev=null;state._finishPending=false;state._finishArg=null;
+  _finishClose();try{haptic&&haptic();}catch(e){}
+  if(f)f();
+}
+function _finishUndo(){
+  var p=_finishPrev;_finishFn=null;_finishPrev=null;state._finishPending=false;state._finishArg=null;
+  _finishClose();
+  var s=null;try{s=p?JSON.parse(p):null;}catch(e){}
+  if(s&&s.state&&_LIVE_RENDER[s.screen]&&!s.state._finishPending){_liveResume(s,true);return;}
+  try{gameBarUndo();}catch(e){} // vangnet als er geen snapshot was
+}
+// Na hervatten (herstart midden in de vraag) de vraag opnieuw stellen
+function _finishReopen(){
+  if(!state._finishPending||document.getElementById('fin-ov'))return false;
+  var f=_FINISH[state._finishPending];if(!f)return false;
+  f(state._finishArg);return true;
+}
 // ═══ Lopend potje en toernooi bewaren (v240) ═══
 // iOS sluit een PWA op de achtergrond soms af; dan was het potje weg. Na elke render wordt de stand
 // (state + de spel-eigen objecten) in darts_live gezet, het toernooi in darts_trn_live. Bij het openen
@@ -12491,7 +12579,8 @@ function _liveSnapshot(){
   var scr=_curScreen;if(!_LIVE_RENDER[scr])return null;
   return {v:1,ts:Date.now(),screen:scr,state:state,rco:rco,trn:state.trnMode?trn:null,rematch:rematchConfig,
     afg:(scr.indexOf('afgooien')>=0)?{g:_afg,tieP:_afgTiePlayers,tieR:_afgTieResolved,re:_afgBullReRound,reP:_afgBullRePlayers,teams:afgTeams,teamOf:afgTeamOf}:null,
-    bot:{en:botEnabled,mode:botLevelMode,lvl:botManualLevel,sel:botSelectedPlayer}};
+    bot:{en:botEnabled,mode:botLevelMode,lvl:botManualLevel,sel:botSelectedPlayer},
+    prev:state._finishPending?_finishPrev:undefined};
 }
 function _liveSaveNow(){
   _liveT=null;if(_liveOff)return;
@@ -12536,7 +12625,7 @@ function _liveRestoreTrn(t){
   Object.keys(trn).forEach(function(k){delete trn[k];});Object.assign(trn,t);
   var m=_trnFindMatch(t.currentMatch);trn.currentMatch=m||null;return m;
 }
-function _liveResume(s){
+function _liveResume(s,quiet){
   _liveOff=true;
   try{
     Object.keys(state).forEach(function(k){delete state[k];});Object.assign(state,s.state);
@@ -12551,17 +12640,20 @@ function _liveResume(s){
       if(m)state.trnMatchCallback=function(winnerName){trnRecordLegWin(m,winnerName);renderTrnOverview();showScreen('screen-trn-overview');};
       else{state.trnMode=false;}
     }
+    _finishPrev=state._finishPending?(s.prev||null):null;_finishFn=null;
     showScreen(s.screen);
     window[_LIVE_RENDER[s.screen]]();
+    _finishReopen();
   }finally{_liveOff=false;}
   _liveSaveNow();
   // Was de bot aan de beurt? Dan gaat hij verder.
   setTimeout(function(){try{
+    if(state._finishPending)return;
     if(s.screen==='screen-game'&&state.botPlayerIndex>=0&&state.currentPlayer===state.botPlayerIndex)triggerBotTurn();
     else if(s.screen==='screen-halveit'&&_hiIsBot())triggerHiBotTurn();
     else if(s.screen==='screen-afgooien'&&_afgIsBot())triggerAfgBotDart();
   }catch(e){}},500);
-  showToast('Potje hervat','success');
+  if(!quiet)showToast('Potje hervat','success');
 }
 function _liveDescribe(s){
   var st=s.state||{},t=st.gameType||'',lbl=(typeof GAME_TYPE_LABELS!=='undefined'&&GAME_TYPE_LABELS[t])||(s.screen.indexOf('afgooien')>=0?'Afgooien':t);
