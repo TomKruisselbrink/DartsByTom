@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v247** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v248** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -149,7 +149,7 @@ Volgorde in het bestand (globaal):
 | **X01** (`x01`, `501`, `301`) | Start 501, 301 of eigen getal. Double out of single out. Legs **first to** of **best of** N, optioneel sets (1 = geen sets). Invoer per beurt (0–180) via numpad of snelknoppen. Bust onder 0 of op 1 (bij double out). Bij uitgooien vraagt de app "Was het op een double?" en daarna welke dubbel (→ `doubleStats`). Checkout-hints uit de checkouttabel. De bot kan meedoen. |
 | **X01 teams 2 tegen 2** (v241) | Setup X01 → Spelers: "2 tegen 2" (`x01Teams`). Precies 4 spelers: 1+2 = Team 1, 3+4 = Team 2; volgorde in het spel om en om (`[p0,p2,p1,p3]`, `state.teamOf=[0,1,0,1]`, via `_pendingTeams` in `launchGame`). Eén score per team: elke scorewijziging wordt gekopieerd (`_syncTeam`), legs/sets ook (`_mates`). Eigen beurten → eigen `detailedStats`; `won` = teamuitslag; entry krijgt `partners:[naam]` en `opponents` = het andere team. Teamlegs (`legData.team`) tellen niet voor beste leg. Geen bot, geen toernooi. |
 | **Cricket** (`cricket`) | 15–20 en Bull. Drie marks sluit een vak. Extra marks scoren punten zolang een tegenstander het vak nog niet dicht heeft. Winst: alles dicht en score ≥ ieders score. |
-| **Eliminatie** (`eliminatie`) | Optellen naar een doel (standaard 301, of eigen). Boven het doel = bust. Kom je precies op de score van een tegenstander (>0), dan gaat die terug naar 0. Optioneel double out (bevestiging). |
+| **Eliminatie** (`eliminatie`) | Optellen naar een doel (standaard 301, of eigen). Boven het doel = bust. Kom je precies op de score van een tegenstander (>0), dan gaat die terug naar 0. Optioneel double out (bevestiging). **Opslaan (v248):** per speler een entry in `_eliWinSave` (`state._eliSaved` voorkomt dubbel): `darts` = beurten (`eliTurns`), `score` = `highScore` = eindstand, `matchFormat` 'tot 301' (+ ' · double out'). Potjes van vóór v248 bestaan niet. |
 | **Afgooien** = Killer (`afgooien`) | Nummer verdelen: **bullronde** (één pijl op de bull; dichtstbij begint, het geraakte vak wordt je nummer, bij gelijkspel een sleepscherm) of **willekeurig** 1–20 (`afgAssign`). **Levens** 1–10 (`afgLives`) = punten nodig om Killer te worden. Opbouwen op je eigen nummer: **per vak 1·2·3** (`afgBySeg`) of **elke raak 1**. Als Killer raak je andermans nummer: −1/−2/−3 levens. Wie op 0 staat ligt eruit; de laatste die overblijft wint. **Teams** (2–4): delen nummer en levens, gooien om de beurt. **Twee spelers met hetzelfde nummer mag** (bijv. allebei 20, of Bull en Bull buiten): dat hoort bij het spel, niet "repareren". De bot kan meedoen (niet bij teams). |
 | **Around the Clock** (`atc`) | 1–20, dan Bull, dan D-Bull (22 doelen). Modus *basis*: raak = +1. Modus *punten*: dubbel = +2, triple = +3 stappen. Wie het eerst klaar is wint. |
 | **Shanghai** (`shanghai7`, `shanghai20`) | 7 of 20 rondes. Ronde n = doel n; enkel/dubbel/triple = n×1/2/3. Optie "halveren": een beurt zonder punten halveert je totaal (anders 0 voor die ronde). Hoogste totaal wint, **of direct**: single + dubbel + triple van het rondegetal in één beurt = Shanghai = gewonnen (`_shIsShanghai`, v240; entry krijgt `shanghai:true`). |
@@ -358,8 +358,6 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
 ## 12. Bekende bugs
-
-- **Eliminatie slaat geen potjes op** (al zo sinds het spel bestaat): `_eliWinSave` toont alleen het winscherm, er is geen `updatePlayerStat` voor `eliminatie`. Gemeld aan Tom (v247), nog niet gebouwd.
 
 - **Groepssync en tellers (al zo sinds v244):** `_grpMerge` neemt de groepsversie als basis; is die verouderd, dan kunnen de tellers (games/wins/…) van een speler dalen. Er verdwijnen geen potjes. Groepssync wordt niet meer gebruikt; niet "repareren" zonder overleg (merge-logica, §13).
 

@@ -21,10 +21,13 @@ async function run(root, c) {
   for (const n in db) { (db[n].gameHistory || []).forEach(e => { delete e.gid; delete e.ts; delete e.date; }); }
   return JSON.stringify(db);
 }
+// Bewuste verschillen t.o.v. een oudere referentie (SKIP=eliminatie om over te slaan, of REF = v248+ gebruiken).
+const SKIP = (process.env.SKIP || '').split(',').filter(Boolean);
 let bad = 0;
 for (const [g, c] of Object.entries(cases)) {
+  if (SKIP.includes(g)) { console.log(g.padEnd(15), 'overgeslagen (SKIP)'); continue; }
   const a = await run(REF, c), v = await run(ROOT, c);
   const same = a === v; if (!same) bad++;
-  console.log(g.padEnd(15), same ? 'identiek' : 'VERSCHIL', same ? '' : '\n  v246: ' + a.slice(0, 300) + '\n  nu:   ' + v.slice(0, 300));
+  console.log(g.padEnd(15), same ? 'identiek' : 'VERSCHIL', same ? '' : '\n  ref:  ' + a.slice(0, 300) + '\n  nu:   ' + v.slice(0, 300));
 }
 console.log(bad ? 'gate-eq: GEZAKT' : 'gate-eq: GESLAAGD'); await b.close(); process.exit(bad ? 1 : 0);

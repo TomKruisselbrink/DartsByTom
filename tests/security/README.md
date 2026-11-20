@@ -26,3 +26,6 @@ Exitcode 0 = geslaagd. `ROOT=<map>` test een andere versie (bijv. een uitgepakte
 de code opgebouwde HTML. Gebruikers- of serverdata hoort daar nooit in.
 
 `diag-legacy.html` + `INSTRUCTIES.md`: alleen-lezen diagnose van exports/Firestore-data (stap 0 van het herstel v246).
+
+- `eli-save.mjs` (v248): Eliminatie slaat per speler 1 potje op (won, beurten, eindstand, matchFormat), ook bij double out, solo zonder winst; geschiedenis/statistieken NL/EN; rare namen ge-escapet.
+- `finish-gate-eq.mjs`: met een referentie van vóór v248 `SKIP=eliminatie` meegeven (bewust verschil).

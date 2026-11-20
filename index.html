@@ -1751,6 +1751,7 @@ video {
 <body>
 <script>
 var I18N={
+"Hoogste eindstand": "Highest final score",
 "Vul een naam in.": "Enter a name.",
 "Een naam mag geen onzichtbare tekens bevatten.": "A name can't contain invisible characters.",
 "Deze naam kan niet: geen / gebruiken, en niet alleen . of .. of __…__.": "This name can't be used: no /, and not just . or .. or __…__.",
@@ -2577,6 +2578,8 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^eindstand (-?\d+)$/,'final score $1'],
+[/^tot (\d+)( · double out)?$/,function(m){return 'to '+m[1]+(m[2]?' · double out':'');}],
 [/^Eindscore (\d+) → (\d+)$/,'Final score $1 → $2'],
 [/^Eindscore (\S+) →$/,'Final score $1 →'],
 [/^(.+) wint nu$/,'$1 now wins'],[/^(.+) wint niet meer$/,'$1 no longer wins'],
@@ -7515,7 +7518,7 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     state.eliScores=players.map(function(){return 0;});
     state.eliTurns=players.map(function(){return 0;});
     state.eliHistory=[];state.eliRound=1;state.eliTarget=eliTarget;
-    state.eliDoubleOut=eliDoubleOut;state.eliSnapshots=[];
+    state.eliDoubleOut=eliDoubleOut;state.eliSnapshots=[];state._eliSaved=false;
     _eliNumVal='';
     setTimeout(saveRematchConfig,0);renderEliminatie();showScreen('screen-eliminatie');
   }
@@ -10046,10 +10049,10 @@ function _renderStatsImpl(){
 
     // Other game type stats blocks
     var otherBlock='';
-    if(activeFilter==='atc'||activeFilter==='shanghai7'||activeFilter==='shanghai20'||activeFilter==='halveit'||activeFilter==='checkout121'){
+    if(activeFilter==='atc'||activeFilter==='shanghai7'||activeFilter==='shanghai20'||activeFilter==='halveit'||activeFilter==='checkout121'||activeFilter==='eliminatie'){
       var gs=calcGameStats(name,activeFilter);
       if(gs){
-        var labelMap={atc:'Hoogste segment',shanghai7:'Hoogste score',shanghai20:'Hoogste score',halveit:'Hoogste score',checkout121:'Meeste checkouts'};
+        var labelMap={atc:'Hoogste segment',shanghai7:'Hoogste score',shanghai20:'Hoogste score',halveit:'Hoogste score',checkout121:'Meeste checkouts',eliminatie:'Hoogste eindstand'};
         otherBlock=
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'+
             '<div style="background:rgba(185,78,42,.08);border:1px solid rgba(185,78,42,.2);border-radius:var(--radius-sm);padding:10px;text-align:center">'+
@@ -10744,6 +10747,7 @@ function _renderHistoryImpl(){
     if(g.gameType==='randomco'&&g.score!=null)info.push(g.score+' pnt');
     if(g.bobStats){info.push('score '+(g.score||0));info.push(g.bobStats.hits+'/'+g.bobStats.att+' raak');if(g.bobStats.out)info.push('uit bij '+bobLabel(Math.max(0,g.bobStats.reached-1)));}
     if(g.shanghai)info.push('Shanghai!');
+    if(g.gameType==='eliminatie'){info.push('eindstand '+(g.score||0));if(g.darts)info.push(g.darts+(g.darts===1?' beurt':' beurten'));}
     if(g.corrected)info.push('gecorrigeerd');
     if(g.matchFormat)info.push(g.matchFormat);
     var legHtml='';
@@ -11396,7 +11400,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=247;
+var APP_VERSION=248;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -12002,6 +12006,14 @@ function _eliWinSave(val,newScore){
     return '<div class="stat-row"><span>'+_esc(n)+'</span><strong>'+state.eliScores[i]+
       ' <span style="color:var(--muted);font-size:11px;font-weight:600">('+state.eliTurns[i]+' beurt'+(state.eliTurns[i]!==1?'en':'')+')</span></strong></div>';
   }).join('');
+  // v248: potjes opslaan (voorheen ging een potje Eliminatie nergens heen). darts = beurten, score = eindstand.
+  if(!state._eliSaved){state._eliSaved=true;
+    var _fmt='tot '+state.eliTarget+(state.eliDoubleOut?' · double out':'');
+    players.forEach(function(n,i){
+      var sc=state.eliScores[i]||0;
+      updatePlayerStat(n,'eliminatie',{won:i===cur,darts:state.eliTurns[i]||0,score:sc,highScore:sc,matchFormat:_fmt});
+    });
+  }
   showWin(players[cur],'Eliminatie – exact '+state.eliTarget+' in ronde '+totalRounds+' 🎯',statsHtml);
 }
 

@@ -46,7 +46,7 @@ for (const [g, c] of Object.entries(cases)) {
   // Afronden
   await p.evaluate(() => document.getElementById('fin-ok').click()); await p.waitForTimeout(600);
   const r4 = await p.evaluate(() => ({ scr: _curScreen, live: localStorage.getItem('darts_live') }));
-  const n = await cnt(), want = c.want != null ? c.want : (g === 'bob' ? 1 : (g === 'eliminatie' ? 0 : 2));
+  const n = await cnt(), want = c.want != null ? c.want : (g === 'bob' ? 1 : 2);
   if (r4.scr !== 'screen-win') fails.push(g + ': geen winscherm na Afronden (' + r4.scr + ')');
   if (n !== want) fails.push(g + `: ${n} potjes opgeslagen, verwacht ${want}`);
   if (r4.live) fails.push(g + ': darts_live niet gewist');
