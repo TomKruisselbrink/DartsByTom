@@ -2,8 +2,7 @@ rules_version = '2';
 // Darts by Tom — Firestore-regels, voorstel WP3 (v250). Zelf plakken in de Firebase-console → Firestore → Regels.
 // Verschil met de huidige regels (20-11-2026):
 //   1. groups/** gaat op slot (niemand gebruikt nog een groepscode; iedereen heeft een account).
-//   2. De catch-all onderaan laat groups niet meer door. Andere collecties (andere tools in dit project) blijven open
-//      zoals nu. Staat er in de Data-tab niets anders dan de collecties van Darts by Tom: dat hele blok weghalen.
+//   2. De catch-all is weg. Alleen de collecties van de andere tool (events, meal, tasks) blijven open zoals nu.
 //   3. usernames: alleen een naam opzoeken (get), niet de hele lijst met namen + uid's ophalen (list).
 //   4. friendRequests: geen verzoek aan jezelf.
 // Al het andere is letterlijk gelijk aan de huidige regels.
@@ -58,10 +57,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // Andere tools in dit project blijven open zoals nu, behalve accounts en groepen.
-    // Gebruiken geen andere tools dit project (Data-tab: alleen groups, users, usernames, friendRequests)? Haal dit blok dan weg.
-    match /{coll}/{document=**} {
-      allow read, write: if coll != 'users' && coll != 'usernames' && coll != 'friendRequests' && coll != 'groups';
-    }
+    // Andere tool in dit project (Data-tab 20-11-2026: events, meal, tasks): open zoals nu.
+    // Voorheen stond hier een catch-all die ELKE nieuwe collectie open zette; nu alleen deze drie.
+    // Gaat die tool een nieuwe collectie gebruiken, dan moet die naam hier bij.
+    match /events/{document=**} { allow read, write: if true; }
+    match /meal/{document=**}   { allow read, write: if true; }
+    match /tasks/{document=**}  { allow read, write: if true; }
   }
 }
