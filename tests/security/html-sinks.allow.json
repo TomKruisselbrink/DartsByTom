@@ -40,6 +40,7 @@
   "_bobEnd|state.bobScores[i]": "getal: berekend door de code of uit de spelstatus van het lopende potje (state), niet uit opgeslagen of binnengekomen data",
   "_buildHiPlayers|_last.pts": "getal: berekend door de code of uit de spelstatus van het lopende potje (state), niet uit opgeslagen of binnengekomen data",
   "_buildHiPlayers|state.hiScores[i]": "getal: berekend door de code of uit de spelstatus van het lopende potje (state), niet uit opgeslagen of binnengekomen data",
+  "_compatRender|_compat.length": "getal (lengte van een lijst)",
   "_dayLabel|((p.gameHistory||[]).length-_histLimit)": "getal: berekend door de code of uit de spelstatus van het lopende potje (state), niet uit opgeslagen of binnengekomen data",
   "_dayLabel|(g.ts?_hhmm(g.ts)": "tijd uit tijdstempel; partners/tegenstanders/legResult daarna via _esc",
   "_dayLabel|detailId": "element-id, alleen a–z0–9",

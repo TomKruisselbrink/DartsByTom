@@ -10082,7 +10082,7 @@ function importStats(){
   if(updatedNames.length)msg+='Bijgewerkt: '+updatedNames.join(', ')+'. ';
   if(skipped.length)msg+='Niet geïmporteerd: '+skipped.join(', ')+' (geen geldige spelergegevens).';
   if(!msg)msg='Niets nieuws — alles was al aanwezig.';
-  setImportResult('✓ '+msg,'var(--success)');
+  setImportResult('✓ '+msg.trim(),'var(--success)');
   document.getElementById('import-code').value='';
   renderStats();
 }

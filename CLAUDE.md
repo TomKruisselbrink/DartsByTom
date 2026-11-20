@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v245** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v246** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -122,15 +122,16 @@ Volgorde in het bestand (globaal):
 
 ---
 
-## 3b. Beveiliging (v245, roadmap fase 1)
+## 3b. Beveiliging (v246, roadmap fase 1 + herstel)
 
-- **Alles wat van een gebruiker of van buiten komt (namen, bijnamen, gebruikersnamen, potjesvelden) gaat via `_esc()` de HTML in**, of via `textContent`. `_esc` escapet `& < > " '`.
-- **In `onclick`-strings altijd `_ue(x)`** met `decodeURIComponent('…')` aan de andere kant. `_ue` = `encodeURIComponent` dat ook `' ( ) ! *` codeert. Nooit `_esc` of `JSON.stringify` in een JS-string binnen een attribuut: de browser decodeert `&#39;` terug naar `'`.
-- **Invoerfilter** (sectie `// ═══ Invoer- en binnenkomstfilter (v245) ═══`): `_nameError(n)` weigert `< > " ' \`` en stuurtekens, max. `NAME_MAX` = 24. Alleen voor **nieuwe** namen (`addPlayer`, `trnAddPlayer`, `acctPickNewOk`); bestaande spelers (bijv. met een apostrof) blijven werken en worden **niet** hernoemd. Bijnaam en botnaam worden opgeschoond.
-- **Binnenkomstfilter:** `_remoteNameOk(n)` (spelernaam van buiten; ongeldige namen worden overgeslagen), `_safeId(id)` (Firestore-doc-id's), `_scrub(v)` / `_scrubPlayer(p)` (haalt `< > " \`` en stuurtekens uit strings en sleutels, niet-eindige getallen → 0). Toegepast op: groepslistener, vriendverzoeken/vrienden, `_frLoadAll`, inbox, `importStats`, `_acctMerge`. Lokale bestaande data wordt niet aangepast.
-- **CSP:** alleen `object-src 'none'; base-uri 'self'; form-action 'self'` (meta-tag). Een strenge `script-src` kan niet zolang er ~350 inline `onclick`'s zijn.
-- **Firestore-regels voor `groups/**`:** `firebase/groups.rules` + uitleg en testtabel in `firebase/README.md`. Tom zet ze zelf in de console; de catch-all moet dan weg, anders hebben ze geen effect.
-- Testscripts (buiten de repo): XSS-harnas met payloads in namen/velden, lokaal en via nep-Firestore. v244: 655 + 177 uitvoeringen, v245: 0 + 0.
+- **De verdediging zit in de uitvoer.** Alles wat niet uit de code zelf komt (namen, bijnamen, gebruikersnamen, potjesvelden, óók "getallen" uit data zoals score, tellers, gemiddelden, dubbel-aantallen) gaat via `_esc()` de HTML in, of via `textContent`. `_esc` escapet `& < > " '`.
+- **Nooit gebruikers- of Firebase-data in een JS-string in een `onclick`.** Zet de waarde in een data-attribuut en lees hem als tekst: `data-n="'+_esc(naam)+'" onclick="spMergePick(this.dataset.n)"`. Meerdere waarden: `data-a`/`data-b`, `data-u` (uid), `data-i`, `data-t`. In handlers mogen alleen bewezen getallen of codeconstanten (`setAfgLives('+v+')`). `_ue` is er alleen nog voor deellinks.
+- **Invoerfilter = gebruiksgemak, geen beveiliging** (sectie `// ═══ Invoer, binnenkomst en meldingen (v246) ═══`). Nieuw getypte naam (`_nameError`, B1/B2): alle gewone tekens mogen, ook `' " & < >`; geweigerd: leeg, onzichtbare tekens, langer dan `NAME_MAX` = 24, en wat geen Firestore-documentnaam kan (`_fsIdOk`: geen `/`, niet `.`/`..`/`__…__`, max 1500 bytes). Bestaande langere of afwijkende namen blijven werken en worden nooit hernoemd.
+- **Data van buiten wordt nooit aangepast en spelers worden niet overgeslagen om hun naam** (groep, account-back-up, import, vrienden, inbox). `_nameStorable(n)` = elke niet-lege tekst. `_shapeCheck(p,bron,naam)` controleert alleen de vorm; een potje dat geen object is, wordt in een kopie weggelaten en gemeld. `_safeId` blijft voor Firebase-uid's/doc-id's. (v245 had `_scrub`/`_remoteNameOk` die tekens weghaalden en namen oversloegen: verwijderd in v246.)
+- **Melden in plaats van stil overslaan:** `_compatNote(bron,naam,reden)` vult `_compat` (alleen in het geheugen) en Instellingen → Gegevens → **Synchronisatieproblemen** (`#st-sync-issues`, verborgen als er niets is). Bronnen: groep (naam kan geen Firestore-document zijn, schrijven geweigerd), back-up, import (ook in de importmelding: "Niet geïmporteerd: …"), vrienden.
+- **CSP:** alleen `object-src 'none'; base-uri 'self'; form-action 'self'` (meta-tag). Een strenge `script-src` kan pas na het ombouwen van de ~350 inline handlers naar event-delegatie (roadmap, later).
+- **Firestore-regels** (WP3, apart, nog niet toegepast): `firebase/`. Niemand gebruikt nog een groep; voorstel is `groups/**` helemaal op slot. Alleen met Toms akkoord, hij zet ze zelf in de console.
+- **Tests:** `tests/security/` (zie README daar). `html-sinks.mjs` is statisch en faalt op elke `'+x+'` in HTML of een handler die niet ge-escapet is of niet met reden in `html-sinks.allow.json` staat (sleutel `functie|expressie`). Nieuwe code met data in HTML: `_esc`; een getal of constante: met reden in de allowlist. De andere tests draaien met Playwright (geen afhankelijkheid voor de app).
 
 ## 4. Vertaling (NL/EN)
 
@@ -338,6 +339,9 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 
 ## 11. Openstaand
 
+- **v247 (afgesproken 20-11):** bevestigingsscherm "Potje afronden?" (Ongedaan / Afronden) na de laatste invoer van een potje, vóór het opslaan; alle spellen waar de laatste invoer het potje beëindigt (aanleiding: tikfout in de laatste Halve It-beurt kon niet meer terug). Per spel eerst nalopen; X01 heeft al de double-vraag.
+- **WP3 Firestore-regels** (apart, Toms akkoord): huidige regels van Tom nodig, `full.rules` zonder catch-all, emulator-test lokaal bij Tom (optie B).
+
 - **Font aanvullen:** `% & ( )` en `×` ontbreken nog in Flow (via `font/add_glyphs.py`).
 - **Flow Text verder verfijnen** op Toms feedback (v239 = versie 0.2). Flow zelf: 0/O en 8/B lijken nog op elkaar (alleen relevant bij grote getallen).
 - **Kleine tekst:** met Flow overal zijn ondertitels en uitleg klein. Tom bepaalt of alles een stap groter moet.
@@ -350,6 +354,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 
 ## 12. Bekende bugs
 
+- **Groepssync en tellers (al zo sinds v244):** `_grpMerge` neemt de groepsversie als basis; is die verouderd, dan kunnen de tellers (games/wins/…) van een speler dalen. Er verdwijnen geen potjes. Groepssync wordt niet meer gebruikt; niet "repareren" zonder overleg (merge-logica, §13).
+
 - **Afgooien, geen winstscherm (gemeld 13-11):** in de testbrowser komt het winstscherm altijd (bullronde, willekeurig, ongedaan, telefoon en groot scherm). Nog niet gereproduceerd; wacht op Toms info (welk apparaat, welke versie, wat er precies stond).
 
 - **Bot X01:** de lijst `impossible` in `botGenerateScore` bevat ook 159, 162, 165 en 168. Die zijn als beurtscore wél mogelijk (alleen niet als checkout), dus de bot gooit ze nooit.
@@ -361,7 +367,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 
 ## 13. Nooit doen
 
-- **Nooit gebruikers- of serverdata ongeëscapet in HTML of in een `onclick`-string zetten** (zie §3b). Nooit `_scrub`/`_remoteNameOk` bij binnenkomende data weghalen.
+- **Nooit gebruikers- of serverdata ongeëscapet in HTML zetten, en nooit in een JS-string in een `onclick`** (zie §3b: `_esc` + `data-*`). Nooit binnenkomende data stil aanpassen of spelers overslaan; wat niet kan, melden via `_compatNote`. `tests/security/html-sinks.mjs` moet groen zijn vóór elke push.
 
 - **Nooit `darts_db` overschrijven met iets dat minder bevat dan er lokaal staat.** Geen `localStorage.clear()`, geen `removeItem('darts_db')`, geen reset of "schone start" en geen migratie die spelers of potjes weggooit. Migraties vullen alleen aan.
 - **Nooit server- of groepsdata blind boven lokale data zetten.** Altijd samenvoegen (`_grpMerge`, `_acctMerge`). Haal de merge-, tombstone- en `_grpSent`-logica niet weg en "vereenvoudig" die niet.
