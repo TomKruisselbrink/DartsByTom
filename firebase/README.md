@@ -8,19 +8,15 @@ Er verandert niets aan de app.
 | | Nu | Voorstel |
 |---|---|---|
 | `groups/**` (oude groepscode) | open voor iedereen, ook zonder login: lezen, schrijven, wissen | dicht |
-| andere collecties (andere tools in dit project) | open voor iedereen | ongewijzigd open (zie hieronder) |
+| andere collecties (`events`, `meal`, `tasks`, oude app) | open voor iedereen | dicht |
 | `usernames` | iedere ingelogde gebruiker kan de hele lijst namen + uid's ophalen | alleen één naam opzoeken |
 | `friendRequests` | verzoek aan jezelf mogelijk | niet meer |
 | accounts, back-up, vrienden, inbox | beschermd | letterlijk gelijk |
 
-**De catch-all.** Je huidige regels zetten elke collectie open behalve accounts. In de Data-tab (20-11-2026) staan
-naast de darts-collecties alleen `events`, `meal` en `tasks` van een andere tool. Die drie blijven open zoals nu; de
-catch-all is vervangen door die drie namen. Gevolg: niemand kan nog zomaar nieuwe collecties aanmaken. Gaat die andere
-tool een nieuwe collectie gebruiken, dan moet die naam erbij in de regels, anders werkt dat deel van die tool niet.
-
-**Let op, buiten de darts-app:** `events`, `meal` en `tasks` zijn voor iedereen open, ook zonder login. De projectsleutel
-staat (zoals bij elke Firebase-webapp) gewoon in de broncode van de darts-app, dus iedereen kan die data lezen,
-aanpassen of wissen. Dichtzetten kan pas als die tool zelf een login krijgt.
+**De catch-all is weg.** Je huidige regels zetten elke collectie open behalve accounts. In de Data-tab (20-11-2026)
+staan naast de darts-collecties alleen `events`, `meal` en `tasks` van een oude app die je niet meer gebruikt. Die gaan
+nu ook dicht. De data blijft in Firestore staan, maar niemand kan er nog bij. Wil je die app ooit weer gebruiken, dan
+moet er per collectie een regel bij.
 
 **Groepscode in de app.** Wie nog een groepscode heeft ingesteld, krijgt na deze regels een melding dat schrijven
 naar de groep geweigerd wordt (Instellingen → Gegevens → Synchronisatieproblemen). Er gaat lokaal niets verloren.
@@ -44,13 +40,11 @@ Volgens jou gebruikt niemand de groep meer.
 | get | `users/uidB/backup/meta` | uidA | — | geweigerd |
 | create | `friendRequests/uidA_uidA` | uidA | `{"from":"uidA","to":"uidA"}` | geweigerd |
 | create | `friendRequests/uidA_uidB` | uidA | `{"from":"uidA","to":"uidB"}` | toegestaan |
-| get | `events/mnk4liixz3a` | uit | — | toegestaan |
-| create | `meal/test` | uit | `{"x":1}` | toegestaan |
+| get | `events/mnk4liixz3a` | uit | — | geweigerd |
 | create | `iets/test` | uit | `{"x":1}` | geweigerd |
 
 5. Publiceren.
-6. Controle van de andere tool: open hem en kijk of afspraken, maaltijden en taken nog laden en opslaan.
-7. Controle in de app (op twee telefoons met een account): speel een potje met een gekoppelde vriend, kijk of het bij
+6. Controle in de app (op twee telefoons met een account): speel een potje met een gekoppelde vriend, kijk of het bij
    de ander binnenkomt, en open Vrienden-weergave in Statistieken. Account-back-up: Instellingen → Account →
    Back-up maken. Alles moet werken zoals voorheen.
 
