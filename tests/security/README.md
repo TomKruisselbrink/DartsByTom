@@ -12,6 +12,9 @@ node tests/security/names-compat.mjs      # namen met speciale tekens komen exac
 node tests/security/no-disappear.mjs      # geen spelers/potjes weg, tellers niet lager (groep: bekend gedrag als waarschuwing)
 node tests/security/report.mjs            # melden in plaats van overslaan, NL en EN
 node tests/security/diag-legacy.test.mjs  # de diagnosepagina (alleen lezen, geanonimiseerd)
+node tests/security/finish-gate.mjs       # v247: 'Potje afronden?' per spel (Ongedaan, Afronden, herstart midden in de vraag)
+REF=<oude versie> node tests/security/finish-gate-eq.mjs  # Afronden slaat exact hetzelfde op als de referentie
+node tests/security/hi-correct.mjs        # v247: Halve It-rondes corrigeren (winnaar, tellers, tombstone, sync, vrienden)
 ```
 
 Exitcode 0 = geslaagd. `ROOT=<map>` test een andere versie (bijv. een uitgepakte oude release).

@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v246** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v247** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -102,6 +102,7 @@ Volgorde in het bestand (globaal):
    - geluid (Web Audio, geen bestanden), confetti;
    - `renderLeaderboard(tab)` (met periode **Alles / Deze maand**, `_lbPeriod`; maand = `_withView(_lbMonthDB(...))`, tellers opnieuw uit de gefilterde historie), `renderHistory()` (`_renderHistoryImpl`), head-to-head, records + grafiek, uitdaginglink;
    - dubbels bijhouden; `deleteMatchEntry()`.
+   - **Halve It: rondes corrigeren** (v247, Geschiedenis → potje → "Rondes corrigeren", `hiCorrectOpen`/`hiCorrectSave`): punten per ronde (0 = gehalveerd) → `_hiRecalc` (tussenstanden, eindscore), `_hiStatsFrom` (raak-%, D/T-% uit labels), winnaar opnieuw via de potjes van de tegenstanders (`_hiSiblings`: zelfde moment ±10 s, elkaar als tegenstander; ontbreekt er een, dan blijft de winnaar staan + melding). Het oude potje wordt **vervangen**, niet bewerkt: tombstone + kopie met nieuwe `gid` en `corrected:{from,at}` (`_hiReplaceEntry`; ts/date van het potje blijven), tellers wins/totalScore bijgewerkt, kopie van het oude potje in `darts_correct_backup`. Gaat via account-/groepssync naar andere apparaten (tombstones). `_frSync` stuurt de kopie niet naar een vriend die het origineel al heeft (geen dubbel; hij houdt zijn versie). Alleen met rondes (`hiRoundHistory`, dus niet bij potjes ouder dan de nieuwste 200).
    - **Leg-details** in Geschiedenis als tabel (`_legTable`, v233); oude legs tonen alleen wat er is. **Beste leg** (`bestLeg(naam,501)`, `_bestLegCard`) = minste beurten in een gewonnen 501-leg, bij gelijk hoogste gemiddelde; staat bij Persoonlijke records. Legs van type `x01` van vóór v233 hebben geen `start`: dan geldt de leg als 501 als `avg × beurten` ≈ 501 (v237), want de winnaar gooit precies de startscore weg. Tijdens een potje: toast "Nieuwe beste leg!" (`_legPbCheck`) alleen als er al een eerdere beste leg was.
 15. **Init + versie.**
    - `initApp()` laadt `darts_db` uit localStorage en verbindt stil met de groep;
@@ -110,6 +111,7 @@ Volgorde in het bestand (globaal):
    - Autodarts-bridge (alleen actief op localhost/LAN, websocket poort 8079);
    - installatiebanner (iOS).
 15b. **Lopend potje bewaren (v240)** staat helemaal achteraan het hoofdscript: na elke render van een spelscherm (`_LIVE_RENDER`: scherm → renderfunctie, de functies worden omwikkeld) gaat een snapshot naar `darts_live` (`state`, `rco`, `_afg` + tie-globals, `trn` bij toernooimodus, `rematchConfig`, botinstellingen). Ook bij `visibilitychange`/`pagehide`. Gewist door `showWin` en bij het verlaten van een spelscherm naar een niet-spelscherm (Stop, terug naar toernooi). Bij het starten (`_liveOffer`, 0,7 s na laden) verschijnt "Potje hervatten?"; `_liveResume` zet alles terug, bouwt `state.trnMatchCallback` opnieuw op (wedstrijd teruggevonden met `_trnFindMatch`, want JSON verbreekt de verwijzing) en laat de bot verdergaan als die aan de beurt was. Toernooi apart in `darts_trn_live` (bij elke `renderTrnOverview`/`renderStandings`), gewist bij "Toernooi verlaten". Max. leeftijd 48 uur (toernooi 6 dagen). Nieuw spel toevoegen = ook in `_LIVE_RENDER` zetten.
+15c. **Potje afronden? (v247)** staat vlak vóór 15b: na de laatste invoer van een potje vraagt `_finishGate(kind,arg,rijenHtml,opslaanFn)` eerst "Potje afronden?" (eindstand, Ongedaan / Afronden). Pas bij Afronden draait de oude opslaan-+-winschermcode (`opslaanFn`). Ongedaan zet de stand van vóór de laatste invoer terug uit de hervat-snapshot (`darts_live`, `_finishPrev`, via `_liveResume(s,true)`), dus niet via de Ongedaan-functie per spel. `state._finishPending` + `prev` in de snapshot: na een herstart stelt `_finishReopen()` de vraag opnieuw via `_FINISH[kind]` (gedefinieerd vóór `var state`). Spellen: ATC (`_atcFinish`), Cricket (`_crFinish`), Shanghai (`_shFinish`, direct gewonnen `_shShanghaiWin`→`_shShanghaiSave`), Bob's 27 (`_bobEnd`→`_bobSave`), Halve It (`_hiFinish`), Eliminatie (`_eliDoWin`→`_eliWinSave`; bij double out direct, die vraagt al), Afgooien (`_afgFinish`), Random Checkout (`_rcoFinish`; de knop "Spel afronden" blijft direct). **Niet** bij X01 (double out heeft al de double-vraag; single out en toernooi: zie §11). Nieuw spel = eindpunt via `_finishGate` + `_FINISH`-registratie, en render-guards laten `_finishReopen()` voorgaan.
 16. **Afgooien** (Killer: bullronde, tie-break-sleepscherm, hoofdspel `renderAfgooien`, `afgScore`, `afgAttack`, `_afgNextTurn`, `_afgWin`) en **Eliminatie** (`eli*`) staan helemaal achteraan.
 
 **Opslaan van een potje:**
@@ -214,7 +216,8 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
     bobStats?,                   // Bob's 27 (v240): { hits, att, reached (rondes gespeeld, 21 = alles), out, stop }
     shanghai?,                   // true als het potje met een Shanghai gewonnen is (v240)
     partners?: [naam],           // teamgenoot bij X01 2 tegen 2 (v241)
-    via?                         // naam van de vriend die dit potje stuurde
+    via?,                        // naam van de vriend die dit potje stuurde
+    corrected?                   // v247: { from: gid van het vervangen potje, at: ms } bij een gecorrigeerde kopie
   }
   ```
   - Bij potjes ouder dan de nieuwste **200** (`HISTORY_DETAIL_KEEP`) vervallen alleen `legBreakdown` en `hiRoundHistory`. Het potje zelf blijft.
@@ -254,6 +257,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_lb_period` | ranglijst `all` / `month` |
 | `darts_live` | lopend potje (snapshot, v240); wordt gewist als het potje klaar of gestopt is |
 | `darts_trn_live` | lopend toernooi (v240) |
+| `darts_correct_backup` | `{ 'naam @ms': { old: Entry, newGid } }`: kopie van gecorrigeerde potjes (vangnet, max 20, v247). Niet opruimen. |
 | `darts_merge_backup` | `{ 'naam @ms': Player }`: kopie van samengevoegde spelers (vangnet, max 10). Niet opruimen. |
 | `darts_install_dismissed` | `'1'` als de iOS-installatiebanner weggeklikt is |
 
@@ -339,7 +343,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 
 ## 11. Openstaand
 
-- **v247 (afgesproken 20-11):** bevestigingsscherm "Potje afronden?" (Ongedaan / Afronden) na de laatste invoer van een potje, vóór het opslaan; alle spellen waar de laatste invoer het potje beëindigt (aanleiding: tikfout in de laatste Halve It-beurt kon niet meer terug). Per spel eerst nalopen; X01 heeft al de double-vraag.
+- **X01 single out en toernooi: "Potje afronden?"** zit er (nog) niet in (v247). Double out heeft al de double-vraag; bij single out en in toernooien moet Ongedaan door een gewonnen leg heen (legs/sets, legsData, toernooi-callback). Tom beslist of dat erbij moet.
+- **Rondes corrigeren voor andere spellen** (nu alleen Halve It, v247).
 - **WP3 Firestore-regels** (apart, Toms akkoord): huidige regels van Tom nodig, `full.rules` zonder catch-all, emulator-test lokaal bij Tom (optie B).
 
 - **Font aanvullen:** `% & ( )` en `×` ontbreken nog in Flow (via `font/add_glyphs.py`).
@@ -353,6 +358,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
 ## 12. Bekende bugs
+
+- **Eliminatie slaat geen potjes op** (al zo sinds het spel bestaat): `_eliWinSave` toont alleen het winscherm, er is geen `updatePlayerStat` voor `eliminatie`. Gemeld aan Tom (v247), nog niet gebouwd.
 
 - **Groepssync en tellers (al zo sinds v244):** `_grpMerge` neemt de groepsversie als basis; is die verouderd, dan kunnen de tellers (games/wins/…) van een speler dalen. Er verdwijnen geen potjes. Groepssync wordt niet meer gebruikt; niet "repareren" zonder overleg (merge-logica, §13).
 
@@ -375,7 +382,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Nooit `gameHistory` inkorten of potjes weggooien om opslag te sparen.** Alleen detailvelden (`legBreakdown`, `hiRoundHistory`) van potjes na de nieuwste 200 mogen weg.
 - **Nooit `gid`, `ts` of `date` van bestaande entries wijzigen,** en de opbouw van `gid` / `DEVICE_ID` niet veranderen. Dedupe, vrienden-sync en tombstones hangen ervan af.
 - **Nooit de veldnamen van Player of Entry hernoemen.** Ook geen `gameType`-waarden veranderen: stats, filters, de ranglijst en vrienden lezen ze.
-- **Nooit `darts_hidden_archive`, `darts_db_before_restore` of `darts_merge_backup` opruimen.** Het zijn vangnetten.
+- **Nooit `darts_hidden_archive`, `darts_db_before_restore`, `darts_merge_backup` of `darts_correct_backup` opruimen.** Het zijn vangnetten.
+- **Nooit een opgeslagen potje in place bewerken.** Corrigeren = tombstone + kopie met nieuwe gid (zie `_hiReplaceEntry`), anders loopt de sync uit elkaar.
 - **Nooit bij Stop, rematch of verbinding verbreken de lokale data leegmaken.** `disconnectGroup` moet de lokale DB laten staan.
 - **Nooit `deleteMatchEntry` of `clearPlayer` aanroepen zonder bevestiging door de gebruiker,** en ook nooit in tests tegen echte data.
 - **Nooit de cache-naam of `sw.js` zo aanpassen dat oude data weggaat.** Een SW raakt localStorage niet aan, en dat moet zo blijven: niets in `activate` behalve oude caches verwijderen.

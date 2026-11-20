@@ -69,6 +69,10 @@ const steps = [
   ['trn', `trnFormat='roundrobin';trnPlayers=['Tom',${J(N.h)},${J(N.d)},${J(N.j)}];showScreen('screen-trn-setup');renderTrnSetup();startTournament();`],
   ['trn-standings', `renderStandings();showScreen('screen-trn-standings');`],
   ['trn-match', `showScreen('screen-trn-overview');renderTrnOverview();var bt=[...document.querySelectorAll('#trn-overview-content button.g-hit')][0];bt&&bt.click();`],
+  ['hi-correct', `closeGameSheet();var _e=(dbCache[${J(NAMES[0])}].gameHistory||[]).find(function(e){return e.gameType==='halveit'});if(_e)hiCorrectOpen(${J(NAMES[0])},_mkey(_e));`],
+  ['hi-correct-save', `try{hiCorrectPreview(${J(NAMES[0])},_mkey((dbCache[${J(NAMES[0])}].gameHistory||[]).find(function(e){return e.gameType==='halveit'})))}catch(e){}`],
+  ['finish-gate', `closeGameSheet();launchGame('atc',[${J(N.h)},${J(N.s)}],true,'firstto',1,1,501,0);state.atcTarget[state.currentPlayer]=atcMaxTarget();atcHitMult(1);`],
+  ['finish-gate-close', `var _f=document.getElementById('fin-ov');if(_f)_f.remove();`],
   ['live-offer', `closeGameSheet();localStorage.setItem('darts_live',${J(J(live))});_liveOffer();`],
 ];
 const b = await browser();

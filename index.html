@@ -270,6 +270,10 @@ body::before{
 .ask-ov.out{opacity:0;transition:opacity .15s}
 .fin-rows{text-align:left;margin:4px 0 14px;max-height:40vh;overflow:auto;border-top:1px solid var(--border)}
 .fin-rows .stat-row{display:flex;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px solid var(--border);font-size:14px}
+.hic-list{max-height:46vh;overflow:auto;margin:8px 0}
+.hic-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 2px;border-bottom:1px solid var(--border);font-size:14px}
+.hic-in{width:84px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:16px;text-align:right}
+.hic-sum{font-size:13px;line-height:1.5;margin-top:6px}
 .ask-box{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:askPop .2s cubic-bezier(.34,1.56,.64,1)}
 .ask-t{font-family:var(--ff-display);font-weight:700;font-size:21px;line-height:1.15;color:var(--text);margin-bottom:6px;font-synthesis:none}
 .ask-s{font-size:14px;color:var(--muted);line-height:1.4;margin-bottom:18px}
@@ -1751,15 +1755,22 @@ var I18N={
 "Een naam mag geen onzichtbare tekens bevatten.": "A name can't contain invisible characters.",
 "Deze naam kan niet: geen / gebruiken, en niet alleen . of .. of __…__.": "This name can't be used: no /, and not just . or .. or __…__.",
 "Dit kon niet worden gesynchroniseerd of overgenomen. Er is niets gewijzigd of verwijderd; de gegevens staan nog op dit apparaat.": "This could not be synced or taken over. Nothing was changed or deleted; the data is still on this device.",
-"Groep": "Group",
-"Back-up": "Backup",
-"Vrienden": "Friends",
 "geen geldige spelergegevens": "no valid player data",
 "potjes hebben een onbekende vorm": "games have an unknown format",
 "1 potje met onbekende vorm overgeslagen": "1 game with an unknown format skipped",
 "gedeelde gegevens niet leesbaar": "shared data not readable",
 "speler zonder naam": "player without a name",
 "(lege naam)": "(empty name)",
+"Rondes corrigeren": "Correct rounds",
+"Punten per ronde. 0 = geen raak, de score wordt gehalveerd.": "Points per round. 0 = no hit, the score is halved.",
+"Correctie opslaan?": "Save correction?",
+"Potje gecorrigeerd": "Game corrected",
+"Niets veranderd": "Nothing changed",
+"gecorrigeerd": "corrected",
+"Dit potje heeft geen rondes meer om te corrigeren": "This game no longer has rounds to correct",
+"Potje afronden?": "Finish game?",
+"Klopt de eindstand? Vergist bij de laatste invoer? Tik op Ongedaan.": "Is the final score right? Made a mistake with the last input? Tap Undo.",
+"Afronden": "Finish",
 "naam kan niet als Firestore-document (bevat / of is . / .. / __…__); blijft alleen op dit apparaat": "name can't be a Firestore document (contains / or is . / .. / __…__); stays on this device only",
 "Mijn gebruikersnaam (nieuwe speler)": "My username (new player)",
 "Iedereen is uit": "Everyone is out",
@@ -2566,6 +2577,11 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Eindscore (\d+) → (\d+)$/,'Final score $1 → $2'],
+[/^Eindscore (\S+) →$/,'Final score $1 →'],
+[/^(.+) wint nu$/,'$1 now wins'],[/^(.+) wint niet meer$/,'$1 no longer wins'],
+[/^Winnaar niet opnieuw bepaald: score van (.+) staat niet op dit apparaat\.$/,"Winner not recalculated: the score of $1 isn't on this device."],
+[/^Eindscore (\d+) → (\d+)\.(.*) Het potje wordt vervangen, ook op je andere apparaten\. Vrienden die het al hebben, houden hun versie\.$/,function(m){return 'Final score '+m[1]+' → '+m[2]+'.'+m[3].replace(/ wint nu\./,' now wins.').replace(/ wint niet meer\./,' no longer wins.')+' The game will be replaced, on your other devices too. Friends who already have it keep their version.';}],
 [/^Synchronisatieproblemen \((\d+)\)$/,'Sync problems ($1)'],
 [/^(\d+) potjes met onbekende vorm overgeslagen$/,'$1 games with an unknown format skipped'],
 [/^schrijven naar de groep geweigerd( \((.+)\))?$/,function(m){return 'writing to the group was refused'+(m[2]?' ('+m[2]+')':'');}],
@@ -4697,7 +4713,8 @@ function _frSync(){
     var p=dbCache[local];if(!p||!Array.isArray(p.gameHistory))return;
     var sh=S[local];if(Array.isArray(sh))sh={k:sh,ds:JSON.parse(JSON.stringify(p.doubleStats||{}))};if(!sh)sh={k:[],ds:{}};
     var seen={};(sh.k||[]).forEach(function(k){seen[k]=1;});
-    var fresh=p.gameHistory.filter(function(e){return e&&e.gid&&e.gid.indexOf(DEVICE_ID+'-')===0&&!seen['g:'+e.gid];});
+    // v247: een gecorrigeerd potje niet sturen als de vriend het origineel al heeft (geen dubbel potje)
+    var fresh=p.gameHistory.filter(function(e){return e&&e.gid&&e.gid.indexOf(DEVICE_ID+'-')===0&&!seen['g:'+e.gid]&&!(e.corrected&&(seen['g:'+e.corrected.from]||seen[e.corrected.from]));});
     var ds=null,cur=p.doubleStats||{};
     if(fresh.length){Object.keys(cur).forEach(function(k){var d=(cur[k]||0)-((sh.ds&&sh.ds[k])||0);if(d>0){ds=ds||{};ds[k]=d;}});}
     S[local]={k:p.gameHistory.map(_ekey),ds:JSON.parse(JSON.stringify(cur))};
@@ -9734,6 +9751,111 @@ function hiUndo(){
 }
 
 
+// ═══ Halve It: rondes corrigeren (v247) ═══
+// Een opgeslagen Halve It-potje kan per ronde worden gecorrigeerd. Het oude potje wordt niet bewerkt maar vervangen:
+// tombstone (deleted) + een gecorrigeerde kopie met een nieuwe gid en corrected:{from,at}. Zo gaat de correctie via de
+// bestaande sync (account/groep respecteren tombstones) naar je andere apparaten. Vrienden die het potje al hadden,
+// houden hun versie (_frSync stuurt de kopie dan niet; geen dubbel potje). Vangnet: darts_correct_backup (max 20).
+function _hiRecalc(rounds){
+  var sc=0;
+  return rounds.map(function(r){
+    var pts=Math.max(0,Math.round(Number(r.pts)||0)),o={round:r.round,label:r.label};
+    if(pts>0){sc+=pts;o.pts=pts;o.halved=false;}else{sc=Math.floor(sc/2);o.pts=0;o.halved=true;}
+    o.newScore=sc;return o;
+  });
+}
+function _hiStatsFrom(rh,old){
+  var hits=rh.filter(function(r){return !r.halved;}).length,tot=rh.length,o=Object.assign({},old||{});
+  o.hits=hits;o.misses=tot-hits;o.rounds=tot;o.pct=tot?Math.round(hits/tot*100):0;
+  function kind(l){l=String(l||'');return /^double$/i.test(l)||/^D\d+$/.test(l)?'d':(/^triple$/i.test(l)||/^T\d+$/.test(l)?'t':'');}
+  if(old&&('doubleHits' in old||'trebleHits' in old)){
+    var dh=0,dm=0,th=0,tm=0;rh.forEach(function(r){var k=kind(r.label);if(k==='d'){if(r.halved)dm++;else dh++;}if(k==='t'){if(r.halved)tm++;else th++;}});
+    o.doubleHits=dh;o.doubleMisses=dm;o.doublePct=(dh+dm)?Math.round(dh/(dh+dm)*100):null;
+    o.trebleHits=th;o.trebleMisses=tm;o.treblePct=(th+tm)?Math.round(th/(th+tm)*100):null;
+  }
+  return o;
+}
+// De potjes van de tegenstanders uit hetzelfde Halve It-potje (zelfde moment, elkaar als tegenstander).
+function _hiSiblings(name,g){
+  var db=dbCache,out={},missing=[];
+  (g.opponents||[]).forEach(function(opp){
+    var best=null,bd=1e9;
+    ((db[opp]&&db[opp].gameHistory)||[]).forEach(function(e){
+      if(!e||e.gameType!=='halveit'||!Array.isArray(e.opponents)||e.opponents.indexOf(name)<0)return;
+      var d=Math.abs((e.ts||0)-(g.ts||0));if(d<=10000&&d<bd){bd=d;best=e;}
+    });
+    if(best)out[opp]=best;else missing.push(opp);
+  });
+  return {sib:out,missing:missing};
+}
+function _hiFindEntry(name,key){var p=dbCache[name];if(!p||!Array.isArray(p.gameHistory))return null;for(var i=0;i<p.gameHistory.length;i++){if(_mkey(p.gameHistory[i])===key)return p.gameHistory[i];}return null;}
+function hiCorrectOpen(name,key){
+  var g=_hiFindEntry(name,key);
+  if(!g||!Array.isArray(g.hiRoundHistory)||!g.hiRoundHistory.length){showToast('Dit potje heeft geen rondes meer om te corrigeren','info');return;}
+  var rows=g.hiRoundHistory.map(function(r,i){
+    return '<div class="hic-row"><span>'+_esc(r.label)+'</span><input type="number" inputmode="numeric" min="0" step="1" class="hic-in" data-i="'+i+'" value="'+_esc(r.halved?0:r.pts)+'" aria-label="'+_esc(r.label)+'"></div>';
+  }).join('');
+  openGameSheet('Rondes corrigeren',
+    '<div class="ac-note"><b>'+_esc(name)+'</b> · '+_esc(g.date||'')+'<br>Punten per ronde. 0 = geen raak, de score wordt gehalveerd.</div>'+
+    '<div class="hic-list">'+rows+'</div>'+
+    '<div class="hic-sum" id="hic-sum"></div>'+
+    '<button class="g-hit" style="width:100%;margin-top:10px" data-n="'+_esc(name)+'" data-k="'+_esc(key)+'" onclick="hiCorrectSave(this.dataset.n,this.dataset.k)">Opslaan</button>');
+  var upd=function(){hiCorrectPreview(name,key);};
+  document.querySelectorAll('.hic-in').forEach(function(el){el.addEventListener('input',upd);});
+  upd();
+}
+function _hiCorrectPlan(name,key){
+  var g=_hiFindEntry(name,key);if(!g)return null;
+  var vals=[].map.call(document.querySelectorAll('.hic-in'),function(el){return el.value;});
+  var rh=_hiRecalc(g.hiRoundHistory.map(function(r,i){return {round:r.round,label:r.label,pts:vals[i]!=null?vals[i]:(r.halved?0:r.pts)};}));
+  var score=rh.length?rh[rh.length-1].newScore:0;
+  var S=_hiSiblings(name,g),known=!S.missing.length,won=g.won,flips={};
+  if(known&&Object.keys(S.sib).length){
+    var scores={};scores[name]=score;Object.keys(S.sib).forEach(function(o){scores[o]=Number(S.sib[o].score)||0;});
+    var max=Math.max.apply(null,Object.keys(scores).map(function(k){return scores[k];}));
+    var cur=[name].concat(Object.keys(S.sib)).filter(function(n){return n===name?g.won:S.sib[n].won;});
+    var winner=(cur.length&&scores[cur[0]]===max)?cur[0]:[name].concat(g.opponents||[]).filter(function(n){return scores[n]===max;})[0];
+    won=(winner===name);
+    Object.keys(S.sib).forEach(function(o){var w=(winner===o);if(!!S.sib[o].won!==w)flips[o]=w;});
+  }
+  return {g:g,rh:rh,score:score,won:won,flips:flips,known:known,missing:S.missing,changed:score!==Number(g.score)||won!==!!g.won};
+}
+function hiCorrectPreview(name,key){
+  var pl=_hiCorrectPlan(name,key),el=document.getElementById('hic-sum');if(!pl||!el)return;
+  var t='Eindscore '+_esc(pl.g.score)+' → <b>'+_esc(pl.score)+'</b>';
+  if(pl.won!==!!pl.g.won)t+='<br>'+(pl.won?_esc(name)+' wint nu':_esc(name)+' wint niet meer');
+  Object.keys(pl.flips).forEach(function(o){if(pl.flips[o])t+='<br>'+_esc(o)+' wint nu';});
+  if(!pl.known&&(pl.g.opponents||[]).length)t+='<br><span style="color:var(--muted)">Winnaar niet opnieuw bepaald: score van '+_esc(pl.missing.join(', '))+' staat niet op dit apparaat.</span>';
+  el.innerHTML=t;
+}
+function _hiReplaceEntry(name,old,patch){
+  var p=dbCache[name];var i=p.gameHistory.indexOf(old);if(i<0)return null;
+  var ne=JSON.parse(JSON.stringify(old));Object.assign(ne,patch);
+  ne.gid=_newGid();ne.corrected={from:old.gid||_mkey(old),at:Date.now()};
+  p.gameHistory.splice(i,1,ne);
+  var dl=p.deleted||[];dl.push(_mkey(old));p.deleted=dl.slice(-300);
+  p.wins=Math.max(0,(p.wins||0)+(ne.won?1:0)-(old.won?1:0));
+  if(typeof old.score==='number'&&typeof ne.score==='number')p.totalScore=Math.max(0,(p.totalScore||0)+ne.score-old.score);
+  try{var B=_ls('darts_correct_backup',{});B[name+' @'+Date.now()]={old:old,newGid:ne.gid};var ks=Object.keys(B);while(ks.length>20){delete B[ks.shift()];}_lsSet('darts_correct_backup',B);}catch(e){}
+  return ne;
+}
+function hiCorrectSave(name,key){
+  var pl=_hiCorrectPlan(name,key);if(!pl)return;
+  if(!pl.changed&&JSON.stringify(pl.rh)===JSON.stringify(pl.g.hiRoundHistory)){closeGameSheet();showToast('Niets veranderd','info');return;}
+  var sub='Eindscore '+pl.g.score+' → '+pl.score+'.'+(pl.won!==!!pl.g.won?(pl.won?' '+name+' wint nu.':' '+name+' wint niet meer.'):'')+
+    ' Het potje wordt vervangen, ook op je andere apparaten. Vrienden die het al hebben, houden hun versie.';
+  _askConfirm('Correctie opslaan?',sub,'Opslaan',false,function(){
+    var g=pl.g;
+    _hiReplaceEntry(name,g,{hiRoundHistory:pl.rh,score:pl.score,highScore:pl.score,hiStats:_hiStatsFrom(pl.rh,g.hiStats),won:pl.won});
+    var S=_hiSiblings(name,g);
+    Object.keys(pl.flips).forEach(function(o){var e=S.sib[o];if(e)_hiReplaceEntry(o,e,{won:pl.flips[o]});});
+    [name].concat(Object.keys(pl.flips)).forEach(function(n){_sortHistory(dbCache[n]);});
+    saveDB(dbCache);
+    closeGameSheet();showToast('Potje gecorrigeerd','success');
+    try{renderHistory();}catch(e){}
+  });
+}
+
 // ═══════════════════════════════════════════
 // WIN & STATS
 // ═══════════════════════════════════════════
@@ -10622,6 +10744,7 @@ function _renderHistoryImpl(){
     if(g.gameType==='randomco'&&g.score!=null)info.push(g.score+' pnt');
     if(g.bobStats){info.push('score '+(g.score||0));info.push(g.bobStats.hits+'/'+g.bobStats.att+' raak');if(g.bobStats.out)info.push('uit bij '+bobLabel(Math.max(0,g.bobStats.reached-1)));}
     if(g.shanghai)info.push('Shanghai!');
+    if(g.corrected)info.push('gecorrigeerd');
     if(g.matchFormat)info.push(g.matchFormat);
     var legHtml='';
     if(g.legBreakdown&&g.legBreakdown.length){
@@ -10654,6 +10777,7 @@ function _renderHistoryImpl(){
               :'<span style="font-size:12px;font-weight:700;color:var(--success)">+'+_esc(r.pts)+' → '+_esc(r.newScore)+'</span>')
             +'</div>';
         }).join('');
+        if(_statsScope!=='friends')hiDetailHtml+='<button class="btn btn-sm" style="width:100%;margin-top:8px;justify-content:center" data-n="'+_esc(historySelectedPlayer)+'" data-k="'+_esc(_mkey(g))+'" onclick="event.stopPropagation();hiCorrectOpen(this.dataset.n,this.dataset.k)">Rondes corrigeren</button>';
       }
     }
     var detailHtml=
@@ -11272,7 +11396,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=246;
+var APP_VERSION=247;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
