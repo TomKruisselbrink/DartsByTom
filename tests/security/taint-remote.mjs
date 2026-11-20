@@ -7,7 +7,8 @@ const E = (gt, opp, x) => Object.assign({ gid: 'rT-' + (++gi), ts: T0 + gi * 600
   legBreakdown: [{ legNum: 1, winner: opp[0] || 'Tom', start: 501, co: 40, dbl: ALL('dbl'), playerStats: { [opp[0] || 'Tom']: { avg: 60, darts: 11, high: 140 } } }] }, x || {});
 const player = (tag, opp) => ({ games: 3, wins: 3, totalDarts: 60, totalScore: 900, nickname: ALL('nick' + tag), doubleStats: { [ALL('dsk' + tag)]: 2, D16: 1 },
   gameHistory: [E('501', [opp]), E('halveit', [opp], { hiRoundHistory: [{ round: 0, label: ALL('hil' + tag), pts: 20, halved: false, newScore: 20 }] }), E(ALL('gt' + tag), [opp])] });
-const R = { G: [P.html('Gh'), P.attrDq('Gd'), P.jsQ('Gj'), "O'Neil"], B: [P.attrSq('Bs'), P.jsEnt('Be'), 'Tom '], I: [P.jsBs('Ib'), P.svg('Iv'), 'Jan "JJ"'] };
+// Groep: een Firestore-documentnaam kan geen / bevatten, dus groepsnamen zonder /.
+const R = { G: [`<dbtx-el data-k="Gh">x<img data-dbtx-img="Gh" src=x onerror="__x('Gh')">`, P.attrDq('Gd'), `Gj');__x('Gj');(`, "O'Neil"], B: [P.attrSq('Bs'), P.jsEnt('Be'), 'Tom '], I: [P.jsBs('Ib'), P.svg('Iv'), 'Jan "JJ"'] };
 const src = {}; for (const k in R) R[k].forEach((n, i) => { src[n] = player(k + i, i ? R[k][0] : 'Tom'); });
 const store = { 'groups/G': JSON.stringify({ hidden: [] }) }; R.G.forEach(n => { store['groups/G/players/' + n] = JSON.stringify(src[n]); });
 const friendPlayer = player('F', 'Tom'), friendName = P.jsQ('Fp');

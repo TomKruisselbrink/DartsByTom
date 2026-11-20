@@ -19,7 +19,8 @@ for (const lang of ['nl', 'en']) {
   const want = lang === 'nl' ? /Synchronisatieproblemen/ : /Sync problems/;
   if (!want.test(txt)) fails.push(lang + ': regel Synchronisatieproblemen niet zichtbaar in Instellingen → Gegevens');
   // import met een naam die niet naar de groep kan: wel importeren, wel melden
-  const msg = await p.evaluate(() => { document.getElementById('import-code').value = btoa(unescape(encodeURIComponent(JSON.stringify({ v: 1, ts: Date.now(), data: { 'C/D': { games: 1, wins: 0, gameHistory: [] }, bad: 'geen speler' } })))); importStats(); return [Object.keys(dbCache).includes('C/D'), document.getElementById('import-result').innerText]; });
+  const msg = [await p.evaluate(() => { document.getElementById('import-code').value = btoa(unescape(encodeURIComponent(JSON.stringify({ v: 1, ts: Date.now(), data: { 'C/D': { games: 1, wins: 0, gameHistory: [] }, bad: 'geen speler' } })))); importStats(); return Object.keys(dbCache).includes('C/D'); })]; await p.waitForTimeout(400);
+  msg.push(await p.evaluate(() => document.getElementById('import-result').innerText)); 
   if (!msg[0]) fails.push(lang + ': C/D niet geïmporteerd');
   if (!(lang === 'nl' ? /Niet geïmporteerd/ : /Not imported/).test(msg[1])) fails.push(lang + ': importmelding noemt overgeslagen item niet (' + msg[1].slice(0, 60) + ')');
   if (errs.length) fails.push(lang + ': pageerrors ' + errs.slice(0, 2).join(' | '));

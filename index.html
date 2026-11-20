@@ -1746,7 +1746,19 @@ video {
 <script>
 var I18N={
 "Vul een naam in.": "Enter a name.",
-"Een naam mag geen < > \" ' of ` bevatten.": "A name can't contain < > \" ' or `.",
+"Een naam mag geen onzichtbare tekens bevatten.": "A name can't contain invisible characters.",
+"Deze naam kan niet: geen / gebruiken, en niet alleen . of .. of __…__.": "This name can't be used: no /, and not just . or .. or __…__.",
+"Dit kon niet worden gesynchroniseerd of overgenomen. Er is niets gewijzigd of verwijderd; de gegevens staan nog op dit apparaat.": "This could not be synced or taken over. Nothing was changed or deleted; the data is still on this device.",
+"Groep": "Group",
+"Back-up": "Backup",
+"Vrienden": "Friends",
+"geen geldige spelergegevens": "no valid player data",
+"potjes hebben een onbekende vorm": "games have an unknown format",
+"1 potje met onbekende vorm overgeslagen": "1 game with an unknown format skipped",
+"gedeelde gegevens niet leesbaar": "shared data not readable",
+"speler zonder naam": "player without a name",
+"(lege naam)": "(empty name)",
+"naam kan niet als Firestore-document (bevat / of is . / .. / __…__); blijft alleen op dit apparaat": "name can't be a Firestore document (contains / or is . / .. / __…__); stays on this device only",
 "Mijn gebruikersnaam (nieuwe speler)": "My username (new player)",
 "Iedereen is uit": "Everyone is out",
 "Niemand wint": "Nobody wins",
@@ -2552,6 +2564,10 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Synchronisatieproblemen \((\d+)\)$/,'Sync problems ($1)'],
+[/^(\d+) potjes met onbekende vorm overgeslagen$/,'$1 games with an unknown format skipped'],
+[/^schrijven naar de groep geweigerd( \((.+)\))?$/,function(m){return 'writing to the group was refused'+(m[2]?' ('+m[2]+')':'');}],
+[/^✓ (.*Niet geïmporteerd: .*)$/,function(m){return '✓ '+m[1].replace(/Nieuw: /,'New: ').replace(/Bijgewerkt: /,'Updated: ').replace(/Niet geïmporteerd: /,'Not imported: ').replace(/\(geen geldige spelergegevens\)/,'(no valid player data)');}],
 [/^Een naam mag maximaal (\d+) tekens zijn\.$/,'A name can have at most $1 characters.'],
 [/^Nog niet samen gespeeld op deze telefoon\. Kies (.+) gewoon bij een nieuw potje \(bij de spelers staat hij met het label vriend\), dan wordt hij vanzelf gekoppeld en gaan de potjes naar zijn account\.$/,'Not played together on this phone yet. Just pick $1 for a new game (marked as friend in the player list); they are linked automatically and the games go to their account.'],
 [/^Uit bij (D\d+|Bull)$/,'Out at $1'],
@@ -3024,6 +3040,7 @@ function _tr1(n){
 
   <div class="st-page" data-page="data" hidden>
     <div class="st-phead"><button class="st-back" onclick="stClose()" aria-label="Terug"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h2>Gegevens</h2></div>
+    <div id="st-sync-issues" class="card st-card" hidden></div>
     <div class="card st-card">
       <div class="st-cap">Groep (cloud)</div>
       <button id="group-tile" onclick="openGroupModal()" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:none;border-radius:var(--radius-sm);padding:0;cursor:pointer">
@@ -3821,7 +3838,7 @@ function mergePlayers(src,dst){
 }
 function setPlayerNickname(name,val){
   var db=getDB();if(!db[name])return;
-  val=(val||'').replace(_BAD_REMOTE,'').trim().slice(0,40);
+  val=(val||'').replace(/[\u0000-\u001f\u007f]/g,'').trim().slice(0,40); // alleen onzichtbare tekens weg; weergave via _esc
   if(val)db[name].nickname=val;else delete db[name].nickname;
   saveDB(db);
 }
@@ -4130,33 +4147,60 @@ function _acctErr(e){
 }
 function _myUsername(){return (acctProfile&&acctProfile.username)||((acctUser&&acctUser.email)||'').replace(ACCT_DOMAIN,'');}
 function _acctUserRef(){return fbDb.collection('users').doc(acctUser.uid);}
-// HTML-escape voor alles wat van gebruikers of de server komt (namen, opdrachten). v245: ook ' (attribuutwaarden met enkele quotes).
+// ═══ Beveiliging: escapen bij het tonen (v246) ═══
+// De verdediging zit in de UITVOER: alles wat niet uit de code zelf komt (namen, bijnamen, potjesvelden, ook
+// "getallen" uit data) gaat via _esc() de HTML in, of via textContent. Gebruikers- of Firebase-data komt NOOIT in
+// een JS-string in een onclick: zet hem in een data-attribuut (data-n="'+_esc(x)+'") en lees this.dataset.n.
+// tests/security/html-sinks.mjs controleert dit bij elke wijziging.
 function _esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-// Voor tekst die als JS-string in een onclick-attribuut staat: decodeURIComponent('...'+_ue(x)+'...'). encodeURIComponent laat ' ( ) ! * staan; _ue niet.
+// Alleen nog voor URL-delen (deellinks); niet meer voor onclick-strings (zie hierboven).
 function _ue(t){return encodeURIComponent(String(t==null?'':t)).replace(/['()!*]/g,function(c){return '%'+c.charCodeAt(0).toString(16).toUpperCase();});}
-// ═══ Invoer- en binnenkomstfilter (v245) ═══
-// Nieuwe namen: geen < > " ' ` of stuurtekens, max 24 tekens. Data van buiten (groep, vrienden, inbox, import):
-// tekens < > " ` en stuurtekens worden uit alle tekst gehaald (_scrub); spelers met zo'n naam worden niet overgenomen.
-// Bestaande lokale namen worden nooit hernoemd: weergave is veilig via _esc/_ue.
-var _BAD_NAME=/[<>"'`\u0000-\u001f\u007f]/,_BAD_REMOTE=/[<>"`\u0000-\u001f\u007f]/g,NAME_MAX=24;
+// ═══ Invoer, binnenkomst en meldingen (v246) ═══
+// Invoerfilter = gebruiksgemak, geen beveiliging. Data van buiten wordt NOOIT aangepast en spelers worden niet
+// overgeslagen om hun naam; alleen wat technisch echt niet kan, blijft lokaal en wordt gemeld (Instellingen → Gegevens).
+var NAME_MAX=24,_CTRL_RE=/[\u0000-\u001f\u007f]/;
+function _utf8Len(s){try{return unescape(encodeURIComponent(s)).length;}catch(e){return String(s).length*3;}}
+// Kan deze naam een Firestore-documentnaam zijn (groep)? Geen /, niet . of .., niet __…__, max 1500 bytes.
+function _fsIdOk(n){return typeof n==='string'&&n.length>0&&n.indexOf('/')<0&&n!=='.'&&n!=='..'&&!/^__.*__$/.test(n)&&_utf8Len(n)<=1500;}
+// Nieuw getypte naam (B1/B2): alle gewone tekens mogen, ook ' " & < >.
 function _nameError(n){
   if(!n)return 'Vul een naam in.';
-  if(_BAD_NAME.test(n))return 'Een naam mag geen < > " \' of ` bevatten.';
+  if(_CTRL_RE.test(n))return 'Een naam mag geen onzichtbare tekens bevatten.';
   if(n.length>NAME_MAX)return 'Een naam mag maximaal '+NAME_MAX+' tekens zijn.';
+  if(!_fsIdOk(n))return 'Deze naam kan niet: geen / gebruiken, en niet alleen . of .. of __…__.';
   return '';
 }
-function _remoteNameOk(n){return typeof n==='string'&&n.length>0&&n.length<=60&&n.trim()===n&&!/[<>"`\u0000-\u001f\u007f]/.test(n);}
-function _safeId(id){return typeof id==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(id);}
-function _scrub(v,d){
-  d=d||0;if(d>12)return null;
-  if(typeof v==='string')return v.replace(_BAD_REMOTE,'').slice(0,4000);
-  if(typeof v==='number')return isFinite(v)?v:0;
-  if(typeof v==='boolean'||v===null)return v;
-  if(Array.isArray(v))return v.map(function(x){return _scrub(x,d+1);});
-  if(v&&typeof v==='object'){var o={};Object.keys(v).forEach(function(k){var ck=k.replace(_BAD_REMOTE,'');if(ck)o[ck]=_scrub(v[k],d+1);});return o;}
-  return null;
+// Bestaande of binnenkomende naam: elke niet-lege tekst is bruikbaar (ook spatie aan het eind, quotes, lang).
+function _nameStorable(n){return typeof n==='string'&&n.length>0;}
+function _safeId(id){return typeof id==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(id);} // Firebase-uid's en eigen doc-id's
+// Vorm van een speler van buiten controleren zonder iets aan te passen. Potjes die geen object zijn, worden niet
+// samengevoegd (alleen in een kopie weggelaten) en gemeld; het origineel blijft waar het was.
+function _shapeCheck(p,src,name){
+  if(!p||typeof p!=='object'||Array.isArray(p)){_compatNote(src,name,'geen geldige spelergegevens');return null;}
+  if(p.gameHistory==null)return p;
+  if(!Array.isArray(p.gameHistory)){_compatNote(src,name,'potjes hebben een onbekende vorm');return null;}
+  var bad=0,ok=p.gameHistory.filter(function(e){var g=!!e&&typeof e==='object'&&!Array.isArray(e);if(!g)bad++;return g;});
+  if(!bad)return p;
+  _compatNote(src,name,bad===1?'1 potje met onbekende vorm overgeslagen':bad+' potjes met onbekende vorm overgeslagen');
+  var c=Object.assign({},p);c.gameHistory=ok;return c;
 }
-function _scrubPlayer(p){return (p&&typeof p==='object')?_scrub(p):p;}
+// Meldingen: wat niet kon (niet naar de groep, geweigerd, onbekende vorm). Alleen in het geheugen; niets wordt gewijzigd.
+var _compat=[];
+function _compatNote(src,name,reason){
+  var k=src+'|'+name+'|'+reason;
+  for(var i=0;i<_compat.length;i++)if(_compat[i].k===k){_compat[i].ts=Date.now();return;}
+  _compat.push({k:k,src:src,name:String(name==null?'':name),reason:reason,ts:Date.now()});
+  if(_compat.length>100)_compat.shift();
+  try{_compatRender();}catch(e){}
+}
+function _compatRender(){
+  var el=document.getElementById('st-sync-issues');if(!el)return;
+  if(!_compat.length){el.hidden=true;el.innerHTML='';return;}
+  el.hidden=false;
+  el.innerHTML='<div class="st-cap">Synchronisatieproblemen ('+_compat.length+')</div>'+
+    '<div style="font-size:12px;color:var(--muted);margin:0 0 8px;line-height:1.45">Dit kon niet worden gesynchroniseerd of overgenomen. Er is niets gewijzigd of verwijderd; de gegevens staan nog op dit apparaat.</div>'+
+    _compat.slice().reverse().map(function(x){return '<div class="sp-row"><div class="sp-top"><b>'+_esc(x.name||'—')+'</b><small style="color:var(--muted)">'+_esc(x.src)+'</small></div><div style="font-size:12px;color:var(--muted)">'+_esc(x.reason)+'</div></div>';}).join('');
+}
 function _fmtTs(ms){if(!ms)return 'nog niet';var d=new Date(ms);function z(n){return (n<10?'0':'')+n;}return z(d.getDate())+'-'+z(d.getMonth()+1)+' '+z(d.getHours())+':'+z(d.getMinutes());}
 
 if(fbAuth){
@@ -4212,9 +4256,10 @@ function _acctMerge(bk,safetyCopy){
   var before=null;
   Object.keys(players).forEach(function(n){
     var bp=players[n];
-    if(!bp||!Array.isArray(bp.gameHistory)||n===botName)return;
-    if(!dbCache[n]&&!_remoteNameOk(n))return; // v245: nieuwe speler met onveilige naam niet overnemen
-    bp=_scrubPlayer(bp);
+    if(n===botName)return;
+    if(!bp||!Array.isArray(bp.gameHistory)){_compatNote('Back-up',n,'geen geldige spelergegevens');return;}
+    if(!_nameStorable(n))return;
+    bp=_shapeCheck(bp,'Back-up',n);if(!bp)return; // v246: niets aanpassen; alleen een onbekende vorm wordt overgeslagen en gemeld
     if(rm[n]){ // hier gewist: oude potjes van die naam niet terughalen
       bp=JSON.parse(JSON.stringify(bp));
       bp.gameHistory=bp.gameHistory.filter(function(e){return (e.ts||0)>rm[n];});
@@ -4510,16 +4555,16 @@ function frStart(){
   frStop();
   if(!acctUser)return;
   var uid=acctUser.uid;
-  _frUnsubs.push(fbDb.collection('friendRequests').where('to','==',uid).onSnapshot(function(sn){frIn={};sn.forEach(function(d){if(_safeId(d.id))frIn[d.id]=_scrub(d.data());});renderFriendsCard();},function(e){console.error('Vriendverzoeken',e);}));
-  _frUnsubs.push(fbDb.collection('friendRequests').where('from','==',uid).onSnapshot(function(sn){frOut={};sn.forEach(function(d){if(_safeId(d.id))frOut[d.id]=_scrub(d.data());});renderFriendsCard();},function(e){console.error('Verstuurde verzoeken',e);}));
+  _frUnsubs.push(fbDb.collection('friendRequests').where('to','==',uid).onSnapshot(function(sn){frIn={};sn.forEach(function(d){if(_safeId(d.id))frIn[d.id]=d.data();});renderFriendsCard();},function(e){console.error('Vriendverzoeken',e);}));
+  _frUnsubs.push(fbDb.collection('friendRequests').where('from','==',uid).onSnapshot(function(sn){frOut={};sn.forEach(function(d){if(_safeId(d.id))frOut[d.id]=d.data();});renderFriendsCard();},function(e){console.error('Verstuurde verzoeken',e);}));
   _frUnsubs.push(_acctUserRef().collection('friends').onSnapshot(function(sn){
-    frFriends={};sn.forEach(function(d){if(_safeId(d.id))frFriends[d.id]=_scrub(d.data());});
+    frFriends={};sn.forEach(function(d){if(_safeId(d.id))frFriends[d.id]=d.data();});
     _frFriendsLoaded=true;_frLoadedAt=0;
     renderFriendsCard();_frLoadAll().then(function(){renderFriendsCard();_refreshScopeScreens();_refreshKnownNames();});
     _frScheduleSync();_outboxFlush();
   },function(e){console.error('Vrienden',e);}));
   _frUnsubs.push(_acctUserRef().collection('inbox').onSnapshot(function(sn){
-    var docs=[];sn.forEach(function(d){docs.push({id:d.id,data:_scrub(d.data())});});_inboxDocs=docs;_inboxApply(docs);
+    var docs=[];sn.forEach(function(d){docs.push({id:d.id,data:d.data()});});_inboxDocs=docs;_inboxApply(docs);
   },function(e){console.error('Inbox',e);}));
   _frHandlePendingInvite();
 }
@@ -4535,12 +4580,12 @@ function _frLoadAll(force){
     var pref=fbDb.collection('users').doc(uid).collection('public');
     return pref.doc('meta').get().then(function(m){
       if(!m.exists){_frData[uid]={username:frFriends[uid].username,player:'',data:null};return;}
-      var mraw=m.data()||{},md=_scrub(mraw),ps=[];
+      var md=m.data()||{},ps=[];
       for(var i=0;i<(md.chunks||0);i++)ps.push(pref.doc('c'+i).get());
       return Promise.all(ps).then(function(cs){
         var str=cs.map(function(c){return (c.exists&&c.data().d)||'';}).join('');
-        var data=null;try{data=str?_scrubPlayer(JSON.parse(str)):null;}catch(e){}
-        _frData[uid]={username:md.username||frFriends[uid].username,player:_remoteNameOk(mraw.player)?mraw.player:'',ts:md.ts,data:data};
+        var data=null;try{data=str?_shapeCheck(JSON.parse(str),'Vrienden',md.username||frFriends[uid].username):null;}catch(e){_compatNote('Vrienden',md.username||frFriends[uid].username,'gedeelde gegevens niet leesbaar');}
+        _frData[uid]={username:md.username||frFriends[uid].username,player:_nameStorable(md.player)?md.player:'',ts:md.ts,data:data};
       });
     }).catch(function(e){console.error('Vriend laden mislukt',uid,e);});
   })).then(function(){_frLoading=false;_frLoadedAt=Date.now();Object.keys(_frData).forEach(function(u){if(!frFriends[u])delete _frData[u];});});
@@ -4792,7 +4837,7 @@ function openFriendSheet(uid){
   var opts='<option value="">Niet gekoppeld</option>'+locals.filter(function(n){return n!==me&&(!L[n]||L[n].uid===uid);}).map(function(n){return '<option value="'+_esc(n)+'"'+(n===linked?' selected':'')+'>'+_esc(n)+'</option>';}).join('');
   var d=_frData[uid]||{};
   openGameSheet(_esc(nm),
-    '<div class="fr-sheet-sub">@'+_esc(f.username||'')+(d.data&&d.data.games!=null?' · '+d.data.games+' potjes gespeeld':'')+'</div>'+
+    '<div class="fr-sheet-sub">@'+_esc(f.username||'')+(d.data&&d.data.games!=null?' · '+_esc(d.data.games)+' potjes gespeeld':'')+'</div>'+
     // v244: nog nooit samen gespeeld op deze telefoon? Dan valt er niets te kiezen; leg uit dat het vanzelf gaat.
     (linked||locals.filter(function(n){return n!==me&&!L[n];}).length?
       '<div class="st-cap">Speelt op deze telefoon als</div>'+
@@ -5025,10 +5070,11 @@ function _mkey(e){if(!e)return '';if(e.gid)return 'g:'+e.gid;return 'k:'+[e.ts||
 function _grpHash(o){try{return _hash(JSON.stringify(o));}catch(e){return '';}}
 function _grpWrite(name,data){
   if(!groupCode||!data)return;
+  if(!_fsIdOk(name)){_compatNote('Groep',name,'naam kan niet als Firestore-document (bevat / of is . / .. / __…__); blijft alleen op dit apparaat');return;}
   var h=_grpHash(data);
   if(_grpSent[name]===h)return; // niets veranderd: niet opnieuw schrijven (voorkomt dat een oude kopie anderen overschrijft)
   _grpSent[name]=h;
-  fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(data).catch(function(e){delete _grpSent[name];console.error('FB save error',e);});
+  fbDb.collection('groups').doc(groupCode).collection('players').doc(name).set(data).catch(function(e){delete _grpSent[name];console.error('FB save error',e);_compatNote('Groep',name,'schrijven naar de groep geweigerd'+(e&&e.code?' ('+e.code+')':''));});
 }
 function _grpPushLater(name){
   clearTimeout(_grpPushT[name]);
@@ -5174,11 +5220,11 @@ function startFirebaseListener(){
   fbListener = fbDb.collection('groups').doc(groupCode).collection('players').onSnapshot(function(snapshot){
     snapshot.docChanges().forEach(function(change){
       var _id=change.doc.id;
-      if(!_remoteNameOk(_id)){console.warn('Groep: speler met onveilige naam overgeslagen');return;} // v245
       if(isPrivatePlayer(_id))return; // eigen privé-speler: lokale gegevens leidend, niet overschrijven of wissen
       if(change.type === 'added' || change.type === 'modified'){
         if(_groupHidden.indexOf(_id)>=0)return;
-        var _rem=_scrubPlayer(change.doc.data()),_m=_grpMerge(dbCache[_id],_rem);
+        var _rem=_shapeCheck(change.doc.data(),'Groep',_id);if(!_rem)return; // v246: niets aanpassen; onbekende vorm gemeld
+        var _m=_grpMerge(dbCache[_id],_rem);
         dbCache[_id]=_m.p;_grpSent[_id]=_m.remoteHash;
         if(_m.push)_grpPushLater(_id);
         _grpLocalDirty=true;
@@ -6696,7 +6742,7 @@ function startGame(){
   // Add bot if enabled and game is 501/301
   var players=setupPlayers.slice();
   if(botEnabled&&!(selectedGame==='afgooien'&&afgTeams)&&(selectedGame==='x01'||selectedGame==='501'||selectedGame==='301'||selectedGame==='halveit'||selectedGame==='afgooien')){
-    var bname=document.getElementById('bot-name').value.replace(/[<>"'`\u0000-\u001f\u007f]/g,'').trim().slice(0,NAME_MAX)||'Bot';
+    var bname=document.getElementById('bot-name').value.replace(/[\u0000-\u001f\u007f]/g,'').trim().slice(0,NAME_MAX)||'Bot';
     state.botPlayerIndex=players.length;
     players.push(bname);
   } else {
@@ -10011,10 +10057,13 @@ function importStats(){
   var db=getDB();
   var newNames=[];var updatedNames=[];
 
-  var skipped=0;
+  var skipped=[];
   Object.keys(incoming.data).forEach(function(name){
-    if(!_remoteNameOk(name)){skipped++;return;} // v245: onveilige naam niet overnemen
-    var inc=_scrubPlayer(incoming.data[name]);
+    // v246: elke naam wordt overgenomen zoals hij is; alleen gegevens met een onbekende vorm worden overgeslagen en gemeld.
+    var raw=incoming.data[name];
+    if(!_nameStorable(name)){skipped.push('(lege naam)');_compatNote('Import','(lege naam)','speler zonder naam');return;}
+    if(!raw||typeof raw!=='object'||Array.isArray(raw)||(raw.gameHistory!=null&&!Array.isArray(raw.gameHistory))){skipped.push(name);_compatNote('Import',name,'geen geldige spelergegevens');return;}
+    var inc=_shapeCheck(raw,'Import',name);
     if(!db[name]){
       db[name]=inc;newNames.push(name);
     } else {
@@ -10030,7 +10079,8 @@ function importStats(){
   saveDB(db);
   var msg='';
   if(newNames.length)msg+='Nieuw: '+newNames.join(', ')+'. ';
-  if(updatedNames.length)msg+='Bijgewerkt: '+updatedNames.join(', ')+'.';
+  if(updatedNames.length)msg+='Bijgewerkt: '+updatedNames.join(', ')+'. ';
+  if(skipped.length)msg+='Niet geïmporteerd: '+skipped.join(', ')+' (geen geldige spelergegevens).';
   if(!msg)msg='Niets nieuws — alles was al aanwezig.';
   setImportResult('✓ '+msg,'var(--success)');
   document.getElementById('import-code').value='';
@@ -11183,7 +11233,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=245;
+var APP_VERSION=246;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
