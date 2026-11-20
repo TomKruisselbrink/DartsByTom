@@ -1,0 +1,31 @@
+{
+ "_uitleg": "Beoordeelde concatenaties. Sleutel = 'functie|expressie'. Alleen getallen, codeconstanten of door de code opgebouwde HTML. Gebruikers- of serverdata hoort hier NOOIT in: die gaat via _esc() of data-*.",
+ "handler": {
+  "renderSetupRules|v": "codeconstante: vaste lijsten [3,5,10], [3,6,9,12,15,0], safeVals (none/3dart/…) in de code",
+  "renderSetupRules|t[0]": "getal uit vaste lijst [[0,'Geen'],[2,…]]",
+  "renderSetupRules|i": "lusindex (getal)",
+  "renderSetupRules|m[0]": "codeconstante: 'default'/'random'/'race'",
+  "renderSetupPlayers|i": "lusindex (getal)",
+  "setAfgLivesCustom|v": "getal uit vaste lijst",
+  "rcoScore|v": "getal: beurtscore uit het numpad (parseInt)",
+  "renderTrnFormatBtns|n": "getal uit vaste lijst (aantal groepen)",
+  "renderTrnPlayers|i": "lusindex (getal)",
+  "rematch|i": "lusindex (getal)",
+  "pushEntry|remaining": "getal: resterende score (state)",
+  "pushEntry|score": "getal: beurtscore",
+  "pushEntry|cur": "getal: spelerindex",
+  "renderHiInputArea|(n*2)": "getal",
+  "renderHiInputArea|(n*3)": "getal",
+  "renderHiInputArea|_hitVal": "getal",
+  "renderHiInputArea|(2*_hitVal)": "getal",
+  "renderHiInputArea|(3*_hitVal)": "getal",
+  "renderHiInputArea|mult": "getal 1/2/3 uit vaste lijst",
+  "renderHiInputArea|n": "getal 1–20/25/50 uit HI_BOARD_ORDER",
+  "renderHiInputArea|o": "getal uit opts3 (door de code getrokken)",
+  "sTile|_histExtra.length": "getal (lengte van een lijst)",
+  "_dayLabel|lid": "element-id: 'ld-'+naam.replace(/[^a-z0-9]/gi,'')+'-'+index, alleen a–z0–9",
+  "_dayLabel|detailId": "element-id: 'gd-'+naam.replace(/[^a-z0-9]/gi,'')+'-'+index, alleen a–z0–9",
+  "_dayLabel|i": "lusindex (getal)"
+ },
+ "html": {}
+}

@@ -65,11 +65,13 @@ const { p, errs } = await page(b, { db, ls });
 await open(p);
 const all = [];
 let clicked = 0;
+// Alle originele strings (waarden én sleutels) uit de testdata: een handler moet exact één daarvan doorgeven.
+const ORIG = new Set(); (function w(v) { if (typeof v === 'string') ORIG.add(v); else if (v && typeof v === 'object') for (const k in v) { ORIG.add(k); w(v[k]); } })([db, live, NAMES, P.html('arch')]);
 for (const [n, code, wait] of steps) {
   await p.evaluate(n => { window.__step = n; }, n);
   try { await p.evaluate(code); } catch (e) { errs.push(n + ': ' + e.message.split('\n')[0]); }
   await p.waitForTimeout(wait || 250);
-  const r = await clickMarked(p, NAMES.concat(Object.keys(db), [P.html('arch')]));
+  const r = await clickMarked(p, [...ORIG]);
   clicked += r.clicked; r.bad.forEach(x => all.push(Object.assign({ step: n }, x)));
   all.push(...await hits(p));
 }

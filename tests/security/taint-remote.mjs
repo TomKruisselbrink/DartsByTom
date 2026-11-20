@@ -55,11 +55,12 @@ const steps = [
   ['friends-scope', `closeGameSheet();_statsScope='friends';showScreen('screen-leaderboard');renderLeaderboard('wins');showScreen('screen-stats');renderStats();showScreen('screen-history');renderHistory();_statsScope='local';`],
 ];
 const all = [];
+const ORIG = new Set(); (function w(v) { if (typeof v === 'string') ORIG.add(v); else if (v && typeof v === 'object') for (const k in v) { ORIG.add(k); w(v[k]); } })([src, friendPlayer, friendName, inboxGame]);
 for (const [n, code] of steps) {
   await p.evaluate(n => { window.__step = n; }, n);
   try { await p.evaluate(code); } catch (e) { errs.push(n + ': ' + e.message.split('\n')[0]); }
   await p.waitForTimeout(200);
-  const r = await clickMarked(p, names.concat([friendName])); r.bad.forEach(x => all.push(Object.assign({ step: n }, x)));
+  const r = await clickMarked(p, [...ORIG]); r.bad.forEach(x => all.push(Object.assign({ step: n }, x)));
   all.push(...await hits(p));
 }
 const okShow = summarize('taint-remote (tonen)', all, errs.filter(e => !/writeText|clipboard/i.test(e)));

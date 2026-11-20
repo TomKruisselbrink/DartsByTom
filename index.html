@@ -3720,21 +3720,21 @@ function openPlayersSheet(){
     '<div id="sp-sheet-list"></div>');
   _renderPlayersList();
 }
-function _spToggle(en){var n=decodeURIComponent(en);_spOpen=_spOpen===n?'':n;_renderPlayersList();}
+function _spToggle(n){_spOpen=_spOpen===n?'':n;_renderPlayersList();}
 function _renderPlayersList(){
   var el=document.getElementById('sp-sheet-list');if(!el)return;
   var db=dbCache,q=((document.getElementById('sp-search')||{}).value||'').trim().toLowerCase();
   var names=Object.keys(db).sort(function(a,b){return a.localeCompare(b);}).filter(function(n){return !q||n.toLowerCase().indexOf(q)>=0||((db[n].nickname||'').toLowerCase().indexOf(q)>=0);});
   if(!Object.keys(db).length){el.innerHTML='<div class="ac-note">Nog geen spelers. Ze verschijnen hier na hun eerste potje.</div>'+_hiddenArchiveHtml();return;}
   el.innerHTML=(names.length?'':'<div class="ac-note">Geen speler gevonden.</div>')+names.map(function(n){
-    var en=_ue(n),nk=(db[n]&&db[n].nickname)||'',pv=isPrivatePlayer(n),open=_spOpen===n;
-    var h='<div class="sp-row'+(open?' open':'')+'"><button class="sp-head" onclick="_spToggle(\''+en+'\')"><b>'+_esc(n)+'</b>'+(nk?'<span class="sp-nk">'+_esc(nk)+'</span>':'')+'<span class="sp-tag'+(pv?' priv':'')+'">'+(pv?'privé':'gedeeld')+'</span></button>';
+    var nk=(db[n]&&db[n].nickname)||'',pv=isPrivatePlayer(n),open=_spOpen===n;
+    var h='<div class="sp-row'+(open?' open':'')+'"><button class="sp-head" data-n="'+_esc(n)+'" onclick="_spToggle(this.dataset.n)"><b>'+_esc(n)+'</b>'+(nk?'<span class="sp-nk">'+_esc(nk)+'</span>':'')+'<span class="sp-tag'+(pv?' priv':'')+'">'+(pv?'privé':'gedeeld')+'</span></button>';
     if(open)h+='<div class="sp-bottom">'+
-        '<input type="text" class="sp-nick" placeholder="Bijnaam" value="'+_esc(nk)+'" data-n="'+en+'" onchange="setPlayerNickname(decodeURIComponent(this.getAttribute(\'data-n\')),this.value);renderSettingsPlayers()">'+
-        '<button class="sp-say" aria-label="Laat horen" onclick="var i=this.parentNode.querySelector(\'.sp-nick\');callerSay((i.value.trim()||decodeURIComponent(\''+en+'\'))+\', you require 32\',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>'+
-        '<label class="sp-share"><span>Delen</span><input type="checkbox" class="ios-toggle"'+(pv?'':' checked')+' onchange="setPlayerPrivate(decodeURIComponent(\''+en+'\'),!this.checked);renderSettingsPlayers()"></label>'+
+        '<input type="text" class="sp-nick" placeholder="Bijnaam" value="'+_esc(nk)+'" data-n="'+_esc(n)+'" onchange="setPlayerNickname(this.dataset.n,this.value);renderSettingsPlayers()">'+
+        '<button class="sp-say" aria-label="Laat horen" data-n="'+_esc(n)+'" onclick="var i=this.parentNode.querySelector(\'.sp-nick\');callerSay((i.value.trim()||this.dataset.n)+\', you require 32\',true)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>'+
+        '<label class="sp-share"><span>Delen</span><input type="checkbox" class="ios-toggle"'+(pv?'':' checked')+' data-n="'+_esc(n)+'" onchange="setPlayerPrivate(this.dataset.n,!this.checked);renderSettingsPlayers()"></label>'+
       '</div>'+
-      '<div class="sp-actions"><button class="btn btn-sm" onclick="spMergePick(\''+en+'\')">Samenvoegen met…</button><button class="btn btn-sm sp-del" onclick="spDelete(\''+en+'\')">Verwijderen</button></div>';
+      '<div class="sp-actions"><button class="btn btn-sm" data-n="'+_esc(n)+'" onclick="spMergePick(this.dataset.n)">Samenvoegen met…</button><button class="btn btn-sm sp-del" data-n="'+_esc(n)+'" onclick="spDelete(this.dataset.n)">Verwijderen</button></div>';
     return h+'</div>';
   }).join('')+_hiddenArchiveHtml();
 }
@@ -3742,7 +3742,7 @@ function _hiddenArchiveHtml(){
   var arc=_getHiddenArchive(),ks=Object.keys(arc);if(!ks.length)return '';
   return '<div class="st-lbl" style="margin-top:14px">Archief</div>'+
     '<div style="font-size:12px;color:var(--muted);margin:2px 0 8px">Iemand in de groep heeft deze spelers verborgen of gewist. Hun gegevens staan nog veilig op dit apparaat. Terughalen zet ze terug, alleen op deze telefoon.</div>'+
-    ks.map(function(n){return '<div class="sp-row"><div class="sp-top"><b>'+_esc(n)+'</b><button class="lb-chip" onclick="restoreHiddenPlayer(decodeURIComponent(\''+_ue(n)+'\'))">Terughalen</button></div></div>';}).join('');
+    ks.map(function(n){return '<div class="sp-row"><div class="sp-top"><b>'+_esc(n)+'</b><button class="lb-chip" data-n="'+_esc(n)+'" onclick="restoreHiddenPlayer(this.dataset.n)">Terughalen</button></div></div>';}).join('');
 }
 // ═══ Spelers samenvoegen (v241) ═══
 // Alle potjes van src gaan naar dst (dubbele potjes via _grpMerge eruit), namen in andermans potjes
@@ -3761,19 +3761,18 @@ function _askConfirm(title,sub,ok,danger,onOk,cancel){
   document.body.appendChild(ov);
   setTimeout(function(){var b=ov.querySelector('.ask-no');if(b)b.focus();},30);
 }
-function spDelete(en){clearPlayer(decodeURIComponent(en));}
-function spMergePick(en){
-  var src=decodeURIComponent(en),l=src.toLowerCase(),db=dbCache;
+function spDelete(n){clearPlayer(n);}
+function spMergePick(src){
+  var l=src.toLowerCase(),db=dbCache;
   var names=Object.keys(db).filter(function(n){return n!==src;}).sort(function(a,b){
     var sa=a.toLowerCase()===l?0:1,sb=b.toLowerCase()===l?0:1;return (sa-sb)||a.localeCompare(b);});
   if(!names.length){showToast('Geen andere spelers','error');return;}
   openGameSheet('Samenvoegen',
     '<div class="ac-note">Alle potjes en statistieken van '+_esc(src)+' gaan naar de speler die je kiest. Daarna verdwijnt '+_esc(src)+'.</div>'+
     '<div class="mg-list" style="margin-top:10px">'+names.map(function(n){var p=db[n],sug=n.toLowerCase()===l;
-      return '<button class="'+(sug?'sug':'')+'" onclick="spMergeDo(\''+_ue(src)+'\',\''+_ue(n)+'\')"><span>'+_esc(n)+_whoTag(n)+'</span><small>'+((p.gameHistory||[]).length===1?'1 potje':(p.gameHistory||[]).length+' potjes')+'</small></button>';}).join('')+'</div>');
+      return '<button class="'+(sug?'sug':'')+'" data-a="'+_esc(src)+'" data-b="'+_esc(n)+'" onclick="spMergeDo(this.dataset.a,this.dataset.b)"><span>'+_esc(n)+_whoTag(n)+'</span><small>'+((p.gameHistory||[]).length===1?'1 potje':(p.gameHistory||[]).length+' potjes')+'</small></button>';}).join('')+'</div>');
 }
-function spMergeDo(en,dn){
-  var src=decodeURIComponent(en),dst=decodeURIComponent(dn);
+function spMergeDo(src,dst){
   _askConfirm(src+' samenvoegen met '+dst+'?','Alle potjes van '+src+' gaan naar '+dst+'. Daarna verdwijnt '+src+'.','Samenvoegen',false,function(){
   var n=mergePlayers(src,dst);closeGameSheet();
   if(n<0){showToast('Samenvoegen lukte niet','error');return;}
@@ -4442,7 +4441,7 @@ function _acctAskPlayer(){
 function _acctChoosePlayer(){
   var names=Object.keys(dbCache).sort(function(a,b){return a.localeCompare(b);});
   if(!names.length){acctPickNew();return;}
-  openGameSheet('Welke speler ben jij?','<div class="fr-list card">'+names.map(function(n){return '<button class="fr-item" onclick="closeGameSheet();acctSetPlayer(decodeURIComponent(\''+_ue(n)+'\'))">'+_frAv(n)+'<span class="fr-who"><b>'+_esc(n)+'</b></span></button>';}).join('')+'</div><button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="closeGameSheet();setTimeout(acctPickNew,250)">+ Nieuwe speler…</button>');
+  openGameSheet('Welke speler ben jij?','<div class="fr-list card">'+names.map(function(n){return '<button class="fr-item" data-n="'+_esc(n)+'" onclick="closeGameSheet();acctSetPlayer(this.dataset.n)">'+_frAv(n)+'<span class="fr-who"><b>'+_esc(n)+'</b></span></button>';}).join('')+'</div><button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="closeGameSheet();setTimeout(acctPickNew,250)">+ Nieuwe speler…</button>');
 }
 function acctPickNew(){
   var sug=_acctSuggestName(),n=(_inboxDocs||[]).reduce(function(t,d){return t+((d.data&&d.data.games)||[]).length;},0);
@@ -4585,7 +4584,7 @@ function frDecline(id){fbDb.collection('friendRequests').doc(id).delete().catch(
 function frRemoveAsk(uid){
   var f=frFriends[uid]||{};
   openGameSheet('Vriend verwijderen?','<div class="ac-note">'+_esc(f.username||'')+' kan jouw statistieken dan niet meer zien, en potjes gaan niet meer naar zijn of haar account. Gegevens op deze telefoon blijven staan.</div>'+
-    '<button class="g-hit" style="width:100%;background:#B94E2A" onclick="closeGameSheet();frRemove(\''+uid+'\')">Verwijderen</button>');
+    '<button class="g-hit" style="width:100%;background:#B94E2A" data-u="'+_esc(uid)+'" onclick="closeGameSheet();frRemove(this.dataset.u)">Verwijderen</button>');
 }
 function frRemove(uid){
   var b=fbDb.batch();
@@ -4609,7 +4608,7 @@ function frLink(uid,local,quiet){
     if(n&&!quiet){
       openGameSheet('Eerdere potjes meesturen?',
         '<div class="ac-note">'+_esc(local)+' heeft al <b>'+n+'</b> '+(n===1?'potje':'potjes')+' op deze telefoon. Wil je die ook in het account van '+_esc(uname)+' zetten? Potjes die hij al heeft, worden overgeslagen.</div>'+
-        '<button class="g-hit" style="width:100%" onclick="closeGameSheet();frSendHistory(decodeURIComponent(\''+_ue(local)+'\'))">Ja, alle '+n+' potjes meesturen</button>'+
+        '<button class="g-hit" style="width:100%" data-n="'+_esc(local)+'" onclick="closeGameSheet();frSendHistory(this.dataset.n)">Ja, alle '+n+' potjes meesturen</button>'+
         '<button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="closeGameSheet();showToast(\'Alleen nieuwe potjes gaan mee\',\'info\')">Nee, alleen nieuwe potjes</button>');
     } else if(!quiet)showToast('Nieuwe potjes van '+local+' gaan nu ook naar '+uname,'success');
   } else {_lsSet('darts_friend_links',L);_lsSet('darts_friend_shadow',S);}
@@ -4766,14 +4765,14 @@ function renderFriendsCard(){
   if(ins.length){
     h+='<div class="fr-req"><div class="fr-lbl">'+(ins.length===1?'Nieuw vriendverzoek':'Nieuwe vriendverzoeken')+'</div>'+ins.map(function(id){var r=frIn[id];
       return '<div class="fr-row">'+_frAv(r.fromName)+'<div class="fr-who"><b>'+_esc(r.fromName)+'</b><span>wil vrienden worden</span></div>'+
-        '<button class="btn btn-primary btn-sm" onclick="frAccept(\''+id+'\')">Accepteren</button><button class="fr-txtbtn" onclick="frDecline(\''+id+'\')">Weigeren</button></div>';}).join('')+'</div>';
+        '<button class="btn btn-primary btn-sm" data-u="'+_esc(id)+'" onclick="frAccept(this.dataset.u)">Accepteren</button><button class="fr-txtbtn" data-u="'+_esc(id)+'" onclick="frDecline(this.dataset.u)">Weigeren</button></div>';}).join('')+'</div>';
   }
   var fs=Object.keys(frFriends).sort(function(a,b){return _frName(a).localeCompare(_frName(b));});
   h+='<div class="fr-hd">Mijn vrienden'+(fs.length?' ('+fs.length+')':'')+'</div>';
   if(!fs.length)h+='<div class="card st-card fr-empty">Nog geen vrienden. Voeg iemand toe op gebruikersnaam of deel je uitnodigingslink.</div>';
   else h+='<div class="card fr-list">'+fs.map(function(uid){
       var f=frFriends[uid],linked=_linkedLocalFor(uid),nm=_frName(uid);
-      return '<button class="fr-item" onclick="openFriendSheet(\''+uid+'\')">'+_frAv(nm)+'<span class="fr-who"><b>'+_esc(nm)+'</b><span>@'+_esc(f.username||'')+' · '+(linked?'op deze telefoon: '+_esc(linked):'niet gekoppeld')+'</span></span><svg class="st-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>';
+      return '<button class="fr-item" data-u="'+_esc(uid)+'" onclick="openFriendSheet(this.dataset.u)">'+_frAv(nm)+'<span class="fr-who"><b>'+_esc(nm)+'</b><span>@'+_esc(f.username||'')+' · '+(linked?'op deze telefoon: '+_esc(linked):'niet gekoppeld')+'</span></span><svg class="st-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>';
     }).join('')+'</div>';
   h+='<div class="fr-hd" style="margin-top:18px">Vriend toevoegen</div><div class="card st-card">'+
     '<div class="fr-add"><input id="fr-name" placeholder="Gebruikersnaam" autocapitalize="none" autocomplete="off" spellcheck="false" onkeydown="if(event.key===\'Enter\')frAddFromInput()"><button class="btn btn-primary btn-sm" onclick="frAddFromInput()">Toevoegen</button></div>'+
@@ -4781,7 +4780,7 @@ function renderFriendsCard(){
   var outs=Object.keys(frOut);
   if(outs.length){
     h+='<div class="fr-hd" style="margin-top:18px">Verstuurd</div><div class="card st-card">'+outs.map(function(id){var r=frOut[id];
-      return '<div class="fr-row">'+_frAv(r.toName)+'<div class="fr-who"><b>'+_esc(r.toName)+'</b><span>wacht op antwoord</span></div><button class="fr-txtbtn" onclick="frDecline(\''+id+'\')">Intrekken</button></div>';}).join('')+'</div>';
+      return '<div class="fr-row">'+_frAv(r.toName)+'<div class="fr-who"><b>'+_esc(r.toName)+'</b><span>wacht op antwoord</span></div><button class="fr-txtbtn" data-u="'+_esc(id)+'" onclick="frDecline(this.dataset.u)">Intrekken</button></div>';}).join('')+'</div>';
   }
   el.innerHTML=h;
   var ni=document.getElementById('fr-name');if(ni){ni.value=keep;if(foc)ni.focus();}
@@ -4797,11 +4796,11 @@ function openFriendSheet(uid){
     // v244: nog nooit samen gespeeld op deze telefoon? Dan valt er niets te kiezen; leg uit dat het vanzelf gaat.
     (linked||locals.filter(function(n){return n!==me&&!L[n];}).length?
       '<div class="st-cap">Speelt op deze telefoon als</div>'+
-      '<div class="fr-link" style="padding-bottom:4px"><select onchange="closeGameSheet();frLink(\''+uid+'\',this.value)">'+opts+'</select></div>'+
+      '<div class="fr-link" style="padding-bottom:4px"><select data-u="'+_esc(uid)+'" onchange="closeGameSheet();frLink(this.dataset.u,this.value)">'+opts+'</select></div>'+
       '<div class="ac-note" style="margin:6px 0 16px">Nieuwe potjes van deze speler komen dan ook in het account van '+_esc(nm)+'.</div>'
      :'<div class="ac-note" style="margin:6px 0 16px">Nog niet samen gespeeld op deze telefoon. Kies '+_esc(nm)+' gewoon bij een nieuw potje (bij de spelers staat hij met het label vriend), dan wordt hij vanzelf gekoppeld en gaan de potjes naar zijn account.</div>')+
-    (d.data?'<button class="g-hit" style="width:100%" onclick="closeGameSheet();frShowStats(\''+uid+'\')">Statistieken bekijken</button>':'<div class="ac-note">'+_esc(nm)+' heeft nog geen statistieken gedeeld.</div>')+
-    '<button class="fr-remove" onclick="frRemoveAsk(\''+uid+'\')">Vriend verwijderen</button>');
+    (d.data?'<button class="g-hit" style="width:100%" data-u="'+_esc(uid)+'" onclick="closeGameSheet();frShowStats(this.dataset.u)">Statistieken bekijken</button>':'<div class="ac-note">'+_esc(nm)+' heeft nog geen statistieken gedeeld.</div>')+
+    '<button class="fr-remove" data-u="'+_esc(uid)+'" onclick="frRemoveAsk(this.dataset.u)">Vriend verwijderen</button>');
 }
 function frShowStats(uid){
   var v=_friendsViewDB(),nm=_frName(uid),f=frFriends[uid]||{};
@@ -4887,7 +4886,7 @@ function _scopedInner(impl,screenId,elId,args){
   var slot=scr.querySelector('.scope-slot');
   if(!slot){var hd=scr.querySelector('.page-head');if(hd){slot=document.createElement('div');slot.className='scope-slot';hd.parentNode.insertBefore(slot,hd.nextSibling);}}
   var _noData=fr&&!_frLoading?Object.keys(frFriends).filter(function(u){return !(_frData[u]&&_frData[u].data);}).map(function(u){return _frName(u);}):[];
-  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':'')+(_noData.length?'<div class="fr-note">Nog geen statistieken gedeeld: '+_noData.map(_esc).join(', ')+'. Die vriend moet bij Account kiezen welke speler hij is.</div>':'')+(fr&&!_frLoading?_frUnlinked().map(function(u){var n=_frData[u].player;return '<div class="fr-note fr-unl"><span>'+_esc(n)+' is niet gekoppeld: potjes op deze telefoon gaan niet naar zijn account.</span><button class="btn btn-sm" onclick="frLinkSame(\''+u+'\')">Koppelen</button></div>';}).join(''):''):'';
+  if(slot)slot.innerHTML=avail?'<div class="seg-ctrl"><button class="seg-btn'+(fr?'':' active')+'" onclick="setStatsScope(\'local\')">Deze telefoon</button><button class="seg-btn'+(fr?' active':'')+'" onclick="setStatsScope(\'friends\')">Vrienden</button></div>'+(fr&&_frLoading?'<div class="fr-note">Vrienden laden…</div>':'')+(_noData.length?'<div class="fr-note">Nog geen statistieken gedeeld: '+_noData.map(_esc).join(', ')+'. Die vriend moet bij Account kiezen welke speler hij is.</div>':'')+(fr&&!_frLoading?_frUnlinked().map(function(u){var n=_frData[u].player;return '<div class="fr-note fr-unl"><span>'+_esc(n)+' is niet gekoppeld: potjes op deze telefoon gaan niet naar zijn account.</span><button class="btn btn-sm" data-u="'+_esc(u)+'" onclick="frLinkSame(this.dataset.u)">Koppelen</button></div>';}).join(''):''):'';
   if(fr){var el=document.getElementById(elId);if(el)el.querySelectorAll('.st-danger,[onclick*="deleteMatchEntry"],[onclick*="generateChallenge"]').forEach(function(b){b.parentNode&&b.parentNode.removeChild(b);});}
 }
 
@@ -6414,8 +6413,8 @@ function _pickFriendForGame(uid,inputId,addFn){
   var cnt=(dbCache[want].gameHistory||[]).length;
   openGameSheet('Is dit dezelfde '+_esc(want)+'?',
     '<div class="ac-note">Er staat al een speler <b>'+_esc(want)+'</b> op deze telefoon ('+cnt+(cnt===1?' potje':' potjes')+'). Is dat je vriend '+_esc(f.username)+'?</div>'+
-    '<button class="g-hit" style="width:100%" onclick="closeGameSheet();_pfgYes(\''+uid+'\',\''+inputId+'\')">Ja, dat is '+_esc(f.username)+'</button>'+
-    '<button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="closeGameSheet();_pfgNo(\''+uid+'\',\''+inputId+'\')">Nee, iemand anders</button>');
+    '<button class="g-hit" style="width:100%" data-u="'+_esc(uid)+'" data-i="'+_esc(inputId)+'" onclick="closeGameSheet();_pfgYes(this.dataset.u,this.dataset.i)">Ja, dat is '+_esc(f.username)+'</button>'+
+    '<button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:8px" data-u="'+_esc(uid)+'" data-i="'+_esc(inputId)+'" onclick="closeGameSheet();_pfgNo(this.dataset.u,this.dataset.i)">Nee, iemand anders</button>');
 }
 function _pfgAddFn(inputId){return inputId==='player-name-input'?addPlayer:trnAddPlayer;}
 function _pfgYes(uid,inputId){
@@ -9774,8 +9773,7 @@ function _renderStatsImpl(){
     if(allOpponents.length>1){
       var vsBtns=allOpponents.map(function(opp){
         var lbl=opp==='alle'?'Alle':opp;var isActive=opp===activeVs;
-        var en=_ue(name);var eo=_ue(opp);
-        return'<button class="lb-sub'+(isActive?' active':'')+'" onclick="setStatsVsFilter(decodeURIComponent(\''+en+'\'),decodeURIComponent(\''+eo+'\'))">'+(opp==='alle'?'Iedereen':'vs '+_esc(lbl))+'</button>';
+        return'<button class="lb-sub'+(isActive?' active':'')+'" data-n="'+_esc(name)+'" data-o="'+_esc(opp)+'" onclick="setStatsVsFilter(this.dataset.n,this.dataset.o)">'+(opp==='alle'?'Iedereen':'vs '+_esc(lbl))+'</button>';
       }).join('');
       vsTabsHtml='<div class="st-lbl">Tegen</div><div class="lb-subrow" style="margin-bottom:12px">'+vsBtns+'</div>';
     }
@@ -9789,7 +9787,7 @@ function _renderStatsImpl(){
     var tabsHtml='<div class="st-lbl">Spel</div><div class="lb-subrow" style="margin-bottom:10px">'+
       allTypes.map(function(t){
         var lbl=typeLabels[t]||t;
-        return'<button class="lb-sub'+(t===activeFilter?' active':'')+'" onclick="setStatsFilter(decodeURIComponent(\''+_ue(name)+'\'),\''+t+'\')">'+lbl+'</button>';
+        return'<button class="lb-sub'+(t===activeFilter?' active':'')+'" data-n="'+_esc(name)+'" data-t="'+_esc(t)+'" onclick="setStatsFilter(this.dataset.n,this.dataset.t)">'+_esc(lbl)+'</button>';
       }).join('')+
     '</div>';
 
@@ -9897,7 +9895,7 @@ function _renderStatsImpl(){
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
         '<h3 style="margin:0">'+_esc(name)+'</h3>'+
         '<div style="display:flex;gap:6px">'+
-          '<button class="btn btn-xs" style="color:var(--accent2);display:inline-flex;align-items:center" onclick="generateChallenge(decodeURIComponent(\''+_ue(name)+'\'))"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent2)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Daag uit</button>'+
+          '<button class="btn btn-xs" style="color:var(--accent2);display:inline-flex;align-items:center" data-n="'+_esc(name)+'" onclick="generateChallenge(this.dataset.n)"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent2)\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px\"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Daag uit</button>'+
 
         '</div>'+
       '</div>'+
@@ -9911,9 +9909,9 @@ function _renderStatsImpl(){
       '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Recente wedstrijden</div>'+
       (histRows||'<div class="empty">Geen wedstrijden gevonden</div>')+
       (_histExtra.length?'<div id="stats-more-'+_ue(name)+'" style="display:none">'+_histExtra.map(function(g){var ds=g.detailedStats;var infoItems=[];if(g.setResult)infoItems.push('Sets '+g.setResult);else if(g.legResult)infoItems.push('Legs '+g.legResult);if(ds){infoItems.push('gem '+ds.avg3+(ds.count180?' · '+ds.count180+'×180':''));}var typeLabel=typeLabels[g.gameType]||g.gameType;return'<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-size:13px;font-weight:600">'+typeLabel+'</span><span style="color:var(--muted);font-size:12px;margin-left:6px">'+g.date+'</span></div>'+(!g.opponents||!g.opponents.length?'':g.won?'<span class="badge badge-success">Win</span>':'<span class="badge badge-warning">Verlies</span>')+'</div>'+(infoItems.length?'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+infoItems.join(' · ')+'</div>':'')+'</div>';}).join('')+'</div>'+
-      '<button onclick="var m=document.getElementById(\'stats-more-'+_ue(name)+'\');var open=m.style.display!==\'none\';m.style.display=open?\'none\':\'\';this.textContent=open?\'Toon meer ('+_histExtra.length+')\':\'Toon minder\';" style="width:100%;margin-top:6px;background:none;border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:7px;font-size:12px;color:var(--muted);cursor:pointer">Toon meer ('+_histExtra.length+')</button>':
+      '<button onclick="var m=this.previousElementSibling;var open=m.style.display!==\'none\';m.style.display=open?\'none\':\'\';this.textContent=open?\'Toon meer ('+_histExtra.length+')\':\'Toon minder\';" style="width:100%;margin-top:6px;background:none;border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:7px;font-size:12px;color:var(--muted);cursor:pointer">Toon meer ('+_histExtra.length+')</button>':
       '')+
-      '<button class="st-manage" onclick="showScreen(\'screen-settings\');stOpen(\'players\');_spOpen=decodeURIComponent(\''+_ue(name)+'\');renderSettingsPlayers()">Speler beheren (samenvoegen of verwijderen)</button>';
+      '<button class="st-manage" data-n="'+_esc(name)+'" onclick="showScreen(\'screen-settings\');stOpen(\'players\');_spOpen=this.dataset.n;renderSettingsPlayers()">Speler beheren (samenvoegen of verwijderen)</button>';
     el.appendChild(card);
 }
 
@@ -10504,7 +10502,7 @@ function _renderHistoryImpl(){
   var tabs=names.map(function(name){
     var isActive=name===historySelectedPlayer;
     var p=db[name];
-    return'<button class="lb-chip'+(isActive?' active':'')+'" onclick="selectHistoryPlayer(decodeURIComponent(\''+_ue(name)+'\'))">'+_esc(name)+_whoTag(name)+'</button>';
+    return'<button class="lb-chip'+(isActive?' active':'')+'" data-n="'+_esc(name)+'" onclick="selectHistoryPlayer(this.dataset.n)">'+_esc(name)+_whoTag(name)+'</button>';
   }).join('');
 
   // Games for selected player
@@ -10594,7 +10592,7 @@ function _renderHistoryImpl(){
       '<div id="'+detailId+'" style="display:none;padding:0 14px 12px;border-top:1px solid var(--separator)">'+
         (detailHtml||'<div style="font-size:12px;color:var(--muted);padding-top:8px">Geen extra details beschikbaar</div>')+
         '<div style="margin-top:10px;text-align:right">'+
-          '<button onclick="event.stopPropagation();deleteMatchEntry(decodeURIComponent(\''+_ue(historySelectedPlayer)+'\'),'+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--danger);font-size:12px;font-weight:600">Verwijderen</button>'+
+          '<button data-n="'+_esc(historySelectedPlayer)+'" onclick="event.stopPropagation();deleteMatchEntry(this.dataset.n,'+i+')" style="background:rgba(239,68,68,.12);border:none;border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--danger);font-size:12px;font-weight:600">Verwijderen</button>'+
         '</div>'+
       '</div>'+
     '</div>';

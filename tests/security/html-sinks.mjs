@@ -8,6 +8,9 @@ const src = fs.readFileSync(ROOT + 'index.html', 'utf8');
 const allowFile = path.join(HERE, 'html-sinks.allow.json');
 const allow = fs.existsSync(allowFile) ? JSON.parse(fs.readFileSync(allowFile, 'utf8')) : { html: {}, handler: {} };
 const lines = src.split('\n');
+// Omringende functienaam per regel: de allowlist-sleutel is 'functie|expressie', zodat een goedgekeurde
+// 'v' in de ene functie niet automatisch overal goedgekeurd is.
+const fnAt = []; { let cur = '(top)'; lines.forEach((l, i) => { const m = l.match(/function\s+([A-Za-z_$][\w$]*)\s*\(/); if (m) cur = m[1]; fnAt[i] = cur; }); }
 // Alleen het app-script (na de vertaaltabellen); CSS/HTML-opmaak en I18N overslaan.
 const start = lines.findIndex(l => /var I18N_PATTERNS\s*=/.test(l)) + 1;
 const norm = e => e.trim().replace(/\s+/g, ' ').replace(/\\'/g, "'");
@@ -32,7 +35,7 @@ for (let i = start; i < lines.length; i++) {
     handlerSpans.push([m.index, m.index + m[0].length]);
     const body = m[1];
     const cre = /'\s*\+\s*(.+?)\s*\+\s*'/g; let c;
-    while ((c = cre.exec(body))) { const e = norm(c[1]); if (NUMLIKE.some(r => r.test(e))) continue; if (!(e in allow.handler)) out.handler.push({ line: i + 1, expr: e }); }
+    while ((c = cre.exec(body))) { const e = norm(c[1]); if (NUMLIKE.some(r => r.test(e))) continue; const key = fnAt[i] + '|' + e; if (!(key in allow.handler)) out.handler.push({ line: i + 1, expr: e, key }); }
   }
   // 2) HTML-context
   if (!HTML_CTX.test(l)) continue;
@@ -42,15 +45,16 @@ for (let i = start; i < lines.length; i++) {
     const e = norm(c[1]);
     if (/^'/.test(e)) continue; // string + string
     if (SAFE.some(r => r.test(e))) continue;
-    if (e in allow.html) continue;
-    out.html.push({ line: i + 1, expr: e });
+    const key = fnAt[i] + '|' + e;
+    if (key in allow.html) continue;
+    out.html.push({ line: i + 1, expr: e, key });
   }
 }
-const uniq = a => [...new Map(a.map(x => [x.expr, x])).values()];
+const uniq = a => [...new Map(a.map(x => [x.key, x])).values()];
 const H = uniq(out.html), K = uniq(out.handler);
 const list = process.argv.includes('--list');
 console.log(`html-sinks: ${H.length + K.length ? 'GEZAKT' : 'GESLAAGD'}  (HTML-context: ${H.length} onbeoordeelde expressies, ${out.html.length} plekken; inline handlers: ${K.length} expressies, ${out.handler.length} plekken)`);
-const show = (t, a) => a.slice(0, list ? 1e9 : 15).forEach(x => console.log(`  ${t} r${x.line}  ${x.expr.slice(0, 110)}`));
+const show = (t, a) => a.slice(0, list ? 1e9 : 15).forEach(x => console.log(`  ${t} r${x.line}  ${x.key.slice(0, 120)}`));
 show('html', H); show('handler', K);
 if (list) fs.writeFileSync('/tmp/html-sinks-open.json', JSON.stringify({ html: H, handler: K }, null, 1));
 process.exit(H.length + K.length ? 1 : 0);
