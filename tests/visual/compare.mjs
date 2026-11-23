@@ -2,7 +2,8 @@
 // omgeving, en vergelijkt pixel voor pixel. Zo zijn er geen opgeslagen referentiebeelden nodig in de (openbare) repo en
 // spelen verschillen tussen computers (lettertype-rendering) geen rol.
 //   REF=<map met index.html van de goedgekeurde versie> node tests/visual/compare.mjs [--quick] [--only=…] [--threshold=0]
-//   Tip: git show <commit>:index.html > /tmp/ref/index.html   (de goedgekeurde baseline is tag visual-baseline-v252)
+//   Tip: git show faf50f0:index.html > /tmp/ref/index.html   (de goedgekeurde baseline is commit faf50f0 = v252; de tag
+//   visual-baseline-v252 bestaat alleen lokaal, de commit is de vaste referentie)
 // Exitcode 0 = geen verschillen boven de drempel. Rapport: tests/visual/out/compare/index.html (rood omrand = verschil).
 import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url'; import { createRequire } from 'module';
 import { PNG } from 'pngjs'; import pixelmatch from 'pixelmatch';
@@ -13,7 +14,7 @@ if (!process.env.REF) { console.error('Zet REF=<map met de index.html van de ref
 if (!process.env.PLAYWRIGHT) process.env.PLAYWRIGHT = pathToFileURL(createRequire(path.join(REPO, 'package.json')).resolve('playwright')).href;
 const pw = (await import(process.env.PLAYWRIGHT)).default;
 const out = path.join(HERE, 'out', 'compare'); fs.rmSync(out, { recursive: true, force: true });
-let items = matrix({ quick: process.argv.includes('--quick') });
+let items = matrix({ quick: process.argv.includes('--quick'), extra: process.argv.includes('--extra') });
 const only = arg('only'); if (only) items = items.filter(i => only.split(',').includes(i.s.id));
 const thr = Number(arg('threshold') || 0), jobs = Number(arg('jobs')) || 2;
 const b = await pw.chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});

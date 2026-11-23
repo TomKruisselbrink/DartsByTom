@@ -56,6 +56,61 @@ export const SCENARIOS = [
   { id: 'toernooi-setup', group: 'Toernooi', label: 'Toernooi opzetten', setup: `showScreen('screen-trn-setup');` },
   { id: 'toernooi-overzicht', group: 'Toernooi', label: 'Toernooi: overzicht round robin', land: true, setup: `trnPlayers=${P4};trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();` },
   { id: 'toernooi-stand', group: 'Toernooi', label: 'Toernooi: stand', setup: `trnPlayers=${P4};trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();showScreen('screen-trn-standings');renderStandings();` },
+  // Aanvullende toestanden (fase 4C-0, alleen toegevoegd: de 46 scenario's hierboven zijn ongewijzigd)
+  { id: 'bevestig-stop', group: 'Toestanden', label: 'Stop tijdens een potje: bevestigvenster', land: true, setup: `launchGame('501',${P2},true,'firstto',3,1,501,0);confirmEndGame();` },
+  { id: 'hervatten', group: 'Toestanden', label: '"Potje hervatten?" na herstart', setup: `launchGame('501',${P2},true,'firstto',3,1,501,0);state.scores=[121,140];renderGame();_liveSaveNow();var __s=localStorage.getItem(LIVE_KEY);showScreen('screen-home');localStorage.setItem(LIVE_KEY,__s);_liveOffer();` },
+  { id: 'toernooi-wie-begint', group: 'Toestanden', label: 'Toernooi: wie begint (munt)', land: true, setup: `trnPlayers=${P4};trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();[...document.querySelectorAll('#screen-trn-overview button')].find(b=>/Speel leg/.test(b.textContent)).click();` },
+  { id: 'update-banner', group: 'Toestanden', label: 'Melding nieuwe versie op het beginscherm', setup: `showScreen('screen-home');_updAvail=9999;_updSetUI();` },
+  { id: 'ios-uitleg', group: 'Toestanden', label: 'Uitleg "Zet op beginscherm" (iPhone)', setup: `showScreen('screen-home');document.getElementById('ios-install-modal').classList.add('show');` },
+  { id: 'randomco-uitgegooid', group: 'Toestanden', label: 'Random Checkout: "Uitgegooid?"', setup: `rcoCount=10;rcoMode='default';rcoDarts=9;launchRandomCheckout(['Tom','Henk','Imke']);rcoScore(rco.rest);` },
+  { id: 'halveit-rondes', group: 'Toestanden', label: 'Halve It: rondes-onderblad tijdens het spel', setup: `hiRandomOrder=false;hiSequence=DEFAULT_SEQ.map(function(s){return Object.assign({},s);});launchGame('halveit',${P2},true,'firstto',1,1,501,0);gameBarInfo();` },
+  { id: 'eindstand-corrigeren', group: 'Toestanden', label: 'Geschiedenis: "Eindstand corrigeren" (formulier)', setup: `historySelectedPlayer='Tom';showScreen('screen-history');var __g=getDB().Tom.gameHistory.find(function(e){return e.gameType==='cricket'});ecOpen('Tom',_mkey(__g));` },
+  { id: 'rondes-corrigeren', group: 'Toestanden', label: 'Geschiedenis: "Rondes corrigeren" Halve It (formulier)', setup: `historySelectedPlayer='Tom';showScreen('screen-history');var __g=getDB().Tom.gameHistory.find(function(e){return e.gameType==='halveit'&&e.hiRoundHistory});hiCorrectOpen('Tom',_mkey(__g));` },
 ];
 export const PHONES = [[375, 667, 'se'], [390, 844, 'mobiel'], [430, 932, 'groot']];
 export const LANDS = [[1280, 800, 'kantine-1280'], [1920, 1080, 'kantine-1920']];
+// Fase 4C-0 (aanvullend): tablet staand/liggend en een smalle Android-telefoon. Zie DEKKING hieronder voor wat waar draait.
+export const TABLETS = [[768, 1024, 'tablet-staand'], [1024, 768, 'tablet-liggend']];
+export const NARROW = [[360, 640, 'android-360']];
+
+// ═══ Dekking (fase 4C-0) ═══
+// EXPECT: waar elk scenario moet landen (scherm, instellingenpagina, zichtbare overlays). tests/core/tap-390.mjs controleert
+// dit bij elke run; tests/core/coverage.mjs controleert dat elk scherm, elke instellingenpagina en elke overlay van de app
+// door minstens één scenario gedekt wordt, of hieronder met reden is uitgezonderd.
+export const EXPECT = {
+  'home': ['screen-home'], 'home-leeg': ['screen-home'],
+  'setup-1-spelkeuze': ['screen-setup'], 'setup-2-x01': ['screen-setup'], 'setup-2-halveit': ['screen-setup'], 'setup-2-randomco': ['screen-setup'], 'setup-2-afgooien': ['screen-setup'], 'setup-3-spelers': ['screen-setup'],
+  'x01-2sp': ['screen-game'], 'x01-4sp': ['screen-game'], 'x01-teams': ['screen-game'], 'x01-double-vraag': ['screen-game', '', ['dubbel-ja-nee']], 'x01-dubbel-kiezen': ['screen-game', '', ['welke-dubbel']], 'x01-stats-blad': ['screen-game', '', ['x01-stats']],
+  'cricket': ['screen-cricket'], 'atc': ['screen-atc'], 'shanghai': ['screen-shanghai'], 'halveit': ['screen-halveit'], 'bobs27': ['screen-bobs27'], 'checkout121': ['screen-checkout121'], 'randomco': ['screen-randomco'], 'eliminatie': ['screen-eliminatie'],
+  'afgooien-bull': ['screen-afgooien-bull'], 'afgooien': ['screen-afgooien'], 'afgooien-nummers': ['screen-afgooien', '', ['sheet:Jullie nummers']], 'potje-afronden': ['screen-atc', '', ['bevestig']],
+  'winst': ['screen-win'], 'verlies-solo': ['screen-win'], 'rematch': ['screen-win'],
+  'geschiedenis': ['screen-history'], 'geschiedenis-detail': ['screen-history'], 'statistieken': ['screen-stats'], 'statistieken-x01': ['screen-stats'], 'ranglijst': ['screen-leaderboard'],
+  'instellingen': ['screen-settings'], 'inst-account': ['screen-settings', 'account'], 'inst-vrienden': ['screen-settings', 'friends'], 'inst-account-ingelogd': ['screen-settings', 'account'], 'inst-vrienden-ingelogd': ['screen-settings', 'friends'], 'inst-spelers': ['screen-settings', 'players'], 'inst-spel': ['screen-settings', 'game'], 'inst-weergave': ['screen-settings', 'appearance'], 'inst-gegevens': ['screen-settings', 'data'],
+  'toernooi-setup': ['screen-trn-setup'], 'toernooi-overzicht': ['screen-trn-overview'], 'toernooi-stand': ['screen-trn-standings'],
+  'bevestig-stop': ['screen-game', '', ['bevestig']], 'hervatten': ['screen-home', '', ['sheet:Potje hervatten?']], 'toernooi-wie-begint': ['screen-trn-overview', '', ['toernooi-start']], 'update-banner': ['screen-home', '', ['update-banner']], 'ios-uitleg': ['screen-home', '', ['ios-uitleg']],
+  'randomco-uitgegooid': ['screen-randomco', '', ['sheet:Uitgegooid?']], 'halveit-rondes': ['screen-halveit', '', ['sheet:Rondes']], 'eindstand-corrigeren': ['screen-history', '', ['sheet:Eindstand corrigeren']], 'rondes-corrigeren': ['screen-history', '', ['sheet:Rondes corrigeren']],
+};
+// Overlays van de app (selector) en wat er bewust niet als eigen scenario in staat, met reden.
+export const OVERLAYS = { 'sheet': '#game-sheet', 'bevestig': '.ask-ov', 'dubbel-ja-nee': '#dbl-yn-overlay', 'welke-dubbel': '#double-modal', 'toernooi-start': '#trn-start-modal', 'update-banner': '#upd-banner', 'ios-uitleg': '#ios-install-modal', 'x01-stats': '#x01-stats-sheet', 'groep': '#group-modal', 'laden': '#fb-loading', 'install-banner': '#install-banner' };
+export const OVERLAY_EXEMPT = {
+  'groep': 'groepscode-venster: groups staat sinds 21-11 dicht, wordt in fase 6 verwijderd',
+  'laden': 'laadscherm bij Firebase-verbinding: kortstondig, niet deterministisch vast te leggen',
+  'install-banner': 'Android-installatiebanner: verschijnt alleen na beforeinstallprompt van Chrome; zelfde opmaak als update-banner',
+};
+// Onderbladen (openGameSheet) zijn één component. Gedekt: Jullie nummers, Potje hervatten?, Uitgegooid?, Rondes,
+// Eindstand corrigeren, Rondes corrigeren. De overige (tekst + knoppen in hetzelfde blad) staan hier met reden.
+export const SHEETS_EXEMPT = {
+  'Aantal levens': 'keuzeknoppen, zelfde opmaak als Jullie nummers', 'App downloaden': 'tekst + knoppen', 'Eerdere potjes meesturen?': 'vraag + 2 knoppen (vrienden, alleen ingelogd)',
+  'Herstellen uit back-up': 'vraag + knoppen (account)', 'Herstellen': 'vraag + knoppen (account)', 'Is dit dezelfde ': 'vraag + knoppen (vrienden koppelen)', 'Jouw uitnodigingslink': 'tekst + kopieerknop',
+  'Pogingen': 'lijst, zelfde opmaak als Rondes', 'Samenvoegen': 'keuzelijst spelers', 'Spelers': 'keuzelijst spelers', 'Toernooi hervatten?': 'zelfde opmaak als Potje hervatten?', 'Uitloggen?': 'vraag + 2 knoppen',
+  'Uitnodiging van ': 'vraag + 2 knoppen (vrienden)', 'Vriend verwijderen?': 'vraag + 2 knoppen', 'Welke speler ben jij?': 'keuzelijst spelers (account)', 'Wie begint de rematch?': 'gedekt via scenario rematch (zelfde keuze op het winstscherm)',
+  'Wie wil je delen met de groep?': 'groepscode, verdwijnt in fase 6',
+};
+// Matrix (zie shoot.mjs matrix()): waarom deze dimensies.
+export const DEKKING = {
+  telefoons: '375×667, 390×844, 430×932 × NL/EN × licht/donker: elk scenario (taal bepaalt tekstlengte, dus EN op smal)',
+  liggend: '1280×800, 1920×1080 × NL/EN × licht/donker: scenario\'s met land:true (spelschermen en hoofdoverzichten)',
+  tablet: '768×1024, 1024×768 × NL × licht/donker: elk scenario (breed genoeg dat EN geen andere afbreking geeft)',
+  smal: '360×640 × NL × licht/donker: elk scenario (gangbare Android-maat)',
+  automatisch: 'systeemthema zonder keuze in de app (donker en licht) op 390×844 NL voor elk scenario, plus donker op 1920×1080 voor land:true',
+};

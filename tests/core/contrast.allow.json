@@ -1,0 +1,145 @@
+{
+  "_uitleg": "Bekende contrast-uitzonderingen (fase 4B: C1–C8; gevonden in 4C-0: C9–C11). De test faalt hier NIET op, maar meldt ze apart. Elke andere onvoldoende combinatie laat de test falen. Een uitzondering die inmiddels voldoet, meldt de test als 'mag uit de lijst'. Toevoegen alleen met akkoord van Tom. thema: donker, licht, auto-donker, auto-licht.",
+  "uitzonderingen": [
+    {
+      "c": "C1",
+      "pair": "doelgetal/doelvlak",
+      "themas": [
+        "donker",
+        "auto-donker"
+      ],
+      "reden": "accent #B94E2A als groot doelgetal op donkere kaart (2,78). Voorstel K7: in donker #E07A55. 4D."
+    },
+    {
+      "c": "C2",
+      "pair": "muted/bg",
+      "themas": [
+        "licht",
+        "auto-licht"
+      ],
+      "reden": "muted #6B6560 direct op de lichte gloedhoek (4,25). 4D."
+    },
+    {
+      "c": "C3",
+      "pair": "accent-tekst/bg",
+      "themas": [
+        "licht",
+        "auto-licht"
+      ],
+      "reden": "accent-tekst #A8431F direct op de lichte gloedhoek (4,45). 4D."
+    },
+    {
+      "c": "C4",
+      "pair": "warning/bg",
+      "themas": [
+        "licht",
+        "auto-licht"
+      ],
+      "reden": "warning-token bestaat nog niet (K3, 4D); paar wordt pas meetbaar als het token er is."
+    },
+    {
+      "c": "C5",
+      "pair": "wit/danger",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "reden": "wit op #FF3B30 (3,55): alleen voor grote tekst gebruikt; regel: geen kleine witte tekst op danger."
+    },
+    {
+      "c": "C6",
+      "pair": "wit/bord-groen",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "reden": "uitgooi-badge #16a34a (3,30). Opgelost door K5 (#1E7E34). 4D."
+    },
+    {
+      "c": "C7",
+      "pair": "wit/speler",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "waarden": [
+        "#2E8C9A",
+        "#D08A2E"
+      ],
+      "reden": "avatarkleuren _frColor met witte letter (#2E8C9A 3,98 en #D08A2E 2,85). Herkenningskleur (X2), niet automatisch aanpassen; keuze Tom."
+    },
+    {
+      "c": "C8",
+      "pair": "wit/melding-succes",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "reden": "meldingen in Tailwind-groen (2,28). Opgelost door K4. 4D."
+    },
+    {
+      "c": "C8",
+      "pair": "wit/melding-waarschuwing",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "reden": "meldingen in iOS-oranje (2,20). Opgelost door K4. 4D."
+    },
+    {
+      "c": "C8",
+      "pair": "wit/melding-fout",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "reden": "meldingen in Tailwind-rood (3,76). Opgelost door K4. 4D."
+    },
+    {
+      "c": "C9",
+      "pair": "wit/team",
+      "themas": [
+        "donker",
+        "licht",
+        "auto-donker",
+        "auto-licht"
+      ],
+      "waarden": [
+        "#D08A2E"
+      ],
+      "reden": "NIEUW in 4C-0: teamkleur 4 (#D08A2E, Afgooien/X01-teams) met wit nummer (2,85). Teamkleur (X1), niet automatisch aanpassen; keuze Tom."
+    },
+    {
+      "c": "C10",
+      "pair": "stop/spelbalk",
+      "themas": [
+        "licht",
+        "auto-licht"
+      ],
+      "reden": "NIEUW in 4C-0 (DOM-steekproef): rode Stop #FF3B30 in de lichte spelbalk (3,37 tegen de balk, 2,82 in de steekproef). Voorstel: --danger-text (#B3261E) in licht. 4D."
+    },
+    {
+      "c": "C11",
+      "pair": "accent-als-tekst/kaart",
+      "themas": [
+        "donker",
+        "auto-donker",
+        "licht",
+        "auto-licht"
+      ],
+      "reden": "NIEUW in 4C-0 (DOM-steekproef): accent-vulkleur #B94E2A als kleine tekst op een kaart (donker 2,78, licht 4,30): actieve spelersnaam, cijfers op het winstscherm. Zelfde oorzaak als C1; voorstel: --accent-text. 4D."
+    }
+  ]
+}

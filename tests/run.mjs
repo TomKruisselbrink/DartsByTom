@@ -10,13 +10,13 @@ if (!process.env.PLAYWRIGHT) {
   try { process.env.PLAYWRIGHT = pathToFileURL(createRequire(path.join(ROOT, 'package.json')).resolve('playwright')).href; }
   catch (e) { console.error('Playwright niet gevonden. Eenmalig: npm install  (en: npx playwright install chromium)\nof zet PLAYWRIGHT=<pad naar playwright/index.js>.'); process.exit(2); }
 }
-const SKIP = new Set(['lib.mjs', 'h.mjs', 'finish-gate-eq.mjs']);
+const SKIP = new Set(['lib.mjs', 'h.mjs', 'finish-gate-eq.mjs', 'tap-lib.mjs']);
 let suites = [];
 for (const dir of ['core', 'security']) for (const f of fs.readdirSync(path.join(HERE, dir)).sort()) if (f.endsWith('.mjs') && !SKIP.has(f)) suites.push(path.join(dir, f));
 if (process.env.REF) suites.push('security/finish-gate-eq.mjs');
 const only = arg('only'); if (only) { const w = only.split(','); suites = suites.filter(s => w.some(x => s.includes(x))); }
 // Langste eerst, dan is de totale tijd het kortst.
-const SLOW = ['rematch-start', 'finish-gate', 'taint-local', 'ui', 'eli-save', 'x01', 'games', 'data'];
+const SLOW = ['tap-320', 'tap-360', 'tap-375', 'tap-390', 'rematch-start', 'finish-gate', 'taint-local', 'ui', 'eli-save', 'x01', 'games', 'data'];
 suites.sort((a, b) => { const ia = SLOW.findIndex(s => a.includes(s)), ib = SLOW.findIndex(s => b.includes(s)); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
 const jobs = Number(arg('jobs')) || Math.min(4, Math.max(2, os.cpus().length));
 const t0 = Date.now(); const results = [];

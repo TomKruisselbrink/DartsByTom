@@ -1,0 +1,202 @@
+{
+  "_uitleg": "Paren voor tests/core/contrast.mjs. fg/bg verwijzen naar bronnen die de test in de app zelf meet (zie SOURCES in contrast.mjs). min = WCAG 2.1 AA: 4.5 gewone tekst, 3 voor tekst >= 24 px of >= 18.7 px vet. Doorschijnende kleuren worden over elk punt van het achtergrondverloop samengesteld; de laagste uitkomst telt. Nieuwe tokens (4C-1) = nieuwe paren hier toevoegen.",
+  "pairs": [
+    {
+      "id": "tekst/bg",
+      "fg": "text",
+      "bg": "bg",
+      "min": 4.5
+    },
+    {
+      "id": "tekst/kaart",
+      "fg": "text",
+      "bg": "card",
+      "min": 4.5
+    },
+    {
+      "id": "tekst/vlak",
+      "fg": "text",
+      "bg": "surface",
+      "min": 4.5
+    },
+    {
+      "id": "muted/bg",
+      "fg": "muted",
+      "bg": "bg",
+      "min": 4.5
+    },
+    {
+      "id": "muted/kaart",
+      "fg": "muted",
+      "bg": "card",
+      "min": 4.5
+    },
+    {
+      "id": "muted/vlak",
+      "fg": "muted",
+      "bg": "surface",
+      "min": 4.5
+    },
+    {
+      "id": "soft/kaart",
+      "fg": "soft",
+      "bg": "card",
+      "min": 4.5
+    },
+    {
+      "id": "soft/vlak",
+      "fg": "soft",
+      "bg": "surface",
+      "min": 4.5
+    },
+    {
+      "id": "accent-tekst/bg",
+      "fg": "accentText",
+      "bg": "bg",
+      "min": 4.5
+    },
+    {
+      "id": "accent-tekst/kaart",
+      "fg": "accentText",
+      "bg": "card",
+      "min": 4.5
+    },
+    {
+      "id": "accent-tekst/vlak",
+      "fg": "accentText",
+      "bg": "surface",
+      "min": 4.5
+    },
+    {
+      "id": "hit-tekst/bg",
+      "fg": "hitText",
+      "bg": "bg",
+      "min": 4.5
+    },
+    {
+      "id": "hit-tekst/kaart",
+      "fg": "hitText",
+      "bg": "card",
+      "min": 4.5
+    },
+    {
+      "id": "hit-tekst/vlak",
+      "fg": "hitText",
+      "bg": "surface",
+      "min": 4.5
+    },
+    {
+      "id": "mis-tekst/kaart",
+      "fg": "missText",
+      "bg": "card",
+      "min": 4.5
+    },
+    {
+      "id": "mis-tekst/vlak",
+      "fg": "missText",
+      "bg": "surface",
+      "min": 4.5
+    },
+    {
+      "id": "doelgetal/doelvlak",
+      "fg": "targetBig",
+      "bg": "targetBg",
+      "min": 3,
+      "groot": true
+    },
+    {
+      "id": "accent-als-tekst/kaart",
+      "fg": "accent",
+      "bg": "card",
+      "min": 4.5,
+      "_noot": "accent-vulkleur als kleine tekst (actieve spelersnaam, cijfers winstscherm); gevonden door de DOM-steekproef"
+    },
+    {
+      "id": "stop/spelbalk",
+      "fg": "stopText",
+      "bg": "gameBar",
+      "min": 4.5,
+      "_noot": "rode Stop in de zwevende spelbalk"
+    },
+    {
+      "id": "wit/accent",
+      "fg": "white",
+      "bg": "accent",
+      "min": 4.5
+    },
+    {
+      "id": "wit/raak",
+      "fg": "white",
+      "bg": "hitFill",
+      "min": 4.5
+    },
+    {
+      "id": "wit/danger",
+      "fg": "white",
+      "bg": "danger",
+      "min": 4.5
+    },
+    {
+      "id": "wit/bord-rood",
+      "fg": "white",
+      "bg": "boardRed",
+      "min": 4.5
+    },
+    {
+      "id": "wit/bord-groen",
+      "fg": "white",
+      "bg": "boardGreen",
+      "min": 4.5
+    },
+    {
+      "id": "wit/single-rood",
+      "fg": "white",
+      "bg": "singleRed",
+      "min": 4.5
+    },
+    {
+      "id": "wit/single-groen",
+      "fg": "white",
+      "bg": "singleGreen",
+      "min": 4.5
+    },
+    {
+      "id": "wit/team",
+      "fg": "white",
+      "bg": "team",
+      "min": 4.5,
+      "elk": true
+    },
+    {
+      "id": "wit/speler",
+      "fg": "white",
+      "bg": "player",
+      "min": 4.5,
+      "elk": true
+    },
+    {
+      "id": "wit/melding-succes",
+      "fg": "white",
+      "bg": "toastSuccess",
+      "min": 4.5
+    },
+    {
+      "id": "wit/melding-waarschuwing",
+      "fg": "white",
+      "bg": "toastWarning",
+      "min": 4.5
+    },
+    {
+      "id": "wit/melding-fout",
+      "fg": "white",
+      "bg": "toastError",
+      "min": 4.5
+    },
+    {
+      "id": "wit/melding-info",
+      "fg": "white",
+      "bg": "toastInfo",
+      "min": 4.5
+    }
+  ]
+}
