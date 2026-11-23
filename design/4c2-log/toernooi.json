@@ -1,0 +1,306 @@
+[
+ {
+  "groep": "toernooi",
+  "selector": ".trn-head",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-head",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "14px",
+  "nieuw": "var(--sp-7)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-exit",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-exit",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "18px 12px",
+  "nieuw": "18px var(--sp-6)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "14px",
+  "nieuw": "var(--sp-7)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-icon",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-icon",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-icon",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-icon",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-kicker",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-kicker",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--green-300)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-champ-name",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "28px",
+  "nieuw": "var(--fs-stat)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-match,#screen-trn-standings .trn-match",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-match.current",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#5E9E6E",
+  "nieuw": "var(--green-400)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-match-header",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-match-header",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 14px 4px",
+  "nieuw": "var(--sp-5) var(--sp-7) var(--sp-2)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-match.current .trn-match-header",
+  "soort": "thema",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--hit-text)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-player-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "9px 14px",
+  "nieuw": "9px var(--sp-7)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-player-name",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .trn-player-wins",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "20px",
+  "nieuw": "var(--fs-title)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "er .trn-player-name,#screen-trn-overview .trn-player-row.winner .trn-player-wins",
+  "soort": "thema",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--hit-text)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .card,#screen-trn-standings .card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "#screen-trn-overview .card,#screen-trn-standings .card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "4px 0",
+  "nieuw": "var(--sp-2) 0"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "s,[data-theme=\"light\"] #screen-trn-overview .trn-match.current .trn-match-header",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "t([data-theme=\"dark\"]) #screen-trn-overview .trn-match.current .trn-match-header",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-match",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-match",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow)",
+  "nieuw": "var(--elev-1)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-match-header",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "7px 14px",
+  "nieuw": "7px var(--sp-7)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-match-header",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-match-header",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-player-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "11px 14px",
+  "nieuw": "11px var(--sp-7)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-player-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-player-name",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ".trn-player-wins",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": "[data-theme=\"light\"] #screen-trn-setup",
+  "soort": "kleur",
+  "eigenschap": "--setup-accent-text",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "toernooi",
+  "selector": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+  "soort": "kleur",
+  "eigenschap": "--setup-accent-text",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ }
+]
