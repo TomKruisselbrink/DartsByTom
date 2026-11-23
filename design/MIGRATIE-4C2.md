@@ -72,7 +72,7 @@ Meest gebruikt: `--sp-4` 88×, `--text-muted` 86×, `--fw-bold` 60×, `--sp-5` 5
 | font-weight 600/800/900 | | ongewijzigd | renderen gelijk aan 700, maar zijn niet exact dezelfde waarde; aanpassen hoort bij 4D |
 
 Buiten scope gebleven: inline `style=""` in de HTML en stijlen in JS-strings (±820), en de 3 z-index-tokens die daar thuishoren (stap 4X, optioneel).
-Kleurenteller (`tokens-ratchet`): CSS 255 (was 370), HTML/JS 132 (ongewijzigd). Het maximum in `tokens-ratchet.json` staat nog op 370: omlaag zetten is een nulmeting bijwerken, dus alleen met akkoord van Tom.
+Kleurenteller (`tokens-ratchet`): CSS 255 (was 370), HTML/JS 132 (ongewijzigd). Het maximum in `tokens-ratchet.json` is met akkoord van Tom (23-11-2026) van 370 naar 255 gezet; HTML/JS blijft 132.
 
 ## Tests aangepast
 
@@ -93,3 +93,15 @@ Kleurenteller (`tokens-ratchet`): CSS 255 (was 370), HTML/JS 132 (ongewijzigd). 
 | `node tests/mutation.mjs --visual` | **19/20 gevangen — GEZAKT** |
 
 **Niet gevangen: "kleuren: nieuwe hardgecodeerde kleur" (`core/tokens-ratchet`).** Oorzaak: de migratie bracht de CSS-teller van 370 naar 255, maar het maximum in `tokens-ratchet.json` staat nog op 370. Eén extra kleur (256) blijft ruim onder het maximum, dus de test slaagt en de mutatie wordt niet gevangen. De ratchet is daarmee tijdelijk zonder werking. Herstel = maximum naar 255 (`node tests/core/tokens-ratchet.mjs --update`); dat is een nulmeting bijwerken en wacht op akkoord van Tom. Niet zelf aangepast.
+
+### Herstel ratchet (akkoord Tom, 23-11-2026)
+
+Alleen `tests/core/tokens-ratchet.json` gewijzigd: `cssHard` 370 → 255 (en de uitleg). Geen andere grenzen, geen app-code.
+
+| Controle | Uitkomst |
+|---|---|
+| Huidige telling (zelfde meetmethode, `tokens-ratchet.mjs`) | CSS hard 255, HTML/JS 132 → exact gelijk aan het nieuwe maximum |
+| Kopie met één extra CSS-kleur (`.x-nieuw{color:#123456}`) | ratchet faalt: "256 > 255" |
+| `node tests/mutation.mjs --visual` | **20/20 gevangen — GESLAAGD** |
+| `npm test` | 107/107 (27 suites) |
+| Volledige compare t.o.v. `faf50f0` | **1253/1253 gelijk** (2142 s) |
