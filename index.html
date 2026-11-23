@@ -70,16 +70,38 @@
   --r-xs:6px; --r-sm:8px; --r-md:10px; --r-lg:12px; --r-xl:14px; --r-2xl:16px; --r-3xl:20px; --r-pill:999px; --r-round:50%; --r-score-xl:22px;
   /* lagen (huidige waarden; de correcties uit het voorstel horen bij 4D) */
   --z-base:0; --z-content:1; --z-sticky:10; --z-drag:100; --z-banner-top:9000; --z-game-controls:9970; --z-nav:9980; --z-install:9980; --z-sheet:9990; --z-modal:9997; --z-toast:9999; --z-confirm:10050;
+  /* componenten (4C-3): themawaarden van componenten; donker = standaard, licht in de overrides hieronder */
+  --nav-bg:rgba(28,28,30,0.92);  /* #pill-nav achtergrond; geen bestaand token met dit paar (--header-bg verschilt per stand) */
+  --nav-border:rgba(255,255,255,0.1);  /* #pill-nav rand; --border heeft in licht rgba(60,40,30,.10) */
+  --nav-shadow:0 4px 28px rgba(0,0,0,.5);  /* #pill-nav schaduw; uniek */
+  --nav-tab:rgba(255,255,255,0.42);  /* .pn-tab tekst; uniek */
+  --nav-badge-ring:rgba(28,28,30,.92);  /* ring om het meldingsstipje (#pn-settings.has-badge::after); donker = --nav-bg, licht niet */
+  --controls-bg:rgba(30,30,30,0.72);  /* #game-controls achtergrond; uniek */
+  --controls-border:rgba(255,255,255,0.12);  /* #game-controls rand; uniek */
 }
 :root[data-theme="light"]{
   --text-soft:#48484A; --sunken:rgba(0,0,0,.06);
   --accent-text:var(--terra-600); --hit-text:var(--green-600); --hit-soft:rgba(62,123,79,.18); --danger-text:var(--red-700);
   --elev-4:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22);   /* .ask-box licht (v241) */
+  --nav-bg:rgba(255,255,255,.9);
+  --nav-border:rgba(0,0,0,.08);
+  --nav-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06);
+  --nav-tab:rgba(0,0,0,.42);
+  --nav-badge-ring:#fff;
+  --controls-bg:rgba(255,255,255,0.82);
+  --controls-border:rgba(0,0,0,0.1);
 }
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
   --text-soft:#48484A; --sunken:rgba(0,0,0,.06);
   --accent-text:var(--terra-600); --hit-text:var(--green-600); --hit-soft:rgba(62,123,79,.18); --danger-text:var(--red-700);
   --elev-4:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22);   /* .ask-box licht (v241) */
+  --nav-bg:rgba(255,255,255,.9);
+  --nav-border:rgba(0,0,0,.08);
+  --nav-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06);
+  --nav-tab:rgba(0,0,0,.42);
+  --nav-badge-ring:#fff;
+  --controls-bg:rgba(255,255,255,0.82);
+  --controls-border:rgba(0,0,0,0.1);
 }}
 /* ─── DESIGN TOKENS ─── */
 :root{
@@ -258,15 +280,13 @@ body::before{
   display:none;
   align-items:center;
   gap:var(--sp-4);
-  background:rgba(30,30,30,0.72);
+  background:var(--controls-bg);
   backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
-  border:0.5px solid rgba(255,255,255,0.12);
+  border:0.5px solid var(--controls-border);
   border-radius:30px;
   padding:var(--sp-4) var(--sp-6);
   box-shadow:0 4px 24px rgba(0,0,0,0.3);
 }
-[data-theme="light"] #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}}
 #game-controls.show{display:flex}
 #rco-mid{flex:1 1 0;min-height:44px;container-type:size;display:flex;align-items:center;justify-content:center}
 #rco-players.rco-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
@@ -1766,7 +1786,7 @@ video {
 @keyframes stIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
 @keyframes stBack{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
 #pn-settings{position:relative}
-#pn-settings.has-badge::after{content:'';position:absolute;top:7px;right:9px;width:8px;height:8px;border-radius:var(--r-round);background:#E5484D;box-shadow:0 0 0 2px rgba(28,28,30,.92)}
+#pn-settings.has-badge::after{content:'';position:absolute;top:7px;right:9px;width:8px;height:8px;border-radius:var(--r-round);background:#E5484D;box-shadow:0 0 0 2px var(--nav-badge-ring)}
 /* ═══ Vrienden (v212) ═══ */
 .fr-req{background:rgba(62,123,79,.14);border:1px solid rgba(111,191,133,.35);border-radius:var(--r-2xl);padding:var(--sp-6) var(--sp-7);margin-bottom:var(--sp-6)}
 .fr-req .fr-lbl{margin-top:0;color:#6FBF85}
@@ -1783,17 +1803,7 @@ video {
 .fr-remove{width:100%;margin-top:22px;background:transparent;border:0;color:#FF7A6B;font:inherit;font-size:14px;font-weight:var(--fw-bold);padding:var(--sp-6);cursor:pointer}
 .fr-sheet-sub{font-size:var(--fs-small);color:var(--text-muted);margin:-6px 0 16px}
 .fr-empty{text-align:center;padding:18px var(--sp-4);color:var(--text-muted);font-size:var(--fs-small);line-height:1.5}
-/* ═══ Onderbalk in licht thema (v212) ═══ */
-@media (prefers-color-scheme:light){
-  :root:not([data-theme="dark"]) #pill-nav{background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06)}
-  :root:not([data-theme="dark"]) .pn-tab{color:rgba(0,0,0,.42)}
-  :root:not([data-theme="dark"]) .pn-tab.active{color:var(--text-on-fill)}
-  :root:not([data-theme="dark"]) #pn-settings.has-badge::after{box-shadow:0 0 0 2px #fff}
-}
-:root[data-theme="light"] #pill-nav{background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06)}
-:root[data-theme="light"] .pn-tab{color:rgba(0,0,0,.42)}
-:root[data-theme="light"] .pn-tab.active{color:var(--text-on-fill)}
-:root[data-theme="light"] #pn-settings.has-badge::after{box-shadow:0 0 0 2px #fff}
+/* ═══ Onderbalk in licht thema (v212): sinds 4C-3 via --nav-* (tokenblok) ═══ */
 
 /* ═══ Loting in app-stijl (v215): muntje en rad zonder emoji ═══ */
 .dc-coin{--dc:var(--accent);width:76px;height:76px;border-radius:var(--r-round);margin:0 auto var(--sp-6);display:flex;align-items:center;justify-content:center;color:var(--text-muted);
@@ -13162,13 +13172,13 @@ setTimeout(_liveOffer,700);
 #pill-nav{
   position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
   display:flex;align-items:center;gap:var(--sp-1);
-  background:rgba(28,28,30,0.92);
-  border:0.5px solid rgba(255,255,255,0.1);
+  background:var(--nav-bg);
+  border:0.5px solid var(--nav-border);
   border-radius:40px;
   padding:5px var(--sp-3);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   z-index:var(--z-nav);
-  box-shadow:0 4px 28px rgba(0,0,0,.5);
+  box-shadow:var(--nav-shadow);
   transition:opacity .22s ease,transform .22s ease;
 }
 #pill-nav.hidden{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(10px);}
@@ -13177,7 +13187,7 @@ setTimeout(_liveOffer,700);
   display:flex;align-items:center;justify-content:center;gap:0;
   border:none;background:transparent;cursor:pointer;
   padding:9px var(--sp-7);border-radius:32px;
-  color:rgba(255,255,255,0.42);
+  color:var(--nav-tab);
   transition:color .3s ease,padding .42s cubic-bezier(.32,.72,0,1),gap .42s cubic-bezier(.32,.72,0,1);
   white-space:nowrap;overflow:hidden;
 }

@@ -87,6 +87,14 @@ const MAP = [
   ['--sage-300', 'color', ['var', '--accent2']],
   ['--accent-ring', 'color', ['lit', 'rgba(185,78,42,.35)']],
   ['--text-on-fill', 'color', ['lit', '#ffffff']],
+  // componenten (4C-3): bron = het bestaande element in faf50f0 (['el', selector, eigenschap, pseudo?])
+  ['--nav-bg', 'backgroundColor', ['el', '#pill-nav', 'backgroundColor']],
+  ['--nav-border', 'borderTopColor', ['el', '#pill-nav', 'borderTopColor']],
+  ['--nav-shadow', 'boxShadow', ['el', '#pill-nav', 'boxShadow']],
+  ['--nav-tab', 'color', ['el', '.pn-tab:not(.active)', 'color']],
+  ['--nav-badge-ring', 'color', ['lit-theme', 'rgba(28,28,30,.92)', '#fff']],
+  ['--controls-bg', 'backgroundColor', ['el', '#game-controls', 'backgroundColor']],
+  ['--controls-border', 'borderTopColor', ['el', '#game-controls', 'borderTopColor']],
 ];
 // Bron = dezelfde regel in de goedgekeurde versie faf50f0 (daar staat nog de letterlijke waarde). Sinds 4C-2 gebruiken die
 // regels in de huidige code zelf de tokens, dus vergelijken met de huidige bron zou rondjes draaien.
@@ -96,6 +104,8 @@ const SOURCE = map => {
   const out = map.map(([tok, prop, s]) => {
     if (s[0] === 'var') { const el = s[2] ? document.querySelector(s[2]) : null; return viaProp(prop, `var(${s[1]})`, el || host); }
     if (s[0] === 'lit') return viaProp(prop, s[1]);
+    if (s[0] === 'lit-theme') { const t = document.documentElement.getAttribute('data-theme'); const light = t === 'light' || (t !== 'dark' && matchMedia('(prefers-color-scheme: light)').matches); return viaProp(prop, light ? s[2] : s[1]); } // [donker, licht] uit de bronregel
+    if (s[0] === 'el') { const el = document.querySelector(s[1]); return el ? getComputedStyle(el, s[3] || null)[s[2]] : 'ontbreekt: ' + s[1]; }
     const par = document.querySelector(s[1]) || document.body; const d = document.createElement('div'); d.className = s[2]; par.appendChild(d); const r = getComputedStyle(d)[s[3]]; d.remove(); return r;
   });
   host.remove(); return out;

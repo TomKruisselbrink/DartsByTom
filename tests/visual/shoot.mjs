@@ -69,12 +69,12 @@ export function matrix({ quick = false, extra = false } = {}) {
 export async function shootAll(browser, root, outDir, items, { jobs = 2, log = () => {}, shot = true, measure = null } = {}) {
   fs.mkdirSync(outDir, { recursive: true });
   const groups = {};
-  for (const it of items) { const k = `${it.w}x${it.h}|${it.lang}|${it.theme}`; (groups[k] = groups[k] || []).push(it); }
+  for (const it of items) { const k = `${it.w}x${it.h}|${it.lang}|${it.theme}|${it.scheme || ''}`; (groups[k] = groups[k] || []).push(it); }
   const results = []; const queue = Object.values(groups);
   async function worker() {
     while (queue.length) {
       const list = queue.shift(), { w, h, lang, theme } = list[0];
-      const ctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: theme.startsWith('auto-') ? theme.slice(5) : theme, reducedMotion: 'reduce', timezoneId: 'Europe/Amsterdam', locale: lang === 'nl' ? 'nl-NL' : 'en-GB', deviceScaleFactor: 1 });
+      const ctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: list[0].scheme || (theme.startsWith('auto-') ? theme.slice(5) : theme), /* scheme: optioneel ander systeemthema (kruiscombinatie, 4C-3) */ reducedMotion: 'reduce', timezoneId: 'Europe/Amsterdam', locale: lang === 'nl' ? 'nl-NL' : 'en-GB', deviceScaleFactor: 1 });
       await ctx.clock.install({ time: NOW }); await ctx.clock.resume(); await ctx.clock.setFixedTime(NOW);
       const mime = f => f.endsWith('.js') ? 'text/javascript' : f.endsWith('.json') ? 'application/json' : f.endsWith('.png') ? 'image/png' : f.endsWith('.svg') ? 'image/svg+xml' : 'text/html';
       // Nep-Firebase (geen netwerk): leeg = niet ingelogd; scenario's met fb/user krijgen een eigen opslag.

@@ -1,0 +1,23 @@
+{
+ "static": {
+  "player-card": [],
+  "numpad": [
+   "1746: v> </div> <!-- Score input — custom numpad --> <input type=",
+   "3321: i-k,#hi-input-area button,.x01-pad .btn,.numpad .btn,.x01-input .b",
+   "6642: urn CHECKOUTS[n]||null; } // ─── Custom numpad ──────────────────",
+   "6706: NpSide(); } // ─── Physical keyboard → numpad (PC/laptop support",
+   "10343: Child(topWrap); // ── Bottom section: numpad (pinned, not scrol",
+   "10402: bottom); eliUpdateAfter(); // Reset numpad display after rend"
+  ]
+ },
+ "runtime": {
+  "opnames": 110,
+  "scenarios": 55,
+  "playerCardMatches": 0,
+  "numpadMatches": 0,
+  "gameBarDisplay": [
+   "none"
+  ],
+  "opnamesMetFout": 0
+ }
+}

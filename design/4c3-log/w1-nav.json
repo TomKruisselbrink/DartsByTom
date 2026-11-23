@@ -1,0 +1,90 @@
+{
+ "groep": "nav",
+ "titel": "navigatie en spelbalk",
+ "tokens": [
+  {
+   "naam": "--nav-bg",
+   "donker": "rgba(28,28,30,0.92)",
+   "licht": "rgba(255,255,255,.9)",
+   "reden": "#pill-nav achtergrond; geen bestaand token met dit paar (--header-bg verschilt per stand)"
+  },
+  {
+   "naam": "--nav-border",
+   "donker": "rgba(255,255,255,0.1)",
+   "licht": "rgba(0,0,0,.08)",
+   "reden": "#pill-nav rand; --border heeft in licht rgba(60,40,30,.10)"
+  },
+  {
+   "naam": "--nav-shadow",
+   "donker": "0 4px 28px rgba(0,0,0,.5)",
+   "licht": "0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06)",
+   "reden": "#pill-nav schaduw; uniek"
+  },
+  {
+   "naam": "--nav-tab",
+   "donker": "rgba(255,255,255,0.42)",
+   "licht": "rgba(0,0,0,.42)",
+   "reden": ".pn-tab tekst; uniek"
+  },
+  {
+   "naam": "--nav-badge-ring",
+   "donker": "rgba(28,28,30,.92)",
+   "licht": "#fff",
+   "reden": "ring om het meldingsstipje (#pn-settings.has-badge::after); donker = --nav-bg, licht niet"
+  },
+  {
+   "naam": "--controls-bg",
+   "donker": "rgba(30,30,30,0.72)",
+   "licht": "rgba(255,255,255,0.82)",
+   "reden": "#game-controls achtergrond; uniek"
+  },
+  {
+   "naam": "--controls-border",
+   "donker": "rgba(255,255,255,0.12)",
+   "licht": "rgba(0,0,0,0.1)",
+   "reden": "#game-controls rand; uniek"
+  }
+ ],
+ "edits": [
+  {
+   "reden": "R1 #game-controls background",
+   "oud": "  background:rgba(30,30,30,0.72);\n  backdrop-filter:blur(24px)",
+   "nieuw": "  background:var(--controls-bg);\n  backdrop-filter:blur(24px)"
+  },
+  {
+   "reden": "R1 #game-controls border-color",
+   "oud": "  border:0.5px solid rgba(255,255,255,0.12);\n  border-radius:30px;",
+   "nieuw": "  border:0.5px solid var(--controls-border);\n  border-radius:30px;"
+  },
+  {
+   "reden": "R1 lichte #game-controls-regels weg (2)",
+   "oud": "[data-theme=\"light\"] #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}\n@media(prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) #game-controls{background:rgba(255,255,255,0.82);border-color:rgba(0,0,0,0.1);}}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 #pill-nav background + border-color",
+   "oud": "  background:rgba(28,28,30,0.92);\n  border:0.5px solid rgba(255,255,255,0.1);\n  border-radius:40px;",
+   "nieuw": "  background:var(--nav-bg);\n  border:0.5px solid var(--nav-border);\n  border-radius:40px;"
+  },
+  {
+   "reden": "R1 #pill-nav box-shadow",
+   "oud": "  box-shadow:0 4px 28px rgba(0,0,0,.5);\n  transition:opacity .22s ease",
+   "nieuw": "  box-shadow:var(--nav-shadow);\n  transition:opacity .22s ease"
+  },
+  {
+   "reden": "R1 .pn-tab color",
+   "oud": "  color:rgba(255,255,255,0.42);\n  transition:color .3s ease",
+   "nieuw": "  color:var(--nav-tab);\n  transition:color .3s ease"
+  },
+  {
+   "reden": "R1 #pn-settings.has-badge::after box-shadow",
+   "oud": "background:#E5484D;box-shadow:0 0 0 2px rgba(28,28,30,.92)}",
+   "nieuw": "background:#E5484D;box-shadow:0 0 0 2px var(--nav-badge-ring)}"
+  },
+  {
+   "reden": "R1 lichte navigatieregels weg (8); .pn-tab.active werd alleen nodig doordat de lichte .pn-tab specifieker was (na R1 wint de basisregel .pn-tab.active weer)",
+   "oud": "/* ═══ Onderbalk in licht thema (v212) ═══ */\n@media (prefers-color-scheme:light){\n  :root:not([data-theme=\"dark\"]) #pill-nav{background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06)}\n  :root:not([data-theme=\"dark\"]) .pn-tab{color:rgba(0,0,0,.42)}\n  :root:not([data-theme=\"dark\"]) .pn-tab.active{color:var(--text-on-fill)}\n  :root:not([data-theme=\"dark\"]) #pn-settings.has-badge::after{box-shadow:0 0 0 2px #fff}\n}\n:root[data-theme=\"light\"] #pill-nav{background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06)}\n:root[data-theme=\"light\"] .pn-tab{color:rgba(0,0,0,.42)}\n:root[data-theme=\"light\"] .pn-tab.active{color:var(--text-on-fill)}\n:root[data-theme=\"light\"] #pn-settings.has-badge::after{box-shadow:0 0 0 2px #fff}\n",
+   "nieuw": "/* ═══ Onderbalk in licht thema (v212): sinds 4C-3 via --nav-* (tokenblok) ═══ */\n"
+  }
+ ]
+}

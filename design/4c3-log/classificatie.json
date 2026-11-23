@@ -1,0 +1,6258 @@
+{
+ "opnames": 220,
+ "opnamesMetFout": 0,
+ "declaraties": [
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .ask-box",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .bob-keys button",
+   "prop": "box-shadow",
+   "liveEx": [
+    "button.g-miss rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → rgba(255, 90, 70, 0.28) 0px 3px 0px 0px"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 220,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-bottom-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-left-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-left-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-right-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-right-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-top-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "border-top-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .card",
+   "part": ":root:not([data-theme=\"dark\"]) .card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.05) 0px 1px 2px 0px, rgba(60, 40, 30, 0.1) 0px 6px 18px -6px → rgba(0, 0, 0, 0.08) 0px 1px 4px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.05) 0px 1px 2px 0px, rgba(60, 40, 30, 0.1) 0px 6px 18px -6px → rgba(0, 0, 0, 0.08) 0px 1px 4px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px"
+   ],
+   "val": "rgba(60, 40, 30, 0.05) 0px 1px 2px, rgba(60, 40, 30, 0.1) 0px 6px 18px -6px",
+   "pri": "",
+   "applies": 610,
+   "win": 610,
+   "live": 610,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .co-lbl",
+   "part": ":root:not([data-theme=\"dark\"]) .co-lbl",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 7,
+   "win": 7,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .g-big3 button",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 165,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "rgba(62, 123, 79, 0.18)",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "part": ":root:not([data-theme=\"dark\"]) .g-chip",
+   "prop": "color",
+   "liveEx": [
+    "span.g-chip rgb(30, 86, 49) → rgb(207, 234, 213)"
+   ],
+   "val": "var(--green-700)",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 3,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "part": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "part": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "prop": "border-left-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "part": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "prop": "border-right-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "part": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "prop": "border-top-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "part": ":root:not([data-theme=\"dark\"]) .g-miss",
+   "prop": "color",
+   "liveEx": [
+    "button.g-miss rgb(179, 38, 30) → rgb(26, 23, 20)"
+   ],
+   "val": "var(--red-700)",
+   "pri": "",
+   "applies": 227,
+   "win": 225,
+   "live": 1,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .g-plus",
+   "part": ":root:not([data-theme=\"dark\"]) .g-plus",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card.on, :root:not([data-theme=\"dark\"]) .g-prow.on",
+   "part": ":root:not([data-theme=\"dark\"]) .g-prow.on",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.g-prow.on rgba(185, 78, 42, 0.35) 0px 0px 0px 1px, rgba(185, 78, 42, 0.45) 0px 10px 26px -8px, rgba(185, 78, 42, 0.3) 0px 0px 32px -6px → rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px"
+   ],
+   "val": "0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)",
+   "pri": "",
+   "applies": 9,
+   "win": 9,
+   "live": 9,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .g-prow",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.g-prow rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 21,
+   "win": 12,
+   "live": 12,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .g-target",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.g-target rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 278,
+   "win": 278,
+   "live": 278,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .home-quick-tile",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 220,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .home-tile",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 110,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .live-card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.live-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 1,
+   "win": 1,
+   "live": 1,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .metric",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.metric rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → rgba(0, 0, 0, 0.08) 0px 1px 4px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 8,
+   "win": 8,
+   "live": 8,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .numpad .btn",
+   "part": ":root:not([data-theme=\"dark\"]) .numpad .btn",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(0, 0, 0, 0.22) 0px 3px 0px, rgba(0, 0, 0, 0.08) 0px 1px 4px, rgba(255, 255, 255, 0.9) 0px 1px 0px inset",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .pn-tab.active",
+   "part": ":root:not([data-theme=\"dark\"]) .pn-tab.active",
+   "prop": "color",
+   "liveEx": [
+    "#pn-history.pn-tab.active rgb(255, 255, 255) → rgba(0, 0, 0, 0.42)",
+    "#pn-home.pn-tab.active rgb(255, 255, 255) → rgba(0, 0, 0, 0.42)",
+    "#pn-settings.pn-tab.active rgb(255, 255, 255) → rgba(0, 0, 0, 0.42)"
+   ],
+   "val": "var(--text-on-fill)",
+   "pri": "",
+   "applies": 28,
+   "win": 28,
+   "live": 28,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .pn-tab",
+   "part": ":root:not([data-theme=\"dark\"]) .pn-tab",
+   "prop": "color",
+   "liveEx": [
+    "#pn-home.pn-tab rgba(0, 0, 0, 0.42) → rgba(255, 255, 255, 0.42)",
+    "#pn-leaderboard.pn-tab rgba(0, 0, 0, 0.42) → rgba(255, 255, 255, 0.42)",
+    "#pn-stats.pn-tab rgba(0, 0, 0, 0.42) → rgba(255, 255, 255, 0.42)"
+   ],
+   "val": "rgba(0, 0, 0, 0.42)",
+   "pri": "",
+   "applies": 275,
+   "win": 247,
+   "live": 247,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .sp-tag",
+   "part": ":root:not([data-theme=\"dark\"]) .sp-tag",
+   "prop": "color",
+   "liveEx": [
+    "span.sp-tag rgb(30, 86, 49) → rgb(143, 203, 156)"
+   ],
+   "val": "var(--green-700)",
+   "pri": "",
+   "applies": 216,
+   "win": 216,
+   "live": 216,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .win-kicker, :root:not([data-theme=\"dark\"]) .trn-champ-kicker, :root:not([data-theme=\"dark\"]) .standing-pts",
+   "part": ":root:not([data-theme=\"dark\"]) .standing-pts",
+   "prop": "color",
+   "liveEx": [
+    "span.standing-pts rgb(47, 107, 64) → rgb(143, 203, 156)"
+   ],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 4,
+   "win": 4,
+   "live": 4,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .win-kicker, :root:not([data-theme=\"dark\"]) .trn-champ-kicker, :root:not([data-theme=\"dark\"]) .standing-pts",
+   "part": ":root:not([data-theme=\"dark\"]) .trn-champ-kicker",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .win-card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.win-card.leg-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none",
+    "div.win-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none",
+    "div.win-card.win-extra rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 135,
+   "win": 135,
+   "live": 135,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .win-kicker, :root:not([data-theme=\"dark\"]) .trn-champ-kicker, :root:not([data-theme=\"dark\"]) .standing-pts",
+   "part": ":root:not([data-theme=\"dark\"]) .win-kicker",
+   "prop": "color",
+   "liveEx": [
+    "#win-kicker.win-kicker rgb(47, 107, 64) → rgb(255, 59, 48)"
+   ],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 55,
+   "win": 55,
+   "live": 1,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card.on, :root:not([data-theme=\"dark\"]) .g-prow.on",
+   "part": ":root:not([data-theme=\"dark\"]) .x-card.on",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.x-card.on rgba(185, 78, 42, 0.35) 0px 0px 0px 1px, rgba(185, 78, 42, 0.45) 0px 10px 26px -8px, rgba(185, 78, 42, 0.3) 0px 0px 32px -6px → rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px"
+   ],
+   "val": "0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)",
+   "pri": "",
+   "applies": 12,
+   "win": 12,
+   "live": 12,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-card, :root:not([data-theme=\"dark\"]) .g-prow, :root:not([data-theme=\"dark\"]) .g-target, :root:not([data-theme=\"dark\"]) .home-tile, :root:not([data-theme=\"dark\"]) .home-quick-tile, :root:not([data-theme=\"dark\"]) .metric, :root:not([data-theme=\"dark\"]) .win-card, :root:not([data-theme=\"dark\"]) .live-card, :root:not([data-theme=\"dark\"]) .ask-box, :root:not([data-theme=\"dark\"]) .g-big3 button, :root:not([data-theme=\"dark\"]) .bob-keys button",
+   "part": ":root:not([data-theme=\"dark\"]) .x-card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.x-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 30,
+   "win": 18,
+   "live": 18,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "rgba(179, 38, 30, 0.1)",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--red-700)",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-color",
+   "liveEx": [
+    "span.x-last rgba(62, 123, 79, 0.16) → rgba(62, 123, 79, 0.22)"
+   ],
+   "val": "rgba(62, 123, 79, 0.16)",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 2,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) .x-last",
+   "part": ":root:not([data-theme=\"dark\"]) .x-last",
+   "prop": "color",
+   "liveEx": [
+    "span.x-last rgb(30, 86, 49) → rgb(143, 203, 156)"
+   ],
+   "val": "var(--green-700)",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 2,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-color",
+   "liveEx": [
+    "#game-bar. rgba(242, 242, 247, 0.88) → rgba(0, 0, 0, 0.65)"
+   ],
+   "val": "rgba(242, 242, 247, 0.88)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.08)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "border-left-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgb(26, 23, 20)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "border-right-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgb(26, 23, 20)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "part": ":root:not([data-theme=\"dark\"]) #game-bar:not([data-force])",
+   "prop": "border-top-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgb(26, 23, 20)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-color",
+   "liveEx": [
+    "#game-controls. rgba(255, 255, 255, 0.82) → rgba(30, 30, 30, 0.72)",
+    "#game-controls.show rgba(255, 255, 255, 0.82) → rgba(30, 30, 30, 0.72)"
+   ],
+   "val": "rgba(255, 255, 255, 0.82)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "border-left-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "border-right-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "part": ":root:not([data-theme=\"dark\"]) #game-controls",
+   "prop": "border-top-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(255, 255, 255, 0.9) → rgba(28, 28, 30, 0.92)",
+    "#pill-nav. rgba(255, 255, 255, 0.9) → rgba(28, 28, 30, 0.92)"
+   ],
+   "val": "rgba(255, 255, 255, 0.9)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "border-left-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "border-right-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "border-top-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "part": ":root:not([data-theme=\"dark\"]) #pill-nav",
+   "prop": "box-shadow",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.12) 0px 4px 24px 0px, rgba(0, 0, 0, 0.06) 0px 1px 3px 0px → rgba(0, 0, 0, 0.5) 0px 4px 28px 0px",
+    "#pill-nav. rgba(0, 0, 0, 0.12) 0px 4px 24px 0px, rgba(0, 0, 0, 0.06) 0px 1px 3px 0px → rgba(0, 0, 0, 0.5) 0px 4px 28px 0px"
+   ],
+   "val": "rgba(0, 0, 0, 0.12) 0px 4px 24px, rgba(0, 0, 0, 0.06) 0px 1px 3px",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #pn-settings.has-badge::after",
+   "part": ":root:not([data-theme=\"dark\"]) #pn-settings.has-badge::after",
+   "prop": "box-shadow",
+   "liveEx": [
+    "#pn-settings.pn-tab.has-badge rgb(255, 255, 255) 0px 0px 0px 2px → rgba(28, 28, 30, 0.92) 0px 0px 0px 2px"
+   ],
+   "val": "rgb(255, 255, 255) 0px 0px 0px 2px",
+   "pri": "",
+   "applies": 1,
+   "win": 1,
+   "live": 1,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--setup-accent-text",
+   "liveEx": [],
+   "val": "var(--terra-600)",
+   "pri": "important",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-bar",
+   "liveEx": [
+    "#screen-setup.screen rgba(255,255,255,.94) → rgba(20,19,20,.95)",
+    "#screen-setup.screen.active rgba(255,255,255,.94) → rgba(20,19,20,.95)"
+   ],
+   "val": "rgba(255,255,255,.94)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-btn",
+   "liveEx": [
+    "#screen-setup.screen #3A3A3C → #D9D1CB",
+    "#screen-setup.screen.active #3A3A3C → #D9D1CB"
+   ],
+   "val": "#3A3A3C",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-card",
+   "liveEx": [
+    "#screen-setup.screen rgba(255,255,255,.8) → rgba(28,26,27,.88)",
+    "#screen-setup.screen.active rgba(255,255,255,.8) → rgba(28,26,27,.88)"
+   ],
+   "val": "rgba(255,255,255,.8)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-green-text",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-muted",
+   "liveEx": [
+    "#screen-setup.screen #6E6E73 → #A8A09A",
+    "#screen-setup.screen.active #6E6E73 → #A8A09A"
+   ],
+   "val": "#6E6E73",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-orange-text",
+   "liveEx": [],
+   "val": "var(--terra-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-soft",
+   "liveEx": [],
+   "val": "#48484A",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-text",
+   "liveEx": [
+    "#screen-setup.screen #1C1C1E → #F3EDE8",
+    "#screen-setup.screen.active #1C1C1E → #F3EDE8"
+   ],
+   "val": "#1C1C1E",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w05",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.04) → rgba(255,255,255,.05)",
+    "#screen-setup.screen.active rgba(0,0,0,.04) → rgba(255,255,255,.05)"
+   ],
+   "val": "rgba(0,0,0,.04)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w06",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.06) → rgba(255,255,255,.06)",
+    "#screen-setup.screen.active rgba(0,0,0,.06) → rgba(255,255,255,.06)"
+   ],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w07",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.07)",
+    "#screen-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.07)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w08",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.08)",
+    "#screen-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.08)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w1",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w10",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-w25",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.25) → rgba(255,255,255,.25)",
+    "#screen-setup.screen.active rgba(0,0,0,.25) → rgba(255,255,255,.25)"
+   ],
+   "val": "rgba(0,0,0,.25)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-setup",
+   "prop": "--su-well",
+   "liveEx": [],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-name, :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-wins, :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-match.current .trn-match-header",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-match.current .trn-match-header",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-name, :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-wins, :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-match.current .trn-match-header",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-name",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-name, :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-wins, :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-match.current .trn-match-header",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-wins",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--setup-accent-text",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-bar",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(255,255,255,.94) → rgba(20,19,20,.95)",
+    "#screen-trn-setup.screen.active rgba(255,255,255,.94) → rgba(20,19,20,.95)"
+   ],
+   "val": "rgba(255,255,255,.94)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-btn",
+   "liveEx": [
+    "#screen-trn-setup.screen #3A3A3C → #D9D1CB",
+    "#screen-trn-setup.screen.active #3A3A3C → #D9D1CB"
+   ],
+   "val": "#3A3A3C",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-card",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(255,255,255,.8) → rgba(28,26,27,.88)",
+    "#screen-trn-setup.screen.active rgba(255,255,255,.8) → rgba(28,26,27,.88)"
+   ],
+   "val": "rgba(255,255,255,.8)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-green-text",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-muted",
+   "liveEx": [
+    "#screen-trn-setup.screen #6E6E73 → #A8A09A",
+    "#screen-trn-setup.screen.active #6E6E73 → #A8A09A"
+   ],
+   "val": "#6E6E73",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-orange-text",
+   "liveEx": [],
+   "val": "var(--terra-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-soft",
+   "liveEx": [],
+   "val": "#48484A",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-text",
+   "liveEx": [
+    "#screen-trn-setup.screen #1C1C1E → #F3EDE8",
+    "#screen-trn-setup.screen.active #1C1C1E → #F3EDE8"
+   ],
+   "val": "#1C1C1E",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w05",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.04) → rgba(255,255,255,.05)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.04) → rgba(255,255,255,.05)"
+   ],
+   "val": "rgba(0,0,0,.04)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w06",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.06) → rgba(255,255,255,.06)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.06) → rgba(255,255,255,.06)"
+   ],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w07",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.07)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.07)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w08",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.08)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.08)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w1",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w10",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-w25",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.25) → rgba(255,255,255,.25)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.25) → rgba(255,255,255,.25)"
+   ],
+   "val": "rgba(0,0,0,.25)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) #screen-setup, :root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "part": ":root:not([data-theme=\"dark\"]) #screen-trn-setup",
+   "prop": "--su-well",
+   "liveEx": [],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "radial-gradient(80% 60% at 50% 0%, rgba(185, 78, 42, 0.06) 0%, transparent 70%)",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-image",
+   "liveEx": [
+    "body. none → radial-gradient(80% 60% at 50% 0%, rgba(185, 78, 42, 0.06) 0%, rgba(0, 0, 0, 0) 70%)"
+   ],
+   "val": "none",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body::before",
+   "part": ":root:not([data-theme=\"dark\"]) body::before",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 110,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-color",
+   "liveEx": [
+    "body. rgb(244, 241, 237) → rgba(0, 0, 0, 0)"
+   ],
+   "val": "rgb(244, 241, 237)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "linear-gradient(160deg, rgb(232, 184, 158) 0%, rgb(244, 235, 228) 55%, rgb(255, 255, 255) 100%)",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-image",
+   "liveEx": [
+    "body. radial-gradient(95% 50% at 0% 0%, rgba(185, 78, 42, 0.14), rgba(185, 78, 42, 0) 62%), radial-gradient(95% 50% at 100% 100%, rgba(62, 123, 79, 0.14), rgba(62, 123, 79, 0) 62%), none → linear-gradient(160deg, rgb(232, 184, 158) 0%, rgb(244, 235, 228) 55%, rgb(255, 255, 255) 100%)"
+   ],
+   "val": "radial-gradient(95% 50% at 0% 0%, rgba(185, 78, 42, 0.14), rgba(185, 78, 42, 0) 62%), radial-gradient(95% 50% at 100% 100%, rgba(62, 123, 79, 0.14), rgba(62, 123, 79, 0) 62%), initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ":root:not([data-theme=\"dark\"]) body",
+   "part": ":root:not([data-theme=\"dark\"]) body",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-color",
+   "liveEx": [
+    "#sound-enabled.ios-toggle rgb(58, 58, 60) → rgb(52, 199, 89)",
+    "#haptics-enabled.ios-toggle rgb(58, 58, 60) → rgb(229, 229, 234)",
+    "#caller-enabled.ios-toggle rgb(58, 58, 60) → rgb(229, 229, 234)"
+   ],
+   "val": "rgb(58, 58, 60)",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 275,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "part": ":root:not([data-theme=\"light\"]) .ios-toggle",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 275,
+   "win": 275,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-color",
+   "liveEx": [
+    "body. rgba(0, 0, 0, 0) → rgb(0, 0, 0)"
+   ],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-image",
+   "liveEx": [
+    "body. linear-gradient(160deg, rgb(0, 0, 0) 0%, rgb(56, 16, 0) 30%, rgb(15, 46, 16) 100%) → none"
+   ],
+   "val": "linear-gradient(160deg, rgb(0, 0, 0) 0%, rgb(56, 16, 0) 30%, rgb(15, 46, 16) 100%)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: dark)",
+   "sel": ":root:not([data-theme=\"light\"]) body",
+   "part": ":root:not([data-theme=\"light\"]) body",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "auto-dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .card",
+   "part": ":root[data-theme=\"light\"] .card",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .card",
+   "part": ":root[data-theme=\"light\"] .card",
+   "prop": "border-left-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .card",
+   "part": ":root[data-theme=\"light\"] .card",
+   "prop": "border-right-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .card",
+   "part": ":root[data-theme=\"light\"] .card",
+   "prop": "border-top-color",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.07) → rgba(255, 255, 255, 0.6)"
+   ],
+   "val": "rgba(60, 40, 30, 0.07)",
+   "pri": "",
+   "applies": 610,
+   "win": 609,
+   "live": 609,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .card",
+   "part": ":root[data-theme=\"light\"] .card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.card.st-group rgba(60, 40, 30, 0.05) 0px 1px 2px 0px, rgba(60, 40, 30, 0.1) 0px 6px 18px -6px → rgba(0, 0, 0, 0.07) 0px 1px 8px 0px, rgba(0, 0, 0, 0.05) 0px 2px 12px 0px",
+    "#st-app-group.card.st-group rgba(60, 40, 30, 0.05) 0px 1px 2px 0px, rgba(60, 40, 30, 0.1) 0px 6px 18px -6px → rgba(0, 0, 0, 0.07) 0px 1px 8px 0px, rgba(0, 0, 0, 0.05) 0px 2px 12px 0px"
+   ],
+   "val": "rgba(60, 40, 30, 0.05) 0px 1px 2px, rgba(60, 40, 30, 0.1) 0px 6px 18px -6px",
+   "pri": "",
+   "applies": 610,
+   "win": 610,
+   "live": 610,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .pn-tab.active",
+   "part": ":root[data-theme=\"light\"] .pn-tab.active",
+   "prop": "color",
+   "liveEx": [
+    "#pn-history.pn-tab.active rgb(255, 255, 255) → rgba(0, 0, 0, 0.42)",
+    "#pn-home.pn-tab.active rgb(255, 255, 255) → rgba(0, 0, 0, 0.42)",
+    "#pn-settings.pn-tab.active rgb(255, 255, 255) → rgba(0, 0, 0, 0.42)"
+   ],
+   "val": "var(--text-on-fill)",
+   "pri": "",
+   "applies": 28,
+   "win": 28,
+   "live": 28,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] .pn-tab",
+   "part": ":root[data-theme=\"light\"] .pn-tab",
+   "prop": "color",
+   "liveEx": [
+    "#pn-home.pn-tab rgba(0, 0, 0, 0.42) → rgba(255, 255, 255, 0.42)",
+    "#pn-leaderboard.pn-tab rgba(0, 0, 0, 0.42) → rgba(255, 255, 255, 0.42)",
+    "#pn-stats.pn-tab rgba(0, 0, 0, 0.42) → rgba(255, 255, 255, 0.42)"
+   ],
+   "val": "rgba(0, 0, 0, 0.42)",
+   "pri": "",
+   "applies": 275,
+   "win": 247,
+   "live": 247,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(255, 255, 255, 0.9) → rgba(28, 28, 30, 0.92)",
+    "#pill-nav. rgba(255, 255, 255, 0.9) → rgba(28, 28, 30, 0.92)"
+   ],
+   "val": "rgba(255, 255, 255, 0.9)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "border-left-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "border-right-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "border-top-color",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)",
+    "#pill-nav. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.1)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pill-nav",
+   "part": ":root[data-theme=\"light\"] #pill-nav",
+   "prop": "box-shadow",
+   "liveEx": [
+    "#pill-nav.hidden rgba(0, 0, 0, 0.12) 0px 4px 24px 0px, rgba(0, 0, 0, 0.06) 0px 1px 3px 0px → rgba(0, 0, 0, 0.5) 0px 4px 28px 0px",
+    "#pill-nav. rgba(0, 0, 0, 0.12) 0px 4px 24px 0px, rgba(0, 0, 0, 0.06) 0px 1px 3px 0px → rgba(0, 0, 0, 0.5) 0px 4px 28px 0px"
+   ],
+   "val": "rgba(0, 0, 0, 0.12) 0px 4px 24px, rgba(0, 0, 0, 0.06) 0px 1px 3px",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] #pn-settings.has-badge::after",
+   "part": ":root[data-theme=\"light\"] #pn-settings.has-badge::after",
+   "prop": "box-shadow",
+   "liveEx": [
+    "#pn-settings.pn-tab.has-badge rgb(255, 255, 255) 0px 0px 0px 2px → rgba(28, 28, 30, 0.92) 0px 0px 0px 2px"
+   ],
+   "val": "rgb(255, 255, 255) 0px 0px 0px 2px",
+   "pri": "",
+   "applies": 1,
+   "win": 1,
+   "live": 1,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-image",
+   "liveEx": [
+    "body. none → radial-gradient(80% 60% at 50% 0%, rgba(185, 78, 42, 0.07) 0%, rgba(0, 0, 0, 0) 70%), radial-gradient(60% 40% at 80% 100%, rgba(157, 191, 158, 0.05) 0%, rgba(0, 0, 0, 0) 60%)"
+   ],
+   "val": "none",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body::before",
+   "part": ":root[data-theme=\"light\"] body::before",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-color",
+   "liveEx": [
+    "body. rgb(244, 241, 237) → rgba(0, 0, 0, 0)"
+   ],
+   "val": "rgb(244, 241, 237)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-image",
+   "liveEx": [
+    "body. radial-gradient(95% 50% at 0% 0%, rgba(185, 78, 42, 0.14), rgba(185, 78, 42, 0) 62%), radial-gradient(95% 50% at 100% 100%, rgba(62, 123, 79, 0.14), rgba(62, 123, 79, 0) 62%), none → linear-gradient(160deg, rgb(232, 184, 158) 0%, rgb(244, 235, 228) 55%, rgb(255, 255, 255) 100%)"
+   ],
+   "val": "radial-gradient(95% 50% at 0% 0%, rgba(185, 78, 42, 0.14), rgba(185, 78, 42, 0) 62%), radial-gradient(95% 50% at 100% 100%, rgba(62, 123, 79, 0.14), rgba(62, 123, 79, 0) 62%), initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": ":root[data-theme=\"light\"] body",
+   "part": ":root[data-theme=\"light\"] body",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial, initial, initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "(prefers-color-scheme: light)",
+   "sel": ".player-card.active",
+   "part": ".player-card.active",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(185, 78, 42, 0.2) 0px 0px 0px 2px, rgba(185, 78, 42, 0.12) 0px 4px 20px",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-color",
+   "liveEx": [
+    "body. rgba(0, 0, 0, 0) → rgb(0, 0, 0)"
+   ],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-image",
+   "liveEx": [
+    "body. linear-gradient(160deg, rgb(0, 0, 0) 0%, rgb(56, 16, 0) 30%, rgb(15, 46, 16) 100%) → none"
+   ],
+   "val": "linear-gradient(160deg, rgb(0, 0, 0) 0%, rgb(56, 16, 0) 30%, rgb(15, 46, 16) 100%)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"dark\"] body",
+   "part": "[data-theme=\"dark\"] body",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "dark"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .ask-box",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .bob-keys button",
+   "prop": "box-shadow",
+   "liveEx": [
+    "button.g-miss rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → rgba(255, 90, 70, 0.28) 0px 3px 0px 0px"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 220,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .card",
+   "part": "[data-theme=\"light\"] .card",
+   "prop": "border-bottom-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .card",
+   "part": "[data-theme=\"light\"] .card",
+   "prop": "border-left-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .card",
+   "part": "[data-theme=\"light\"] .card",
+   "prop": "border-right-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .card",
+   "part": "[data-theme=\"light\"] .card",
+   "prop": "border-top-color",
+   "liveEx": [],
+   "val": "rgba(255, 255, 255, 0.6)",
+   "pri": "",
+   "applies": 610,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .co-lbl",
+   "part": "[data-theme=\"light\"] .co-lbl",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 7,
+   "win": 7,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .g-big3 button",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 165,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "rgba(62, 123, 79, 0.18)",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-chip",
+   "part": "[data-theme=\"light\"] .g-chip",
+   "prop": "color",
+   "liveEx": [
+    "span.g-chip rgb(30, 86, 49) → rgb(207, 234, 213)"
+   ],
+   "val": "var(--green-700)",
+   "pri": "",
+   "applies": 3,
+   "win": 3,
+   "live": 3,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-miss",
+   "part": "[data-theme=\"light\"] .g-miss",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-miss",
+   "part": "[data-theme=\"light\"] .g-miss",
+   "prop": "border-left-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-miss",
+   "part": "[data-theme=\"light\"] .g-miss",
+   "prop": "border-right-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-miss",
+   "part": "[data-theme=\"light\"] .g-miss",
+   "prop": "border-top-color",
+   "liveEx": [
+    "button.g-miss rgba(179, 38, 30, 0.45) → rgba(255, 122, 107, 0.5)"
+   ],
+   "val": "rgba(179, 38, 30, 0.45)",
+   "pri": "",
+   "applies": 227,
+   "win": 224,
+   "live": 224,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-miss",
+   "part": "[data-theme=\"light\"] .g-miss",
+   "prop": "color",
+   "liveEx": [
+    "button.g-miss rgb(179, 38, 30) → rgb(26, 23, 20)"
+   ],
+   "val": "var(--red-700)",
+   "pri": "",
+   "applies": 227,
+   "win": 225,
+   "live": 1,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .g-plus",
+   "part": "[data-theme=\"light\"] .g-plus",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card.on, [data-theme=\"light\"] .g-prow.on",
+   "part": "[data-theme=\"light\"] .g-prow.on",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.g-prow.on rgba(185, 78, 42, 0.35) 0px 0px 0px 1px, rgba(185, 78, 42, 0.45) 0px 10px 26px -8px, rgba(185, 78, 42, 0.3) 0px 0px 32px -6px → rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px"
+   ],
+   "val": "0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)",
+   "pri": "",
+   "applies": 9,
+   "win": 9,
+   "live": 9,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .g-prow",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.g-prow rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 21,
+   "win": 12,
+   "live": 12,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .g-target",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.g-target rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 278,
+   "win": 278,
+   "live": 278,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .home-quick-tile",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 220,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .home-tile",
+   "prop": "box-shadow",
+   "liveEx": [],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 110,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .live-card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.live-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 1,
+   "win": 1,
+   "live": 1,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .metric",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.metric rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → rgba(0, 0, 0, 0.07) 0px 1px 8px 0px, rgba(0, 0, 0, 0.05) 0px 2px 12px 0px"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 8,
+   "win": 8,
+   "live": 8,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .sp-tag",
+   "part": "[data-theme=\"light\"] .sp-tag",
+   "prop": "color",
+   "liveEx": [
+    "span.sp-tag rgb(30, 86, 49) → rgb(143, 203, 156)"
+   ],
+   "val": "var(--green-700)",
+   "pri": "",
+   "applies": 216,
+   "win": 216,
+   "live": 216,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .win-kicker, [data-theme=\"light\"] .trn-champ-kicker, [data-theme=\"light\"] .standing-pts",
+   "part": "[data-theme=\"light\"] .standing-pts",
+   "prop": "color",
+   "liveEx": [
+    "span.standing-pts rgb(47, 107, 64) → rgb(143, 203, 156)"
+   ],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 4,
+   "win": 4,
+   "live": 4,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .win-kicker, [data-theme=\"light\"] .trn-champ-kicker, [data-theme=\"light\"] .standing-pts",
+   "part": "[data-theme=\"light\"] .trn-champ-kicker",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .win-card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.win-card.leg-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none",
+    "div.win-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none",
+    "div.win-card.win-extra rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 135,
+   "win": 135,
+   "live": 135,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .win-kicker, [data-theme=\"light\"] .trn-champ-kicker, [data-theme=\"light\"] .standing-pts",
+   "part": "[data-theme=\"light\"] .win-kicker",
+   "prop": "color",
+   "liveEx": [
+    "#win-kicker.win-kicker rgb(47, 107, 64) → rgb(255, 59, 48)"
+   ],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 55,
+   "win": 55,
+   "live": 1,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card.on, [data-theme=\"light\"] .g-prow.on",
+   "part": "[data-theme=\"light\"] .x-card.on",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.x-card.on rgba(185, 78, 42, 0.35) 0px 0px 0px 1px, rgba(185, 78, 42, 0.45) 0px 10px 26px -8px, rgba(185, 78, 42, 0.3) 0px 0px 32px -6px → rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px"
+   ],
+   "val": "0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)",
+   "pri": "",
+   "applies": 12,
+   "win": 12,
+   "live": 12,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-card, [data-theme=\"light\"] .g-prow, [data-theme=\"light\"] .g-target, [data-theme=\"light\"] .home-tile, [data-theme=\"light\"] .home-quick-tile, [data-theme=\"light\"] .metric, [data-theme=\"light\"] .win-card, [data-theme=\"light\"] .live-card, [data-theme=\"light\"] .ask-box, [data-theme=\"light\"] .g-big3 button, [data-theme=\"light\"] .bob-keys button",
+   "part": "[data-theme=\"light\"] .x-card",
+   "prop": "box-shadow",
+   "liveEx": [
+    "div.x-card rgba(60, 40, 30, 0.06) 0px 1px 2px 0px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px → none"
+   ],
+   "val": "rgba(60, 40, 30, 0.06) 0px 1px 2px, rgba(120, 60, 30, 0.22) 0px 8px 22px -10px",
+   "pri": "",
+   "applies": 30,
+   "win": 18,
+   "live": 18,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "rgba(179, 38, 30, 0.1)",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last.bust",
+   "part": "[data-theme=\"light\"] .x-last.bust",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--red-700)",
+   "pri": "",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-color",
+   "liveEx": [
+    "span.x-last rgba(62, 123, 79, 0.16) → rgba(62, 123, 79, 0.22)"
+   ],
+   "val": "rgba(62, 123, 79, 0.16)",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 2,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] .x-last",
+   "part": "[data-theme=\"light\"] .x-last",
+   "prop": "color",
+   "liveEx": [
+    "span.x-last rgb(30, 86, 49) → rgb(143, 203, 156)"
+   ],
+   "val": "var(--green-700)",
+   "pri": "",
+   "applies": 2,
+   "win": 2,
+   "live": 2,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-color",
+   "liveEx": [
+    "#game-bar. rgba(242, 242, 247, 0.88) → rgba(0, 0, 0, 0.65)"
+   ],
+   "val": "rgba(242, 242, 247, 0.88)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgba(255, 255, 255, 0.08)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "border-left-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgb(26, 23, 20)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "border-right-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgb(26, 23, 20)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-bar",
+   "part": "[data-theme=\"light\"] #game-bar",
+   "prop": "border-top-color",
+   "liveEx": [
+    "#game-bar. rgba(0, 0, 0, 0.08) → rgb(26, 23, 20)"
+   ],
+   "val": "rgba(0, 0, 0, 0.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-color",
+   "liveEx": [
+    "#game-controls. rgba(255, 255, 255, 0.82) → rgba(30, 30, 30, 0.72)",
+    "#game-controls.show rgba(255, 255, 255, 0.82) → rgba(30, 30, 30, 0.72)"
+   ],
+   "val": "rgba(255, 255, 255, 0.82)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "border-bottom-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "border-left-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "border-right-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #game-controls",
+   "part": "[data-theme=\"light\"] #game-controls",
+   "prop": "border-top-color",
+   "liveEx": [
+    "#game-controls. rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)",
+    "#game-controls.show rgba(0, 0, 0, 0.1) → rgba(255, 255, 255, 0.12)"
+   ],
+   "val": "rgba(0, 0, 0, 0.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--setup-accent-text",
+   "liveEx": [],
+   "val": "var(--terra-600)",
+   "pri": "important",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-bar",
+   "liveEx": [
+    "#screen-setup.screen rgba(255,255,255,.94) → rgba(20,19,20,.95)",
+    "#screen-setup.screen.active rgba(255,255,255,.94) → rgba(20,19,20,.95)"
+   ],
+   "val": "rgba(255,255,255,.94)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-btn",
+   "liveEx": [
+    "#screen-setup.screen #3A3A3C → #D9D1CB",
+    "#screen-setup.screen.active #3A3A3C → #D9D1CB"
+   ],
+   "val": "#3A3A3C",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-card",
+   "liveEx": [
+    "#screen-setup.screen rgba(255,255,255,.8) → rgba(28,26,27,.88)",
+    "#screen-setup.screen.active rgba(255,255,255,.8) → rgba(28,26,27,.88)"
+   ],
+   "val": "rgba(255,255,255,.8)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-green-text",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-muted",
+   "liveEx": [
+    "#screen-setup.screen #6E6E73 → #A8A09A",
+    "#screen-setup.screen.active #6E6E73 → #A8A09A"
+   ],
+   "val": "#6E6E73",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-orange-text",
+   "liveEx": [],
+   "val": "var(--terra-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-soft",
+   "liveEx": [],
+   "val": "#48484A",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-text",
+   "liveEx": [
+    "#screen-setup.screen #1C1C1E → #F3EDE8",
+    "#screen-setup.screen.active #1C1C1E → #F3EDE8"
+   ],
+   "val": "#1C1C1E",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w05",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.04) → rgba(255,255,255,.05)",
+    "#screen-setup.screen.active rgba(0,0,0,.04) → rgba(255,255,255,.05)"
+   ],
+   "val": "rgba(0,0,0,.04)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w06",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.06) → rgba(255,255,255,.06)",
+    "#screen-setup.screen.active rgba(0,0,0,.06) → rgba(255,255,255,.06)"
+   ],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w07",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.07)",
+    "#screen-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.07)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w08",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.08)",
+    "#screen-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.08)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w1",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w10",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-w25",
+   "liveEx": [
+    "#screen-setup.screen rgba(0,0,0,.25) → rgba(255,255,255,.25)",
+    "#screen-setup.screen.active rgba(0,0,0,.25) → rgba(255,255,255,.25)"
+   ],
+   "val": "rgba(0,0,0,.25)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-setup",
+   "prop": "--su-well",
+   "liveEx": [],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-name, [data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-wins, [data-theme=\"light\"] #screen-trn-overview .trn-match.current .trn-match-header",
+   "part": "[data-theme=\"light\"] #screen-trn-overview .trn-match.current .trn-match-header",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 3,
+   "win": 3,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-name, [data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-wins, [data-theme=\"light\"] #screen-trn-overview .trn-match.current .trn-match-header",
+   "part": "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-name",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-name, [data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-wins, [data-theme=\"light\"] #screen-trn-overview .trn-match.current .trn-match-header",
+   "part": "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-wins",
+   "prop": "color",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 0,
+   "win": 0,
+   "live": 0,
+   "modes": [],
+   "klasse": "NIET-WAARGENOMEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--setup-accent-text",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "important",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-bar",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(255,255,255,.94) → rgba(20,19,20,.95)",
+    "#screen-trn-setup.screen.active rgba(255,255,255,.94) → rgba(20,19,20,.95)"
+   ],
+   "val": "rgba(255,255,255,.94)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-btn",
+   "liveEx": [
+    "#screen-trn-setup.screen #3A3A3C → #D9D1CB",
+    "#screen-trn-setup.screen.active #3A3A3C → #D9D1CB"
+   ],
+   "val": "#3A3A3C",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-card",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(255,255,255,.8) → rgba(28,26,27,.88)",
+    "#screen-trn-setup.screen.active rgba(255,255,255,.8) → rgba(28,26,27,.88)"
+   ],
+   "val": "rgba(255,255,255,.8)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-green-text",
+   "liveEx": [],
+   "val": "var(--green-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-muted",
+   "liveEx": [
+    "#screen-trn-setup.screen #6E6E73 → #A8A09A",
+    "#screen-trn-setup.screen.active #6E6E73 → #A8A09A"
+   ],
+   "val": "#6E6E73",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-orange-text",
+   "liveEx": [],
+   "val": "var(--terra-600)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-soft",
+   "liveEx": [],
+   "val": "#48484A",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-text",
+   "liveEx": [
+    "#screen-trn-setup.screen #1C1C1E → #F3EDE8",
+    "#screen-trn-setup.screen.active #1C1C1E → #F3EDE8"
+   ],
+   "val": "#1C1C1E",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w05",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.04) → rgba(255,255,255,.05)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.04) → rgba(255,255,255,.05)"
+   ],
+   "val": "rgba(0,0,0,.04)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w06",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.06) → rgba(255,255,255,.06)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.06) → rgba(255,255,255,.06)"
+   ],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w07",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.07)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.07)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w08",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.08) → rgba(255,255,255,.08)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.08) → rgba(255,255,255,.08)"
+   ],
+   "val": "rgba(0,0,0,.08)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w1",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w10",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.1) → rgba(255,255,255,.1)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.1) → rgba(255,255,255,.1)"
+   ],
+   "val": "rgba(0,0,0,.1)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-w25",
+   "liveEx": [
+    "#screen-trn-setup.screen rgba(0,0,0,.25) → rgba(255,255,255,.25)",
+    "#screen-trn-setup.screen.active rgba(0,0,0,.25) → rgba(255,255,255,.25)"
+   ],
+   "val": "rgba(0,0,0,.25)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 55,
+   "modes": [
+    "light"
+   ],
+   "klasse": "WERKZAAM"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] #screen-setup, [data-theme=\"light\"] #screen-trn-setup",
+   "part": "[data-theme=\"light\"] #screen-trn-setup",
+   "prop": "--su-well",
+   "liveEx": [],
+   "val": "rgba(0,0,0,.06)",
+   "pri": "",
+   "applies": 55,
+   "win": 55,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERBODIG"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-attachment",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-clip",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-color",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-image",
+   "liveEx": [],
+   "val": "linear-gradient(160deg, rgb(232, 184, 158) 0%, rgb(244, 235, 228) 55%, rgb(255, 255, 255) 100%)",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-origin",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-position-x",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-position-y",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-repeat",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  },
+  {
+   "cond": "",
+   "sel": "[data-theme=\"light\"] body",
+   "part": "[data-theme=\"light\"] body",
+   "prop": "background-size",
+   "liveEx": [],
+   "val": "initial",
+   "pri": "",
+   "applies": 55,
+   "win": 0,
+   "live": 0,
+   "modes": [
+    "light"
+   ],
+   "klasse": "OVERSCHREVEN"
+  }
+ ]
+}
