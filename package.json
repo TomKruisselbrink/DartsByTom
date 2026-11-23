@@ -1,0 +1,12 @@
+{
+  "name": "dartsbytom-tests",
+  "private": true,
+  "description": "Alleen voor de tests. De app zelf (index.html) heeft geen afhankelijkheden en geen bouwstap.",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

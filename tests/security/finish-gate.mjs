@@ -1,6 +1,7 @@
 // v247 — draaien: node tests/security/finish-gate.mjs (zie README).
 // v247: "Potje afronden?" per spel: vraag verschijnt, niets opgeslagen; Ongedaan = stand vóór laatste invoer; Afronden = 1× opslaan; herstart midden in de vraag.
 import { browser, page, open } from './lib.mjs';
+const K = Number(process.env.FAST) > 1 ? 0.25 : 1; // FAST=10 (npm test): app-timers 10× sneller, dus korter wachten
 const P2 = ['Tom', 'Henk'];
 const cases = {
   atc: { launch: `launchGame('atc',${JSON.stringify(P2)},true,'firstto',1,1,501,0);`, toEnd: `state.atcTarget[state.currentPlayer]=atcMaxTarget();renderATC();`, last: `atcHitMult(1);`, screen: 'screen-atc' },
@@ -21,17 +22,17 @@ const cases = {
 const b = await browser(); const fails = []; const log = [];
 for (const [g, c] of Object.entries(cases)) {
   const { p, errs } = await page(b, { db: { Tom: { games: 0, wins: 0, totalDarts: 0, totalScore: 0, gameHistory: [] }, Henk: { games: 0, wins: 0, totalDarts: 0, totalScore: 0, gameHistory: [] } } });
-  await open(p);
+  await open(p, Math.round(1200 * K));
   const cnt = () => p.evaluate(() => ['Tom','Henk','Piet','Kees'].reduce(function(s,n){return s+((dbCache[n]&&dbCache[n].gameHistory)||[]).length;},0));
-  await p.evaluate(c.launch); await p.waitForTimeout(200);
-  await p.evaluate(c.toEnd); await p.waitForTimeout(150);
+  await p.evaluate(c.launch); await p.waitForTimeout(Math.round((200)*K));
+  await p.evaluate(c.toEnd); await p.waitForTimeout(Math.round((150)*K));
   const before = await p.evaluate(() => JSON.stringify(state));
-  await p.evaluate(c.last); await p.waitForTimeout(250);
+  await p.evaluate(c.last); await p.waitForTimeout(Math.round((250)*K));
   const r1 = await p.evaluate(() => ({ ov: !!document.getElementById('fin-ov'), pend: state._finishPending, scr: _curScreen, rows: (document.querySelector('#fin-ov .fin-rows') || {}).innerText || '' }));
   if (!r1.ov) { fails.push(g + ': geen vraag na laatste invoer (scherm ' + r1.scr + ', ' + JSON.stringify(r1) + ')'); await p.close(); continue; }
   if (await cnt() !== 0) fails.push(g + ': al opgeslagen vóór Afronden');
   // Ongedaan
-  await p.evaluate(() => document.getElementById('fin-undo').click()); await p.waitForTimeout(400);
+  await p.evaluate(() => document.getElementById('fin-undo').click()); await p.waitForTimeout(Math.round((400)*K));
   const after = await p.evaluate(() => JSON.stringify(state));
   const r2 = await p.evaluate(() => ({ ov: !!document.getElementById('fin-ov'), scr: _curScreen }));
   if (r2.ov) fails.push(g + ': vraag blijft na Ongedaan');
@@ -39,17 +40,17 @@ for (const [g, c] of Object.entries(cases)) {
   if (after !== before) fails.push(g + ': stand na Ongedaan ≠ stand vóór laatste invoer');
   if (await cnt() !== 0) fails.push(g + ': opgeslagen na Ongedaan');
   // opnieuw naar het einde, herstart midden in de vraag
-  await p.evaluate(c.last); await p.waitForTimeout(300);
-  await p.reload(); await p.waitForTimeout(1300);
+  await p.evaluate(c.last); await p.waitForTimeout(Math.round((300)*K));
+  await p.reload(); await p.waitForTimeout(Math.round((1300)*K));
   const offer = await p.evaluate(() => document.body.innerText.includes('Potje hervatten?'));
   if (!offer) fails.push(g + ': na herstart geen "Potje hervatten?"');
-  await p.evaluate(() => { closeGameSheet(); _liveResumeStored(); }); await p.waitForTimeout(500);
+  await p.evaluate(() => { closeGameSheet(); _liveResumeStored(); }); await p.waitForTimeout(Math.round((500)*K));
   const r3 = await p.evaluate(() => ({ ov: !!document.getElementById('fin-ov'), pend: state._finishPending }));
   if (!r3.ov) fails.push(g + ': na hervatten geen vraag');
   // Ongedaan na herstart moet ook terug naar de stand vóór de laatste invoer
-  if (r3.ov) { await p.evaluate(() => document.getElementById('fin-undo').click()); await p.waitForTimeout(400); const a2 = await p.evaluate(() => JSON.stringify(state)); if (a2 !== before) fails.push(g + ': Ongedaan na herstart ≠ stand vóór laatste invoer'); await p.evaluate(c.last); await p.waitForTimeout(300); }
+  if (r3.ov) { await p.evaluate(() => document.getElementById('fin-undo').click()); await p.waitForTimeout(Math.round((400)*K)); const a2 = await p.evaluate(() => JSON.stringify(state)); if (a2 !== before) fails.push(g + ': Ongedaan na herstart ≠ stand vóór laatste invoer'); await p.evaluate(c.last); await p.waitForTimeout(Math.round((300)*K)); }
   // Afronden
-  await p.evaluate(() => document.getElementById('fin-ok').click()); await p.waitForTimeout(600);
+  await p.evaluate(() => document.getElementById('fin-ok').click()); await p.waitForTimeout(Math.round((600)*K));
   const r4 = await p.evaluate(() => ({ scr: _curScreen, live: localStorage.getItem('darts_live') }));
   const n = await cnt(), want = c.want != null ? c.want : (g === 'bob' ? 1 : 2);
   if (r4.scr !== (c.endScreen || 'screen-win')) fails.push(g + ': geen winscherm na Afronden (' + r4.scr + ')');

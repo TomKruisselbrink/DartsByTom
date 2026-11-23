@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v250** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v251** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -32,6 +32,7 @@ Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet 
   - NL + EN;
   - klein scherm (375×667, iPhone SE) en 390×844;
   - geen `pageerror`.
+  - **`npm test` moet groen zijn vóór elke push** (roadmap fase 2, v251). Alles in `tests/` (zie `tests/README.md`): ±3 min, 69+ testgevallen. In de sessie: `PLAYWRIGHT=... CHROMIUM=... node tests/run.mjs` (helper `/home/claude/t/env.sh` als die er is). Nieuwe functie = nieuwe testgevallen in `tests/core/`. Na grote wijzigingen ook `node tests/mutation.mjs`.
   - Firebase stub je via `page.route(/gstatic/…)`. Voor groep/vrienden-tests gebruik je een nep-Firestore die tussen twee browsercontexten gedeeld wordt.
 - **Antwoordvorm:** kort per punt wat er veranderd is en wat Tom zelf moet controleren. Wat alleen op een echte iPhone te testen is, noem je expliciet.
 - **Huisstijl:** bouw verder op wat er is (één bestand, bestaande componenten). Geen rebuild of andere stack. Doel: het moet voelen als een echte app.
@@ -111,6 +112,7 @@ Volgorde in het bestand (globaal):
    - wake lock, fullscreen, thema/taal (`applyTheme`);
    - Autodarts-bridge (alleen actief op localhost/LAN, websocket poort 8079);
    - installatiebanner (iOS).
+15a. **Foutlog (v251, roadmap fase 2)** staat bovenaan het hoofdscript: `_errLog(e,waar)` bewaart fouten in `darts_errlog` (max 50, dubbele opgeteld) en toont ze in Instellingen → Gegevens → **Foutlog** (`#st-errlog`, `_errRender`, knoppen Kopiëren/Wissen). Ook `console.error`, `window.onerror` en onafgehandelde promises gaan erin. **Geen lege `catch` meer:** gebruik `catch(e){_errLog(e,'functienaam')}`; alleen voor browserfuncties zonder data (geluid, spraak, trillen, scrollen) mag `catch(e){/*stil: reden*/}`, en die functie moet in de lijst in `tests/core/errlog.mjs` staan.
 15b. **Lopend potje bewaren (v240)** staat helemaal achteraan het hoofdscript: na elke render van een spelscherm (`_LIVE_RENDER`: scherm → renderfunctie, de functies worden omwikkeld) gaat een snapshot naar `darts_live` (`state`, `rco`, `_afg` + tie-globals, `trn` bij toernooimodus, `rematchConfig`, botinstellingen). Ook bij `visibilitychange`/`pagehide`. Gewist door `showWin` en bij het verlaten van een spelscherm naar een niet-spelscherm (Stop, terug naar toernooi). Bij het starten (`_liveOffer`, 0,7 s na laden) verschijnt "Potje hervatten?"; `_liveResume` zet alles terug, bouwt `state.trnMatchCallback` opnieuw op (wedstrijd teruggevonden met `_trnFindMatch`, want JSON verbreekt de verwijzing) en laat de bot verdergaan als die aan de beurt was. Toernooi apart in `darts_trn_live` (bij elke `renderTrnOverview`/`renderStandings`), gewist bij "Toernooi verlaten". Max. leeftijd 48 uur (toernooi 6 dagen). Nieuw spel toevoegen = ook in `_LIVE_RENDER` zetten.
 15c. **Potje afronden? (v247)** staat vlak vóór 15b: na de laatste invoer van een potje vraagt `_finishGate(kind,arg,rijenHtml,opslaanFn)` eerst "Potje afronden?" (eindstand, Ongedaan / Afronden). Pas bij Afronden draait de oude opslaan-+-winschermcode (`opslaanFn`). Ongedaan zet de stand van vóór de laatste invoer terug uit de hervat-snapshot (`darts_live`, `_finishPrev`, via `_liveResume(s,true)`), dus niet via de Ongedaan-functie per spel. `state._finishPending` + `prev` in de snapshot: na een herstart stelt `_finishReopen()` de vraag opnieuw via `_FINISH[kind]` (gedefinieerd vóór `var state`). Spellen: ATC (`_atcFinish`), Cricket (`_crFinish`), Shanghai (`_shFinish`, direct gewonnen `_shShanghaiWin`→`_shShanghaiSave`), Bob's 27 (`_bobEnd`→`_bobSave`), Halve It (`_hiFinish`), Eliminatie (`_eliDoWin`→`_eliWinSave`; bij double out direct, die vraagt al), Afgooien (`_afgFinish`), Random Checkout (`_rcoFinish`; de knop "Spel afronden" blijft direct). **X01 (v249):** alleen bij single out (vrij spel én toernooi) en alleen na de worp die de **wedstrijd** beslist (`_x01MatchEnds`, `_x01Finish`, `_FINISH.x01`); tussenlegs geen vraag, double out houdt de double-vraag, een uitgooi door de bot vraagt niets (bot roept `endGame501` direct aan). Nieuw spel = eindpunt via `_finishGate` + `_FINISH`-registratie, en render-guards laten `_finishReopen()` voorgaan.
 16. **Afgooien** (Killer: bullronde, tie-break-sleepscherm, hoofdspel `renderAfgooien`, `afgScore`, `afgAttack`, `_afgNextTurn`, `_afgWin`) en **Eliminatie** (`eli*`) staan helemaal achteraan.
@@ -260,6 +262,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_trn_live` | lopend toernooi (v240) |
 | `darts_correct_backup` | `{ 'naam @ms': { old: Entry, newGid } }`: kopie van gecorrigeerde potjes (vangnet, max 20, v247). Niet opruimen. |
 | `darts_merge_backup` | `{ 'naam @ms': Player }`: kopie van samengevoegde spelers (vangnet, max 10). Niet opruimen. |
+| `darts_errlog` | `[{ t, w, m, n, v }]`: foutlog (v251), max 50. Geen spelgegevens; mag gewist worden (knop Wissen). |
 | `darts_install_dismissed` | `'1'` als de iOS-installatiebanner weggeklikt is |
 
 Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
@@ -356,6 +359,9 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Groepscode uitfaseren:** de groepscode-UI kan uit de app zodra de regels van v250 staan (groups dicht).
 - **Eigen Halve It-volgorde** (`hiOwnSeq`) staat alleen in het geheugen en is na een herstart weg.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
+
+- **Spelschermen op de iPhone SE (375×667) moeten soms scrollen** om de onderste knoppen boven de spelbalk te krijgen: Cricket (2 en 4 spelers), en met 4 spelers Shanghai, Bob's 27, 121 en Random Checkout (Random Checkout met 4 spelers ook op 375×812). Bereikbaar, maar niet in één oogopslag. `tests/core/ui.mjs` meldt dit als waarschuwing. Oplossen in roadmap fase 3/4.
+- **Groepscode-kaart** staat nog in Instellingen → Gegevens, terwijl `groups` sinds 21-11 dicht staat (fase 6: weghalen).
 
 ## 12. Bekende bugs
 

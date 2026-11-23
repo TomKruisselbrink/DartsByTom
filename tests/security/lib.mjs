@@ -43,7 +43,8 @@ const DETECT = () => {
   const start = () => { mo.observe(document, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-dbtx-attr', 'data-dbtx-img', 'href', 'src'] }); document.querySelectorAll('*').forEach(checkEl); };
   start();
 };
-export async function page(b, { db, ls = {}, viewport = { width: 390, height: 844 }, fake = null, colorScheme } = {}) {
+// fast: getal > 1 = alle setTimeout-vertragingen in de app zoveel keer korter (animaties, beurtwissels). Alleen voor tests.
+export async function page(b, { db, ls = {}, viewport = { width: 390, height: 844 }, fake = null, colorScheme, fast = Number(process.env.FAST || 0), seedOnce = false } = {}) {
   const ctx = await b.newContext({ viewport, colorScheme });
   const p = await ctx.newPage();
   const errs = [];
@@ -59,12 +60,16 @@ export async function page(b, { db, ls = {}, viewport = { width: 390, height: 84
     await p.route(/gstatic\.com/, r => r.fulfill({ contentType: 'text/javascript', body: '' }));
   }
   await p.route('http://app.test/**', r => { const f = new URL(r.request().url()).pathname.slice(1) || 'index.html'; if (!fs.existsSync(ROOT + f)) return r.fulfill({ status: 404, body: '' }); r.fulfill({ body: fs.readFileSync(ROOT + f), contentType: f.endsWith('.js') ? 'text/javascript' : 'text/html' }); });
+  if (fast > 1) await p.addInitScript(f => { const st = window.setTimeout; window.setTimeout = function (fn, d) { const a = [].slice.call(arguments, 2); return st.apply(window, [fn, Math.round((+d || 0) / f)].concat(a)); }; }, fast);
   await p.addInitScript(DETECT);
-  await p.addInitScript(([db, ls]) => {
+  // seedOnce: alleen bij de eerste keer laden vullen, zodat een herlaadtest ziet wat de app zelf bewaarde.
+  await p.addInitScript(([db, ls, once]) => {
+    if (once && sessionStorage.getItem('__dbtSeeded')) return;
+    if (once) sessionStorage.setItem('__dbtSeeded', '1');
     localStorage.setItem('darts_sound', '0'); localStorage.setItem('darts_caller', '0');
     if (db) localStorage.setItem('darts_db', db);
     for (const k in ls) localStorage.setItem(k, ls[k]);
-  }, [db ? JSON.stringify(db) : null, ls]);
+  }, [db ? JSON.stringify(db) : null, ls, seedOnce]);
   return { p, errs, ctx };
 }
 export async function open(p, wait = 1200) { await p.goto('http://app.test/index.html'); await p.waitForTimeout(wait); }

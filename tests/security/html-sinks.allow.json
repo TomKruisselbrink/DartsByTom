@@ -382,6 +382,7 @@
   "ecOpen|i": "lusindex (getal), in value van de radioknop",
   "ecOpen|(c.f?_esc(c.l)": "c.l is een codeconstante uit EC_CFG en gaat toch via _esc; rest is vaste tekst",
   "ecOpen|(canWin?' en de winnaar.':'.'):'Wie heeft er gewonnen?')": "alleen vaste tekst uit de code",
-  "ecOpen|rows": "door de code opgebouwde HTML; namen en waarden daarin via _esc"
+  "ecOpen|rows": "door de code opgebouwde HTML; namen en waarden daarin via _esc",
+  "_errRender|b.length": "lengte van een array (getal)"
  }
 }

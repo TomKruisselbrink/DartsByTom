@@ -1752,6 +1752,11 @@ video {
 <body>
 <script>
 var I18N={
+"Technische meldingen van deze app. Je gegevens zijn niet aangepast. Stuur dit door als er iets niet werkt.": "Technical messages from this app. Your data has not been changed. Send this on if something isn't working.",
+"Kopiëren": "Copy",
+"Foutlog gekopieerd": "Error log copied",
+"Kopiëren lukte niet": "Copying failed",
+"Foutlog gewist": "Error log cleared",
 "Eindstand corrigeren": "Correct final score",
 "Doelen gehaald": "Targets hit",
 "Wie heeft er gewonnen?": "Who won?",
@@ -2585,6 +2590,7 @@ var I18N={
 // Werkt via een MutationObserver: ook meldingen, pop-ups en teksten met namen/getallen (via patronen).
 var _lang=(function(){try{return localStorage.getItem('lang')||'nl';}catch(e){return 'nl';}})();
 var I18N_PATTERNS=[
+[/^Foutlog \((\d+)\)$/,'Error log ($1)'],
 [/^(Punten|Score|Doelen gehaald) per speler( en de winnaar\.|\.)$/,function(m){var l={Punten:'Points',Score:'Score','Doelen gehaald':'Targets hit'}[m[1]];return l+' per player'+(m[2]==='.'?'.':' and the winner.');}],
 [/^Winnaar kan hier niet aangepast worden: het potje van (.+) staat niet op dit apparaat\.$/,"The winner can't be changed here: the game of $1 isn't on this device."],
 [/^De potjes van (.+) staan niet op dit apparaat$/,"The games of $1 aren't on this device"],
@@ -3073,6 +3079,7 @@ function _tr1(n){
   <div class="st-page" data-page="data" hidden>
     <div class="st-phead"><button class="st-back" onclick="stClose()" aria-label="Terug"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h2>Gegevens</h2></div>
     <div id="st-sync-issues" class="card st-card" hidden></div>
+    <div id="st-errlog" class="card st-card" hidden></div>
     <div class="card st-card">
       <div class="st-cap">Groep (cloud)</div>
       <button id="group-tile" onclick="openGroupModal()" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:none;border-radius:var(--radius-sm);padding:0;cursor:pointer">
@@ -3704,6 +3711,41 @@ function _tr1(n){
 
 </div><!-- app-content -->
 <script>
+// ═══ Foutlog (v251, roadmap fase 2) ═══
+// Fouten die vroeger stil werden weggeslikt (lege catch), plus console.error en onverwachte fouten, komen in een kleine
+// buffer: localStorage 'darts_errlog', max 50 regels, dubbele meldingen opgeteld. Zichtbaar in Instellingen → Gegevens → Foutlog.
+// Raakt nooit spelgegevens aan. _errLog gooit zelf nooit een fout.
+var ERRLOG_KEY='darts_errlog',ERRLOG_MAX=50,_errBuf=null;
+function _errLoad(){if(_errBuf)return _errBuf;try{_errBuf=JSON.parse(localStorage.getItem(ERRLOG_KEY)||'[]');}catch(x){_errBuf=[];}if(!Array.isArray(_errBuf))_errBuf=[];return _errBuf;}
+function _errLog(e,where){try{
+  var b=_errLoad(),w=String(where||'?').slice(0,60);
+  var m=e&&typeof e==='object'?((e.name&&e.name!=='Error'?e.name+': ':'')+(e.message||e.code||JSON.stringify(e))):String(e);
+  m=String(m).slice(0,240);var now=Date.now(),hit=null;
+  for(var i=b.length-1;i>=0;i--){if(b[i].w===w&&b[i].m===m){hit=b[i];break;}}
+  if(hit){hit.n=(hit.n||1)+1;hit.t=now;}else{b.push({t:now,w:w,m:m,n:1,v:(typeof APP_VERSION!=='undefined'?APP_VERSION:0)});while(b.length>ERRLOG_MAX)b.shift();}
+  try{localStorage.setItem(ERRLOG_KEY,JSON.stringify(b));}catch(x){/*stil: opslag vol, dan alleen in het geheugen*/}
+  try{if(window.console&&console.warn)console.warn('[Darts by Tom]',w,e);}catch(x){/*stil: geen console*/}
+  if(typeof _errRender==='function'){try{_errRender();}catch(x){/*stil: weergave van de foutlog zelf*/}}
+}catch(x){/*stil: de foutlog mag nooit zelf een fout geven*/}}
+(function(){
+  try{var ce=console.error;console.error=function(){try{ce.apply(console,arguments);}catch(x){/*stil*/}var a=[].slice.call(arguments);
+    var e=null;for(var i=0;i<a.length;i++){if(a[i]&&typeof a[i]==='object'){e=a[i];break;}}
+    _errLog(e||a.map(String).join(' '),typeof a[0]==='string'?a[0]:'console');};}catch(x){/*stil*/}
+  window.addEventListener('error',function(ev){_errLog(ev.error||ev.message,'onverwacht'+(ev.filename?' r'+ev.lineno:''));});
+  window.addEventListener('unhandledrejection',function(ev){_errLog(ev.reason,'onverwacht (promise)');});
+})();
+function _errRender(){
+  var el=document.getElementById('st-errlog');if(!el)return;var b=_errLoad();
+  if(!b.length){el.hidden=true;el.innerHTML='';return;}
+  el.hidden=false;
+  el.innerHTML='<div class="st-cap">Foutlog ('+b.length+')</div>'+
+    '<div style="font-size:12px;color:var(--muted);margin:0 0 8px;line-height:1.45">Technische meldingen van deze app. Je gegevens zijn niet aangepast. Stuur dit door als er iets niet werkt.</div>'+
+    b.slice().reverse().slice(0,20).map(function(x){return '<div class="sp-row"><div class="sp-top"><b>'+_esc(x.w)+'</b><small style="color:var(--muted)">'+_esc(_fmtTs(x.t))+(x.n>1?' · '+_esc(x.n)+'×':'')+'</small></div><div style="font-size:12px;color:var(--muted);word-break:break-word">'+_esc(x.m)+'</div></div>';}).join('')+
+    '<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-sm" style="flex:1;justify-content:center" onclick="errCopy()">Kopiëren</button><button class="btn btn-sm" style="flex:1;justify-content:center" onclick="errClear()">Wissen</button></div>';
+}
+function _errText(){return 'Darts by Tom v'+(typeof APP_VERSION!=='undefined'?APP_VERSION:'?')+' · '+navigator.userAgent+'\n'+_errLoad().map(function(x){return new Date(x.t).toISOString()+' ['+x.w+'] '+(x.n>1?x.n+'× ':'')+x.m+' (v'+x.v+')';}).join('\n');}
+function errCopy(){var t=_errText();try{navigator.clipboard.writeText(t).then(function(){showToast('Foutlog gekopieerd','success');},function(){showToast('Kopiëren lukte niet','error');});}catch(e){_errLog(e,'errCopy');showToast('Kopiëren lukte niet','error');}}
+function errClear(){_errBuf=[];try{localStorage.removeItem(ERRLOG_KEY);}catch(e){_errLog(e,'errClear');}_errRender();showToast('Foutlog gewist','info');}
 // ═══════════════════════════════════════════
 // DATA & STATE
 // ═══════════════════════════════════════════
@@ -3806,7 +3848,7 @@ function _askConfirm(title,sub,ok,danger,onOk,cancel){
   function close(){ov.classList.add('out');setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},160);}
   ov.querySelector('.ask-no').onclick=close;
   ov.addEventListener('click',function(e){if(e.target===ov)close();});
-  ov.querySelector('.ask-yes').onclick=function(){close();try{haptic&&haptic();}catch(e){}onOk&&onOk();};
+  ov.querySelector('.ask-yes').onclick=function(){close();try{haptic&&haptic();}catch(e){/*stil: tikgevoel*/}onOk&&onOk();};
   document.body.appendChild(ov);
   setTimeout(function(){var b=ov.querySelector('.ask-no');if(b)b.focus();},30);
 }
@@ -3826,7 +3868,7 @@ function spMergeDo(src,dst){
   var n=mergePlayers(src,dst);closeGameSheet();
   if(n<0){showToast('Samenvoegen lukte niet','error');return;}
   _spOpen=dst;renderSettingsPlayers();
-  try{renderStats();renderHistory();}catch(e){}
+  try{renderStats();renderHistory();}catch(e){_errLog(e,'spMergeDo')}
   showToast(src+' samengevoegd met '+dst+' (+'+n+' potjes)','success');
   });
 }
@@ -3842,8 +3884,8 @@ function _renameInEntry(e,a,b){
 }
 function mergePlayers(src,dst){
   var db=dbCache,S=db[src],T=db[dst];if(!S||!T||src===dst)return -1;
-  try{var bk={};try{bk=JSON.parse(localStorage.getItem('darts_merge_backup')||'{}');}catch(e){}
-    bk[src+' @'+Date.now()]=S;var ks=Object.keys(bk);if(ks.length>10)delete bk[ks[0]];localStorage.setItem('darts_merge_backup',JSON.stringify(bk));}catch(e){}
+  try{var bk={};try{bk=JSON.parse(localStorage.getItem('darts_merge_backup')||'{}');}catch(e){_errLog(e,'mergePlayers')}
+    bk[src+' @'+Date.now()]=S;var ks=Object.keys(bk);if(ks.length>10)delete bk[ks[0]];localStorage.setItem('darts_merge_backup',JSON.stringify(bk));}catch(e){_errLog(e,'mergePlayers')}
   var sh=S.gameHistory||[],tLen=(T.gameHistory||[]).length,tWonH=(T.gameHistory||[]).filter(function(g){return g.won;}).length;
   var moved=sh.map(function(e){return _renameInEntry(e,src,dst);});
   var r=_grpMerge({gameHistory:moved,deleted:[],games:0,wins:0,totalDarts:0,totalScore:0},T);
@@ -3858,11 +3900,11 @@ function mergePlayers(src,dst){
   Object.keys(db).forEach(function(n){if(n===src||n===dst)return;var p=db[n];if(!Array.isArray(p.gameHistory))return;
     p.gameHistory=p.gameHistory.map(function(e){var hit=(e.opponents&&e.opponents.indexOf(src)>=0)||(e.partners&&e.partners.indexOf(src)>=0)||(e.legBreakdown&&JSON.stringify(e.legBreakdown).indexOf('"'+src+'"')>=0);return hit?_renameInEntry(e,src,dst):e;});});
   // Vriendenkoppeling meenemen
-  var L=getFriendLinks();if(L[src]){if(!L[dst])L[dst]=L[src];delete L[src];try{localStorage.setItem('darts_friend_links',JSON.stringify(L));}catch(e){}}
-  if(acctProfile&&acctProfile.player===src){try{acctSetPlayer(dst);}catch(e){}}
+  var L=getFriendLinks();if(L[src]){if(!L[dst])L[dst]=L[src];delete L[src];try{localStorage.setItem('darts_friend_links',JSON.stringify(L));}catch(e){_errLog(e,'mergePlayers')}}
+  if(acctProfile&&acctProfile.player===src){try{acctSetPlayer(dst);}catch(e){_errLog(e,'mergePlayers')}}
   delete db[src];
   var _rm=_acctRemoved();_rm[src]=Date.now();_lsSet('darts_acct_removed',_rm);
-  if(groupCode){try{fbDb.collection('groups').doc(groupCode).collection('players').doc(src).delete().catch(function(){});}catch(e){}}
+  if(groupCode){try{fbDb.collection('groups').doc(groupCode).collection('players').doc(src).delete().catch(function(){});}catch(e){_errLog(e,'mergePlayers')}}
   if(statsSelectedPlayer===src)statsSelectedPlayer=dst;
   if(typeof historySelectedPlayer!=='undefined'&&historySelectedPlayer===src)historySelectedPlayer=dst;
   saveDB(db);
@@ -3874,7 +3916,7 @@ function setPlayerNickname(name,val){
   if(val)db[name].nickname=val;else delete db[name].nickname;
   saveDB(db);
 }
-function setCallerEnabled(v){callerEnabled=v;try{localStorage.setItem('darts_caller',v?'1':'0');}catch(e){}if(!v&&window.speechSynthesis)speechSynthesis.cancel();}
+function setCallerEnabled(v){callerEnabled=v;try{localStorage.setItem('darts_caller',v?'1':'0');}catch(e){_errLog(e,'setCallerEnabled')}if(!v&&window.speechSynthesis)speechSynthesis.cancel();}
 var _callerVoice=null;
 function _voiceQuality(v){var t=(v.name+' '+v.voiceURI).toLowerCase();return /premium/.test(t)?2:(/enhanced|verbeterd|neural|natural/.test(t)?1:0);}
 function _englishVoices(){
@@ -3888,7 +3930,7 @@ function _englishVoices(){
 function _pickCallerVoice(){
   if(!window.speechSynthesis)return null;
   var vs=speechSynthesis.getVoices()||[];
-  var want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){}
+  var want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){_errLog(e,'_pickCallerVoice')}
   if(want){var w=vs.find(function(x){return x.voiceURI===want;});if(w)return w;}
   var en=_englishVoices();
   // Beste kwaliteit eerst (Premium / Verbeterd), dan Britse mannenstemmen
@@ -3898,11 +3940,11 @@ function _pickCallerVoice(){
   for(var i=0;i<pref.length;i++){var v=vs.find(function(x){return x.name.indexOf(pref[i])>=0;});if(v)return v;}
   return en.find(function(x){return /en[-_]GB/i.test(x.lang);})||en[0]||null;
 }
-function setCallerVoice(uri){try{localStorage.setItem('darts_caller_voice',uri||'');}catch(e){}_callerVoice=_pickCallerVoice();callerSay('Game on!',true);}
+function setCallerVoice(uri){try{localStorage.setItem('darts_caller_voice',uri||'');}catch(e){_errLog(e,'setCallerVoice')}_callerVoice=_pickCallerVoice();callerSay('Game on!',true);}
 var _voiceTries=0,_voiceRetry=null;
 function renderVoicePicker(){
   var sel=document.getElementById('caller-voice'),hint=document.getElementById('caller-voice-hint');if(!sel)return;
-  var en=_englishVoices(),want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){}
+  var en=_englishVoices(),want='';try{want=localStorage.getItem('darts_caller_voice')||'';}catch(e){/*stil: stemmenlijst van de browser*/}
   // iOS geeft na het downloaden van een stem soms even een lege lijst: opnieuw proberen in plaats van alles leeg te tonen
   if(!en.length&&window.speechSynthesis){
     _voiceTries++;
@@ -3920,7 +3962,7 @@ function renderVoicePicker(){
   var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   if(hint)hint.textContent=hasGood?'':(ios?'Betere stem? Download er een op je iPhone: Instellingen › Toegankelijkheid › Gesproken materiaal › Stemmen › Engels, kies bijv. Daniel of Arthur en tik op "Verbeterd" of "Premium". Herstart daarna de app.':'Tip: installeer een betere Engelse stem in de spraakinstellingen van je apparaat.');
 }
-if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=function(){_callerVoice=_pickCallerVoice();renderVoicePicker();};}catch(e){}}
+if(window.speechSynthesis){try{speechSynthesis.onvoiceschanged=function(){_callerVoice=_pickCallerVoice();renderVoicePicker();};}catch(e){/*stil: stemmenlijst van de browser*/}}
 function callerSay(text,interrupt){
   if(!callerEnabled||!window.speechSynthesis||!text)return;
   try{
@@ -3931,14 +3973,14 @@ function callerSay(text,interrupt){
     u.lang=(_callerVoice&&_callerVoice.lang)||'en-GB';
     u.rate=0.92;u.pitch=0.85;u.volume=1;
     speechSynthesis.speak(u);
-  }catch(e){}
+  }catch(e){/*stil: spraak niet beschikbaar*/}
 }
 // iOS speelt spraak pas af nadat er één keer direct vanuit een tik is gesproken. Aankondigingen via een
 // timer (zoals "you require") bleven daardoor in leg 1 stil, tot "Game shot!" de spraak ontgrendelde (v223).
 var _callerUnlocked=false;
 function _callerUnlock(){
   if(_callerUnlocked||!callerEnabled||!window.speechSynthesis)return;
-  try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;u.rate=2;speechSynthesis.speak(u);_callerUnlocked=true;}catch(e){}
+  try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;u.rate=2;speechSynthesis.speak(u);_callerUnlocked=true;}catch(e){/*stil: spraak niet beschikbaar*/}
 }
 ['touchend','click','keydown'].forEach(function(ev){document.addEventListener(ev,_callerUnlock,true);});
 var _callerLastKey='',_callerLastAt=0;
@@ -4037,7 +4079,7 @@ function _meFirst(names){var me=acctUser&&acctProfile&&acctProfile.player;if(!me
 function getDB(){return _viewDB||dbCache;}
 function _withView(db,fn){var o=_viewDB;_viewDB=db;try{return fn();}finally{_viewDB=o;}}
 function _loadLocalDB(){
-  try{var raw=localStorage.getItem('darts_db');if(raw){var d=JSON.parse(raw);if(d&&typeof d==='object')return d;}}catch(e){}
+  try{var raw=localStorage.getItem('darts_db');if(raw){var d=JSON.parse(raw);if(d&&typeof d==='object')return d;}}catch(e){_errLog(e,'_loadLocalDB')}
   return null;
 }
 
@@ -4090,14 +4132,14 @@ function _syncPrivateToGroup(){
 function setPlayerPrivate(name,priv){
   var list=getPrivatePlayers().filter(function(n){return n!==name;});
   if(priv)list.push(name);
-  try{localStorage.setItem('darts_private',JSON.stringify(list));}catch(e){}
+  try{localStorage.setItem('darts_private',JSON.stringify(list));}catch(e){_errLog(e,'setPlayerPrivate')}
   if(!groupCode)return;
   if(priv){
     _syncPrivateToGroup();
   } else {
     try{
       _groupDocRef().set({hidden:firebase.firestore.FieldValue.arrayRemove(name)},{merge:true}).catch(function(e){console.error(e);});
-    }catch(e){}
+    }catch(e){_errLog(e,'setPlayerPrivate')}
     _groupHidden=_groupHidden.filter(function(n){return n!==name;});
     var db=getDB();
     if(db[name])_groupDocRef().collection('players').doc(name).set(db[name]).catch(function(e){console.error('FB save error',e);});
@@ -4110,7 +4152,7 @@ function _restoreOwnFromArchive(){
   var db=getDB();
   if(!db[me]||((arc[me].gameHistory||[]).length>(db[me].gameHistory||[]).length))db[me]=arc[me];
   delete arc[me];
-  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}
+  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){_errLog(e,'_restoreOwnFromArchive')}
   saveDB(db);showToast(me+' is teruggezet op deze telefoon','success');
 }
 // Speler veilig in het archief zetten. Bestaat er al een archiefkopie, dan worden beide samengevoegd (v225)
@@ -4134,11 +4176,11 @@ function _getHiddenArchive(){try{var o=JSON.parse(localStorage.getItem('darts_hi
 function restoreHiddenPlayer(name){
   var arc=_getHiddenArchive();if(!arc[name])return;
   var list=getPrivatePlayers().filter(function(n){return n!==name;});list.push(name);
-  try{localStorage.setItem('darts_private',JSON.stringify(list));}catch(e){}
+  try{localStorage.setItem('darts_private',JSON.stringify(list));}catch(e){_errLog(e,'restoreHiddenPlayer')}
   var db=getDB();
   if(!db[name])db[name]=arc[name];
   delete arc[name];
-  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}
+  try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){_errLog(e,'restoreHiddenPlayer')}
   saveDB(db);renderSettingsPlayers();
 }
 function startHiddenListener(){
@@ -4154,9 +4196,9 @@ function startHiddenListener(){
       var arc=_getHiddenArchive();
       var _own=acctProfile&&acctProfile.player;
       _groupHidden.forEach(function(n){if(!isPrivatePlayer(n)&&n!==_own&&dbCache[n]){arc[n]=dbCache[n];delete dbCache[n];changed=true;}});
-      if(changed){try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){}}
+      if(changed){try{localStorage.setItem('darts_hidden_archive',JSON.stringify(arc));}catch(e){_errLog(e,'startHiddenListener')}}
       if(changed){
-        try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){}
+        try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){_errLog(e,'startHiddenListener')}
         var a=document.querySelector('.screen.active');
         if(a&&a.id==='screen-stats')renderStats();else if(a&&a.id==='screen-history')renderHistory();else if(a&&a.id==='screen-leaderboard')renderLeaderboard(currentLbTab||'avg');
       }
@@ -4224,7 +4266,7 @@ function _compatNote(src,name,reason){
   for(var i=0;i<_compat.length;i++)if(_compat[i].k===k){_compat[i].ts=Date.now();return;}
   _compat.push({k:k,src:src,name:String(name==null?'':name),reason:reason,ts:Date.now()});
   if(_compat.length>100)_compat.shift();
-  try{_compatRender();}catch(e){}
+  try{_compatRender();}catch(e){_errLog(e,'_compatNote')}
 }
 function _compatRender(){
   var el=document.getElementById('st-sync-issues');if(!el)return;
@@ -4280,7 +4322,7 @@ function _games(p){return (p&&Array.isArray(p.gameHistory))?p.gameHistory.length
 // behalve potjes die je op een ander apparaat zelf hebt gewist (tombstone).
 var _acctSeenTs=(function(){try{return +localStorage.getItem('darts_acct_seen')||0;}catch(e){return 0;}})();
 var _acctPullBusy=false,_acctMetaUnsub=null,_acctPullT=null,_acctLastVisPull=0;
-function _acctSeen(ts){if(ts&&ts>_acctSeenTs){_acctSeenTs=ts;try{localStorage.setItem('darts_acct_seen',String(ts));}catch(e){}}}
+function _acctSeen(ts){if(ts&&ts>_acctSeenTs){_acctSeenTs=ts;try{localStorage.setItem('darts_acct_seen',String(ts));}catch(e){_errLog(e,'_acctSeen')}}}
 function _acctRemoved(){return _ls('darts_acct_removed',{});}
 function _acctMerge(bk,safetyCopy){
   var db=dbCache,added=[],updated=[],newGames=0,changed=false;
@@ -4317,16 +4359,16 @@ function _acctMerge(bk,safetyCopy){
   });
   if(bk&&Array.isArray(bk.private)){
     var pv=getPrivatePlayers(),pc=false;bk.private.forEach(function(n){if(pv.indexOf(n)<0&&db[n]){pv.push(n);pc=true;}});
-    if(pc){try{localStorage.setItem('darts_private',JSON.stringify(pv));}catch(e){}}
+    if(pc){try{localStorage.setItem('darts_private',JSON.stringify(pv));}catch(e){_errLog(e,'_acctMerge')}}
   }
   if(bk&&bk.links&&typeof bk.links==='object'&&!Object.keys(getFriendLinks()).length&&Object.keys(bk.links).length){
     _lsSet('darts_friend_links',bk.links);
   }
   if(changed){
-    if(safetyCopy&&before!==null){try{localStorage.setItem('darts_db_before_restore',before);}catch(e){}}
+    if(safetyCopy&&before!==null){try{localStorage.setItem('darts_db_before_restore',before);}catch(e){_errLog(e,'_acctMerge')}}
     saveDB(db);
     var _act=document.querySelector('.screen.active');
-    if(!(_act&&/^screen-(game|afgooien|atc|shanghai|checkout121|cricket|eliminatie|halveit|randomco)/.test(_act.id))){try{_refreshScopeScreens();}catch(e){}try{renderSettingsPlayers();}catch(e){}}
+    if(!(_act&&/^screen-(game|afgooien|atc|shanghai|checkout121|cricket|eliminatie|halveit|randomco)/.test(_act.id))){try{_refreshScopeScreens();}catch(e){_errLog(e,'_acctMerge')}try{renderSettingsPlayers();}catch(e){_errLog(e,'_acctMerge')}}
   }
   return {added:added,updated:updated,newGames:newGames,changed:changed};
 }
@@ -4359,7 +4401,7 @@ function _acctWatch(){
     },function(e){console.error('Account meekijken mislukt',e);});
   }catch(e){console.error(e);}
 }
-function _acctUnwatch(){if(_acctMetaUnsub){try{_acctMetaUnsub();}catch(e){}_acctMetaUnsub=null;}clearTimeout(_acctPullT);}
+function _acctUnwatch(){if(_acctMetaUnsub){try{_acctMetaUnsub();}catch(e){_errLog(e,'_acctUnwatch')}_acctMetaUnsub=null;}clearTimeout(_acctPullT);}
 document.addEventListener('visibilitychange',function(){
   if(document.visibilityState!=='visible'||!acctUser)return;
   if(Date.now()-_acctLastVisPull<30000)return;
@@ -4572,7 +4614,7 @@ var _gidN=0;
 function _newGid(){_gidN++;return DEVICE_ID+'-'+Date.now().toString(36)+_gidN.toString(36)+Math.random().toString(36).slice(2,5);}
 var frFriends={},frIn={},frOut={},_frUnsubs=[],_frData={},_frLoading=false,_frLoadedAt=0,_frFriendsLoaded=false,_statsScope='local',_inboxDocs=[];
 function _ls(k,def){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?def:v;}catch(e){return def;}}
-function _lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function _lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){_errLog(e,'_lsSet')}}
 function getFriendLinks(){var o=_ls('darts_friend_links',{});return (o&&typeof o==='object'&&!Array.isArray(o))?o:{};}
 function _linkedLocalFor(uid){var L=getFriendLinks();for(var k in L){if(L[k]&&L[k].uid===uid)return k;}return '';}
 function _has(o,k){return Object.prototype.hasOwnProperty.call(o,k);}
@@ -4601,7 +4643,7 @@ function frStart(){
   },function(e){console.error('Inbox',e);}));
   _frHandlePendingInvite();
 }
-function frStop(){_frUnsubs.forEach(function(f){try{f();}catch(e){}});_frUnsubs=[];frFriends={};frIn={};frOut={};_frData={};_frFriendsLoaded=false;_frLoadedAt=0;_inboxDocs=[];if(_statsScope==='friends')_statsScope='local';}
+function frStop(){_frUnsubs.forEach(function(f){try{f();}catch(e){_errLog(e,'frStop')}});_frUnsubs=[];frFriends={};frIn={};frOut={};_frData={};_frFriendsLoaded=false;_frLoadedAt=0;_inboxDocs=[];if(_statsScope==='friends')_statsScope='local';}
 
 // Openbare gegevens van vrienden ophalen (cache 60 s)
 function _frLoadAll(force){
@@ -4801,7 +4843,7 @@ function _inboxApply(docs){
   try{
     var m=location.search.match(/[?&]vriend=([^&#]+)/);
     if(m){localStorage.setItem('darts_pending_invite',decodeURIComponent(m[1]));history.replaceState(null,'',location.pathname+location.hash);}
-  }catch(e){}
+  }catch(e){_errLog(e,'vriend-uitnodiging')}
 })();
 function frInviteLink(){return location.origin+location.pathname+'?vriend='+_ue(_myUsername());}
 function frShareLink(){
@@ -4812,7 +4854,7 @@ function frShareLink(){
 }
 function _frShowLink(url){openGameSheet('Jouw uitnodigingslink','<div class="ac-note">Kopieer deze link en stuur hem naar je vriend.</div><div class="ac-field"><input readonly value="'+_esc(url)+'" onclick="this.select()"></div>');}
 function _frHandlePendingInvite(){
-  var name='';try{name=localStorage.getItem('darts_pending_invite')||'';}catch(e){}
+  var name='';try{name=localStorage.getItem('darts_pending_invite')||'';}catch(e){_errLog(e,'_frHandlePendingInvite')}
   if(!name||!fbAuth)return;
   if(!acctUser){
     openGameSheet('Uitnodiging van '+_esc(name),'<div class="ac-note">'+_esc(name)+' wil vrienden met je worden in Darts by Tom. Maak een account of log in, dan sturen we het verzoek meteen.</div>'+
@@ -4820,7 +4862,7 @@ function _frHandlePendingInvite(){
     return;
   }
   if(!_frFriendsLoaded){setTimeout(_frHandlePendingInvite,800);return;}
-  try{localStorage.removeItem('darts_pending_invite');}catch(e){}
+  try{localStorage.removeItem('darts_pending_invite');}catch(e){_errLog(e,'_frHandlePendingInvite')}
   if(_acctNorm(name)===_myUsername())return;
   frSendRequest(name).then(function(r){showToast(r==='accepted'?'Jullie zijn nu vrienden':'Vriendverzoek gestuurd naar '+name,'success');})
     .catch(function(e){showToast((e&&e.message&&!e.code)?e.message:_acctErr(e),'info');});
@@ -4949,7 +4991,7 @@ function _scrollSnap(root){
 }
 function _scrollRestore(root,snap){
   if(!root||!snap.length)return;
-  snap.forEach(function(r){try{var same=root.querySelectorAll(r.cls?'.'+String(r.cls).trim().split(/\s+/).join('.'):r.tag),el=same[r.i];if(el)el.scrollLeft=r.x;}catch(e){}});
+  snap.forEach(function(r){try{var same=root.querySelectorAll(r.cls?'.'+String(r.cls).trim().split(/\s+/).join('.'):r.tag),el=same[r.i];if(el)el.scrollLeft=r.x;}catch(e){/*stil: scrollpositie herstellen is cosmetisch*/}});
 }
 function _scoped(impl,screenId,elId,args){
   var _scr0=document.getElementById(screenId),_snap=_scrollSnap(_scr0);
@@ -5003,9 +5045,9 @@ function haptic(){
     // iPhone (iOS 18+): een verborgen schakelaar geeft een korte tik
     if(!_hapEl){var l=document.createElement('label');l.setAttribute('aria-hidden','true');l.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';var i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;l.appendChild(i);document.body.appendChild(l);_hapEl=l;}
     _hapEl.click();
-  }catch(e){}
+  }catch(e){/*stil: trillen niet beschikbaar*/}
 }
-function setHaptics(v){hapticsOn=!!v;try{localStorage.setItem('darts_haptics',v?'1':'0');}catch(e){}if(v)haptic();}
+function setHaptics(v){hapticsOn=!!v;try{localStorage.setItem('darts_haptics',v?'1':'0');}catch(e){_errLog(e,'setHaptics')}if(v)haptic();}
 (function(){
   var down=null,t0=0;
   function release(){if(!down)return;var el=down,wait=Math.max(0,70-(Date.now()-t0));down=null;setTimeout(function(){el.classList.remove('k-down');},wait);}
@@ -5053,6 +5095,7 @@ function stOpen(pg){
   if(el){el.classList.remove('st-in');void el.offsetWidth;el.classList.add('st-in');}
   var ac=document.getElementById('app-content');if(ac)ac.scrollTop=0;
   if(pg==='players'){_spOpen='';_renderPlayersList();}
+  if(pg==='data'){try{_errRender();}catch(e){_errLog(e,'stOpen')}}
   if(pg==='friends'){renderFriendsCard();_frLoadAll().then(renderFriendsCard);}
   if(pg==='account')renderAccountCard();
   if(pg==='game')renderVoicePicker();
@@ -5162,7 +5205,7 @@ function disconnectGroup(){
   // Lokale gegevens houden (v207): voorheen werd alles leeggemaakt, en het eerstvolgende potje overschreef dan je opslag
   dbCache=_loadLocalDB()||dbCache||{};
   document.getElementById('group-modal').style.display='none';
-  try{renderSettingsPlayers();_refreshScopeScreens();_refreshKnownNames();}catch(e){}
+  try{renderSettingsPlayers();_refreshScopeScreens();_refreshKnownNames();}catch(e){_errLog(e,'disconnectGroup')}
   updateGroupTile();
   });
 }
@@ -5271,8 +5314,8 @@ function startFirebaseListener(){
         _archivePlayer(_id,dbCache[_id]);
         delete dbCache[_id];
         _grpLocalDirty=true;
-        try{showToast(_id+' gewist in groep, bewaard in archief','info');}catch(e){}
-        try{renderSettingsPlayers();}catch(e){}
+        try{showToast(_id+' gewist in groep, bewaard in archief','info');}catch(e){_errLog(e,'startFirebaseListener')}
+        try{renderSettingsPlayers();}catch(e){_errLog(e,'startFirebaseListener')}
       }
     });
     if(_grpLocalDirty){_grpLocalDirty=false;try{localStorage.setItem('darts_db',JSON.stringify(dbCache));}catch(e){_storageFull(e);}}
@@ -5689,7 +5732,7 @@ function renderSetup(){
   try{
     var last=JSON.parse(localStorage.getItem('darts_last_players')||'[]');
     if(last.length)setupPlayers=last.slice();
-  }catch(e){}
+  }catch(e){_errLog(e,'renderSetup')}
   selectGame(selectedGame);
   renderSetupPlayers();renderKnownNames('#known-names');renderSeqEditor();
   var botChk=document.getElementById('bot-enabled');if(botChk)botChk.checked=false;
@@ -6406,7 +6449,7 @@ function _seqPressStart(e,idx){
     _seqDragIdx=idx;
     var t=document.querySelector('#seq-editor [data-seq-idx="'+idx+'"]');
     if(t)t.classList.add('hi-dragging');
-    if(navigator.vibrate)try{navigator.vibrate(15);}catch(_){}
+    if(navigator.vibrate)try{navigator.vibrate(15);}catch(_){/*stil: trillen niet beschikbaar*/}
   },250);
   document.addEventListener('pointermove',_seqDragMove);
   document.addEventListener('pointerup',_seqDragEnd);
@@ -6555,7 +6598,7 @@ var afgLives=(function(){try{return parseInt(localStorage.getItem('darts_afg_liv
 var afgBySeg=(function(){try{return localStorage.getItem('darts_afg_byseg')!=='0';}catch(e){return true;}})();
 var afgAssign=(function(){try{return localStorage.getItem('darts_afg_assign')||'manual';}catch(e){return 'manual';}})();
 var afgTeams=0,afgTeamOf={};
-function _afgSave(k,v){try{localStorage.setItem(k,String(v));}catch(e){}}
+function _afgSave(k,v){try{localStorage.setItem(k,String(v));}catch(e){_errLog(e,'_afgSave')}}
 function setAfgLives(v){afgLives=Math.max(1,Math.min(10,v|0));_afgSave('darts_afg_lives',afgLives);renderSetupRules();updateSetupActionBar();}
 function setAfgLivesCustom(){
   openGameSheet('Aantal levens','<div class="g-keys" style="grid-template-columns:repeat(5,1fr)">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){return '<button onclick="closeGameSheet();setAfgLives('+v+')">'+v+'</button>';}).join('')+'</div>');
@@ -6576,10 +6619,10 @@ var RCO_BOGEY=[159,162,163,165,166,168,169];
 var rcoBrackets=(function(){try{var a=JSON.parse(localStorage.getItem('darts_rco_brk')||'null');return Array.isArray(a)&&a.length?a:[0,1,2,3,4,5,6];}catch(e){return [0,1,2,3,4,5,6];}})();
 var rcoMode=(function(){try{return localStorage.getItem('darts_rco_mode')||'default';}catch(e){return 'default';}})();
 var rcoSame=(function(){try{return localStorage.getItem('darts_rco_same')==='1';}catch(e){return false;}})(); // v234: iedereen per ronde dezelfde checkout (alleen Willekeurig)
-function setRcoSame(v){rcoSame=!!v;try{localStorage.setItem('darts_rco_same',v?'1':'0');}catch(e){}renderSetupRules();updateSetupActionBar();}
+function setRcoSame(v){rcoSame=!!v;try{localStorage.setItem('darts_rco_same',v?'1':'0');}catch(e){_errLog(e,'setRcoSame')}renderSetupRules();updateSetupActionBar();}
 var rcoDarts=(function(){try{var v=localStorage.getItem('darts_rco_darts');return v==null?9:parseInt(v);}catch(e){return 9;}})();
 var rcoCount=(function(){try{var v=localStorage.getItem('darts_rco_count');return v==null?10:parseInt(v);}catch(e){return 10;}})();
-function _rcoSave(){try{localStorage.setItem('darts_rco_brk',JSON.stringify(rcoBrackets));localStorage.setItem('darts_rco_mode',rcoMode);localStorage.setItem('darts_rco_darts',String(rcoDarts));localStorage.setItem('darts_rco_count',String(rcoCount));}catch(e){}}
+function _rcoSave(){try{localStorage.setItem('darts_rco_brk',JSON.stringify(rcoBrackets));localStorage.setItem('darts_rco_mode',rcoMode);localStorage.setItem('darts_rco_darts',String(rcoDarts));localStorage.setItem('darts_rco_count',String(rcoCount));}catch(e){_errLog(e,'_rcoSave')}}
 function toggleRcoBracket(i){var k=rcoBrackets.indexOf(i);if(k>=0){if(rcoBrackets.length===1)return;rcoBrackets.splice(k,1);}else rcoBrackets.push(i);rcoBrackets.sort(function(a,b){return a-b;});_rcoSave();renderSetupRules();updateSetupActionBar();}
 function setRcoMode(m){rcoMode=m;_rcoSave();renderSetupRules();updateSetupActionBar();}
 function setRcoDarts(v){rcoDarts=v;_rcoSave();renderSetupRules();updateSetupActionBar();}
@@ -6753,7 +6796,7 @@ function rcoEnd(raceWinner){
 // state.teamOf=[0,1,0,1]: spelers staan om en om (T1a,T2a,T1b,T2b). Teamgenoten delen één score; elke
 // wijziging wordt naar de teamgenoot gekopieerd (_syncTeam). Legs/sets ook. Opslaan: eigen beurten, teamuitslag.
 var x01Teams=false,_pendingTeams=null;
-function setX01Teams(v){x01Teams=!!v;renderSetupRules();try{renderSetupPlayers();}catch(e){}updateSetupActionBar();}
+function setX01Teams(v){x01Teams=!!v;renderSetupRules();try{renderSetupPlayers();}catch(e){_errLog(e,'setX01Teams')}updateSetupActionBar();}
 function _isX01Type(g){return g==='x01'||g==='501'||g==='301';}
 function _mates(i){if(!state.teamOf)return [];var t=state.teamOf[i],o=[];state.teamOf.forEach(function(x,j){if(x===t&&j!==i)o.push(j);});return o;}
 function _syncTeam(i){_mates(i).forEach(function(j){state.scores[j]=state.scores[i];});}
@@ -7000,7 +7043,7 @@ function _hsUpdate(el){var m=el.scrollWidth-el.clientWidth;el.classList.toggle('
 function _hsAll(){document.querySelectorAll(_HS_SEL).forEach(_hsUpdate);}
 document.addEventListener('scroll',function(e){var t=e.target;if(t&&t.matches&&t.matches(_HS_SEL))_hsUpdate(t);},true);
 window.addEventListener('resize',_hsAll);
-(function(){var _t=null;try{new MutationObserver(function(){clearTimeout(_t);_t=setTimeout(_hsAll,60);}).observe(document.body,{childList:true,subtree:true});}catch(e){}})();
+(function(){var _t=null;try{new MutationObserver(function(){clearTimeout(_t);_t=setTimeout(_hsAll,60);}).observe(document.body,{childList:true,subtree:true});}catch(e){/*stil: observer niet beschikbaar*/}})();
 function showToast(msg,type){
   // type: 'error'|'warning'|'success'|'info'
   var bg={error:'rgba(239,68,68,.96)',warning:'rgba(255,149,0,.96)',success:'rgba(34,197,94,.96)',info:'rgba(36,36,40,.93)'}[type]||'rgba(36,36,40,.93)';
@@ -7461,8 +7504,8 @@ function launchTrnMatchWithStart(match,onWin,startIdx){
 
 function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
   // Remember last players and game for next time
-  try{localStorage.setItem('darts_last_players',JSON.stringify(players.filter(function(p){return p!=='Bot'})));}catch(e){}
-  try{localStorage.setItem('darts_last_game',gameType);}catch(e){}
+  try{localStorage.setItem('darts_last_players',JSON.stringify(players.filter(function(p){return p!=='Bot'})));}catch(e){_errLog(e,'launchGame')}
+  try{localStorage.setItem('darts_last_game',gameType);}catch(e){_errLog(e,'launchGame')}
   _prevScores={};
 
   state.gameType=gameType;state.doubleOut=dblOut;state.players=players.slice();
@@ -8676,7 +8719,7 @@ function _legSetDbl(dbl){var l=state.legsData&&state.legsData[state.legsData.len
 function endGame501(winnerName){
   // Save leg stats first (needed for both normal and tournament mode)
   saveLegData(winnerName);
-  try{_legPbCheck(winnerName);}catch(e){}
+  try{_legPbCheck(winnerName);}catch(e){_errLog(e,'endGame501')}
   if(state.trnMode&&state.trnMatchCallback){
     var cb=state.trnMatchCallback;state.trnMode=false;state.trnMatchCallback=null;
     state.botPlayerIndex=-1;
@@ -8786,7 +8829,7 @@ function atcMaxTarget(){return 22;}
 // ═══ Bob's 27 (v240) ═══
 // 27 punten start; per ronde 3 pijlen op D1..D20 en Bull. Raak = +waarde per raak, niets raak = −waarde.
 var bobStopNeg=(function(){try{return localStorage.getItem('darts_bob_stop')!=='0';}catch(e){return true;}})();
-function setBobStop(v){bobStopNeg=!!v;try{localStorage.setItem('darts_bob_stop',v?'1':'0');}catch(e){}renderSetupRules();updateSetupActionBar();}
+function setBobStop(v){bobStopNeg=!!v;try{localStorage.setItem('darts_bob_stop',v?'1':'0');}catch(e){_errLog(e,'setBobStop')}renderSetupRules();updateSetupActionBar();}
 function bobLabel(r){return r<20?'D'+(r+1):'Bull';}
 function bobVal(r){return r<20?(r+1)*2:50;}
 function _bobActive(i){return !state.bobOut[i]&&state.bobRound[i]<21;}
@@ -9152,7 +9195,7 @@ _FINISH.shw=_shShanghaiWin;
 function _shShanghaiSave(){
   var w=state.currentPlayer;
   state.dartCount[w]=(state.dartCount[w]||0)+3;
-  playSound('high');try{callerSay('Shanghai! '+callerName(state.players[w])+' wins the game!',true);}catch(e){}
+  playSound('high');try{callerSay('Shanghai! '+callerName(state.players[w])+' wins the game!',true);}catch(e){/*stil: spraak niet beschikbaar*/}
   if(!state.shStatsSaved){state.shStatsSaved=true;state.players.forEach(function(name,i){updatePlayerStat(name,state.gameType,{won:i===w,darts:state.dartCount[i]||0,score:state.shScores[i]||0,highScore:state.shScores[i]||0,shanghai:i===w});});}
   showWin(state.players[w],'Shanghai op '+state.shTarget+'! Direct gewonnen',state.players.map(function(n,i){return'<div class="stat-row"><span>'+_esc(n)+(i===w?' <span style="color:var(--accent);font-weight:700">· Shanghai</span>':'')+'</span><strong>'+state.shScores[i]+'</strong></div>';}).join(''));
 }
@@ -9883,7 +9926,7 @@ function _hiReplaceEntry(name,old,patch){
   var dl=p.deleted||[];dl.push(_mkey(old));p.deleted=dl.slice(-300);
   p.wins=Math.max(0,(p.wins||0)+(ne.won?1:0)-(old.won?1:0));
   if(typeof old.score==='number'&&typeof ne.score==='number')p.totalScore=Math.max(0,(p.totalScore||0)+ne.score-old.score);
-  try{var B=_ls('darts_correct_backup',{});B[name+' @'+Date.now()]={old:old,newGid:ne.gid};var ks=Object.keys(B);while(ks.length>20){delete B[ks.shift()];}_lsSet('darts_correct_backup',B);}catch(e){}
+  try{var B=_ls('darts_correct_backup',{});B[name+' @'+Date.now()]={old:old,newGid:ne.gid};var ks=Object.keys(B);while(ks.length>20){delete B[ks.shift()];}_lsSet('darts_correct_backup',B);}catch(e){_errLog(e,'_hiReplaceEntry')}
   return ne;
 }
 function hiCorrectSave(name,key){
@@ -9899,7 +9942,7 @@ function hiCorrectSave(name,key){
     [name].concat(Object.keys(pl.flips)).forEach(function(n){_sortHistory(dbCache[n]);});
     saveDB(dbCache);
     closeGameSheet();showToast('Potje gecorrigeerd','success');
-    try{renderHistory();}catch(e){}
+    try{renderHistory();}catch(e){_errLog(e,'hiCorrectSave')}
   });
 }
 
@@ -9971,7 +10014,7 @@ function ecSave(){
     pl.ch.forEach(function(c){_sortHistory(dbCache[c.n]);});
     saveDB(dbCache);_ecCtx=null;
     closeGameSheet();showToast('Potje gecorrigeerd','success');
-    try{renderHistory();}catch(e){}
+    try{renderHistory();}catch(e){_errLog(e,'ecSave')}
   });
 }
 
@@ -10254,7 +10297,7 @@ function clearPlayer(name){
   dbCache=db;
   var _rm=_acctRemoved();_rm[name]=Date.now();_lsSet('darts_acct_removed',_rm); // niet terughalen via account-sync (v229)
   // Ook de lokale kopie bijwerken, anders komt de speler na herstart terug (v198)
-  try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){}
+  try{localStorage.setItem('darts_db',JSON.stringify(db));}catch(e){_errLog(e,'clearPlayer')}
   if(statsSelectedPlayer===name)statsSelectedPlayer=null;
   // Delete from Firestore
   if(groupCode){
@@ -10263,7 +10306,7 @@ function clearPlayer(name){
   renderStats();
   renderHistory();
   renderLeaderboard(currentLbTab||'avg');
-  try{if(_spOpen===name)_spOpen='';renderSettingsPlayers();}catch(e){}
+  try{if(_spOpen===name)_spOpen='';renderSettingsPlayers();}catch(e){_errLog(e,'clearPlayer')}
   showToast(name+' verwijderd','success');
   });
 }
@@ -10376,7 +10419,7 @@ function setImportResult(msg,color){
 // GELUID — Web Audio API (geen bestanden nodig)
 // ═══════════════════════════════════════════
 var _ac=null;
-function getAC(){if(!_ac)try{_ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}return _ac;}
+function getAC(){if(!_ac)try{_ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){/*stil: geluid niet beschikbaar*/}return _ac;}
 
 function playTone(freq,type,dur,vol,delay){
   var ac=getAC();if(!ac)return;
@@ -10415,7 +10458,7 @@ function playSound(name){
       playTone(660,'sine',0.1,0.2);
       playTone(880,'sine',0.1,0.2,0.08);
     }
-  }catch(e){}
+  }catch(e){/*stil: geluid niet beschikbaar*/}
 }
 
 // ═══════════════════════════════════════════
@@ -10624,7 +10667,7 @@ function showLbTab(tab){
   var row=document.getElementById('lb-stat-row');
   if(row)row.style.display=isX01?'':'none';
   var act=document.querySelector('.lb-chip.active');
-  if(act&&act.scrollIntoView)try{act.scrollIntoView({block:'nearest',inline:'center'});}catch(e){}
+  if(act&&act.scrollIntoView)try{act.scrollIntoView({block:'nearest',inline:'center'});}catch(e){/*stil: scrollIntoView is cosmetisch*/}
   renderLeaderboard(tab);
 }
 
@@ -10645,7 +10688,7 @@ function calcGameStats(name, gameTypeFilter){
 function renderLeaderboard(tab){_scoped(_renderLeaderboardImpl,'screen-leaderboard','leaderboard-content',arguments);}
 // Ranglijst per periode (v240): "Deze maand" rekent alleen met potjes van de huidige kalendermaand.
 var _lbPeriod=(function(){try{return localStorage.getItem('darts_lb_period')==='month'?'month':'all';}catch(e){return 'all';}})(),_lbLastTab=null;
-function setLbPeriod(v){_lbPeriod=v;try{localStorage.setItem('darts_lb_period',v);}catch(e){}renderLeaderboard(_lbLastTab||'avg');}
+function setLbPeriod(v){_lbPeriod=v;try{localStorage.setItem('darts_lb_period',v);}catch(e){_errLog(e,'setLbPeriod')}renderLeaderboard(_lbLastTab||'avg');}
 function _lbEntryTs(e){if(e.ts)return e.ts;var m=/^(\d{1,2})-(\d{1,2})-(\d{4})/.exec(e.date||'');return m?new Date(+m[3],+m[2]-1,+m[1]).getTime():0;}
 function _lbMonthDB(src){
   var d=new Date(),from=new Date(d.getFullYear(),d.getMonth(),1).getTime(),out={};
@@ -11517,7 +11560,7 @@ function deleteMatchEntry(playerName, index){
 // ════ APP-VERSIE ════
 // Bij elke release ALLEEN dit getal ophogen. Instellingen toont het, en sw.js
 // krijgt het mee als ?v=… zodat de cache automatisch ververst.
-var APP_VERSION=250;
+var APP_VERSION=251;
 function showAppVersion(){
   var el=document.getElementById('app-version');
   if(el)el.textContent='v'+APP_VERSION;
@@ -11532,7 +11575,7 @@ if('serviceWorker' in navigator){
 // Haalt index.html vers van de server, leest APP_VERSION en herlaadt de app als er een nieuwere is.
 // Spelgegevens staan in localStorage en blijven bij herladen gewoon staan.
 var _updAvail=0,_updLastCheck=0,_updBusy=false;
-(function(){try{if(/[?&]u=\d+/.test(location.search))history.replaceState(null,'',location.pathname+location.hash);}catch(e){}})();
+(function(){try{if(/[?&]u=\d+/.test(location.search))history.replaceState(null,'',location.pathname+location.hash);}catch(e){/*stil: adresbalk opschonen is cosmetisch*/}})();
 function _updSetUI(){
   var st=document.getElementById('upd-status'),b=document.getElementById('upd-btn');
   if(b){
@@ -11619,7 +11662,7 @@ function applyTheme(t){
 function applyLang(lang){
   document.querySelectorAll('.lang-tile,.lang-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang-val')===lang);});
   if(lang===_lang)return;
-  try{localStorage.setItem('lang',lang);}catch(e){}
+  try{localStorage.setItem('lang',lang);}catch(e){_errLog(e,'applyLang')}
   // opnieuw laden: alle teksten (ook al getoonde) worden dan in de nieuwe taal opgebouwd
   setTimeout(function(){location.reload();},120);
 }
@@ -12779,7 +12822,7 @@ function _afgWin(winner){
   ['bob-target','atc-needs','sh-target2','co121-target'].forEach(function(id){
     var el=document.getElementById(id);if(!el)return;
     function fit(){var n=Math.max(1.6,(el.textContent||'').trim().length);el.style.setProperty('--gt-n',n);}
-    fit();try{new MutationObserver(fit).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){}
+    fit();try{new MutationObserver(fit).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){/*stil: observer niet beschikbaar*/}
   });
 })();
 // ═══ Potje afronden? (v247) ═══
@@ -12788,9 +12831,9 @@ function _afgWin(winner){
 // spel even exact, zonder te leunen op de Ongedaan-functie per spel. Na een herstart komt de vraag terug (_FINISH).
 var _finishPrev=null,_finishFn=null;
 function _finishGate(kind,arg,rowsHtml,fn){
-  if(_finishPrev==null){try{_finishPrev=localStorage.getItem(LIVE_KEY);}catch(e){}}
+  if(_finishPrev==null){try{_finishPrev=localStorage.getItem(LIVE_KEY);}catch(e){_errLog(e,'_finishGate')}}
   state._finishPending=kind;state._finishArg=(arg==null?null:arg);_finishFn=fn;
-  try{_liveSaveNow();}catch(e){}
+  try{_liveSaveNow();}catch(e){_errLog(e,'_finishGate')}
   var old=document.getElementById('fin-ov');if(old&&old.parentNode)old.parentNode.removeChild(old);
   var ov=document.createElement('div');ov.className='ask-ov';ov.id='fin-ov';
   ov.innerHTML='<div class="ask-box" role="dialog" aria-modal="true" aria-labelledby="fin-t"><div class="ask-t" id="fin-t">Potje afronden?</div>'+
@@ -12805,15 +12848,15 @@ function _finishGate(kind,arg,rowsHtml,fn){
 function _finishClose(){var ov=document.getElementById('fin-ov');if(ov){ov.classList.add('out');setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},160);}}
 function _finishDo(){
   var f=_finishFn;_finishFn=null;_finishPrev=null;state._finishPending=false;state._finishArg=null;
-  _finishClose();try{haptic&&haptic();}catch(e){}
+  _finishClose();try{haptic&&haptic();}catch(e){/*stil: tikgevoel*/}
   if(f)f();
 }
 function _finishUndo(){
   var p=_finishPrev;_finishFn=null;_finishPrev=null;state._finishPending=false;state._finishArg=null;
   _finishClose();
-  var s=null;try{s=p?JSON.parse(p):null;}catch(e){}
+  var s=null;try{s=p?JSON.parse(p):null;}catch(e){_errLog(e,'_finishUndo')}
   if(s&&s.state&&_LIVE_RENDER[s.screen]&&!s.state._finishPending){_liveResume(s,true);return;}
-  try{gameBarUndo();}catch(e){} // vangnet als er geen snapshot was
+  try{gameBarUndo();}catch(e){_errLog(e,'_finishUndo')} // vangnet als er geen snapshot was
 }
 // Na hervatten (herstart midden in de vraag) de vraag opnieuw stellen
 function _finishReopen(){
@@ -12839,12 +12882,12 @@ function _liveSnapshot(){
 }
 function _liveSaveNow(){
   _liveT=null;if(_liveOff)return;
-  try{var s=_liveSnapshot();if(s)localStorage.setItem(LIVE_KEY,JSON.stringify(s));}catch(e){}
+  try{var s=_liveSnapshot();if(s)localStorage.setItem(LIVE_KEY,JSON.stringify(s));}catch(e){_errLog(e,'_liveSaveNow')}
 }
 function _liveSave(){if(!_liveT)_liveT=setTimeout(_liveSaveNow,0);}
-function _liveClear(){try{localStorage.removeItem(LIVE_KEY);}catch(e){}}
-function _trnSave(){try{if(trn&&trn.format)localStorage.setItem(TRN_KEY,JSON.stringify({ts:Date.now(),trn:trn,screen:_curScreen==='screen-trn-standings'?'screen-trn-standings':'screen-trn-overview'}));}catch(e){}}
-function _trnClear(){try{localStorage.removeItem(TRN_KEY);}catch(e){}}
+function _liveClear(){try{localStorage.removeItem(LIVE_KEY);}catch(e){_errLog(e,'_liveClear')}}
+function _trnSave(){try{if(trn&&trn.format)localStorage.setItem(TRN_KEY,JSON.stringify({ts:Date.now(),trn:trn,screen:_curScreen==='screen-trn-standings'?'screen-trn-standings':'screen-trn-overview'}));}catch(e){_errLog(e,'_trnSave')}}
+function _trnClear(){try{localStorage.removeItem(TRN_KEY);}catch(e){_errLog(e,'_trnClear')}}
 // Na elke render opslaan
 Object.keys(_LIVE_RENDER).forEach(function(k){
   var n=_LIVE_RENDER[k],f=window[n];if(typeof f!=='function')return;
@@ -12907,7 +12950,7 @@ function _liveResume(s,quiet){
     if(s.screen==='screen-game'&&state.botPlayerIndex>=0&&state.currentPlayer===state.botPlayerIndex)triggerBotTurn();
     else if(s.screen==='screen-halveit'&&_hiIsBot())triggerHiBotTurn();
     else if(s.screen==='screen-afgooien'&&_afgIsBot())triggerAfgBotDart();
-  }catch(e){}},500);
+  }catch(e){_errLog(e,'_liveResume')}},500);
   if(!quiet)showToast('Potje hervat','success');
 }
 function _liveDescribe(s){
@@ -12920,8 +12963,8 @@ function _liveDescribe(s){
 }
 function _liveOffer(){
   var s=null,t=null;
-  try{s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');}catch(e){}
-  try{t=JSON.parse(localStorage.getItem(TRN_KEY)||'null');}catch(e){}
+  try{s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');}catch(e){_errLog(e,'_liveOffer')}
+  try{t=JSON.parse(localStorage.getItem(TRN_KEY)||'null');}catch(e){_errLog(e,'_liveOffer')}
   var now=Date.now();
   if(s&&(!s.ts||now-s.ts>LIVE_MAX_AGE||!_LIVE_RENDER[s.screen]||!s.state)){_liveClear();s=null;}
   if(t&&(!t.ts||now-t.ts>LIVE_MAX_AGE*3||!t.trn||!t.trn.format)){_trnClear();t=null;}
@@ -12942,9 +12985,9 @@ function _liveOffer(){
 function _liveResumeStored(){try{var s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');if(s)_liveResume(s);}catch(e){showToast('Hervatten lukte niet','error');}}
 function _liveDiscard(){
   _askConfirm('Potje weggooien?','Dit potje wordt niet opgeslagen.','Weggooien',true,function(){
-  var s=null;try{s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');}catch(e){}
+  var s=null;try{s=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');}catch(e){_errLog(e,'_liveDiscard')}
   _liveClear();closeGameSheet();
-  if(s&&s.state&&s.state.trnMode&&s.trn){try{localStorage.setItem(TRN_KEY,JSON.stringify({ts:Date.now(),trn:s.trn,screen:'screen-trn-overview'}));}catch(e){}setTimeout(_liveOffer,350);}
+  if(s&&s.state&&s.state.trnMode&&s.trn){try{localStorage.setItem(TRN_KEY,JSON.stringify({ts:Date.now(),trn:s.trn,screen:'screen-trn-overview'}));}catch(e){_errLog(e,'_liveDiscard')}setTimeout(_liveOffer,350);}
   });
 }
 function _trnResumeStored(){
