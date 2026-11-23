@@ -33,6 +33,7 @@ Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet 
   - klein scherm (375×667, iPhone SE) en 390×844;
   - geen `pageerror`.
   - **`npm test` moet groen zijn vóór elke push** (roadmap fase 2, v251). Alles in `tests/` (zie `tests/README.md`): ±3 min, 69+ testgevallen. In de sessie: `PLAYWRIGHT=... CHROMIUM=... node tests/run.mjs` (helper `/home/claude/t/env.sh` als die er is). Nieuwe functie = nieuwe testgevallen in `tests/core/`. Na grote wijzigingen ook `node tests/mutation.mjs`.
+  - **Visuele regressie (fase 4A):** `tests/visual/` (zie README daar). 46 scenario's × telefoon (375×667, 390×844, 430×932) en liggend (1280×800, 1920×1080) × NL/EN × licht/donker = 672 opnames. Vergelijkt de huidige code met een goedgekeurde versie (tag `visual-baseline-v252`) in dezelfde omgeving; er staan geen PNG's in de repo. Bij elke wijziging aan de UI: `REF=… npm run visual:compare -- --quick`, en vóór een release de volledige run. Bedoelde verschillen keurt Tom goed (nieuwe tag); onbedoelde zijn een fout. Bekende problemen in de baseline: `tests/visual/BEVINDINGEN-v252.md`, inventaris: `tests/visual/BASELINE-v252.md`.
   - Firebase stub je via `page.route(/gstatic/…)`. Voor groep/vrienden-tests gebruik je een nep-Firestore die tussen twee browsercontexten gedeeld wordt.
 - **Antwoordvorm:** kort per punt wat er veranderd is en wat Tom zelf moet controleren. Wat alleen op een echte iPhone te testen is, noem je expliciet.
 - **Huisstijl:** bouw verder op wat er is (één bestand, bestaande componenten). Geen rebuild of andere stack. Doel: het moet voelen als een echte app.
@@ -364,6 +365,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
 - **Spelschermen op de iPhone SE (375×667) moeten soms scrollen** om de onderste knoppen boven de spelbalk te krijgen: Cricket (2 en 4 spelers), en met 4 spelers Shanghai, Bob's 27, 121 en Random Checkout (Random Checkout met 4 spelers ook op 375×812). Bereikbaar, maar niet in één oogopslag. `tests/core/ui.mjs` meldt dit als waarschuwing. Oplossen in roadmap fase 4 (ontwerpsysteem; fase 3 deed alleen liggend).
+- **Fase 4A-bevindingen** (`tests/visual/BEVINDINGEN-v252.md`): Halve It is niet aangepast aan liggend (zwart vlak), het X01-statistiekenblad valt onder de spelbalk, setup stap 1 zegt nog "Bouw 5 punten" bij Killer, en er zijn kleine tikvlakken en tekst. Op te lossen in fase 4, na Toms akkoord.
 - **Groepscode-kaart** staat nog in Instellingen → Gegevens, terwijl `groups` sinds 21-11 dicht staat (fase 6: weghalen).
 
 ## 12. Bekende bugs
