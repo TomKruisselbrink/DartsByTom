@@ -21,6 +21,7 @@ In een sessie zonder `npm install`: `PLAYWRIGHT=<pad>/playwright/index.js CHROMI
 | `core/games.mjs` | elk spel één keer echt uitgespeeld via de invoerfuncties: ATC, Cricket, Shanghai (+ direct), Bob's 27 (+ uit), Halve It, Eliminatie (+ terugzetten), Afgooien, Random Checkout, 121 |
 | `core/data.mjs` | `_grpMerge` (tombstones, tellers alleen omhoog, idempotent), account-sync tussen twee apparaten, samenvoegen, verwijderen (alleen na bevestiging), potje verwijderen, export/import, hervatten na herladen, `darts_db` byte-gelijk na herladen |
 | `core/ui.mjs` | spelbalk overlapt geen knoppen (4 schermmaten × 10 spellen × 2/4 spelers), geen overloop, NL/EN × licht/donker (+ kruiscombinaties) |
+| `core/fase3.mjs` | kantinescherm liggend (scoregrootte, numpadbreedte, spelbalk), oefenspellen liggend, "Verder waar je was"; met `REF=` ook telefoonmaten pixel-gelijk |
 | `core/errlog.mjs` | geen lege `catch` meer, stille catches alleen met reden buiten opslag/sync, foutlog werkt en toont veilig |
 | `security/*` | fase 1: escapen, binnenkomende data, namen, melden, 'Potje afronden', correcties, Eliminatie, rematch (zie `security/README.md`) |
 

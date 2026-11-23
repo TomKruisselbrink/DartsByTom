@@ -25,7 +25,8 @@
   "sTile|_histExtra.length": "getal (lengte van een lijst)",
   "_dayLabel|lid": "element-id: 'ld-'+naam.replace(/[^a-z0-9]/gi,'')+'-'+index, alleen a–z0–9",
   "_dayLabel|detailId": "element-id: 'gd-'+naam.replace(/[^a-z0-9]/gi,'')+'-'+index, alleen a–z0–9",
-  "_dayLabel|i": "lusindex (getal)"
+  "_dayLabel|i": "lusindex (getal)",
+  "_renderHomeLast|i": "lusindex (getal)"
  },
  "html": {
   "_acctChoosePlayer|_frAv(n)": "getal: berekend door de code of uit de spelstatus van het lopende potje (state), niet uit opgeslagen of binnengekomen data",
@@ -383,6 +384,8 @@
   "ecOpen|(c.f?_esc(c.l)": "c.l is een codeconstante uit EC_CFG en gaat toch via _esc; rest is vaste tekst",
   "ecOpen|(canWin?' en de winnaar.':'.'):'Wie heeft er gewonnen?')": "alleen vaste tekst uit de code",
   "ecOpen|rows": "door de code opgebouwde HTML; namen en waarden daarin via _esc",
-  "_errRender|b.length": "lengte van een array (getal)"
+  "_errRender|b.length": "lengte van een array (getal)",
+  "_renderHomeLast|(h.sub?_esc(h.sub)": "ge-escapete ondertitel of vaste tekst",
+  "_renderHomeLast|(c.players.length>1?(many?'':c.players.map(function(n,i){return '<button onclick=\"homeReplay('+i": "door de code opgebouwde knoppen; naam via _esc, i is een lusindex"
  }
 }

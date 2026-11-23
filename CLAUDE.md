@@ -1,6 +1,6 @@
 # CLAUDE.md — Darts by Tom
 
-Overdracht voor een nieuwe chat. Stand: **v251** (november 2026). Alles hieronder klopt met de code op dat moment.
+Overdracht voor een nieuwe chat. Stand: **v252** (november 2026). Alles hieronder klopt met de code op dat moment.
 Zoek in `index.html` op functienamen en sectiekoppen (`// ═══ …`), niet op regelnummers: die verschuiven.
 
 ---
@@ -262,6 +262,7 @@ Solo-potjes tellen nooit als winst (`updatePlayerStat` zet `won:false` bij één
 | `darts_trn_live` | lopend toernooi (v240) |
 | `darts_correct_backup` | `{ 'naam @ms': { old: Entry, newGid } }`: kopie van gecorrigeerde potjes (vangnet, max 20, v247). Niet opruimen. |
 | `darts_merge_backup` | `{ 'naam @ms': Player }`: kopie van samengevoegde spelers (vangnet, max 10). Niet opruimen. |
+| `darts_last_config` | `{ c: rematchConfig, ts }`: laatste spelinstellingen voor "Verder waar je was" (v252). Geen spelgegevens. |
 | `darts_errlog` | `[{ t, w, m, n, v }]`: foutlog (v251), max 50. Geen spelgegevens; mag gewist worden (knop Wissen). |
 | `darts_install_dismissed` | `'1'` als de iOS-installatiebanner weggeklikt is |
 
@@ -339,6 +340,8 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
   - meldingen via `showToast(msg,type)`.
   - **Bevestigen via `_askConfirm(titel, uitleg, knop, gevaarlijk, onOk)`** (v241): eigen venster in app-stijl. Gebruik nooit `confirm()`/`alert()` (op iPhone staat er "… zegt" boven). Stop in een spel, verwijderen, samenvoegen, groep/toernooi verlaten en potje weggooien gebruiken het allemaal.
   - **Oefenspellen** (Bob's 27, ATC, Shanghai, 121, v241): `.g-target` vult de vrije ruimte (`flex:1 1 0`, `container-type:size`; met `flex-basis:auto` werkt `cqh` niet), het doel schaalt met `cqh`/`cqw` en `--gt-n` (aantal tekens, gezet door een MutationObserver). Onder 700px hoog compactere spelersrijen. Gemeten: geen overlap met de spelbalk bij 1–4 spelers op 375×667 t/m 430×932.
+  - **Kantinescherm** (v252, roadmap fase 3): `@media (orientation:landscape) and (min-width:1000px)`. 501: `#screen-game` wordt een grid, scores links (`.x-score` `clamp(110px,min(15vh,9vw),280px)`, 3+ spelers kleiner), rechts `#x01-side` (op de telefoon `display:contents`, dus geen effect) met de uitgooi-route en de invoer (max. 520 px). Oefenspellen/Cricket/Random Checkout: `.g-wrap` als grid, doel en spelers links, `.g-input` rechts onderaan. Telefoonmaten van het 501-scherm zijn pixel-gelijk getest (`REF=… node tests/core/fase3.mjs`). Gemeten: score 162 px op 1920×1080, 115 px op 1280×800.
+  - **Beginscherm "Verder waar je was"** (v252): `saveRematchConfig` bewaart de laatste instellingen ook in `darts_last_config` (niet bij toernooi); `_renderHomeLast` toont een kaart met per speler een knop "begint" (1 tik: `homeReplay(i)` → `_doRematch`) en Loting (`homeReplayDraw`). Geen kaart als een speler intussen verwijderd is. Rematch onthoudt nu ook het Eliminatie-doel.
   - **Licht thema** (v241): kaarten en knoppen hebben een zachte schaduw, actieve speler (`.x-card.on`, `.g-prow.on`) een terracotta gloed.
   - In Statistieken staat geen wisknop meer, alleen "Speler beheren" → Instellingen → Spelers.
 - **Iconen/logo:** het 20-segment van een dartbord (rode dubbel en triple 20, zwart, bull) op wit, met een subtiele dunne T. Geen tekst.
@@ -360,7 +363,7 @@ Firebase Auth bewaart de login zelf (IndexedDB). Daar hoef je niets aan te doen.
 - **Eigen Halve It-volgorde** (`hiOwnSeq`) staat alleen in het geheugen en is na een herstart weg.
 - **`manifest.json`:** `name` is nog "Darts Scorer". Eventueel aanpassen naar "Darts by Tom", met Toms akkoord. `start_url` laten staan.
 
-- **Spelschermen op de iPhone SE (375×667) moeten soms scrollen** om de onderste knoppen boven de spelbalk te krijgen: Cricket (2 en 4 spelers), en met 4 spelers Shanghai, Bob's 27, 121 en Random Checkout (Random Checkout met 4 spelers ook op 375×812). Bereikbaar, maar niet in één oogopslag. `tests/core/ui.mjs` meldt dit als waarschuwing. Oplossen in roadmap fase 3/4.
+- **Spelschermen op de iPhone SE (375×667) moeten soms scrollen** om de onderste knoppen boven de spelbalk te krijgen: Cricket (2 en 4 spelers), en met 4 spelers Shanghai, Bob's 27, 121 en Random Checkout (Random Checkout met 4 spelers ook op 375×812). Bereikbaar, maar niet in één oogopslag. `tests/core/ui.mjs` meldt dit als waarschuwing. Oplossen in roadmap fase 4 (ontwerpsysteem; fase 3 deed alleen liggend).
 - **Groepscode-kaart** staat nog in Instellingen → Gegevens, terwijl `groups` sinds 21-11 dicht staat (fase 6: weghalen).
 
 ## 12. Bekende bugs
