@@ -1,0 +1,1138 @@
+[
+ {
+  "groep": "instellingen",
+  "selector": ".sp-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 0",
+  "nieuw": "var(--sp-5) 0"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-row:first-child",
+  "soort": "ruimte",
+  "eigenschap": "padding-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-top",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-top",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-top b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-tag",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-tag",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "2px 8px",
+  "nieuw": "var(--sp-1) var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-tag",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--green-300)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-tag.priv",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-bottom",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-manage",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "14px 0 4px",
+  "nieuw": "var(--sp-7) 0 var(--sp-2)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-manage",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-manage",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-manage",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-manage",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-manage",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-actions",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-actions",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-nick",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 12px",
+  "nieuw": "0 var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-share",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-share",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-share",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-share",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "4px 0",
+  "nieuw": "var(--sp-2) 0"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open>span b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open>span span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open>span span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-open>span span",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-search",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-search",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 12px",
+  "nieuw": "0 var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-search",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-head",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-head b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-nk",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-nk",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".sp-row.open",
+  "soort": "ruimte",
+  "eigenschap": "padding-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-add",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-add input",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-add input",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 12px",
+  "nieuw": "0 var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-lbl",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-lbl",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-lbl",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-lbl",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "16px 0 4px",
+  "nieuw": "var(--sp-8) 0 var(--sp-2)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "6px 0",
+  "nieuw": "var(--sp-3) 0"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-row .fr-who b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-row .fr-who span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-row .fr-who span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 0 8px",
+  "nieuw": "0 0 var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link select",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "10px",
+  "nieuw": "var(--r-md)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link select",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-link select",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 8px",
+  "nieuw": "0 var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-x",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "10px",
+  "nieuw": "var(--r-md)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-x",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-x",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "20px",
+  "nieuw": "var(--fs-title)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-note",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-note",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-unl",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": "[data-theme=\"light\"] .sp-tag",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#1E5631",
+  "nieuw": "var(--green-700)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ":root:not([data-theme=\"dark\"]) .sp-tag",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#1E5631",
+  "nieuw": "var(--green-700)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".ios-toggle",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".ios-toggle::after",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-lbl",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-lbl",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-lbl",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-lbl",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "2px 0 6px",
+  "nieuw": "var(--sp-1) 0 var(--sp-3)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-danger",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "16px",
+  "nieuw": "var(--sp-8)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-danger",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-danger",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-sec",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-sec",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-sec",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "20px 4px 8px",
+  "nieuw": "var(--sp-10) var(--sp-2) var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": "#screen-settings .page-head+.st-sec",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-card",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-cap",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-cap",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-cap",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-cap",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-list",
+  "soort": "ruimte",
+  "eigenschap": "padding-top",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-list",
+  "soort": "ruimte",
+  "eigenschap": "padding-bottom",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row label",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row label",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row label b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row label span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row label span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-row label span",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-sub",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 0 12px",
+  "nieuw": "0 0 var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more summary",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more summary",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more summary>span b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more summary>span span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more summary>span span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more summary>span span",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more-body",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "14px",
+  "nieuw": "var(--sp-7)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-more-body",
+  "soort": "ruimte",
+  "eigenschap": "padding-top",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-group",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "4px 0",
+  "nieuw": "var(--sp-2) 0"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-group",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-item",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-item",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 14px",
+  "nieuw": "var(--sp-4) var(--sp-7)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-txt b",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-txt span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-txt span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-txt span",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-chev",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-badge",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 6px",
+  "nieuw": "0 var(--sp-3)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-badge",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "10px",
+  "nieuw": "var(--r-md)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-badge",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-badge",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-phead",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".st-back",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "20px",
+  "nieuw": "var(--r-3xl)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-req",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-req",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px 14px",
+  "nieuw": "var(--sp-6) var(--sp-7)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-req",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-item",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-item",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 14px",
+  "nieuw": "var(--sp-4) var(--sp-7)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-av",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-av",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-item .fr-who span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-item .fr-who span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-item .fr-who span",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-list",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "4px 0",
+  "nieuw": "var(--sp-2) 0"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-list",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-hd",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-hd",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-hd",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "4px 4px 8px",
+  "nieuw": "var(--sp-2) var(--sp-2) var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-txtbtn",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-txtbtn",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-txtbtn",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-txtbtn",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-remove",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-remove",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-sheet-sub",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-sheet-sub",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-empty",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "18px 8px",
+  "nieuw": "18px var(--sp-4)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-empty",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "instellingen",
+  "selector": ".fr-empty",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ }
+]
