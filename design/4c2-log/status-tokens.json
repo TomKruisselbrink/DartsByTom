@@ -1,0 +1,22 @@
+[
+ {
+  "selector": "(\\.x-card\\.on\\{[^}]*?background:)var\\(--",
+  "aantal": 1
+ },
+ {
+  "selector": "(\\.g-prow\\.on\\{[^}]*?background:)var\\(--",
+  "aantal": 1
+ },
+ {
+  "selector": "((?<![\\w-])\\.g-hit\\{[^}]*?background:)va",
+  "aantal": 1
+ },
+ {
+  "selector": "((?<![\\w\\]) -])\\.g-miss\\{[^}]*?color:)va",
+  "aantal": 1
+ },
+ {
+  "selector": "(\\.numpad \\.btn-primary:active\\{[^}]*?ba",
+  "aantal": 1
+ }
+]

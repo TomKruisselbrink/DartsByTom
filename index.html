@@ -326,7 +326,7 @@ body::before{
 .g-head-r b{display:block;font-size:var(--fs-body-lg);color:var(--text)}
 #screen-game{padding:var(--sp-6) var(--sp-7) 0;box-sizing:border-box;gap:var(--sp-5)}
 .x-card{padding:var(--sp-6);border-radius:var(--r-2xl);background:var(--card);border:2px solid var(--border);min-width:0}
-.x-card.on{background:var(--accent-soft);border-color:var(--accent)}
+.x-card.on{background:var(--state-turn);border-color:var(--accent)}
 #sb-players.x-compact{gap:var(--sp-3)}
 #sb-players.x-compact .x-card{padding:7px var(--sp-5);display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"top score" "hint score" "meta score";align-items:center;column-gap:var(--sp-4);border-radius:var(--r-xl)}
 #sb-players.x-compact .x-top{grid-area:top;min-width:0}
@@ -538,7 +538,7 @@ body::before{
 #screen-bobs27 .g-target{min-height:178px}#screen-atc .g-target{min-height:172px}#screen-shanghai .g-target{min-height:146px}
 #screen-bobs27 .g-target-big,#screen-atc .g-target-big,#screen-shanghai .g-target-big,#screen-checkout121 .g-target-big{font-size:clamp(76px,min(calc(100cqh - 150px),calc(150cqw / var(--gt-n,3))),260px)!important;font-family:var(--ff-display);font-weight:var(--fw-bold);font-synthesis:none;line-height:.9}
 .g-prow{display:flex;flex-direction:column;justify-content:center;gap:var(--sp-3);min-height:46px;padding:var(--sp-4) var(--sp-7);box-sizing:border-box;border-radius:var(--r-lg);background:var(--card);border:2px solid var(--border)}
-.g-prow.on{background:var(--accent-soft);border-color:var(--accent)}
+.g-prow.on{background:var(--state-turn);border-color:var(--accent)}
 .g-prow-top{display:flex;align-items:center;gap:var(--sp-5)}
 .g-prow-name{flex:1;min-width:0;font-size:var(--fs-body);font-weight:var(--fw-bold);color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .g-prow.on .g-prow-name{color:var(--text);font-weight:800}
@@ -552,8 +552,8 @@ body::before{
 .g-big3 button{height:84px;border-radius:var(--r-2xl);border:1px solid var(--border);background:var(--card);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-2);font:inherit;cursor:pointer}
 .g-big3 small{font-size:var(--fs-micro);font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
 .g-big3 b{font-size:var(--fs-stat);font-weight:900}
-.g-miss{min-height:54px;border-radius:var(--r-2xl);border:1.5px dashed rgba(255,122,107,.5);background:rgba(255,90,70,.07);color:var(--danger-text);font:inherit;font-size:16px;font-weight:800;width:100%;cursor:pointer}
-.g-hit{min-height:54px;border-radius:var(--r-2xl);border:0;background:var(--hit);color:var(--text-on-fill);font:inherit;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:var(--sp-4)}
+.g-miss{min-height:54px;border-radius:var(--r-2xl);border:1.5px dashed rgba(255,122,107,.5);background:rgba(255,90,70,.07);color:var(--state-miss);font:inherit;font-size:16px;font-weight:800;width:100%;cursor:pointer}
+.g-hit{min-height:54px;border-radius:var(--r-2xl);border:0;background:var(--state-hit);color:var(--text-on-fill);font:inherit;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:var(--sp-4)}
 .g-sec{min-height:48px;border-radius:var(--r-xl);border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:var(--fs-body);font-weight:var(--fw-bold);cursor:pointer;width:100%}
 .g-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-2);padding:var(--sp-2);border-radius:var(--r-xl);background:var(--card);border:1px solid var(--border)}
 .g-seg button{height:42px;border:0;border-radius:var(--r-md);background:transparent;color:var(--text-muted);font:inherit;font-size:var(--fs-body);font-weight:var(--fw-bold);cursor:pointer}
@@ -13382,7 +13382,7 @@ body { -webkit-font-smoothing: antialiased; }
   border-color: transparent !important;
 }
 .numpad .btn-primary:active {
-  background: var(--terra-700) !important;
+  background: var(--accent-press) !important;
   box-shadow: 0 1px 0 rgba(120,30,10,.5) !important;
 }
 /* DEL-knop */

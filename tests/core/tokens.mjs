@@ -22,7 +22,36 @@ await T.t('geen dubbele tokennamen, en geen naam die elders al bestond', () => {
   const clash = names.filter(n => new RegExp(n.replace(/[-]/g, '\\-') + '\\s*:').test(rest));
   ok(!clash.length, 'naam bestond al buiten het tokenblok: ' + clash.join(', '));
 });
-await T.t('geen nieuwe waarden: elke letterlijke tokenwaarde komt al elders in de app voor', () => {
+// Gebruik (sinds 4C-2): elk token wordt gebruikt buiten het tokenblok, of via een ander gebruikt token, of staat hieronder met reden.
+const UNUSED_OK = {
+  '--terra-500': 'paletanker; regels gebruiken --accent (zelfde vaste waarde). In 4C-3 wordt dit de bron van --accent',
+  '--red-500': 'paletanker; regels gebruiken --danger (zelfde vaste waarde). In 4C-3 wordt dit de bron van --danger',
+  '--state-win': 'geen CSS-regel met een eenduidige winnaarskleur; winst-tags gebruiken andere bestaande waarden (4D)',
+  '--fw-regular': 'de CSS gebruikt nergens font-weight:400 (Regular komt van de standaard); paar van --fw-bold',
+  '--z-banner-top': 'z-index 9000 staat inline in de HTML (#upd-banner), buiten 4C-2 (stap 4X)',
+  '--z-modal': 'z-index 9997 staat inline in de HTML (#double-modal), buiten 4C-2 (stap 4X)',
+  '--z-toast': 'z-index 9999 van meldingen staat in JS (showToast), buiten 4C-2 (stap 4X)',
+};
+await T.t('elk token wordt gebruikt, of staat met reden op de lijst van nog ongebruikte tokens', () => {
+  const names = decl.map(d => d[0]);
+  const useOut = n => new RegExp('var\\(' + n.replace(/-/g, '\\-') + '\\)').test(rest);
+  const used = new Set(names.filter(useOut));
+  let grew = true; while (grew) { grew = false; for (const [n, v] of decl) if (used.has(n)) for (const m of v.matchAll(/var\((--[\w-]+)\)/g)) if (!used.has(m[1])) { used.add(m[1]); grew = true; } }
+  const unused = names.filter(n => !used.has(n));
+  const bad = unused.filter(n => !UNUSED_OK[n]);
+  ok(!bad.length, 'ongebruikt zonder reden: ' + bad.join(', '));
+  const stale = Object.keys(UNUSED_OK).filter(n => used.has(n) || !names.includes(n));
+  ok(!stale.length, 'staat op de lijst maar wordt nu gebruikt of bestaat niet meer (haal weg): ' + stale.join(', '));
+  console.log(`  tokens: ${names.length}, gebruikt ${names.filter(n => used.has(n)).length}, nog ongebruikt met reden ${unused.length}: ${unused.join(', ')}`);
+});
+
+// Referentie voor "geen nieuwe waarden" is de goedgekeurde versie faf50f0 (sinds 4C-2 staan veel waarden alleen nog in het tokenblok).
+let REF = '';
+const REPO = path.dirname(path.dirname(path.dirname(new URL(import.meta.url).pathname)));
+try { REF = (await import('child_process')).execSync('git show faf50f0:index.html', { cwd: REPO, encoding: 'utf8', maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'ignore'] }); } catch (e) { REF = ''; }
+await T.t('geen nieuwe waarden: elke letterlijke tokenwaarde kwam al voor in faf50f0', () => {
+  ok(REF.length > 100000, 'faf50f0:index.html niet leesbaar via git (draai de test in de repository)');
+  const rest = REF;
   const lit = decl.filter(([, v]) => !/^var\(/.test(v));
   const esc = v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/,/g, ',\\s*');
   const missing = lit.filter(([, v]) => !new RegExp('(^|[^\\w.#-])' + esc(v) + '(?![\\w])', 'i').test(rest)).map(([n, v]) => `${n}: ${v}`);
@@ -59,18 +88,21 @@ const MAP = [
   ['--accent-ring', 'color', ['lit', 'rgba(185,78,42,.35)']],
   ['--text-on-fill', 'color', ['lit', '#ffffff']],
 ];
-const RESOLVE = map => {
+// Bron = dezelfde regel in de goedgekeurde versie faf50f0 (daar staat nog de letterlijke waarde). Sinds 4C-2 gebruiken die
+// regels in de huidige code zelf de tokens, dus vergelijken met de huidige bron zou rondjes draaien.
+const SOURCE = map => {
   const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-9999px;top:0'; document.body.appendChild(host);
   const viaProp = (prop, val, parent) => { const d = document.createElement('div'); (parent || host).appendChild(d); d.style[prop] = val; const r = getComputedStyle(d)[prop]; d.remove(); return r; };
-  const out = [];
-  for (const [tok, prop, s] of map) {
-    const got = viaProp(prop, `var(${tok})`);
-    let want;
-    if (s[0] === 'var') { const el = s[2] ? document.querySelector(s[2]) : null; want = viaProp(prop, `var(${s[1]})`, el || host); }
-    else if (s[0] === 'lit') want = viaProp(prop, s[1]);
-    else { const par = document.querySelector(s[1]) || document.body; const d = document.createElement('div'); d.className = s[2]; par.appendChild(d); want = getComputedStyle(d)[s[3]]; d.remove(); }
-    out.push([tok, got, want]);
-  }
+  const out = map.map(([tok, prop, s]) => {
+    if (s[0] === 'var') { const el = s[2] ? document.querySelector(s[2]) : null; return viaProp(prop, `var(${s[1]})`, el || host); }
+    if (s[0] === 'lit') return viaProp(prop, s[1]);
+    const par = document.querySelector(s[1]) || document.body; const d = document.createElement('div'); d.className = s[2]; par.appendChild(d); const r = getComputedStyle(d)[s[3]]; d.remove(); return r;
+  });
+  host.remove(); return out;
+};
+const TOKENS = map => {
+  const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-9999px;top:0'; document.body.appendChild(host);
+  const out = map.map(([tok, prop]) => { const d = document.createElement('div'); host.appendChild(d); d.style[prop] = `var(${tok})`; const r = getComputedStyle(d)[prop]; d.remove(); return r; });
   host.remove(); return out;
 };
 const MODES = { 'donker': ['dark', 'dark'], 'licht': ['light', 'light'], 'auto-donker': ['dark', null], 'auto-licht': ['light', null] };
@@ -78,12 +110,16 @@ const b = await browser();
 for (const [mode, [scheme, ls]] of Object.entries(MODES)) {
   const { p, errs, ctx } = await page(b, { colorScheme: scheme, ls: ls ? { theme: ls } : {} });
   if (!ls) await p.addInitScript(() => localStorage.removeItem('theme'));
+  await p.route('http://ref.test/**', r => r.fulfill({ body: REF, contentType: 'text/html' }));
+  await p.goto('http://ref.test/index.html'); await p.waitForTimeout(700);
+  const want = REF ? await p.evaluate(SOURCE, MAP) : [];
   await open(p, 900);
-  const res = await p.evaluate(RESOLVE, MAP);
+  const got = await p.evaluate(TOKENS, MAP);
   await ctx.close();
-  await T.t(`${mode}: elk token = de waarde van zijn bron (${MAP.length} tokens)`, () => {
+  await T.t(`${mode}: elk token = de waarde van zijn bron in faf50f0 (${MAP.length} tokens)`, () => {
     ok(!errs.length, 'pageerror: ' + errs[0]);
-    const bad = res.filter(([, g, w]) => g !== w || !g).map(([t, g, w]) => `${t}: ${g} ≠ ${w}`);
+    ok(want.length === MAP.length, 'faf50f0 niet geladen');
+    const bad = MAP.map((m, i) => [m[0], got[i], want[i]]).filter(([, g, w]) => g !== w || !g).map(([t, g, w]) => `${t}: ${g} ≠ ${w}`);
     ok(!bad.length, bad.join('; '));
   });
 }
