@@ -605,6 +605,8 @@ Het principe: **eerst onzichtbaar, dan zichtbaar, en elke stap bewezen met de vi
 - **Uitzonderingen:** staan in `tests/core/contrast.allow.json`, elk met reden en de 4D-stap die het oplost (C1–C8 uit §1.4). De test **faalt** op elke nieuwe onvoldoende combinatie. Bekende uitzonderingen faalt hij niet, maar meldt hij **apart** in een blok `UITZONDERINGEN (n)` in de uitvoer. Een uitzondering die inmiddels wél voldoet, wordt ook gemeld ("mag uit de lijst").
 - **Aanvullend, alleen melden:** de visuele capture krijgt een DOM-steekproef. Per zichtbare tekst wordt de werkelijke voorgrond- en achtergrondkleur bepaald (via de voorouders, inclusief transparantie). Zo'n meting is bij verlopen en afbeeldingen een benadering, dus faalt ze niet maar verschijnt ze als lijst in het rapport.
 
+> **Uitgevoerd in 4C-0 (23-11-2026):** de classificatie is aangescherpt: *afwijkingen* (nulmeting, niet geaccepteerd, falen als ze ernstiger worden), *geaccepteerd* (leeg) en *niet meetbaar* (C4, niet gecontroleerd). Nieuw gevonden: C9–C11. Zie `tests/visual/RAPPORT-4C0.md`.
+
 ### 7.3 Tikvlaktest (`tests/core/tap.mjs`, nieuw in 4C-0)
 
 - Draait op **320×568, 360×640, 375×667 en 390×844**, in alle scenario's van de visuele test.

@@ -123,5 +123,5 @@
   "rondes-corrigeren|overlap|.g-hit \"Opslaan\" × .hic-in \"0\"": 1,
   "rondes-corrigeren|overlap|.g-hit \"Opslaan\" × .hic-in \"20\"": 1
  },
- "_uitleg": "Bekende tikvlakbevindingen van de goedgekeurde versie faf50f0 (v252), per breedte. De tikvlaktests falen op alles wat hier niet in staat of vaker voorkomt. Alleen bijwerken met akkoord van Tom: node tests/core/tap-lib.mjs --update"
+ "_uitleg": "Nulmeting van de tikvlakken van faf50f0 (v252), per breedte, NL donker, Chromium. Dit zijn BESTAANDE PROBLEMEN, geen goedgekeurde kwaliteit (Tom, 23-11-2026). De tikvlaktests falen op elke bevinding die hier niet in staat of vaker voorkomt (een kleiner element krijgt een nieuwe sleutel en faalt dus ook). Alleen bijwerken met akkoord van Tom: node tests/core/tap-lib.mjs --update"
 }

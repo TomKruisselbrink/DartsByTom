@@ -14,6 +14,8 @@ const MUT = [
   { name: 'contrast: muted in licht te licht', find: '</head>', repl: '<style>:root[data-theme="light"]{--muted:#A39C96}@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--muted:#A39C96}}</style></head>', only: 'core/contrast' },
   { name: 'contrast: doelgetal ook in licht onleesbaar', find: '</head>', repl: '<style>.g-target-big{color:#E8B89E!important}</style></head>', only: 'core/contrast' },
   { name: 'contrast: tekst op donkere kaart te zwak', find: '</head>', repl: '<style>:root[data-theme="dark"]{--text:#5C5C60}</style></head>', only: 'core/contrast' },
+  { name: 'contrast: bekende afwijking C1 wordt ernstiger (doelgetal donker nog donkerder)', find: '</head>', repl: '<style>:root[data-theme="dark"] .g-target-big{color:#8A3A1F!important}</style></head>', only: 'core/contrast' },
+  { name: 'contrast: bekende afwijking C10 wordt ernstiger (Stop in lichte balk lichter)', find: '</head>', repl: '<style>:root[data-theme="light"] #game-controls .gc-stop{color:#FF8A80!important}</style></head>', only: 'core/contrast' },
   { name: 'tik: chips overlappen elkaar', find: '</head>', repl: '<style>.known-name-btn{margin-right:-30px!important}</style></head>', only: 'core/tap-390' },
   { name: 'tik: spelbalk bedekt spelknoppen', find: '</head>', repl: '<style>#game-controls{padding-top:80px!important}</style></head>', only: 'core/tap-390' },
   { name: 'tik: filterchip te klein', find: '</head>', repl: '<style>.lb-chip{height:24px!important}</style></head>', only: 'core/tap-390' },

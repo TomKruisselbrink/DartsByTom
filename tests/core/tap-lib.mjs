@@ -111,13 +111,13 @@ export async function runTap(vpKey) {
     ok(!fresh.length, fresh.length + ' NIEUW: ' + fresh.slice(0, 12).join(' | '));
   });
   console.log(`\nTIKVLAKKEN ${vpKey} px: ${res.reduce((a, r) => a + r.measure.n, 0)} bedienbare elementen in ${res.length} scenario's`);
-  console.log('  bekend (staat in tap.known.json, faalt niet): ' + (Object.entries(byType).map(([t, n]) => `${t} ${n}`).join(', ') || '-'));
-  if (gone.length) console.log(`  OPGELOST t.o.v. de lijst (${gone.length}), mag uit tap.known.json: ` + gone.slice(0, 10).join(' | '));
+  console.log('  BESTAANDE PROBLEMEN (nulmeting faf50f0, niet opgelost, falen niet; meer of nieuwe wel): ' + (Object.entries(byType).map(([t, n]) => `${t} ${n}`).join(', ') || '-'));
+  if (gone.length) console.log(`  MINDER DAN DE NULMETING (${gone.length}), na controle en akkoord uit tap.known.json: ` + gone.slice(0, 10).join(' | '));
   return S.done();
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes('--update')) {
-  const out = { _uitleg: 'Bekende tikvlakbevindingen van de goedgekeurde versie faf50f0 (v252), per breedte. De tikvlaktests falen op alles wat hier niet in staat of vaker voorkomt. Alleen bijwerken met akkoord van Tom: node tests/core/tap-lib.mjs --update' };
+  const out = { _uitleg: 'Nulmeting van de tikvlakken van faf50f0 (v252), per breedte, NL donker, Chromium. Dit zijn BESTAANDE PROBLEMEN, geen goedgekeurde kwaliteit (Tom, 23-11-2026). De tikvlaktests falen op elke bevinding die hier niet in staat of vaker voorkomt (een kleiner element krijgt een nieuwe sleutel en faalt dus ook). Alleen bijwerken met akkoord van Tom: node tests/core/tap-lib.mjs --update' };
   for (const k of Object.keys(VPS)) { const res = await measureAll(k, { jobs: 3 }); const bad = res.filter(r => r.errors.length || r.setupErr); if (bad.length) { console.error('fout in scenario, niets geschreven:', bad.map(r => r.id)); process.exit(1); } out[k] = Object.fromEntries(Object.entries(keysOf(res)).sort()); console.log(k, Object.values(out[k]).reduce((a, b) => a + b, 0), 'bevindingen'); }
   fs.writeFileSync(KNOWN_FILE, JSON.stringify(out, null, 1) + '\n'); console.log('geschreven:', KNOWN_FILE);
 }

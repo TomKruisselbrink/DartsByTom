@@ -64,3 +64,11 @@ faalt als de app een scherm, instellingenpagina, overlay of onderblad heeft zond
 
 Per opname ook automatische controles: horizontale overloop, niet-vertaalde tekst in het Engels, knoppen onder de spelbalk,
 of een spelscherm moet scrollen, aantal teksten < 11 px en tikvlakken < 40 px.
+
+## Grenzen (fase 4C-0, blijven staan tot opgelost)
+
+- Alleen Chromium. **Safari op een echte iPhone blijft een verplichte handmatige controle bij elke zichtbare wijziging in 4D**
+  (lettertype-rendering, `env(safe-area-inset-*)`, `100vh`, tikgedrag).
+- Tikvlakmetingen (`tests/core/tap-*.mjs`) alleen in NL en donker. **Engels en licht thema komen later bij de aanvullende dekking.**
+- Tablet en 360×640 alleen in NL; automatisch thema alleen op 390×844 (en 1920×1080 donker voor `land:true`).
+- Nulmetingen zijn geen goedkeuring: bestaande problemen staan in `RAPPORT-4C0.md` en blijven open.

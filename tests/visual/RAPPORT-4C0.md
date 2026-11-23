@@ -1,5 +1,25 @@
 # Fase 4C-0: rapport (alleen tests, geen wijziging aan de app)
 
+## 0. Definitieve status (23-11-2026)
+
+**4C-0 is technisch goedgekeurd en de nulmeting is vastgelegd.** Vastleggen is **niet** accepteren: alle bestaande problemen
+hieronder blijven open en zijn geen goedgekeurde kwaliteit van de app.
+
+| Categorie | Wat | Gedrag van de test |
+|---|---|---|
+| **Gemeten afwijkingen (nulmeting)** | C1, C2, C3, C5, C6, C7, C8, C9, C10, C11, met per themastand de gemeten waarde | faalt niet op de vastgelegde waarde; **faalt als de waarde daalt** (ernstiger) en bij elke andere onvoldoende combinatie |
+| **Bewust geaccepteerde uitzonderingen** | geen | (lijst `geaccepteerd` in `contrast.allow.json` is leeg) |
+| **Niet meetbaar** | C4 (warning-token bestaat nog niet) | **niet gecontroleerd, geen uitzondering**; de test faalt zodra het paar wél meetbaar wordt, zodat het opnieuw geclassificeerd moet worden |
+| **Aandachtspunten 4D, uitdrukkelijk niet goedgekeurd** | C9, C10, C11 | als afwijkingen hierboven |
+| **Tikvlakken (nulmeting)** | 71 / 21 / 20 / 7 bestaande problemen op 320 / 360 / 375 / 390 px | faalt op elke nieuwe bevinding en op meer van hetzelfde; een element dat kleiner wordt, faalt ook (nieuwe sleutel) |
+
+Ongewijzigd: `faf50f0` en alle referentiebeelden, `main` (`4785a1f`), `APP_VERSION` 252, applicatiecode, vormgeving,
+Firebase, synchronisatie en spelregels. Niet gedeployd. 4C-1 is niet begonnen.
+
+**Grenzen die blijven staan:** alles in Chromium, dus **Safari op een echte iPhone is een verplichte handmatige controle bij
+elke zichtbare wijziging in 4D**. Tikvlakken alleen in NL en donker; **Engels en licht thema komen later bij de aanvullende
+dekking.** Er worden geen chips of andere elementen vergroot zonder aanleiding.
+
 Stand: branch `feat/fase4c`, op basis van `feat/fase4b-voorstel`. Referentie: commit **`faf50f0`** (v252).
 `main` = `4785a1f` (ongewijzigd). `index.html`, `sw.js` en `manifest.json` zijn byte-gelijk aan `faf50f0`. `APP_VERSION` = 252.
 Skills: Product-Grade App Builder v2 is in deze sessie **niet** als skill geïnstalleerd; het gedeelde SKILL.md-bestand is als leidraad gebruikt. v1 (geïnstalleerd) is gebruikt voor de controle.
@@ -12,13 +32,13 @@ Skills: Product-Grade App Builder v2 is in deze sessie **niet** als skill geïns
 | 9 nieuwe toestanden | `scenarios.mjs` (46 → 55 scenario's) | idem |
 | Dekkingstest | `tests/core/coverage.mjs` | scherm, instellingenpagina, overlay of onderblad zonder scenario en zonder reden; scenario mist een dimensie; de 46 originele scenario's veranderen |
 | Landingscontrole | `tests/core/tap-390.mjs` + `EXPECT` | een scenario landt op een ander scherm, andere pagina of zonder/met andere overlay |
-| Contrasttest | `tests/core/contrast.mjs`, `contrast.pairs.json`, `contrast.allow.json` | elke onvoldoende combinatie die geen bekende uitzondering is |
+| Contrasttest | `tests/core/contrast.mjs`, `contrast.pairs.json`, `contrast.allow.json` | elke nieuwe onvoldoende combinatie; een vastgelegde afwijking die ernstiger wordt; een niet-meetbaar paar dat meetbaar wordt |
 | Tikvlaktests | `tests/core/tap-lib.mjs`, `tap-320/360/375/390.mjs`, `tap.known.json` | elke nieuwe overlap, bedekking, knop onder balk/nav, te klein element of te grote tikzone |
 | Kleurenteller | `tests/core/tokens-ratchet.mjs`, `tokens-ratchet.json` | meer hardgecodeerde kleuren dan bij `faf50f0` (CSS 370, HTML/JS 132) |
 | Contraststeekproef (alleen melden) | `shoot.mjs` CHECKS | faalt niet: benadering, voor kandidaten |
 | Mutaties | `tests/mutation.mjs` (+9 en `--visual`) | een bewuste fout wordt níet gevangen |
 
-`npm test`: **97/97** in 26 suites, ±7 min (was 75/75, ±3 min). `tests/mutation.mjs --visual`: **16/16 gevangen**.
+`npm test`: **98/98** in 26 suites, ±7 min (was 75/75, ±3 min). `tests/mutation.mjs --visual`: **18/18 gevangen**.
 
 ## 2. Is de oorspronkelijke referentie intact?
 
@@ -53,7 +73,7 @@ Skills: Product-Grade App Builder v2 is in deze sessie **niet** als skill geïns
 
 ## 4. Contrastmatrix (gemeten in de app, laagste waarde over het verloop)
 
-`*` = onder de eis; Cn = bekende uitzondering (faalt niet, wordt apart gemeld).
+`*` = onder de eis; Cn = gemeten afwijking, vastgelegd als nulmeting (niet geaccepteerd; faalt als hij ernstiger wordt).
 
 | Paar | donker | licht | auto-donker | auto-licht | eis |
 |---|---|---|---|---|---|
@@ -92,27 +112,27 @@ Skills: Product-Grade App Builder v2 is in deze sessie **niet** als skill geïns
 | wit/melding-fout | *3,98 C8 | *3,63 C8 | *3,98 C8 | *3,63 C8 | 4,5 |
 | wit/melding-info | 15,45 | 12,70 | 15,45 | 12,70 | 4,5 |
 
-**Uitzonderingen, apart:**
+**Classificatie (zie §0): gemeten afwijkingen, niet meetbaar, geaccepteerd (geen):**
 
 | # | Wat | Status |
 |---|---|---|
 | C1 | groot doelgetal (accent) op donkere kaart, 2,78 / 2,84 | bevestigd |
 | C2 | muted direct op lichte achtergrond, 4,25 | bevestigd |
 | C3 | accent-tekst direct op lichte achtergrond, 4,45 | bevestigd |
-| C4 | warning op licht | **nog niet meetbaar**: het token bestaat pas na K3 (4D) |
+| C4 | warning op licht | **niet meetbaar, niet gecontroleerd**: het token bestaat pas na K3 (4D). Geen uitzondering. |
 | C5 | wit op danger, 3,55 | bevestigd |
 | C6 | wit op groene uitgooi-badge `#16a34a`, 3,30 | bevestigd |
 | C7 | witte letter op avatarkleur `#2E8C9A` (3,94) en `#D08A2E` (2,85) | bevestigd; in 4B noemde ik `#2E8B9A`, de app gebruikt `#2E8C9A` |
 | C8 | witte tekst op meldingen groen/oranje/rood, 2,15–3,98 | bevestigd |
-| **C9** | **nieuw:** wit nummer op teamkleur 4 `#D08A2E` (Afgooien/X01-teams), 2,85 | teamkleur (X1): niet automatisch aanpassen |
-| **C10** | **nieuw:** rode Stop in de lichte spelbalk, 3,37 | gevonden door de steekproef |
-| **C11** | **nieuw:** accent-vulkleur als kleine tekst op een kaart (actieve spelersnaam, cijfers winstscherm), donker 2,78 / licht 4,32 | zelfde oorzaak als C1 |
+| **C9** | **nieuw:** wit nummer op teamkleur 4 `#D08A2E` (Afgooien/X01-teams), 2,85 | aandachtspunt 4D, niet goedgekeurd; teamkleur (X1) niet automatisch aanpassen |
+| **C10** | **nieuw:** rode Stop in de lichte spelbalk, 3,37 | aandachtspunt 4D, niet goedgekeurd (gevonden door de steekproef) |
+| **C11** | **nieuw:** accent-vulkleur als kleine tekst op een kaart (actieve spelersnaam, cijfers winstscherm), donker 2,78 / licht 4,32 | aandachtspunt 4D, niet goedgekeurd; zelfde oorzaak als C1 |
 
 **Contraststeekproef (alleen melden, 55 scenario's × donker/licht/auto-donker op 390×844):** 157 / 228 / 65 teksten onder de eis, en ±300 per thema "onzeker" (achtergrond met verloop). Het is een benadering. "Home" in licht (1,01) is bijvoorbeeld een meetfout, omdat de oranje indicator achter de navigatie geen voorouder is. Wat er echt uit kwam, staat nu als C10 en C11 in de parentest. Overige kandidaten om in 4D per geval te bekijken: de tag "Verlies" in de geschiedenis (4,41–4,43), "niet uitgooibaar" en "gem. —" in licht (4,14), en cijfers in de geschiedenis op donker.
 
 ## 5. Tikvlakken
 
-Alle 55 scenario's per breedte, NL donker. **Bekend** (= stand `faf50f0`, staat in `tap.known.json`, faalt niet):
+Alle 55 scenario's per breedte, NL donker. **Bestaande problemen** (nulmeting `faf50f0` in `tap.known.json`; niet opgelost en niet goedgekeurd; faalt alleen bij nieuwe of meer):
 
 | Breedte | onder spelbalk | onder navigatie | bedekt | overlap | te klein zonder ruimte | totaal |
 |---|---|---|---|---|---|---|
@@ -161,7 +181,9 @@ Automatische controles op de aanvullende opnames (`faf50f0`):
 
 | Bewuste fout | Suite | Faalt met |
 |---|---|---|
-| muted in licht te licht (`#A39C96`) | contrast | "NIEUWE contrastfout: muted/kaart = 2.33; muted/vlak = 2.65" (licht en auto-licht) |
+| muted in licht te licht (`#A39C96`) | contrast | "muted/kaart = 2.33; muted/vlak = 2.65" (licht en auto-licht) |
+| bekende afwijking C1 ernstiger (doelgetal donker donkerder) | contrast | "doelgetal/doelvlak = 1.80: ERNSTIGER dan de nulmeting 2.78 (C1)" |
+| bekende afwijking C10 ernstiger (Stop in lichte balk lichter) | contrast | "stop/spelbalk = 2.17: ERNSTIGER dan de nulmeting 3.37 (C10)" |
 | doelgetal in licht onleesbaar | contrast | "doelgetal/doelvlak = 1.53 (eis 3)" |
 | tekst op donker te zwak | contrast | "tekst/bg = 2.22; tekst/kaart = 2.09; tekst/vlak = 2.56" |
 | chips overlappen elkaar | tap-390 | "3 NIEUW: setup-3-spelers\|bedekt\|.known-name-btn "✓ Tom" door …" |
@@ -175,9 +197,9 @@ Automatische controles op de aanvullende opnames (`faf50f0`):
 
 ## 8. Grenzen (eerlijk)
 
-- Alles draait in Chromium. Safari op de iPhone (lettertype-rendering, `env(safe-area-inset-*)`, `100vh`) kan de test niet nabootsen. Controleren op de echte iPhone blijft nodig bij zichtbare wijzigingen in 4D.
+- Alles draait in Chromium. Safari op de iPhone (lettertype-rendering, `env(safe-area-inset-*)`, `100vh`) kan de test niet nabootsen. **Safari op een echte iPhone is een verplichte handmatige controle bij elke zichtbare wijziging in 4D.**
 - De tikvlaktest kent ::after-tikzones alleen als ze `position:absolute` zijn met insets. Zo worden ze in 4D ook gebouwd (§5.3 van het voorstel).
 - De contraststeekproef is een benadering (verlopen, zuster-elementen als achtergrond). Daarom faalt ze niet. De parentest is exact.
-- Tikvlakken worden alleen in donker en NL gemeten. Thema verandert de maten niet; EN kan langere labels geven. Dat is een bewuste keuze, omdat het anders 4 extra suites zou kosten.
+- Tikvlakken worden alleen in donker en NL gemeten. EN kan langere labels geven en licht kan door schaduwen andere randen hebben. **Engels en licht thema worden later aan de aanvullende dekking toegevoegd** (Tom, 23-11-2026).
 - `npm test` duurt nu ±7 in plaats van ±3 minuten, vooral door de vier tikvlaksuites (elk ±2 min).
 - De Firestore-regels, sync, spelregels en gegevens zijn niet aangeraakt. De tests gebruiken alleen nep-Firebase en testdata.

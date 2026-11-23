@@ -1,14 +1,17 @@
 // Fase 4C-0 — contrast volgens WCAG 2.1, gemeten in de app zelf (berekende CSS-waarden, geen kopie van de kleuren).
 // Vier themastanden: donker en licht gekozen in de app, en automatisch met systeem donker/licht.
-// Paren: contrast.pairs.json. Bekende uitzonderingen: contrast.allow.json (C1–C9).
-// FAALT bij elke onvoldoende combinatie die niet in de uitzonderingen staat. Uitzonderingen worden apart gemeld, net als
-// uitzonderingen die inmiddels wél voldoen ("mag uit de lijst"). De volledige matrix staat in de uitvoer en in
+// Paren: contrast.pairs.json. Classificatie: contrast.allow.json (afwijkingen = nulmeting, geaccepteerd, niet meetbaar).
+// FAALT bij: elke onvoldoende combinatie die niet geclassificeerd is; een vastgelegde afwijking die verder daalt dan de
+// nulmeting (ernstiger); een 'niet meetbaar' paar dat inmiddels wél gemeten wordt (opnieuw classificeren).
+// Vastgelegde afwijkingen zijn GEEN goedkeuring: ze worden apart gemeld als bestaand probleem. De volledige matrix staat in de uitvoer en in
 // tests/visual/out/contrast-rapport.json.
 import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
 import { browser, page, open, suite, ok } from './h.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PAIRS = JSON.parse(fs.readFileSync(path.join(HERE, 'contrast.pairs.json'), 'utf8')).pairs;
-const ALLOW = JSON.parse(fs.readFileSync(path.join(HERE, 'contrast.allow.json'), 'utf8')).uitzonderingen;
+const CLASS = JSON.parse(fs.readFileSync(path.join(HERE, 'contrast.allow.json'), 'utf8'));
+const ALLOW = CLASS.afwijkingen.map(a => Object.assign({ soort: 'afwijking' }, a)).concat(CLASS.geaccepteerd.map(a => Object.assign({ soort: 'geaccepteerd' }, a)));
+const NIET = CLASS.nietMeetbaar || [];
 const THEMES = { 'donker': ['dark', 'dark'], 'licht': ['light', 'light'], 'auto-donker': ['dark', null], 'auto-licht': ['light', null] };
 
 // Draait in de pagina: verzamelt alle bronkleuren als [r,g,b,a] (achtergronden als lijst = punten van het verloop).
@@ -55,7 +58,7 @@ const flat = c => c[3] < 1 ? null : c; // voorgrond moet dekkend zijn (alle teks
 const asList = x => !x ? null : Array.isArray(x[0]) ? x : [x];
 
 const T = suite('contrast');
-const b = await browser(); const report = {}; const exceptions = []; const solved = []; const notMeasured = [];
+const b = await browser(); const report = {}; const exceptions = []; const accepted = []; const solved = []; const notMeasured = [];
 for (const [theme, [scheme, ls]] of Object.entries(THEMES)) {
   const { p, errs, ctx } = await page(b, { colorScheme: scheme, ls: ls ? { theme: ls } : {} });
   if (!ls) await p.addInitScript(() => localStorage.removeItem('theme'));
@@ -63,7 +66,7 @@ for (const [theme, [scheme, ls]] of Object.entries(THEMES)) {
   const { S, labels } = await p.evaluate(SOURCES);
   await ctx.close();
   const rows = [];
-  await T.t(`${theme}: alle paren voldoen (of zijn bekende uitzondering)`, () => {
+  await T.t(`${theme}: alle paren voldoen, of zijn een vastgelegde afwijking die niet verslechterd is`, () => {
     ok(!errs.length, 'pageerror: ' + errs[0]);
     const fails = [];
     for (const pr of PAIRS) {
@@ -75,17 +78,29 @@ for (const [theme, [scheme, ls]] of Object.entries(THEMES)) {
         const id = pr.id + (it.label ? ' ' + it.label : ''); const pass = it.v >= pr.min;
         const al = ALLOW.find(a => a.pair === pr.id && a.themas.includes(theme) && (!a.waarden || a.waarden.includes(it.label)));
         rows.push({ id, v: +it.v.toFixed(2), min: pr.min, pass, c: al ? al.c : '' });
-        if (!pass && al) exceptions.push(`${al.c}  ${theme.padEnd(11)} ${id.padEnd(30)} ${it.v.toFixed(2)} < ${pr.min}`);
+        if (!pass && al) {
+          const g = (al.gemeten || {})[theme]; const base = typeof g === 'object' && g ? g[it.label] : g;
+          if (typeof base !== 'number') fails.push(`${id}: ${al.c} heeft geen nulmetingswaarde voor ${theme}`);
+          else if (it.v < base - 0.005) fails.push(`${id} = ${it.v.toFixed(2)}: ERNSTIGER dan de nulmeting ${base.toFixed(2)} (${al.c})`);
+          else (al.soort === 'geaccepteerd' ? accepted : exceptions).push(`${al.c}  ${theme.padEnd(11)} ${id.padEnd(30)} ${it.v.toFixed(2)} < ${pr.min}  (nulmeting ${base.toFixed(2)})`);
+        }
         else if (!pass) fails.push(`${id} = ${it.v.toFixed(2)} (eis ${pr.min})`);
-        else if (al) solved.push(`${al.c} ${theme} ${id} = ${it.v.toFixed(2)}: voldoet nu, mag uit de lijst`);
+        else if (al) solved.push(`${al.c} ${theme} ${id} = ${it.v.toFixed(2)}: voldoet nu (opgelost?), kan uit de classificatie na akkoord van Tom`);
       }
     }
     report[theme] = rows;
-    ok(!fails.length, 'NIEUWE contrastfout: ' + fails.join('; '));
+    ok(!fails.length, 'contrastregressie: ' + fails.join('; '));
   });
 }
 await b.close();
-for (const a of ALLOW) if (!PAIRS.some(p => p.id === a.pair)) notMeasured.push(`${a.c} ${a.pair}: nog niet meetbaar (${a.reden})`);
+for (const a of ALLOW) if (!PAIRS.some(p => p.id === a.pair)) notMeasured.push(`${a.c} ${a.pair}: staat bij de afwijkingen maar is geen paar meer`);
+for (const a of NIET) notMeasured.push(`${a.c} ${a.pair}: NIET MEETBAAR, niet gecontroleerd (${a.reden})`);
+await T.t('niet-meetbare combinaties zijn ook echt niet meetbaar (anders opnieuw classificeren)', () => {
+  const nu = NIET.filter(a => PAIRS.some(p => p.id === a.pair)).map(a => a.c + ' ' + a.pair);
+  ok(!nu.length, 'nu wél meetbaar, classificeer opnieuw in contrast.allow.json: ' + nu.join(', '));
+  const stale = ALLOW.filter(a => !PAIRS.some(p => p.id === a.pair)).map(a => a.c + ' ' + a.pair);
+  ok(!stale.length, 'afwijking zonder paar: ' + stale.join(', '));
+});
 // Matrix in de uitvoer
 const ids = report['donker'] ? report['donker'].map(r => r.id) : [];
 console.log('\nCONTRASTMATRIX (laagste waarde over het verloop; * = onder de eis)');
@@ -94,8 +109,9 @@ for (const id of ids) {
   const cells = Object.keys(THEMES).map(t => { const r = (report[t] || []).find(x => x.id === id); return r ? ((r.pass ? '' : '*') + r.v.toFixed(2) + (r.c ? ' ' + r.c : '')).padStart(12) : '-'.padStart(12); });
   const r0 = report['donker'].find(x => x.id === id); console.log(id.padEnd(32) + cells.join('') + '   ' + r0.min);
 }
-console.log(`\nUITZONDERINGEN (${exceptions.length}, bekend, falen niet):\n  ` + (exceptions.join('\n  ') || '-'));
-if (solved.length) console.log('\nMAG UIT DE LIJST:\n  ' + solved.join('\n  '));
-if (notMeasured.length) console.log('\nNOG NIET MEETBAAR:\n  ' + notMeasured.join('\n  '));
-try { const out = path.join(HERE, '../visual/out'); fs.mkdirSync(out, { recursive: true }); fs.writeFileSync(path.join(out, 'contrast-rapport.json'), JSON.stringify({ report, exceptions, solved, notMeasured }, null, 1)); } catch (e) { /* rapport is extra */ }
+console.log(`\nBESTAANDE AFWIJKINGEN (${exceptions.length}): nulmeting faf50f0, NIET geaccepteerd, open voor 4D. Falen alleen als ze ernstiger worden:\n  ` + (exceptions.join('\n  ') || '-'));
+console.log(`\nBEWUST GEACCEPTEERDE UITZONDERINGEN (${accepted.length}):\n  ` + (accepted.join('\n  ') || '- (geen)'));
+console.log(`\nNIET MEETBAAR, dus niet gecontroleerd (${notMeasured.length}):\n  ` + (notMeasured.join('\n  ') || '-'));
+if (solved.length) console.log('\nVOLDOET INMIDDELS:\n  ' + solved.join('\n  '));
+try { const out = path.join(HERE, '../visual/out'); fs.mkdirSync(out, { recursive: true }); fs.writeFileSync(path.join(out, 'contrast-rapport.json'), JSON.stringify({ report, afwijkingen: exceptions, geaccepteerd: accepted, nietMeetbaar: notMeasured, voldoetInmiddels: solved }, null, 1)); } catch (e) { /* rapport is extra */ }
 process.exit(T.done());
