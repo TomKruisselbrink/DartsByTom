@@ -1,0 +1,1570 @@
+[
+ {
+  "groep": "basis",
+  "selector": ":root",
+  "soort": "kleur",
+  "eigenschap": "--warning",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "basis",
+  "selector": ":root",
+  "soort": "kleur",
+  "eigenschap": "--info",
+  "oud": "#9DBF9E",
+  "nieuw": "var(--sage-300)"
+ },
+ {
+  "groep": "basis",
+  "selector": "body::before",
+  "soort": "laag",
+  "eigenschap": "z-index",
+  "oud": "0",
+  "nieuw": "var(--z-base)"
+ },
+ {
+  "groep": "basis",
+  "selector": "#game-bar",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".np-disp",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".np-disp",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 16px",
+  "nieuw": "0 var(--sp-8)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".np-disp",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".np-disp span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".np-disp span",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".np-disp span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".fin-rows",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "4px 0 14px",
+  "nieuw": "var(--sp-2) 0 var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".hic-list",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "8px 0",
+  "nieuw": "var(--sp-4) 0"
+ },
+ {
+  "groep": "basis",
+  "selector": ".hic-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".hic-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "6px 2px",
+  "nieuw": "var(--sp-3) var(--sp-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".hic-in",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 10px",
+  "nieuw": "var(--sp-4) var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".hic-sum",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".hic-sum",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ec-w",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ec-w",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ec-w",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list button",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px 14px",
+  "nieuw": "var(--sp-6) var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list button",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list button",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list button",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list small",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".mg-list small",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".pp-row",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".pp-row",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-field",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-field span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-field span",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-field span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-field input,.ac-field select",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-field input,.ac-field select",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 14px",
+  "nieuw": "0 var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-err",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-err",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-err",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "2px 0 8px",
+  "nieuw": "var(--sp-1) 0 var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-note",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-note",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-note",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-row span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-btns",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-btns",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-row",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-row select",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-row select",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-row select",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 10px",
+  "nieuw": "0 var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-hint",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-hint",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".vc-hint",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".who-tag",
+  "soort": "ruimte",
+  "eigenschap": "margin-left",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".who-tag",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "8px",
+  "nieuw": "var(--r-sm)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".who-tag.me",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#E07A55",
+  "nieuw": "var(--terra-300)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".live-card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px 14px",
+  "nieuw": "var(--sp-6) var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".live-card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".live-card",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".live-card span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".live-card span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-btns .btn",
+  "soort": "ruimte",
+  "eigenschap": "padding-left",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ac-btns .btn",
+  "soort": "ruimte",
+  "eigenschap": "padding-right",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-list",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 14px",
+  "nieuw": "0 var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-num",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-num",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-go",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-go",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-go",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl.hl",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#E07A55",
+  "nieuw": "var(--terra-300)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl.hl",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "rgba(185,78,42,.16)",
+  "nieuw": "var(--accent-soft)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl.won",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#5E9E6E",
+  "nieuw": "var(--green-400)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl.won .rm-num",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".rm-pl.won .rm-num",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "basis",
+  "selector": "#win-gif-wrap",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "20px",
+  "nieuw": "var(--r-3xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": "#win-stats",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ws-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ws-row",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ws-row",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ws-row b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ws-head b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".ws-head b",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "9px 12px",
+  "nieuw": "9px var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg-k",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg-v",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "17px",
+  "nieuw": "var(--fs-body-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg-v",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg-s",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg-s",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".best-leg-s",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".bracket-round-title",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "11px 14px",
+  "nieuw": "11px var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-row",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pos",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pos",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-row:first-child .standing-pos",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-row:first-child .standing-pos",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-rec",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-rec",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pts",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--green-300)"
+ },
+ {
+  "groep": "basis",
+  "selector": "h2",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": "h2",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "basis",
+  "selector": "h3",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "17px",
+  "nieuw": "var(--fs-body-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": "h3",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".muted",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".muted",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".label",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".label",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".label",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "14px 16px",
+  "nieuw": "var(--sp-7) var(--sp-8)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".card",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".card",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow)",
+  "nieuw": "var(--elev-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px 18px",
+  "nieuw": "var(--sp-6) 18px"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow)",
+  "nieuw": "var(--elev-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-primary",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-primary",
+  "soort": "kleur",
+  "eigenschap": "box-shadow",
+  "oud": "rgba(185,78,42,.35)",
+  "nieuw": "var(--accent-ring)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-danger",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "rgba(255,59,48,.1)",
+  "nieuw": "var(--danger-soft)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-sm",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 14px",
+  "nieuw": "var(--sp-4) var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-sm",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-xs",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "5px 10px",
+  "nieuw": "5px var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".btn-xs",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": "input[type=text]",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "11px 14px",
+  "nieuw": "11px var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": "input[type=text]",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "17px",
+  "nieuw": "var(--fs-body-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": "input[type=text]::placeholder",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": "select",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".segment",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".segment button",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".segment button",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px 6px",
+  "nieuw": "var(--sp-6) var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".segment button",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".segment button.active",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".segment button.active",
+  "soort": "kleur",
+  "eigenschap": "box-shadow",
+  "oud": "rgba(185,78,42,.35)",
+  "nieuw": "var(--accent-ring)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-grid",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "18px 16px",
+  "nieuw": "18px var(--sp-8)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow)",
+  "nieuw": "var(--elev-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn:hover",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow-lg)",
+  "nieuw": "var(--elev-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn .name",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn .name",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn .sub",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn .sub",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn .sub",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".chip",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "20px",
+  "nieuw": "var(--r-3xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".chip",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "5px 12px",
+  "nieuw": "5px var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".chip",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow)",
+  "nieuw": "var(--elev-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card .pname",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card .pname",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card .pname",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card .score-big",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".badge",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "20px",
+  "nieuw": "var(--r-3xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".badge",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "2px 9px",
+  "nieuw": "var(--sp-1) 9px"
+ },
+ {
+  "groep": "basis",
+  "selector": ".badge",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metrics",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metrics",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metric",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 8px",
+  "nieuw": "var(--sp-5) var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metric",
+  "soort": "alias",
+  "eigenschap": "box-shadow",
+  "oud": "var(--shadow)",
+  "nieuw": "var(--elev-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metric .val",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "20px",
+  "nieuw": "var(--fs-title)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metric .val",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metric .lbl",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".metric .lbl",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".empty",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".empty",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "24px",
+  "nieuw": "var(--sp-12)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".error",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".error",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".gap8",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "9px 14px",
+  "nieuw": "9px var(--sp-7)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pos",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pos",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pos",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".standing-pts",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".bracket-round",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "16px",
+  "nieuw": "var(--sp-8)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".bracket-round-title",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".bracket-round-title",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".bracket-round-title",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".bracket-round-title",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": "h2.page-head",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "4px 0 16px",
+  "nieuw": "var(--sp-2) 0 var(--sp-8)"
+ },
+ {
+  "groep": "basis",
+  "selector": "h2.page-head",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "28px",
+  "nieuw": "var(--fs-stat)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".team-badge",
+  "soort": "ruimte",
+  "eigenschap": "margin-left",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".team-badge",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".team-badge",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".team-badge",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".game-btn",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".lang-tile",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "basis",
+  "selector": "le*=\"text-transform:uppercase\"],\n.card > div[style*=\"text-transform: uppercase\"]",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "basis",
+  "selector": "le*=\"text-transform:uppercase\"],\n.card > div[style*=\"text-transform: uppercase\"]",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "basis",
+  "selector": "le*=\"text-transform:uppercase\"],\n.card > div[style*=\"text-transform: uppercase\"]",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".qt-label",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".qt-label",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".qt-label",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "basis",
+  "selector": ".player-card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ }
+]
