@@ -1,7 +1,19 @@
-# Darts by Tom: ontwerpsysteem (fase 4B, voorstel)
+# Darts by Tom: ontwerpsysteem (fase 4B, voorstel, herziening 2)
 
 Stand: v252 (`main` = `4785a1f`, visuele referentie `faf50f0`). **Dit is een voorstel. Er is niets aan de app veranderd.**
-Skills: Product-Grade App Builder **v1** is als skill geladen. **v2** is in deze sessie niet geïnstalleerd; ik heb alleen het eerder gedeelde SKILL.md-bestand als leidraad gebruikt.
+Skills: Product-Grade App Builder **v2** is in deze sessie **niet** als skill geïnstalleerd. Ik heb het eerder gedeelde SKILL.md-bestand als primaire leidraad voor de uitvoering gebruikt. **v1** is als skill geladen en gebruikt voor de audit en de kwaliteitscontrole.
+
+### Wat er in herziening 2 veranderd is (op Toms punten van 23-11)
+
+| Punt | Wijziging | Waar |
+|---|---|---|
+| 1. Tablet vs. kantine | Breakpoint-logica onderzocht en gemeten op 768×1024 en 1024×768. Correctie: `#app-content` heeft al `max-width:760px`, dus er "rekt niets uit". 1024×768 krijgt nu de kantine-indeling; dat is **niet** als gewenst vastgesteld en wordt een open vraag (K6). In 4C verandert er niets aan de indeling. | §1.5, §6, §9 |
+| 2. Contrastcontrole | Uitgewerkt als geautomatiseerde test (`tests/core/contrast.mjs`) met een vaste parenlijst en een aparte uitzonderingenlijst. De volledige matrix is gemeten. Nieuwe, ernstige uitzondering gevonden: het grote doelgetal in accentkleur haalt maar 2,78 op donker. | §1.4, §4.4, §7.2 |
+| 3. Tikvlakken | Gemeten op 320, 360, 375 en 390 breed: hoeveel ruimte elk klein element heeft tot zijn buren. **Chips kunnen veilig naar 44.** Spelbalk, navigatie, snelscores en numpads niet: die krijgen geen onzichtbare zone maar een indelingsoplossing in 4D. | §5.3, §7.3 |
+| 4. Kleuren en uitzonderingen | Vier kleurgroepen (interface, spelstatus, team, dartbord) en een uitzonderingslijst van kleuren die bewust buiten de semantische tokens blijven. Regel: geen automatische vervanging als de betekenis of herkenbaarheid van een spel verandert. | §3.1, §3.2a |
+| 5. 4C-4 | Inline JS-stijlen verplaatsen is uit de verplichte migratie gehaald en wordt een losse, optionele stap na 4C-3. | §7 |
+| K1–K5 | Vastgelegd als Toms voorkeursrichting. Uitvoering blijft 4D met aparte goedkeuring. | §9 |
+| Planning | 4C-0 wordt groter (tests), 4C wordt kleiner (geen 4C-4). | §10 |
 
 Inhoud:
 1. Wat er nu is (audit)
@@ -13,6 +25,7 @@ Inhoud:
 7. Migratie
 8. Risico's en visuele impact
 9. Keuzes voor Tom
+10. Planning
 
 ---
 
@@ -60,25 +73,58 @@ Daarnaast nog losse sets: `--seq-*` (Halve It-volgorde), `--setup-accent`.
 | I10 | **Twee dartbord-paletten**: badges `#cc2222`/`#16a34a`/`#374151`/`#4b5563`, Halve It-bord `#D9232D`/`#1E7E34`. | |
 | I11 | **z-index zonder orde**: install-banner en pill-nav allebei 9980; toast 9999 valt **onder** het bevestigvenster (10050); update-banner 9000 onder de nav. | Toast kan achter een venster verdwijnen. |
 | I12 | **Geen `:focus-visible`** in de hele app. | Toetsenbordbediening (kantinescherm met toetsenbord, tablet) laat niet zien waar je bent. |
+| I13 | **Halve It vult lege hoogte met een dicht zwart vlak.** Gezien op 1280×800, 1920×1080 én 768×1024 staand. De oorzaak is dus niet "liggend" maar "scherm hoger dan de inhoud". | 4A-bevinding H1 is breder dan gedacht. |
 
-### 1.4 Contrast (WCAG AA = 4,5 voor gewone tekst, 3,0 voor grote tekst/iconen)
+### 1.4 Contrast (WCAG 2.1 AA: 4,5 voor gewone tekst, 3,0 voor tekst ≥ 24 px of ≥ 18,7 px vet)
+
+Gemeten per themastand. "Slechtste waarde" = de doorschijnende kaart en de tekst samengesteld over elk punt van het achtergrondverloop (zwart, `#381000`, `#0f2e10`; licht: crème plus de rode en groene gloed), en daarvan de laagste uitkomst.
+
+**Tekst op achtergrond (slechtste waarde): `bg` / `card` / `surface`**
+
+| Tekstkleur | Donker gekozen | Donker automatisch | Licht |
+|---|---|---|---|
+| tekst | 14,8 / 13,9 / 17,0 | 14,8 / 14,3 / 16,5 | 13,2 / 15,3 / 17,4 |
+| muted | 5,16 / 4,86 / 5,94 | 5,16 / 4,99 / 5,76 | **4,25** / 4,93 / 5,61 |
+| soft | 8,2 / 7,7 / 9,4 | 8,2 / 7,9 / 9,2 | 6,8 / 7,8 / 8,9 |
+| accent-tekst (`#E07A55` / `#A8431F`) | 4,99 / 4,70 / 5,74 | 4,99 / 4,83 / 5,57 | **4,45** / 5,17 / 5,88 |
+| hit-tekst (`#8FCB9C` / `#2F6B40`) | 7,9 / 7,4 / 9,1 | 7,9 / 7,6 / 8,8 | 4,71 / 5,46 / 6,21 |
+| danger-tekst (`#FF7A6B` / `#B3261E`) | 5,8 / 5,5 / 6,7 | 5,8 / 5,6 / 6,5 | 4,83 / 5,61 / 6,38 |
+| warning (K3: `#D08A2E` / `#8A5A12`) | 5,2 / 4,9 / 6,0 | 5,2 / 5,0 / 5,8 | **4,37** / 5,07 / 5,77 |
+
+**Witte tekst op vulkleur**
+
+| Vulkleur | Ratio | Oordeel |
+|---|---|---|
+| accent `#B94E2A` | 5,02 | AA |
+| hit `#3E7B4F` | 5,06 | AA |
+| danger `#FF3B30` | 3,55 | alleen groot |
+| warning `#D08A2E` (K3) | **2,85** | onvoldoende: warning wordt **geen** vulkleur met witte tekst |
+| board-red `#D9232D` / board-green `#1E7E34` (K5) | 4,97 / 5,14 | AA |
+| huidige badges `#cc2222` / `#16a34a` | 5,50 / **3,30** | groen alleen groot (badges zijn ≥ 15 px Flow, vet: grens) |
+| singles `#374151` / `#4b5563` | 10,3 / 7,6 | AA |
+| teamkleuren `#5B6CCF` `#7A5BB5` `#6E7781` / `#2E8B9A` | 4,68 / 5,26 / 4,55 / **3,98** | `#2E8B9A` alleen groot |
+| meldingen nu: groen `#22C55E` / oranje `#FF9500` / rood `#EF4444` | **2,28 / 2,20** / 3,76 | onvoldoende (K4 lost dit op) |
+
+**Merkkleur als groot getal (eis 3:1)**
 
 | Combinatie | Ratio | Oordeel |
 |---|---|---|
-| Accent `#B94E2A` als tekst op donkere kaart `#2C2C2E` | **2,78** | onvoldoende (gebeurt bij kleine accentlabels) |
-| Huisgroen `#3E7B4F` als tekst op donkere kaart | **2,75** | onvoldoende |
-| `--danger #FF3B30` op donkere kaart | 3,93 | alleen voor groot |
-| Accent op lichte kaart `#F2EEE9` | 4,34 | net onvoldoende voor kleine tekst |
-| Huisgroen op lichte kaart | 4,38 | net onvoldoende |
-| `#9DBF9E` (accent2) op licht | **1,75** | nooit als tekst op licht |
-| Muted op donkere kaart (`#98989F`) | 4,86 | goed |
-| Muted op lichte kaart (`#6B6560`) | 4,97 | goed |
-| Wit op accent / wit op huisgroen | 5,02 / 5,06 | goed |
-| `#E07A55` op donker / `#A8431F` op licht | 4,70 / 5,21 | goed: dit zijn de bestaande setup-tekstkleuren |
-| `#8FCB9C` op donker / `#2F6B40` op licht | 7,43 / 5,52 | goed |
-| `#FF7A6B` op donker / `#B3261E` op licht | 5,47 / 5,66 | goed |
+| accent `#B94E2A` als doelgetal ("20", "D16", "1") op donkere kaart | **2,78** (gekozen) / **2,85** (auto) | **onvoldoende, ook voor groot.** Dit is het belangrijkste getal in de oefenspellen. |
+| idem op lichte kaart | 4,30 | goed (groot) |
+| huisgroen `#3E7B4F` als tekst op donkere kaart | 2,75 | onvoldoende |
 
-**Conclusie:** de oplossing bestaat al in de code (setup gebruikt aparte tekstvarianten van accent en groen). Het systeem moet die alleen overal gebruiken: een **vulkleur** en een **tekstkleur** per merkkleur.
+**Uitzonderingen (apart gerapporteerd, worden niet automatisch aangepast):**
+
+| # | Combinatie | Ratio | Waar | Voorstel (4D, met akkoord) |
+|---|---|---|---|---|
+| C1 | accent-vulkleur als groot doelgetal op donker | 2,78 | `.g-target-big`, `#rco-target`, Halve It-doel | in donker `--accent-text` (`#E07A55`, 4,70) voor het getal; vulkleur blijft voor knoppen. Zichtbaar: het getal wordt iets lichter oranje. **Keuze K7.** |
+| C2 | muted direct op de lichte achtergrond (gloedhoek) | 4,25 | sectielabels buiten kaarten in licht | muted in licht 1 stap donkerder (`#625C57` ≈ 4,6) **of** labels alleen in kaarten. |
+| C3 | accent-tekst direct op lichte achtergrond | 4,45 | links/labels buiten kaarten | idem, `#9F3E1C` ≈ 4,8. |
+| C4 | warning-tekst op lichte achtergrond | 4,37 | (nieuw token, nog niet in gebruik) | waarde bij invoering `#80530F`. |
+| C5 | wit op danger `#FF3B30` | 3,55 | alleen grote knoppen; kleine teksten gebruiken al `--danger-soft` + `--danger-text` | regel: geen kleine witte tekst op danger. |
+| C6 | wit op groene badge `#16a34a` | 3,30 | uitgooi-badges | opgelost door K5 (`#1E7E34`, 5,14). |
+| C7 | wit op teamkleur `#2E8B9A` | 3,98 | team-/avatarbadge (alleen letters/cijfers ≥ 13 px vet) | teamkleur niet aanpassen (herkenning); badge-tekst ≥ 18,7 px vet **of** accepteren als uitzondering. Toms keuze. |
+| C8 | witte tekst op meldingen groen/oranje | 2,2–2,3 | `showToast` | opgelost door K4. |
 
 ### 1.5 Wat goed is en blijft
 
@@ -89,6 +135,20 @@ Daarnaast nog losse sets: `--seq-*` (Halve It-volgorde), `--setup-accent`.
 - **De 3D-toetsen** (`--k-*`): voelen als echte knoppen. Houden als apart onderdeel.
 - **Schalen met de ruimte** (`clamp()` met `vh`, `cqh`, `cqw` en container queries) in X01, oefenspellen en Random Checkout. Dat is de juiste techniek; het systeem maakt er vaste stappen van.
 - **De zwevende spelbalk en invoer onderaan bij de duim.**
+
+### 1.6 Huidige breakpoint-logica (gemeten)
+
+| Regel | Query | Wat het doet | Wie krijgt het |
+|---|---|---|---|
+| Kolombreedte | geen query: `#app-content{max-width:760px}` | alle schermen max. 760 px breed, gecentreerd | iedereen ≥ 760 breed |
+| Kantine | `(orientation:landscape) and (min-width:1000px)` (2 blokken) | spelschermen als grid (scores/doel links, invoer rechts), `max-width:none` voor X01 | **ook een iPad liggend (1024×768)** en elke laptop |
+| Smal | `(max-width:420px)` | setup compacter | telefoons |
+| Mobiele actiebalk | `(max-width:600px)` (3×) | setup-actiebalk, Halve It-tegels 3 kolommen | telefoons |
+| Lage schermen | `(max-height:700/740/780px)` | X01, oefenspellen compacter | SE, liggende telefoons |
+| JavaScript | geen breedtecontroles (alleen `innerWidth` voor confetti) | | |
+
+**Gemeten op 768×1024 (staand):** telefoonindeling tot 760 px. Werkt. Veel lege ruimte in Cricket, en het zwarte vlak in Halve It (I13).
+**Gemeten op 1024×768 (liggend):** kantine-indeling. 501 en Cricket bruikbaar, Halve It met zwart vlak, home/statistieken in de 760-kolom. Of dit de gewenste ervaring is voor een tablet in de hand, is **niet vastgesteld** (K6).
 
 ---
 
@@ -110,16 +170,27 @@ Wat we bewust **niet** doen: geen nieuwe fonts, geen nieuwe accentkleur, geen ve
 
 **Regel in fase 4C:** elk token krijgt eerst **exact de huidige waarde**. Afronden naar de schaal (bijv. 13 → 14 px) is een aparte, zichtbare stap (4D) met Toms akkoord.
 
-### 3.1 Kleur: basispalet (vaste waarden, niet per thema)
+### 3.1 Kleur: vier groepen
+
+Elke kleur in de app hoort bij precies één groep. **Alleen groep A en B worden semantische tokens.** C en D zijn betekenisdragende kleuren van het spel en blijven aparte, vaste sets.
+
+| Groep | Wat | Regel |
+|---|---|---|
+| **A. Interface** | achtergronden, tekst, randen, knoppen, accent | semantische tokens per thema (§3.2) |
+| **B. Spelstatus** | aan de beurt, raak, mis, bust, uit, winnaar, uitgooi gelukt | semantische tokens per thema (§3.2, rij "spelstatus") |
+| **C. Team- en spelerskleuren** | wie is wie | vaste set `--team-*` / `--player-*`, **niet per thema, niet vervangen** |
+| **D. Dartbordkleuren** | rood/groen sector, single, bull | vaste set `--board-*`, **niet per thema, niet vervangen** |
+
+**Basispalet groep A/B** (vaste waarden waar de semantische tokens naar verwijzen):
 
 | Token | Waarde | Herkomst / vervangt |
 |---|---|---|
-| `--terra-300` | `#E07A55` | `--su-orange-text` (donker), toast-varianten |
+| `--terra-300` | `#E07A55` | `--su-orange-text` (donker) |
 | `--terra-500` | `#B94E2A` | `--accent`, 47× hard `#B94E2A` |
-| `--terra-600` | `#A8431F` | `--setup-accent-text` licht, `--su-orange-text` licht |
+| `--terra-600` | `#A8431F` | `--setup-accent-text` licht |
 | `--terra-700` | `#9A3F22` | ingedrukte accentknop |
-| `--green-300` | `#8FCB9C` | `--su-green-text` donker, `.co-lbl` donker |
-| `--green-400` | `#5E9E6E` | groene hover/rand (+ `#6FBF85`, `#6BA372`, `#559160` samengevoegd in 4D) |
+| `--green-300` | `#8FCB9C` | `--su-green-text` donker |
+| `--green-400` | `#5E9E6E` | groene rand/hover |
 | `--green-500` | `#3E7B4F` | huisgroen, 22× hard |
 | `--green-600` | `#2F6B40` | groene tekst licht |
 | `--green-700` | `#1E5631` | `.x-last`, `.sp-tag` licht |
@@ -127,14 +198,48 @@ Wat we bewust **niet** doen: geen nieuwe fonts, geen nieuwe accentkleur, geen ve
 | `--red-300` | `#FF7A6B` | miss-tekst donker (+ `#FF8A7A`) |
 | `--red-500` | `#FF3B30` | `--danger` |
 | `--red-700` | `#B3261E` | miss-tekst licht |
-| `--amber-500` | `#D08A2E` | **nieuw als betekenis** (bestaat al als teamkleur). Voor waarschuwingen (keuze K3) |
-| `--board-red` | `#D9232D` | dartbadges `#cc2222` + Halve It-bord `#D9232D` (keuze in 4D) |
-| `--board-green` | `#1E7E34` | badges `#16a34a` + bord `#1E7E34` |
-| `--board-single` | `#374151` / `#4B5563` | single-badges (twee tinten voor rood- en groen-sector) |
+| `--amber-500` | `#D08A2E` | waarschuwing (K3), alleen als tekst/rand |
 | Neutraal warm | `#1A1714` `#141314` `#6B6560` `#A8A09A` `#C9BFB8` `#D9D1CB` `#F3EDE8` `#F4F1ED` | setup + licht thema |
 | Neutraal koel | `#000` `#1C1C1E` `#2C2C2E` `#3A3A3C` `#48484A` `#636366` `#8E8E93` `#98989F` `#E5E5EA` `#F2F2F7` `#FFF` | spelschermen donker, iOS-schakelaars |
 
-Teamkleuren (`#B94E2A #3E7B4F #5B6CCF #D08A2E #7A5BB5 #6E7781 #2E8B9A`) blijven een **aparte set** `--team-1 … --team-7`: dat is data-kleur (wie is wie), geen UI-kleur.
+**Groep C: team- en spelerskleuren** (blijven zoals ze zijn)
+
+| Set | Waarden | Waar |
+|---|---|---|
+| `--team-1…4` | `#B94E2A` `#3E7B4F` `#5B6CCF` `#D08A2E` | `AFG_TEAM_COLORS` (Afgooien-teams), X01-teams |
+| `--player-1…7` | `#B94E2A` `#3E7B4F` `#5B6CCF` `#D08A2E` `#7A5BB5` `#2E8C9A` `#B5476E` | `_frColor` (avatar per naam: een vriend houdt altijd dezelfde kleur) |
+
+Dat teamkleur 1 en 2 gelijk zijn aan accent en huisgroen is toeval in waarde, niet in betekenis: ze worden **geen** alias van `--accent`/`--hit`. Anders zou een latere accentwijziging de teamkleur ongemerkt veranderen.
+
+**Groep D: dartbordkleuren**
+
+| Token | Nu | Waar |
+|---|---|---|
+| `--board-red` | `#cc2222` (badges) en `#D9232D` (Halve It-bord) | uitgooi-badges, Halve It "willekeurige double"-bord |
+| `--board-green` | `#16a34a` (badges) en `#1E7E34` (Halve It-bord) | idem |
+| `--board-single-red` / `--board-single-green` | `#374151` / `#4b5563` | single-badges |
+| bull / bullseye | groen / rood | badges |
+
+In 4C krijgen badges en bord **elk hun eigen huidige waarde** (`--board-red-badge` en `--board-red-hi` enz.). Het samenvoegen (K5) is 4D.
+
+### 3.2a Uitzonderingslijst: kleuren die bewust buiten de semantische tokens blijven
+
+Deze kleuren worden in 4C **niet** vervangen door een interfacetoken. Ze krijgen hoogstens een eigen naam met exact dezelfde waarde, of blijven staan.
+
+| # | Kleur(en) | Waar | Waarom uitzondering |
+|---|---|---|---|
+| X1 | teamkleuren (groep C) | Afgooien-teams, X01-teams, nummerbadges | herkenning wie bij welk team hoort |
+| X2 | spelerskleuren `_frColor` | avatars vrienden | zelfde persoon = zelfde kleur, op elk apparaat |
+| X3 | dartbordkleuren (groep D) | uitgooi-badges, Halve It-bord | het bord zelf; rood/groen = sector |
+| X4 | Halve It-opdrachttypen: oranje tegel `rgba(224,122,85,.10/.28)`, groene tegel `rgba(94,158,110,.12)` / `rgba(143,203,156,.28)`, paars `rgba(156,39,176,…)` + `#9c27b0` ("1 van 3 getallen"), teal `rgba(15,155,142,…)` | Halve It-setup en -spel | elk opdrachttype is herkenbaar aan zijn kleur |
+| X5 | `#f59e0b` (amber) | Halve It-stats "treble %" | stat-categoriekleur; valt mogelijk samen met K3, beslissen in 4D |
+| X6 | instellingen-pictogramkleuren (`.st-ic`: `#B94E2A` `#3E7B4F` `#5B6CCF` `#D08A2E` `#7A5BB5` `#6E7781` `#2E8B9A`) | Instellingen-menu | herkenning per menu-onderdeel (zoals iOS-instellingen) |
+| X7 | confetti `#ff6c00 #ef4444 #f59e0b #22c55e #3b82f6 #a855f7 #ec4899 #fff #ffd700` | winstscherm | feest, geen UI; contrast niet van toepassing |
+| X8 | grafiekkleuren in Statistieken (lijn/punten in accent en huisgroen) | gemiddelde over tijd | datavisualisatie; krijgen `--chart-*`, losgekoppeld van UI-accent |
+| X9 | iOS-schakelaar `#E5E5EA` / `#3A3A3C` | instellingen | platformgewoonte |
+| X10 | `--k-*` (3D-toets) | numpad, spelknoppen | eigen materiaal, niet een kleur met betekenis |
+
+**Regel:** een kleur uit X1–X10 wordt nooit automatisch vervangen, ook niet als hij toevallig dezelfde waarde heeft als een semantisch token. Een vervanging die de betekenis of herkenbaarheid van een spel raakt, gaat alleen via 4D, met een verschilrapport en Toms akkoord.
 
 ### 3.2 Kleur: semantische tokens (wat componenten gebruiken)
 
@@ -169,6 +274,15 @@ Componenten gebruiken **alleen** deze laag, nooit het basispalet of een hexwaard
 | `--warning` | waarschuwing | (K3) `#D08A2E` | (K3) `#8A5A12` | `--warning` (= accent), `#F59E0B`, toast `#FF9500` | sync-problemen, scroll-hint |
 | `--info` | neutraal-positief | `#9DBF9E` | `#2F6B40` ⚠ | `--accent2`, `--info` | **nooit als tekst op licht** (1,75) |
 | `--focus` | focusring | `#E07A55` | `#A8431F` | (nieuw, I12) | `:focus-visible` |
+| **Spelstatus (groep B)** | | | | | |
+| `--state-turn` | aan de beurt (vlak + gloed) | = `--accent-soft` + `--glow-turn` | idem | `.x-card.on`, `.g-prow.on` | spelerskaarten |
+| `--state-hit` | raak / gelukt / uitgegooid | = `--hit` / `--hit-text` | idem | `.g-hit`, Uitgegooid | spelknoppen, pijlstippen |
+| `--state-miss` | mis / mislukt | = `--danger-text`, vlak `--danger-soft` | idem | `.g-miss`, Mislukt | spelknoppen |
+| `--state-bust` | doodgegooid | = `--danger-text` | idem | X01 bust-melding, Random Checkout | |
+| `--state-out` | uit / klaar | `opacity:.45` (geen kleur) | idem | `.g-prow.out` | Bob's 27, Afgooien |
+| `--state-win` | winnaar | = `--hit` | idem | winstag, toernooi-winnaar | |
+
+De spelstatustokens verwijzen naar de interfacetokens, maar hebben **eigen namen**. Zo kan Tom later bijvoorbeeld "mis" anders kleuren dan "verwijderen" zonder de rest te raken.
 
 `--header-bg`, `--game-bar-bg` en `--nav-bg` blijven aparte tokens (doorschijnend + blur), met de huidige waarden.
 
@@ -309,7 +423,7 @@ De werkelijke v241-waarden (niet die uit CLAUDE.md §10): `--bg #F4F1ED`, `--sur
 
 - Een merkkleur als **tekst** gebruikt altijd de `-text`-variant (`--accent-text`, `--hit-text`, `--danger-text`). De vulkleur alleen als achtergrond met `--text-on-fill`.
 - `--info`/sage nooit als tekst in licht.
-- Elke nieuwe combinatie ≥ 4,5 (tekst) of ≥ 3 (grote cijfers ≥ 24 px, iconen). Een test controleert dit (zie §7).
+- Elke combinatie ≥ 4,5 (tekst) of ≥ 3 (tekst ≥ 24 px of ≥ 18,7 px vet, iconen). `tests/core/contrast.mjs` controleert dit automatisch voor alle themastanden (§7.2). Wat er nu niet aan voldoet, staat als uitzondering C1–C8 in §1.4 en wordt apart gerapporteerd, niet stil aangepast.
 
 ---
 
@@ -341,9 +455,35 @@ Staten: rust, ingedrukt (`translateY(1px)`, randschaduw weg, `--dur-press`), uit
 
 Eén component voor `.seg-ctrl/.seg-btn`, `.g-seg` en `.segment` (I8): bak `--sunken` of `--card`, hoek `--r-xl`, padding `--sp-1`/`--sp-2`; knop hoogte 40, hoek `--r-md`, tekst `--fs-body` 700; actief = `--accent` + `--text-on-fill` (spelopties) of `--card` + `--elev-1` (weergave-instellingen). Twee varianten: **sterk** (accent) en **zacht** (kaart). Toernooi-variant: actief = `--hit`.
 
-### 5.3 Chip (`.chip`)
+### 5.3 Chip (`.chip`) en tikvlakken
 
-Eén component voor `.chip`, `.lb-chip`, `.known-name-btn`, `.gc-btn` (I9): hoogte 36 zichtbaar, **tikvlak 44** (padding of `::after`-uitbreiding), hoek `--r-pill`, tekst `--fs-small`/`--fs-body` 700. Staten: rust `--card`, actief `--accent` + `--text-on-fill`, gekozen-zacht `--accent-soft` + `--accent-text`. `.g-chip` (groene doel-chip in spel) is een **tag**, geen chip: zie 5.9.
+Eén component voor `.chip`, `.lb-chip`, `.lb-sub`, `.known-name-btn`, `.gc-btn` (I9): hoogte 36 zichtbaar, hoek `--r-pill`, tekst `--fs-small`/`--fs-body` 700. Staten: rust `--card`, actief `--accent` + `--text-on-fill`, gekozen-zacht `--accent-soft` + `--accent-text`. `.g-chip` (groene doel-chip in spel) is een **tag**, geen chip: zie 5.9.
+
+**Gemeten: kan een groter tikvlak zonder overlap?** Methode: alle bedienbare elementen die bovenop liggen (`elementFromPoint`, dus niet verstopt achter de navigatie), per element onder 44 px de vrije ruimte tot de dichtstbijzijnde buur boven/onder/links/rechts. Een element mag maximaal **de helft** van een tussenruimte claimen, de andere helft is van de buur. 46 scenario's, NL donker.
+
+| Breedte | Kleine elementen | Kunnen veilig naar 44 | Niet zonder overlap |
+|---|---|---|---|
+| 320 × 568 | 290 | 235 | 55 |
+| 360 × 640 | 274 | 241 | 33 |
+| 375 × 667 (SE) | 270 | 246 | 24 |
+| 390 × 844 | 260 | 254 | 6 |
+
+| Element | Maat | Kleinste tussenruimte | Veilig naar 44? |
+|---|---|---|---|
+| `.lb-chip` (ranglijst) | 61–67 × 40 | 15 boven/onder | **ja** (overal) |
+| `.lb-sub` (subfilters) | 72–94 × 36 | 17 | **ja** |
+| `.known-name-btn` (bekende spelers) | 77–84 × 39 | 6 | **ja** (2,5 px per kant nodig, 3 beschikbaar) |
+| `.gc-btn` (spelbalk Ongedaan/Stats/Stop) | 74–109 × 36 | 3 (spelknoppen eronder) | **nee**: zou tikken op 16/15/Bull (Cricket), Uitgegooid (Random Checkout) en 0 (X01) wegnemen |
+| `.pn-tab` (navigatie) | 47 × 38 | 0 (inhoud loopt eronder door) | **nee** |
+| X01-snelscores (`.btn` 0/26/45…) | 37–38 × 44 | 4 naast elkaar | **nee** (te smal op ≤ 375) |
+| Random Checkout-numpad | 43–54 × 40 | 4–5 | **nee** op 320/360 |
+| Random Checkout "pijlen per poging" (`.seg-btn`) | 36 × 54 | 3 | **nee** |
+| `.hi-tile-del` (Halve It verwijderen) | 40 × 40 | 0 (rand tegel) | **nee** naar boven, ligt in de tegel zelf |
+
+**Regels die hieruit volgen:**
+1. Chips (`.chip`, `.lb-chip`, `.lb-sub`, `.known-name-btn`) krijgen het tikvlak via een `::after` van `min(nodig, halve tussenruimte)`: **nooit verder dan het midden tussen twee elementen**.
+2. **Geen onzichtbare zones** op `.gc-btn`, `.pn-tab`, snelscores, numpads en `.seg-btn` in Random Checkout. Die worden in 4D met de indeling opgelost (spelbalk iets hoger en meer afstand tot de spelknoppen, numpad-kolommen op smalle schermen), met verschilrapport.
+3. Een geautomatiseerde test bewaakt dit (§7.3).
 
 ### 5.4 Kaart (`.card`)
 
@@ -413,8 +553,8 @@ Lijstrij: min. 48 hoog, padding `--sp-5 --sp-7`, scheiding `--separator`, chevro
 | Context | Herkennen | Principe |
 |---|---|---|
 | **Telefoon staand** (360–430 breed) | standaard | Eén kolom. Invoer onderaan in de duimzone. Spelschermen schalen met de **hoogte** (`vh`/`cqh`); alles past zonder scrollen boven de spelbalk, ook op 375×667. |
-| **Tablet** (600–999 breed, of staand ≥ 768) | `min-width:600px` | Inhoud max. **560 px** breed en gecentreerd (nu rekt alles uit), spelschermen als telefoon maar met grotere toetsen. **Nog niet getest**: 768×1024 en 1024×768 komen in de visuele test. Let op: een iPad liggend (1024×768) valt nu al in de kantine-layout (≥ 1000). Dat is goed, maar moet gemeten worden. |
-| **Kantinescherm** (liggend, ≥ 1000 breed) | `(orientation:landscape) and (min-width:1000px)` | Twee kolommen: links wat je **op afstand leest** (score, doel, spelers), rechts de **invoer** (max. 520 px). Alle UI-tekst ×1,25 via `--ui-scale`, minimum 14 px. Niet-spelschermen: kolom max. 720 px, ook geschaald. |
+| **Tablet** (staand 768×1024, liggend 1024×768) | nu: staand = telefoonregels, liggend = kantineregels | **In 4C ongewijzigd.** Staand werkt de huidige telefoonindeling (max. 760 px). Liggend valt een iPad nu in de kantine-indeling. Of dat gewenst is, wordt eerst met Tom vastgesteld (K6). Daarna pas een eventuele eigen tabletregel, in 4D. Beide maten komen in de visuele test (4C-0). |
+| **Kantinescherm** (liggend, ≥ 1000 breed) | `(orientation:landscape) and (min-width:1000px)` | Twee kolommen: links wat je **op afstand leest** (score, doel, spelers), rechts de **invoer** (max. 520 px). Doel (4D): alle UI-tekst ×1,25 via `--ui-scale`, minimum 14 px; niet-spelschermen in een geschaalde kolom. In 4C ongewijzigd. |
 
 ### 6.2 Breekpunten
 
@@ -424,8 +564,8 @@ CSS-variabelen werken niet in media queries, dus dit zijn vaste afspraken in de 
 |---|---|---|
 | `compact-h` | `(max-height:700px)` | 700 (+ 740, 780 voor X01: samenvoegen in 4D) |
 | `narrow` | `(max-width:420px)` | 420 |
-| `tablet` | `(min-width:600px)` | `max-width:600` (omgekeerd gebruikt) |
-| `kantine` | `(orientation:landscape) and (min-width:1000px)` | idem |
+| `phone-wide` | `(max-width:600px)` | 600 (setup) |
+| `kantine` | `(orientation:landscape) and (min-width:1000px)` | idem. **Valt nu ook op iPad liggend; zie K6.** Mogelijke scheiding later (alleen na K6): `(orientation:landscape) and (min-width:1000px) and (pointer:fine), (min-width:1200px)` of een eigen instelling "Kantinescherm" in Weergave. |
 
 ### 6.3 Regels
 
@@ -439,23 +579,40 @@ CSS-variabelen werken niet in media queries, dus dit zijn vaste afspraken in de 
 
 ## 7. Migratie
 
-Het principe: **eerst onzichtbaar, dan zichtbaar, en elke stap bewezen met de visuele vergelijking tegen `faf50f0`.**
+Het principe: **eerst onzichtbaar, dan zichtbaar, en elke stap bewezen met de visuele vergelijking tegen `faf50f0`.** De scope van 4C is zo klein mogelijk.
+
+### 7.1 Stappen
 
 | Stap | Wat | Verwacht verschil | Bewijs |
 |---|---|---|---|
-| **4C-0** | Visuele test uitbreiden (additief, de referentie `faf50f0` blijft): thema **automatisch** (donker en licht systeem) en **tablet** 768×1024 / 1024×768. Plus een test die hardgecodeerde kleuren buiten het tokenblok telt (mag alleen dalen). | geen (alleen meer opnames) | n.v.t. |
-| **4C-1** | Tokenblok toevoegen in `:root` met **exact de huidige waarden**, nog door niets gebruikt. Oude namen worden aliassen. | **0 pixels** | volledige compare = 0 verschillen |
-| **4C-2** | Hardgecodeerde waarden vervangen door tokens met **dezelfde waarde**: eerst kleuren, dan hoeken, schaduw, z-index, ruimte, lettergrootte. Per schermgroep een commit. | **0 pixels** | compare per stap = 0 |
-| **4C-3** | Dubbele themaregels samenvoegen (I3): componenten alleen nog tokens. | 0 pixels bij gekozen thema; automatisch volgens K1 | compare incl. "automatisch" |
-| **4C-4** | Inline stijlen in JS-strings stap voor stap naar klassen, alleen in functies die toch al aangeraakt worden. `html-sinks` blijft groen, geen data aanraken. | 0 pixels | compare + `npm test` |
-| **4D** (apart akkoord) | De zichtbare verbeteringen, elk als losse wijziging met verschilrapport: K1–K5, contrastfix (accent-tekst), afronden op de schaal, chips 44 tikbaar, minimaal 11 px, `:focus-visible`, z-index-correcties, de 4A-bugs H1–H3 en M1/M2 (kantine), toastkleuren. | bedoeld, per stap door Tom goedgekeurd | verschilrapport + nieuwe referentiecommit |
+| **4C-0** | **Alleen tests, alleen toevoegen.** (a) visuele test: thema *automatisch* (systeem donker en systeem licht) en tablet 768×1024 / 1024×768; (b) contrasttest (§7.2); (c) tikvlaktest (§7.3); (d) teller van hardgecodeerde kleuren buiten het tokenblok (mag alleen dalen). `faf50f0` blijft de referentie; de nieuwe opnames worden bij elke vergelijking vers van `faf50f0` gemaakt, er wordt niets opgeslagen of overschreven. | geen (de app verandert niet) | `npm test` groen; compare `faf50f0` ↔ `faf50f0` = 0 |
+| **4C-1** | Tokenblok toevoegen met **exact de huidige waarden**, nog door niets gebruikt. Oude namen worden aliassen. | **0 pixels** | volledige compare = 0 |
+| **4C-2** | Hardgecodeerde waarden in **CSS** vervangen door tokens met **dezelfde waarde**: kleuren (alleen groep A/B; C/D krijgen eigen namen, X1–X10 blijven), hoeken, schaduw, z-index, ruimte, lettergrootte, gewicht (600/800/900 → bold, 300/500 → regular: zelfde font-bestand). Per schermgroep een commit. | **0 pixels** | compare per commit = 0 |
+| **4C-3** | Dubbele themaregels samenvoegen (I3): componentregels alleen nog tokens. | **0 pixels**, ook in *automatisch* | compare incl. automatisch en tablet |
+| ~~4C-4~~ | **Vervallen als verplichte stap.** Inline stijlen in JS-strings (±820) naar klassen: wordt **4X, optioneel**, na 4C-3 en met apart akkoord. | | |
+| **4D** (apart akkoord, per punt) | De zichtbare verbeteringen: K1–K7, contrast-uitzonderingen C1–C8, afronden op de schaal, chips via `::after`, minimaal 11 px, `:focus-visible`, z-index-correcties, indeling spelbalk/numpad (tikvlakken), 4A-bugs H1–H3 en M1/M2, tabletkeuze. | bedoeld | verschilrapport per punt; nieuwe referentie = nieuwe commit (`faf50f0` blijft bestaan) |
+| **4X** (optioneel) | Inline JS-stijlen naar klassen, alleen in functies die toch al worden aangeraakt. | 0 pixels | compare + `npm test` + html-sinks |
 
-Afspraken voor elke stap:
-- `APP_VERSION` +1 alleen bij een release naar `main`. 4C-stappen kunnen samen in één release.
-- Geen gegevens, geen spellogica, geen veldnamen aanraken.
-- De goedgekeurde referentie blijft `faf50f0`. Een nieuwe referentie komt pas na Toms akkoord op een 4D-verschil, en altijd als een **nieuwe** commit, nooit als overschrijving.
+**Bewijs van "0 pixels":** `REF=<map met faf50f0> npm run visual:compare` met de **volledige** matrix (ook automatisch en tablet), drempel 0 verschillende pixels per opname. Een stap is pas klaar als het rapport "0 van N opnames veranderd" zegt. De uitkomst gaat mee in het commitbericht.
 
----
+**Afspraken voor heel 4C:** geen wijziging aan `APP_VERSION`, niet naar GitHub Pages (`main`) zonder Toms akkoord per release, geen spelregels, gegevensstructuren, Firebase of synchronisatie aanraken, `npm test` en html-sinks groen bij elke commit. Werk op een branch (`feat/fase4c`).
+
+### 7.2 Contrasttest (`tests/core/contrast.mjs`, nieuw in 4C-0)
+
+- **Wat:** laadt de app in vier themastanden: donker gekozen, licht gekozen, automatisch met systeem donker, automatisch met systeem licht. Leest de **berekende** tokenwaarden (`getComputedStyle(document.documentElement)`; vóór 4C-1 de huidige namen `--text`, `--muted`, `--card` …).
+- **Hoe:** doorschijnende kleuren worden samengesteld over elk punt van het achtergrondverloop. De laagste uitkomst telt.
+- **Paren:** vaste lijst in `tests/core/contrast.pairs.json`: tekst/muted/soft/accent-tekst/hit-tekst/danger-tekst/warning op bg/card/surface; wit op accent/hit/danger/board/team; groot doelgetal (accent) op card. Per paar de eis: 4,5 of 3,0 (groot).
+- **Uitzonderingen:** staan in `tests/core/contrast.allow.json`, elk met reden en de 4D-stap die het oplost (C1–C8 uit §1.4). De test **faalt** op elke nieuwe onvoldoende combinatie. Bekende uitzonderingen faalt hij niet, maar meldt hij **apart** in een blok `UITZONDERINGEN (n)` in de uitvoer. Een uitzondering die inmiddels wél voldoet, wordt ook gemeld ("mag uit de lijst").
+- **Aanvullend, alleen melden:** de visuele capture krijgt een DOM-steekproef. Per zichtbare tekst wordt de werkelijke voorgrond- en achtergrondkleur bepaald (via de voorouders, inclusief transparantie). Zo'n meting is bij verlopen en afbeeldingen een benadering, dus faalt ze niet maar verschijnt ze als lijst in het rapport.
+
+### 7.3 Tikvlaktest (`tests/core/tap.mjs`, nieuw in 4C-0)
+
+- Draait op **320×568, 360×640, 375×667 en 390×844**, in alle scenario's van de visuele test.
+- **Controleert:**
+  1. geen twee bedienbare elementen overlappen elkaar, inclusief hun eventuele `::after`-tikvlak;
+  2. een element onder 44 px claimt nooit meer dan de helft van de ruimte naar zijn buur;
+  3. elk interactief element dat zichtbaar is, is ook echt aanklikbaar (`elementFromPoint` op het midden).
+- **Uitvoer:** in 4C alleen melden (nu zijn er 6 tot 55 kleine elementen per breedte die niet veilig kunnen groeien). Vanaf 4D: falen bij nieuwe overlap, met een uitzonderingenlijst voor wat bewust zo blijft.
 
 ## 8. Risico's en visuele impact
 
@@ -464,10 +621,13 @@ Afspraken voor elke stap:
 | **Specificiteit door 214× `!important`**: een token in een basisregel wordt overstemd door een latere override | hoog | token lijkt niet te werken | tokens juist **in** de override-regels zetten. Visuele vergelijking vangt elk verschil. |
 | **Thema-lek** bij het samenvoegen van themaregels | middel | verkeerde kleuren in één themacombinatie | 4C-0 voegt "automatisch" toe aan de test, plus de twee kruiscombinaties (bestond al in de checklist). |
 | **"Automatisch donker" valt buiten de 4A-baseline** | zeker | verschil niet zichtbaar in de huidige test | 4C-0. |
-| **Inline stijlen in JS** (±820) worden niet door tokens geraakt | zeker | delen van de app blijven oude waarden houden | 4C-4 en de teltest. Geen grote verbouwing in één keer. |
+| **Inline stijlen in JS** (±820) worden niet door tokens geraakt | zeker | delen van de app houden hun eigen waarden | bewust: 4X is optioneel. De teltest laat zien hoeveel er nog over is. |
 | `color-mix()` / nieuwe CSS niet op oudere iPhones | laag | kleuren weg | **niet gebruiken**: alle transparanten als vaste `rgba()`-tokens. |
 | Flow Text bij 11 px slecht leesbaar | middel | kleine tekst blijft lastig | minimum 11 px; op de echte iPhone controleren (kan de test niet). |
-| Tablet-layout onbekend | middel | uitgerekte schermen op iPad | 4C-0 meet het eerst; ontwerp pas daarna. |
+| iPad liggend krijgt de kantine-indeling | zeker (nu al zo) | tablet in de hand voelt als kantinescherm | **niet** aanpassen in 4C; K6 eerst; 4C-0 legt beide tabletmaten vast. |
+| Contrasttest geeft valse meldingen bij verlopen en transparantie | middel | ruis | parentest = deterministisch en faalt alleen daar; DOM-steekproef alleen melden. |
+| Groter tikvlak steelt tikken van een buur | middel (bij spelbalk/numpad zeker) | verkeerde invoer tijdens een potje | alleen chips via `::after` met halve-ruimte-grens; tikvlaktest; spelbalk/numpad via indeling in 4D. |
+| Spelkleur per ongeluk vervangen door UI-token | middel | team- of bordkleur verandert | groepen C/D en lijst X1–X10 zijn uitgesloten van 4C-2; compare = 0 vangt het. |
 | Grote diff, lastig te reviewen | middel | fouten glippen erdoor | kleine commits per schermgroep, elk met compare = 0. |
 
 **Visuele impact per fase:**
@@ -476,12 +636,36 @@ Afspraken voor elke stap:
 
 ---
 
-## 9. Keuzes voor Tom (vóór 4D, niet nodig voor 4C)
+## 9. Keuzes voor Tom
+
+**K1–K5 zijn vastgelegd als Toms voorkeursrichting (23-11-2026).** Uitvoeren gebeurt pas in 4D, per punt met een verschilrapport en een apart akkoord.
+
+| # | Onderwerp | Voorkeursrichting (vastgelegd) |
+|---|---|---|
+| K1 | Donkere kaarten | doorschijnend (zoals "automatisch" nu) |
+| K2 | Grijsfamilie | warm overal |
+| K3 | Waarschuwingskleur | eigen amber `#D08A2E`, alleen als tekst/rand (wit erop haalt maar 2,85) |
+| K4 | Status-groen/-rood | huisgroen en `#FF3B30`/`--danger-text` overal, ook in meldingen; iOS- en Tailwind-kleuren eruit |
+| K5 | Dartbordkleuren | Halve It-tinten `#D9232D` / `#1E7E34` voor badges en bord |
+
+**Nieuwe open vragen (nodig vóór 4D, niet voor 4C):**
 
 | # | Vraag | Opties | Mijn advies |
 |---|---|---|---|
-| **K1** | Donkere kaarten: doorschijnend (wat "automatisch" nu laat zien) of dicht grijs (wat "Donker" kiezen nu laat zien)? | doorschijnend / dicht | **Doorschijnend.** Dat is wat de meeste gebruikers nu zien, en het verloop (rood/groen) schijnt erdoor. Dat is de dartbord-sfeer. |
-| **K2** | Eén grijsfamilie? | warm overal / koel overal / zo laten | **Warm overal.** Het lichte thema en setup zijn al warm en passen bij terracotta. In donker is het verschil klein (muted `#98989F` → `#A8A09A`). |
-| **K3** | Waarschuwingskleur | eigen amber `#D08A2E` / accent blijven | **Amber.** Terracotta betekent "jouw beurt"; een waarschuwing mag daar niet op lijken. |
-| **K4** | Status-groen en -rood | huisgroen en `#FF3B30` overal, iOS- en Tailwind-kleuren eruit | **Ja**, ook in de meldingen. |
-| **K5** | Dartbordkleuren | Halve It-tinten (`#D9232D`/`#1E7E34`, dieper) / badgetinten (`#cc2222`/`#16a34a`, feller) | **Halve It-tinten**: echter bordrood en -groen, en wit erop haalt beter contrast. |
+| **K6** | Wat moet een **iPad liggend (1024×768)** krijgen? | (a) kantine-indeling zoals nu; (b) telefoonindeling in de 760-kolom; (c) eigen tabletindeling; (d) een instelling "Kantinescherm" in Weergave, standaard aan vanaf 1200 breed | **(d)**: de app kan niet betrouwbaar zien of een scherm aan de muur hangt. Een schakelaar plus een veilige standaard is eerlijker dan gokken op pixels. Eerst wil ik van je weten of iemand de app op een iPad gebruikt. |
+| **K7** | Groot doelgetal op donker (C1, 2,78) | (a) in donker `#E07A55` voor het getal; (b) zo laten | **(a)**: het getal moet vanaf de oche te lezen zijn. Het blijft herkenbaar terracotta, alleen lichter. |
+| **C7** | Teamkleur `#2E8B9A` met witte letter (3,98) | badge-tekst groter, of accepteren | accepteren als uitzondering: het is één letter of cijfer, en de kleur is herkenning |
+
+---
+
+## 10. Planning (gevolgen van deze herziening)
+
+| Fase | Was | Nu | Effect |
+|---|---|---|---|
+| 4C-0 | visuele test uitbreiden + kleurenteller | + contrasttest met paren en uitzonderingen, + tikvlaktest op 4 breedtes, + tablet- en automatisch-opnames | **groter**: ±1 sessie extra |
+| 4C-1 t/m 4C-3 | onveranderd | onveranderd, maar groepen C/D en X1–X10 expliciet buiten de vervanging | gelijk |
+| 4C-4 | verplicht | vervallen → 4X optioneel | **kleiner**: 4C is daarmee per saldo kleiner dan in herziening 1 |
+| Visuele test | 672 opnames, ±15 min per kant | ±1040 opnames (+ automatisch: 46 × 2 talen × 2 systeemstanden op 390×844; + tablet: 46 × 2 maten × 2 thema's NL). Volledige compare ±50 min, `--quick` ±10 min | per 4C-2-commit `--quick`; vóór afronding van elke 4C-stap de volledige run |
+| 4D | één blok | per punt; volgorde voorstel: C1/K7 (contrast doelgetal), H1/I13 (Halve It zwart vlak), H2/H3 (onder de spelbalk), tikvlakken spelbalk/numpad, K1–K5, kantine M1/M2, K6 tablet | |
+
+**Wat ik na akkoord als eerste doe:** 4C-0 (alleen tests). Daarna stop ik en laat ik de eerste rapporten zien (contrast, tikvlakken, tablet- en automatisch-opnames), vóór 4C-1.
