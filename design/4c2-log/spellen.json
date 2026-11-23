@@ -1,0 +1,1682 @@
+[
+ {
+  "groep": "spellen",
+  "selector": "#rco-players.rco-grid .g-prow",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "5px 10px",
+  "nieuw": "5px var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#rco-players.rco-grid .g-prow-meta",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#rco-hint .co-big",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#rco-hint .co-big",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "999px",
+  "nieuw": "var(--r-pill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#rco-hint .co-arr",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#sb-players .x-card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "22px",
+  "nieuw": "var(--r-score-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#x01-mid",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "2px 0 6px",
+  "nieuw": "var(--sp-1) 0 var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#checkout-strip .co-big",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#checkout-strip .co-big",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "999px",
+  "nieuw": "var(--r-pill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#checkout-strip .co-arr",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#checkout-strip",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#checkout-strip",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "6px 12px",
+  "nieuw": "var(--sp-3) var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#checkout-strip .co-row",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".co-lbl",
+  "soort": "thema",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--hit-text)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .co-lbl",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ":root:not([data-theme=\"dark\"]) .co-lbl",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "2px 2px 0",
+  "nieuw": "var(--sp-1) var(--sp-1) 0"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head-sub",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head-sub",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head-r",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head-r",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-head-r b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "17px",
+  "nieuw": "var(--fs-body-lg)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-game",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px 14px 0",
+  "nieuw": "var(--sp-6) var(--sp-7) 0"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-game",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-card.on",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "rgba(185,78,42,.16)",
+  "nieuw": "var(--accent-soft)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-card.on",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#sb-players.x-compact",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#sb-players.x-compact .x-card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "7px 10px",
+  "nieuw": "7px var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#sb-players.x-compact .x-card",
+  "soort": "ruimte",
+  "eigenschap": "column-gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#sb-players.x-compact .x-card",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#sb-players.x-many .x-card",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "5px 10px",
+  "nieuw": "5px var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-top",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-name",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-name",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-name",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-legs",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-legs i",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-sets",
+  "soort": "ruimte",
+  "eigenschap": "margin-right",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-score",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "8px 0 6px",
+  "nieuw": "var(--sp-4) 0 var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-last",
+  "soort": "ruimte",
+  "eigenschap": "margin-left",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-last",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-last",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--green-300)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-last.bust",
+  "soort": "thema",
+  "eigenschap": "color",
+  "oud": "#FF8A7A",
+  "nieuw": "var(--danger-text)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .x-last",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#1E5631",
+  "nieuw": "var(--green-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .x-last.bust",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#B3261E",
+  "nieuw": "var(--red-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ":root:not([data-theme=\"dark\"]) .x-last",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#1E5631",
+  "nieuw": "var(--green-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ":root:not([data-theme=\"dark\"]) .x-last.bust",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#B3261E",
+  "nieuw": "var(--red-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-meta",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-meta",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x01-input .btn-sm",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "10px",
+  "nieuw": "var(--r-md)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x01-pad .btn",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-team",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "6px",
+  "nieuw": "var(--r-xs)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-team",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".x-team.t1",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow.out",
+  "soort": "status",
+  "eigenschap": "opacity",
+  "oud": ".38",
+  "nieuw": "var(--state-out-opacity)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".bob-keys",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".bob-keys button",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".bob-keys b",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".bob-keys small",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".bob-keys small",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg.trn-seg button.on",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-wrap",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-target",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-target",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "16px 12px 14px",
+  "nieuw": "var(--sp-8) var(--sp-6) var(--sp-7)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-target-lbl",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-darts",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-darts",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-darts",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-darts",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-dot",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-dot.t",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-plus",
+  "soort": "thema",
+  "eigenschap": "color",
+  "oud": "#8FCB9C",
+  "nieuw": "var(--hit-text)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-plus",
+  "soort": "ruimte",
+  "eigenschap": "margin-left",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-note",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-note",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-note",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-rows",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .x-card.on,[data-theme=\"light\"] .g-prow.on",
+  "soort": "kleur",
+  "eigenschap": "box-shadow",
+  "oud": "rgba(185,78,42,.35)",
+  "nieuw": "var(--accent-ring)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "ot:not([data-theme=\"dark\"]) .x-card.on,:root:not([data-theme=\"dark\"]) .g-prow.on",
+  "soort": "kleur",
+  "eigenschap": "box-shadow",
+  "oud": "rgba(185,78,42,.35)",
+  "nieuw": "var(--accent-ring)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow,#screen-atc .g-prow,#screen-shanghai .g-prow,#screen-checkout121 .g-prow",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "5px 12px",
+  "nieuw": "5px var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-rows,#screen-atc .g-rows,#screen-shanghai .g-rows,#screen-checkout121 .g-rows",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "t,#screen-atc .g-target,#screen-shanghai .g-target,#screen-checkout121 .g-target",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 10px 10px",
+  "nieuw": "var(--sp-5) var(--sp-5) var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "c .g-target-big,#screen-shanghai .g-target-big,#screen-checkout121 .g-target-big",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 14px",
+  "nieuw": "var(--sp-4) var(--sp-7)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow.on",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "rgba(185,78,42,.16)",
+  "nieuw": "var(--accent-soft)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow.on",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-top",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-name",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-name",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-name",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-meta",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-meta",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-prow-meta",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-bar>i",
+  "soort": "alias",
+  "eigenschap": "background",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-input",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-input",
+  "soort": "ruimte",
+  "eigenschap": "padding-top",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-big3",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-big3 button",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-big3 button",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-big3 small",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-big3 small",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-big3 b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "28px",
+  "nieuw": "var(--fs-stat)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-miss",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-miss",
+  "soort": "thema",
+  "eigenschap": "color",
+  "oud": "#FF8A7A",
+  "nieuw": "var(--danger-text)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-hit",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-hit",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-hit",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-hit",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-sec",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-sec",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-sec",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg button",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "10px",
+  "nieuw": "var(--r-md)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg button",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg button",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg button",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg button.on",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-seg button.on",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-keys",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-keys button",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-keys button",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "20px",
+  "nieuw": "var(--fs-title)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-keys .rco-ok",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-keys .rco-ok",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "17px",
+  "nieuw": "var(--fs-body-lg)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 14px",
+  "nieuw": "var(--sp-4) var(--sp-7)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-randomco .g-target",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 12px 8px",
+  "nieuw": "var(--sp-4) var(--sp-6) var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-randomco .g-target",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "2px",
+  "nieuw": "var(--sp-1)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-randomco .g-prow",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "4px 12px",
+  "nieuw": "var(--sp-2) var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-randomco .g-rows",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#screen-randomco .g-input",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "5px 14px",
+  "nieuw": "5px var(--sp-7)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".rco-disp b",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "20px",
+  "nieuw": "var(--fs-title)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-keys button small",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-warn",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-warn",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 12px",
+  "nieuw": "var(--sp-5) var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-warn",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-warn",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "13px",
+  "nieuw": "var(--fs-small)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-chips",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-chip",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 10px",
+  "nieuw": "0 var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-chip",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "8px",
+  "nieuw": "var(--r-sm)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-chip",
+  "soort": "thema",
+  "eigenschap": "background",
+  "oud": "rgba(62,123,79,.28)",
+  "nieuw": "var(--hit-soft)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track",
+  "soort": "ruimte",
+  "eigenschap": "margin-top",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "6px",
+  "nieuw": "var(--r-xs)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "11px",
+  "nieuw": "var(--fs-micro)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span.d",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span.d",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span.c",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span.c",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".g-track span.c",
+  "soort": "kleur",
+  "eigenschap": "box-shadow",
+  "oud": "#E07A55",
+  "nieuw": "var(--terra-300)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".cr-row",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "0 12px",
+  "nieuw": "0 var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".cr-row.head",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 12px",
+  "nieuw": "var(--sp-5) var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".cr-cell",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".cr-pname",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".cr-pname",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".cr-pname",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .g-miss",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#B3261E",
+  "nieuw": "var(--red-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .g-plus",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "[data-theme=\"light\"] .g-chip",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#1E5631",
+  "nieuw": "var(--green-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ":root:not([data-theme=\"dark\"]) .g-miss",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#B3261E",
+  "nieuw": "var(--red-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ":root:not([data-theme=\"dark\"]) .g-plus",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#2F6B40",
+  "nieuw": "var(--green-600)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ":root:not([data-theme=\"dark\"]) .g-chip",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#1E5631",
+  "nieuw": "var(--green-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad .btn",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-dot",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-grid",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-grid",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "10px",
+  "nieuw": "var(--sp-5)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-coin",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "50%",
+  "nieuw": "var(--r-round)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-coin",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "0 auto 12px",
+  "nieuw": "0 auto var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-coin",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-coin.done",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-pick",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "14px 8px",
+  "nieuw": "var(--sp-7) var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-pick",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "14px",
+  "nieuw": "var(--r-xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".dc-pick",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "15px",
+  "nieuw": "var(--fs-body)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#trn-start-p1.dc-pick.on",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#B94E2A",
+  "nieuw": "var(--accent)"
+ },
+ {
+  "groep": "spellen",
+  "selector": "#trn-start-p2.dc-pick.on",
+  "soort": "kleur",
+  "eigenschap": "border-color",
+  "oud": "#3E7B4F",
+  "nieuw": "var(--hit)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tight .hi-tcard",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "10px 16px 8px",
+  "nieuw": "var(--sp-5) var(--sp-8) var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tight .hi-tbig",
+  "soort": "ruimte",
+  "eigenschap": "margin",
+  "oud": "0 0 4px",
+  "nieuw": "0 0 var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tight #hi-input-area button",
+  "soort": "ruimte",
+  "eigenschap": "padding-top",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tight #hi-input-area button",
+  "soort": "ruimte",
+  "eigenschap": "padding-bottom",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tighter #hi-input-area>div>div:first-child",
+  "soort": "ruimte",
+  "eigenschap": "margin-bottom",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tighter #hi-input-area button",
+  "soort": "ruimte",
+  "eigenschap": "padding-top",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".hi-tighter #hi-input-area button",
+  "soort": "ruimte",
+  "eigenschap": "padding-bottom",
+  "oud": "6px",
+  "nieuw": "var(--sp-3)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-kbadge",
+  "soort": "ruimte",
+  "eigenschap": "margin-left",
+  "oud": "4px",
+  "nieuw": "var(--sp-2)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-kbadge",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numlist",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "8px",
+  "nieuw": "var(--sp-4)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numrow",
+  "soort": "ruimte",
+  "eigenschap": "gap",
+  "oud": "12px",
+  "nieuw": "var(--sp-6)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numrow",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "8px 0",
+  "nieuw": "var(--sp-4) 0"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numrow span span",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "12px",
+  "nieuw": "var(--fs-caption)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numrow span span",
+  "soort": "alias",
+  "eigenschap": "color",
+  "oud": "var(--muted)",
+  "nieuw": "var(--text-muted)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numbadge",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "12px",
+  "nieuw": "var(--r-lg)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numbadge",
+  "soort": "kleur",
+  "eigenschap": "color",
+  "oud": "#fff",
+  "nieuw": "var(--text-on-fill)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".afg-numbadge",
+  "soort": "maat",
+  "eigenschap": "font-size",
+  "oud": "20px",
+  "nieuw": "var(--fs-title)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad .btn",
+  "soort": "maat",
+  "eigenschap": "border-radius",
+  "oud": "16px",
+  "nieuw": "var(--r-2xl)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad .btn",
+  "soort": "maat",
+  "eigenschap": "font-weight",
+  "oud": "700",
+  "nieuw": "var(--fw-bold)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad .btn",
+  "soort": "ruimte",
+  "eigenschap": "padding",
+  "oud": "16px 0",
+  "nieuw": "var(--sp-8) 0"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad .btn-primary:active",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "#9a3f22",
+  "nieuw": "var(--terra-700)"
+ },
+ {
+  "groep": "spellen",
+  "selector": ".numpad .btn-danger",
+  "soort": "kleur",
+  "eigenschap": "background",
+  "oud": "rgba(255,59,48,.1)",
+  "nieuw": "var(--danger-soft)"
+ }
+]
