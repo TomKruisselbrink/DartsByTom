@@ -17,6 +17,70 @@
 <link rel="manifest" href="manifest.json">
 <title>Darts</title>
 <style>
+/* ═══ Ontwerpsysteem-tokens (fase 4C-1) ═══
+   Alleen namen voor waarden die de app al gebruikt; nog door niets gebruikt (dat is 4C-2). Elke waarde komt uit een
+   bestaande regel (bron achter de token). Waar al een variabele bestaat, verwijst het token ernaar en volgt het dus elk thema.
+   Team-, speler- en dartbordkleuren (groep C/D, uitzonderingen X1–X10) staan bewust NIET hier: ze blijven in de JS-constanten. */
+:root{
+  /* basispalet (vaste waarden) */
+  --terra-300:#E07A55;  /* --su-orange-text donker */
+  --terra-500:#B94E2A;  /* --accent */
+  --terra-600:#A8431F;  /* --su-orange-text licht */
+  --terra-700:#9A3F22;  /* ingedrukte accentknop */
+  --green-300:#8FCB9C;  /* --su-green-text donker */
+  --green-400:#5E9E6E;
+  --green-500:#3E7B4F;  /* .g-hit */
+  --green-600:#2F6B40;  /* --su-green-text licht */
+  --green-700:#1E5631;
+  --sage-300:#9DBF9E;   /* --accent2 */
+  --red-300:#FF8A7A;    /* .g-miss donker */
+  --red-500:#FF3B30;    /* --danger */
+  --red-700:#B3261E;    /* .g-miss licht */
+  /* interface (donker = standaard; licht hieronder) */
+  --text-muted:var(--muted);
+  --text-soft:#C9BFB8;          /* --su-soft */
+  --text-on-fill:#FFFFFF;
+  --sunken:#141314;             /* --su-well */
+  --scrim:rgba(0,0,0,.55);      /* .ask-ov */
+  --accent-text:var(--terra-300);
+  --accent-soft:rgba(185,78,42,.16);   /* .x-card.on */
+  --accent-ring:rgba(185,78,42,.35);   /* gloed actieve speler (licht) */
+  --accent-press:var(--terra-700);
+  --hit:var(--green-500);
+  --hit-text:var(--green-300);
+  --hit-soft:rgba(62,123,79,.28);      /* .g-chip */
+  --danger-text:var(--red-300);
+  --danger-soft:rgba(255,59,48,.1);    /* .btn-danger */
+  /* spelstatus (groep B) */
+  --state-turn:var(--accent-soft);
+  --state-hit:var(--hit);
+  --state-miss:var(--danger-text);
+  --state-win:var(--hit);
+  --state-out-opacity:.38;             /* .g-prow.out */
+  /* hoogte (schaduw) */
+  --elev-1:var(--shadow);
+  --elev-3:var(--shadow-lg);
+  --elev-4:0 20px 60px rgba(0,0,0,.45);  /* .ask-box */
+  /* typografie */
+  --fs-micro:11px; --fs-caption:12px; --fs-small:13px; --fs-body:15px; --fs-body-lg:17px; --fs-title:20px; --fs-stat:28px; --fs-headline:34px;
+  --fw-regular:400; --fw-bold:700;
+  /* ruimte */
+  --sp-1:2px; --sp-2:4px; --sp-3:6px; --sp-4:8px; --sp-5:10px; --sp-6:12px; --sp-7:14px; --sp-8:16px; --sp-10:20px; --sp-12:24px; --sp-16:32px;
+  /* hoeken */
+  --r-xs:6px; --r-sm:8px; --r-md:10px; --r-lg:12px; --r-xl:14px; --r-2xl:16px; --r-3xl:20px; --r-pill:999px; --r-round:50%; --r-score-xl:22px;
+  /* lagen (huidige waarden; de correcties uit het voorstel horen bij 4D) */
+  --z-base:0; --z-content:1; --z-sticky:10; --z-drag:100; --z-banner-top:9000; --z-game-controls:9970; --z-nav:9980; --z-install:9980; --z-sheet:9990; --z-modal:9997; --z-toast:9999; --z-confirm:10050;
+}
+:root[data-theme="light"]{
+  --text-soft:#48484A; --sunken:rgba(0,0,0,.06);
+  --accent-text:var(--terra-600); --hit-text:var(--green-600); --hit-soft:rgba(62,123,79,.18); --danger-text:var(--red-700);
+  --elev-4:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22);   /* .ask-box licht (v241) */
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --text-soft:#48484A; --sunken:rgba(0,0,0,.06);
+  --accent-text:var(--terra-600); --hit-text:var(--green-600); --hit-soft:rgba(62,123,79,.18); --danger-text:var(--red-700);
+  --elev-4:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22);   /* .ask-box licht (v241) */
+}}
 /* ─── DESIGN TOKENS ─── */
 :root{
   color-scheme:light dark;
