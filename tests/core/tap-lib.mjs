@@ -16,6 +16,9 @@ import { shootAll } from '../visual/shoot.mjs';
 import { SCENARIOS, EXPECT } from '../visual/scenarios.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const KNOWN_FILE = path.join(HERE, 'tap.known.json');
+// Engels (4C-3, W3): aparte nulmeting, ook van faf50f0. De Nederlandse nulmeting (tap.known.json) blijft ongewijzigd.
+const KNOWN_FILE_EN = path.join(HERE, 'tap.known.en.json');
+const knownFile = lang => lang === 'en' ? KNOWN_FILE_EN : KNOWN_FILE;
 export const VPS = { 320: [320, 568], 360: [360, 640], 375: [375, 667], 390: [390, 844] };
 
 export const MEASURE = () => {
@@ -78,24 +81,25 @@ export const MEASURE = () => {
   return { n: top.length, f: out };
 };
 
-export async function measureAll(vpKey, { jobs = 2 } = {}) {
+export async function measureAll(vpKey, { jobs = 2, lang = 'nl', theme = 'dark' } = {}) {
   const [w, h] = VPS[vpKey];
-  const items = SCENARIOS.map(s => ({ s, w, h, vn: 'tap-' + vpKey, lang: 'nl', theme: 'dark', file: s.id }));
+  const items = SCENARIOS.map(s => ({ s, w, h, vn: 'tap-' + vpKey, lang, theme, file: s.id }));
   const pw = (await import(process.env.PLAYWRIGHT || 'playwright')).default;
   const b = await pw.chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
   try { return await shootAll(b, ROOT, '/tmp/dbt-tap', items, { jobs, shot: false, measure: MEASURE }); } finally { await b.close(); }
 }
 export const keysOf = res => { const k = {}; for (const r of res) for (const [type, l] of r.measure.f) { const key = `${r.id}|${type}|${l}`; k[key] = (k[key] || 0) + 1; } return k; };
 
-export async function runTap(vpKey) {
-  const S = suite('tap-' + vpKey);
-  const known = JSON.parse(fs.readFileSync(KNOWN_FILE, 'utf8'))[vpKey] || {};
-  const res = await measureAll(vpKey);
-  await S.t(`${vpKey} px: alle ${SCENARIOS.length} scenario's laden zonder fout`, () => {
+export async function runTap(vpKey, lang = 'nl') {
+  const tag = vpKey + (lang === 'en' ? ' px EN' : ' px');
+  const S = suite('tap-' + vpKey + (lang === 'en' ? '-en' : ''));
+  const known = JSON.parse(fs.readFileSync(knownFile(lang), 'utf8'))[vpKey] || {};
+  const res = await measureAll(vpKey, { lang });
+  await S.t(`${tag}: alle ${SCENARIOS.length} scenario's laden zonder fout`, () => {
     const bad = res.filter(r => r.errors.length || r.setupErr).map(r => r.id + ': ' + (r.setupErr || r.errors[0]));
     ok(res.length === SCENARIOS.length, `${res.length} van ${SCENARIOS.length} gemeten`); ok(!bad.length, bad.join('; '));
   });
-  if (vpKey === '390') await S.t('elk scenario landt op het verwachte scherm, instellingenpagina en overlay (EXPECT)', () => {
+  if (vpKey === '390' && lang === 'nl') await S.t('elk scenario landt op het verwachte scherm, instellingenpagina en overlay (EXPECT)', () => {
     const bad = [];
     for (const r of res) { const [scr, sub = '', ov = []] = EXPECT[r.id] || [];
       if (r.screen !== scr) bad.push(`${r.id}: scherm ${r.screen} ≠ ${scr}`);
@@ -107,16 +111,21 @@ export async function runTap(vpKey) {
   const fresh = Object.entries(cur).filter(([k, n]) => n > (known[k] || 0)).map(([k, n]) => `${k}${n > 1 ? ' ×' + n : ''}${known[k] ? ' (was ' + known[k] + ')' : ''}`);
   const gone = Object.entries(known).filter(([k, n]) => (cur[k] || 0) < n).map(([k]) => k);
   const byType = {}; for (const [k, n] of Object.entries(cur)) { const t = k.split('|')[1]; byType[t] = (byType[t] || 0) + n; }
-  await S.t(`${vpKey} px: geen nieuwe tikvlakproblemen t.o.v. faf50f0 (overlap, bedekt, onder balk/nav, te klein, zone)`, () => {
+  await S.t(`${tag}: geen nieuwe tikvlakproblemen t.o.v. faf50f0 (overlap, bedekt, onder balk/nav, te klein, zone)`, () => {
     ok(!fresh.length, fresh.length + ' NIEUW: ' + fresh.slice(0, 12).join(' | '));
   });
-  console.log(`\nTIKVLAKKEN ${vpKey} px: ${res.reduce((a, r) => a + r.measure.n, 0)} bedienbare elementen in ${res.length} scenario's`);
+  console.log(`\nTIKVLAKKEN ${tag}: ${res.reduce((a, r) => a + r.measure.n, 0)} bedienbare elementen in ${res.length} scenario's`);
   console.log('  BESTAANDE PROBLEMEN (nulmeting faf50f0, niet opgelost, falen niet; meer of nieuwe wel): ' + (Object.entries(byType).map(([t, n]) => `${t} ${n}`).join(', ') || '-'));
-  if (gone.length) console.log(`  MINDER DAN DE NULMETING (${gone.length}), na controle en akkoord uit tap.known.json: ` + gone.slice(0, 10).join(' | '));
+  if (gone.length) console.log(`  MINDER DAN DE NULMETING (${gone.length}), na controle en akkoord uit ${path.basename(knownFile(lang))}: ` + gone.slice(0, 10).join(' | '));
   return S.done();
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes('--update')) {
+if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes('--update') && process.argv.includes('--lang=en')) {
+  // Engelse nulmeting: alleen tap.known.en.json schrijven. Meet de map in ROOT (voor de nulmeting: ROOT=<faf50f0>).
+  const out = { _uitleg: 'Nulmeting van de tikvlakken in het ENGELS van faf50f0 (v252), per breedte, donker, Chromium (fase 4C-3, W3). Aparte nulmeting naast tap.known.json (NL). BESTAANDE PROBLEMEN, geen goedgekeurde kwaliteit; niet automatisch goedgekeurd (Tom, 23-11-2026). De Engelse tikvlaktests (tap-*-en) falen op elke bevinding die hier niet in staat of vaker voorkomt. Alleen bijwerken met akkoord van Tom: ROOT=<faf50f0> node tests/core/tap-lib.mjs --update --lang=en' };
+  for (const k of Object.keys(VPS)) { const res = await measureAll(k, { jobs: 3, lang: 'en' }); const bad = res.filter(r => r.errors.length || r.setupErr); if (bad.length) { console.error('fout in scenario, niets geschreven:', bad.map(r => r.id)); process.exit(1); } out[k] = Object.fromEntries(Object.entries(keysOf(res)).sort()); console.log(k, 'EN', Object.values(out[k]).reduce((a, b) => a + b, 0), 'bevindingen'); }
+  fs.writeFileSync(KNOWN_FILE_EN, JSON.stringify(out, null, 1) + '\n'); console.log('geschreven:', KNOWN_FILE_EN);
+} else if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes('--update')) {
   const out = { _uitleg: 'Nulmeting van de tikvlakken van faf50f0 (v252), per breedte, NL donker, Chromium. Dit zijn BESTAANDE PROBLEMEN, geen goedgekeurde kwaliteit (Tom, 23-11-2026). De tikvlaktests falen op elke bevinding die hier niet in staat of vaker voorkomt (een kleiner element krijgt een nieuwe sleutel en faalt dus ook). Alleen bijwerken met akkoord van Tom: node tests/core/tap-lib.mjs --update' };
   for (const k of Object.keys(VPS)) { const res = await measureAll(k, { jobs: 3 }); const bad = res.filter(r => r.errors.length || r.setupErr); if (bad.length) { console.error('fout in scenario, niets geschreven:', bad.map(r => r.id)); process.exit(1); } out[k] = Object.fromEntries(Object.entries(keysOf(res)).sort()); console.log(k, Object.values(out[k]).reduce((a, b) => a + b, 0), 'bevindingen'); }
   fs.writeFileSync(KNOWN_FILE, JSON.stringify(out, null, 1) + '\n'); console.log('geschreven:', KNOWN_FILE);
