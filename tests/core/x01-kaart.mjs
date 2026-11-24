@@ -61,6 +61,44 @@ for (const lang of ['nl', 'en']) {
   }
   await ctx.close();
 }
+// (1b) Reparatie iPhone (24-11): de regel 'niet uitgooibaar' / 'no checkout' staat volledig op één regel over de volle
+//      kaartbreedte, op alle gangbare iPhone-maten, bij 3 en 4 spelers. Ook de opbouw wordt gecontroleerd: een eigen benoemde
+//      rasterrij ('imp') en geen afkapstijl (nowrap/ellipsis). In Safari gaf de oude opbouw (impliciete rij, grid-column:1/-1)
+//      alleen de breedte naast de score ("niet uitgooibaa…"); Chromium toont dat verschil niet, dus de opbouw zelf wordt bewaakt.
+{
+  const IMPSC = { '3 spelers': `launchGame('501',${P3},true,'firstto',3,1,501,0);renderGame();`, '4 spelers': L(P4, '[501,501,501,501]', '[2,1,0,2]', AVG) };
+  for (const lang of ['nl', 'en']) {
+    const { p, errs, ctx } = await page(b, { ls: { lang } });
+    await open(p, 900);
+    await T.t(`${lang.toUpperCase()} iPhone-maten: '${lang === 'nl' ? 'niet uitgooibaar' : 'no checkout'}' volledig, één regel, volle kaartbreedte, eigen rasterrij`, async () => {
+      const fails = [];
+      for (const [w, h] of [[360, 640], [375, 667], [375, 812], [390, 844], [393, 852], [402, 874], [414, 896], [430, 932], [440, 956]]) {
+        await p.setViewportSize({ width: w, height: h });
+        for (const [naam, setup] of Object.entries(IMPSC)) {
+          await p.evaluate(setup); await p.waitForTimeout(100);
+          const r = await p.evaluate(() => { const c = document.querySelector('#sb-players .x-card.on'), e = c && c.querySelector('.x-imp'); if (!e || !e.offsetParent) return null;
+            const cs = getComputedStyle(e), kc = getComputedStyle(c), er = e.getBoundingClientRect(), cr = c.getBoundingClientRect();
+            const inner = c.clientWidth - parseFloat(kc.paddingLeft) - parseFloat(kc.paddingRight);
+            return { tekst: e.textContent.trim(), w: er.width, inner, h: er.height, fs: parseFloat(cs.fontSize), lh: parseFloat(cs.lineHeight), trunc: e.scrollWidth > e.clientWidth + 1,
+              binnen: er.left >= cr.left - 0.5 && er.right <= cr.right + 0.5, rij: cs.gridRowStart, ws: cs.whiteSpace, to: cs.textOverflow }; });
+          const id = `${w}×${h} ${naam}`;
+          if (!r) { fails.push(id + ': regel ontbreekt'); continue; }
+          const doel = lang === 'nl' ? 'niet uitgooibaar' : 'no checkout';
+          if (r.tekst !== doel) fails.push(`${id}: tekst "${r.tekst}" ≠ "${doel}"`);
+          if (r.trunc) fails.push(id + ': afgekapt');
+          if (r.h > r.lh * 1.5) fails.push(`${id}: niet op één regel (${Math.round(r.h)} px hoog)`);
+          if (r.w < r.inner - 1) fails.push(`${id}: regel ${Math.round(r.w)} px, kaart ${Math.round(r.inner)} px (niet de volle breedte)`);
+          if (!r.binnen) fails.push(id + ': buiten de kaart');
+          if (r.rij !== 'imp') fails.push(`${id}: niet in de benoemde rij 'imp' (grid-row-start ${r.rij})`);
+          if (r.ws === 'nowrap' || r.to === 'ellipsis') fails.push(`${id}: afkapstijl (${r.ws}/${r.to})`);
+        }
+      }
+      ok(!errs.length, 'pageerror: ' + errs[0]);
+      ok(!fails.length, fails.join('; '));
+    });
+    await ctx.close();
+  }
+}
 // (2) kantine
 {
   const { p, errs, ctx } = await page(b, { viewport: { width: 1920, height: 1080 } });

@@ -438,8 +438,12 @@ body::before{
   #sb-players.x-compact:not(.x-many) .x-lg small{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
 /* "niet uitgooibaar" bij 3+ spelers op een eigen regel over de volle kaartbreedte, alleen als het geldt (het uitgooivak is
-   dan leeg en vangt de hoogte op); impliciete 4e rij, dus de rasterindeling hierboven blijft gelijk */
-#sb-players .x-imp{grid-column:1/-1;grid-row:4;min-width:0;font-size:var(--fs-caption);line-height:1.2;color:var(--text-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+   dan leeg en vangt de hoogte op). Reparatie iPhone (24-11): een benoemde rij "imp" over alle kolommen in de rasterindeling
+   van die kaart (.x-imp-card), niet meer een impliciete 4e rij met grid-column:1/-1 (in Safari kreeg de regel daarmee alleen
+   de breedte naast de score: "niet uitgooibaa…"). Nooit afkappen: is de regel ooit te smal, dan breekt hij op de spatie. */
+#sb-players.x-compact .x-card.x-imp-card{grid-template-areas:"top top score" "hint hint score" "meta legs score" "imp imp imp"}
+#sb-players.x-many .x-card.x-imp-card{grid-template-areas:"top legs score" "hint hint score" "meta meta score" "imp imp imp"}
+#sb-players .x-imp{grid-area:imp;min-width:0;font-size:var(--fs-caption);line-height:1.2;color:var(--text-soft);white-space:normal;overflow:visible}
 /* Die regel staat er alleen als de actieve speler niet kan uitgooien: dan is het uitgooivak leeg. Bij 3–4 spelers (JS zet
    .x-imp-on) krimpt de minimale hoogte van dat lege vak met precies de regelhoogte (12 px × 1,2), zodat de toetsen niet zakken.
    Niet in de liggende rasteropstelling: daar staat het uitgooivak in een eigen kolom. */
@@ -8236,7 +8240,7 @@ function renderGame(){
     var co=getCheckout(rem);
     var imp=isActive&&isImpossible(rem)&&rem>1;
     var cell=document.createElement('div');
-    cell.className='x-card'+(isActive?' on':'');
+    cell.className='x-card'+(isActive?' on':'')+(imp&&n>2?' x-imp-card':''); // reparatie iPhone: eigen rasterrij voor 'niet uitgooibaar'
     cell.setAttribute('data-pi',pi);
     var _scoreChanged=(_prevScores[pi]!==undefined&&_prevScores[pi]!==rem);
     _prevScores[pi]=rem;
