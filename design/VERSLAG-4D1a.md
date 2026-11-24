@@ -34,8 +34,10 @@ Beslissingen Tom (24-11-2026): K7 A, K8 B, K9 B, K12 B, K10 B, K6 B, plus de zes
 | x01-double-vraag | 20/20 | ja (X01-scherm achter de vraag) |
 | x01-dubbel-kiezen | 20/20 | ja (idem) |
 | x01-stats-blad | 20/20 | ja (idem) |
-| **bevestig-stop** | **29/29** | **nee**: zie §7 |
+| bevestig-stop | 29/29 | **ja, toegevoegd na akkoord Tom (24-11)**: alleen de geblurde X01-achtergrond; **0 pixels verschil binnen het bevestigvenster** in alle 29 opnames |
 | alle 48 andere scenario's (o.a. hervatten, rematch, winst, Afgooien met `.x-card`) | 0 | — |
+
+**Formeel vastgelegd:** `tests/visual/expect/4D-1a.json` (toegestane scenario's + vensterregel). Controle `design/scope_4d1a.mjs` rekent alle 1253 opnames opnieuw pixel voor pixel na, meet per bevestig-stop-opname de rechthoek van `.ask-box` en telt de verschillende pixels daarbinnen: uitkomst **GOED — 167 anders, allemaal toegestaan, max 0 pixels in het venster** (`design/4d-log/scope-4d1a.json`).
 
 Vóór/na-beelden per context: zie de zip (`1-…` t/m `10-…`). Volledig rapport lokaal: `tests/visual/out/compare/nu/index.html`.
 
@@ -92,12 +94,12 @@ Uitkomst per geval: `design/4d-log/legstand-4d1a.json`.
 | Controle | Uitkomst |
 |---|---|
 | `npm test` | **118/118** in 32 suites (contrast, theme-rules, tokens, tokens-ratchet, html-sinks, tikvlakken NL + EN op 320/360/375/390) |
-| Mutaties | **20/21**: niet gevangen "nieuwe hardgecodeerde kleur" (zie hieronder) |
+| Mutaties | **21/21 gevangen** (na het verlagen van het ratchet-maximum) |
 | Tikvlakken | geen nieuwe bevinding, NL en EN, 4 breedtes |
-| Ratchet | telling **182** (max 183): het grijs van de oude bolletjes verdween |
+| Ratchet | telling 182 = maximum **182** (183 → 182 met akkoord Tom, 24-11); kopie met één extra CSS-kleur: "CSS hard 183 (max 182)" → test faalt |
 | html-sinks | groen; 4 allowlist-sleutels aangepast aan het nieuwe fragment (zelfde redenen), getallen via `_esc` |
 
-**Waarom 20/21:** de telling daalde van 183 naar 182, het maximum staat op 183. Eén nieuwe hardgecodeerde kleur (183) blijft dan binnen het maximum, dus de ratchet vangt hem niet. Herstel = maximum naar 182; dat is een nulmeting bijwerken en wacht op jouw akkoord. Niet zelf aangepast.
+**Verloop:** de eerste run gaf 20/21 (maximum 183, telling 182). Na jouw akkoord is alleen `cssHard` 183 → 182 gezet (`jsHard` 132 ongewijzigd); daarna mutatie volledig opnieuw: 21/21, en `npm test` opnieuw: 118/118.
 
 **Over de mutatie-run:** de visuele mutatie vergelijkt een gemuteerde kopie met een referentie en eist dat alleen home verschilt. Met `faf50f0` als referentie verschilt X01 nu bedoeld, dus heb ik als referentie de huidige code zonder mutatie gebruikt (`REF=/tmp/cur4d`). Dat is de juiste opzet vanaf 4D; de test zelf is niet aangepast.
 
@@ -113,10 +115,18 @@ Uitkomst per geval: `design/4d-log/legstand-4d1a.json`.
 
 ## 7. Open punten en grenzen (voor jouw beoordeling)
 
-- **Afwijking van de opgegeven lijst:** ook `bevestig-stop` verandert (6 opnames, 101–14.371 px). Oorzaak: het bevestigvenster ligt over het X01-scherm, en de geblurde kaarten daarachter tonen de nieuwe legstand. Geen andere oorzaak (diff gecontroleerd). Die had ik in de lijst moeten zetten.
-- **5–6 spelers op lage schermen (≤ 740 px hoog):** daar valt de meta-regel weg (al vóór 4D-1a), en daarmee ook het label GOOIT. De beurt blijft zichtbaar via rand, gloed en bolletje. Het label daar terugbrengen kost een regel hoogte en dan valt de onderste toetsrij onder de spelbalk. Graag je oordeel: accepteren, of in 4D-1b samen met de invoer oplossen.
+- **`bevestig-stop`:** geaccepteerd als indirect verschil (Tom, 24-11) en formeel in de lijst; het venster zelf is pixel-gelijk (zie §2).
+- **5–6 spelers op lage schermen (≤ 740 px hoog):** label GOOIT ontbreekt daar; voorlopig geaccepteerd (Tom, 24-11). Onderzoek in 4D-1b; lukt het niet zonder de onderste toetsrij te verdringen of de bediening te verkleinen, dan blijft het zo.
 - **Kleinste tekst 11 px** op telefoons: het woord "UITGOOI" in de uitgooi-strook (laag 1, buiten 1a). Voorstel: 4D-1b.
 - **Toernooibalk** bovenaan blijft bestaan naast de legstand op de kaart ("LEG 4 VAN 5"). Opruimen of samenvoegen met de kop: 4D-1c.
 - **Contrastnulmeting:** C11 (accent als kleine tekst) staat nog in `contrast.allow.json`: de actieve naam is opgelost, maar de 180-snelscore (1b) en de winstscherm-cijfers (stap 5) gebruiken nog accent als tekst. Niets uit een nulmeting gehaald.
 - **Kruiscombinaties** (gekozen thema ≠ systeemthema): geen nieuwe themaregels (theme-rules groen); alles via bestaande tokens.
 - **Safari op een echte iPhone:** niet getest (kan hier niet). Bij de release van bundel R1 verplicht.
+
+## 8. Meegenomen naar 4D-1b (Tom, 24-11-2026)
+
+1. "UITGOOI" in de uitgooi-strook (nu 11 px) verbeteren.
+2. Onderste toetsrij op 360×640 (valt deels onder de spelbalk).
+3. Dubbele informatie: toernooibalk bovenaan en de legstand op de kaart.
+4. Label GOOIT bij 5–6 spelers op lage schermen.
+Plus wat al gepland stond: C10 (Stop in lichte spelbalk), 180-snelscore in accenttekst (C11), tikvlakken snelscores op 320.

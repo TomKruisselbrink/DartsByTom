@@ -1,5 +1,5 @@
 {
- "_uitleg": "Maximaal aantal hardgecodeerde kleuren in index.html (tests/core/tokens-ratchet.mjs). Mag alleen omlaag. CSS 370 → 255 na fase 4C-2, 255 → 183 na fase 4C-3 (beide met akkoord Tom, 23-11-2026); HTML/JS 132 = stand faf50f0 (v252) bij fase 4C-0.",
- "cssHard": 183,
+ "_uitleg": "Maximaal aantal hardgecodeerde kleuren in index.html (tests/core/tokens-ratchet.mjs). Mag alleen omlaag. CSS 370 → 255 na fase 4C-2, 255 → 183 na fase 4C-3, 183 → 182 na 4D-1a (alle met akkoord Tom: 23-11 en 24-11-2026); HTML/JS 132 = stand faf50f0 (v252) bij fase 4C-0.",
+ "cssHard": 182,
  "jsHard": 132
 }

@@ -16,7 +16,7 @@
 ✓ gevangen  tik: filterchip te klein  (core/tap-390)
 ✓ gevangen  dekking: Stop-venster verschijnt niet meer  (core/tap-390)
 ✓ gevangen  dekking: nieuw scherm zonder scenario  (core/coverage)
-✗ NIET gevangen  kleuren: nieuwe hardgecodeerde kleur  (core/tokens-ratchet)
+✓ gevangen  kleuren: nieuwe hardgecodeerde kleur  (core/tokens-ratchet)
 ✓ gevangen  thema: nieuwe themaregel voor een component (geen token)  (core/theme-rules)
 ✓ gevangen  visueel: 1 px extra ruimte op de snelstart-tegels (alleen home anders, x01 gelijk)
-mutatie: GEZAKT
+mutatie: GESLAAGD

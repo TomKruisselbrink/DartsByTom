@@ -1,0 +1,16 @@
+{
+ "_uitleg": "Toegestane visuele verschillen voor stap 4D-1a t.o.v. de vorige goedgekeurde stand (faf50f0 voor deze eerste 4D-stap). Elk verschil in een scenario dat hier niet staat = stoppen en melden. Controle: node design/scope_4d1a.mjs (na REF=… node tests/visual/compare.mjs).",
+ "stap": "4D-1a spelerskaart en beurt (X01)",
+ "referentie": "faf50f0",
+ "goedgekeurd": "Tom, 24-11-2026 (bevestig-stop als indirect verschil toegevoegd na het eerste verschilrapport)",
+ "scenarios": {
+  "x01-2sp": "X01-spelerskaart: beurt, legstand, route",
+  "x01-4sp": "X01-spelerskaart compact, score min. 34 px",
+  "x01-teams": "X01-spelerskaart teams",
+  "x01-double-vraag": "X01-scherm achter de double-vraag",
+  "x01-dubbel-kiezen": "X01-scherm achter de dubbelkeuze",
+  "x01-stats-blad": "X01-scherm achter het statistiekenblad",
+  "bevestig-stop": "alleen de geblurde X01-achtergrond; het bevestigvenster zelf mag niet veranderen (controle per opname)"
+ },
+ "venster": { "bevestig-stop": ".ask-box" }
+}
