@@ -25,13 +25,13 @@ const run = root => shootAll(b, root, '/tmp/verify4c3', items.map(x => Object.as
 const CUR = path.resolve(process.env.CURROOT || REPO);
 const [a, c] = [await run(REF), await run(CUR)];
 await b.close();
-const key = r => r.file; const A = Object.fromEntries(a.map(r => [key(r), r])); let diffs = 0, lines = [], errs = 0;
+const key = r => r.file; const A = Object.fromEntries(a.map(r => [key(r), r])); let diffs = 0, lines = [], errs = 0; const all = [];
 for (const r of c) {
   const o = A[key(r)]; if (r.errors.length || r.setupErr || o.errors.length || o.setupErr) errs++;
   if (o.measure.length !== r.measure.length) { diffs++; lines.push(`${r.file}: aantal elementen ${o.measure.length} ≠ ${r.measure.length}`); continue; }
-  for (let i = 0; i < r.measure.length; i++) if (o.measure[i] !== r.measure[i]) { diffs++; if (lines.length < 40) lines.push(`${r.file}\n   was: ${o.measure[i].slice(0, 400)}\n   nu : ${r.measure[i].slice(0, 400)}`); }
+  for (let i = 0; i < r.measure.length; i++) if (o.measure[i] !== r.measure[i]) { diffs++; all.push(`${r.file}\n   was: ${o.measure[i]}\n   nu : ${r.measure[i]}`); if (lines.length < 40) lines.push(`${r.file}\n   was: ${o.measure[i].slice(0, 400)}\n   nu : ${r.measure[i].slice(0, 400)}`); }
 }
 const n = c.reduce((s, r) => s + r.measure.length, 0);
-console.log(lines.join('\n'));
+console.log(lines.join('\n')); fs.writeFileSync('/tmp/verify4c3-alle-verschillen.txt', all.join('\n') + '\n');
 console.log(`berekende stijl: ${diffs ? 'VERSCHIL' : 'GELIJK'} — ${c.length} pagina's (${modes.length} standen × ${SCENARIOS.length} scenario's), ${n} elementen/pseudo's vergeleken, ${diffs} verschillen, ${errs} pagina's met fout`);
 process.exit(diffs || errs ? 1 : 0);

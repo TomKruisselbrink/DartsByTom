@@ -1,0 +1,173 @@
+{
+ "groep": "kaarten",
+ "titel": "kaarten en spelstatus",
+ "tokens": [
+  {
+   "naam": "--card-border",
+   "donker": "var(--border)",
+   "licht": "rgba(60,40,30,.07)",
+   "reden": ".card rand; donker volgt --border, licht eigen waarde (v217)"
+  },
+  {
+   "naam": "--card-shadow",
+   "donker": "var(--elev-1)",
+   "licht": "0 1px 2px rgba(60,40,30,.05),0 6px 18px -6px rgba(60,40,30,.10)",
+   "reden": ".card schaduw; donker volgt --elev-1, licht eigen waarde (v217)"
+  },
+  {
+   "naam": "--tile-shadow",
+   "donker": "none",
+   "licht": "0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22)",
+   "reden": "diepte van tegels/kaarten in licht (v241); donker geen schaduw. --elev-4 heeft in licht dezelfde waarde, maar in donker niet none"
+  },
+  {
+   "naam": "--tile-shadow-on",
+   "donker": "none",
+   "licht": "0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)",
+   "reden": "gloed actieve speler in licht (v241); donker geen"
+  },
+  {
+   "naam": "--tag-text",
+   "donker": "var(--green-300)",
+   "licht": "var(--green-700)",
+   "reden": ".x-last en .sp-tag tekst; --hit-text heeft in licht green-600, niet 700"
+  },
+  {
+   "naam": "--last-bg",
+   "donker": "rgba(62,123,79,.22)",
+   "licht": "rgba(62,123,79,.16)",
+   "reden": ".x-last achtergrond; uniek"
+  },
+  {
+   "naam": "--last-bust-bg",
+   "donker": "rgba(255,90,70,.14)",
+   "licht": "rgba(179,38,30,.1)",
+   "reden": ".x-last.bust achtergrond; uniek"
+  },
+  {
+   "naam": "--miss-border",
+   "donker": "rgba(255,122,107,.5)",
+   "licht": "rgba(179,38,30,.45)",
+   "reden": ".g-miss stippelrand; uniek"
+  },
+  {
+   "naam": "--chip-text",
+   "donker": "#CFEAD5",
+   "licht": "var(--green-700)",
+   "reden": ".g-chip tekst; uniek"
+  },
+  {
+   "naam": "--metric-shadow",
+   "donker": "var(--elev-1)",
+   "licht": "var(--tile-shadow)",
+   "reden": ".metric (statistiektegels): donker --elev-1; licht de tegelschaduw (v241). In-place omzetten kon niet: de latere .metric-regel won dan in licht"
+  }
+ ],
+ "edits": [
+  {
+   "reden": "R2 .co-lbl: lichte waarde = --hit-text licht (2 regels weg)",
+   "oud": ".co-lbl{color:var(--hit-text)}[data-theme=\"light\"] .co-lbl{color:var(--green-600)}\n@media(prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .co-lbl{color:var(--green-600)}}\n",
+   "nieuw": ".co-lbl{color:var(--hit-text)}\n"
+  },
+  {
+   "reden": "R1 .x-last achtergrond + tekst",
+   "oud": "background:rgba(62,123,79,.22);color:var(--green-300);vertical-align:1px}",
+   "nieuw": "background:var(--last-bg);color:var(--tag-text);vertical-align:1px}"
+  },
+  {
+   "reden": "R1 .x-last.bust achtergrond (tekst: --danger-text is licht al red-700)",
+   "oud": ".x-last.bust{background:rgba(255,90,70,.14);color:var(--danger-text)}",
+   "nieuw": ".x-last.bust{background:var(--last-bust-bg);color:var(--danger-text)}"
+  },
+  {
+   "reden": "R1/R2 lichte .x-last- en .x-last.bust-regels weg (4)",
+   "oud": "[data-theme=\"light\"] .x-last{color:var(--green-700);background:rgba(62,123,79,.16)}[data-theme=\"light\"] .x-last.bust{color:var(--red-700);background:rgba(179,38,30,.1)}\n@media (prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .x-last{color:var(--green-700);background:rgba(62,123,79,.16)}:root:not([data-theme=\"dark\"]) .x-last.bust{color:var(--red-700);background:rgba(179,38,30,.1)}}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 .sp-tag tekst",
+   "oud": "border-radius:7px;background:rgba(62,123,79,.2);color:var(--green-300)}",
+   "nieuw": "border-radius:7px;background:rgba(62,123,79,.2);color:var(--tag-text)}"
+  },
+  {
+   "reden": "R1 lichte .sp-tag-regels weg (2)",
+   "oud": "[data-theme=\"light\"] .sp-tag{color:var(--green-700)}\n@media (prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .sp-tag{color:var(--green-700)}}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 .standing-pts: bestaand token --hit-text (donker green-300, licht green-600)",
+   "oud": ".standing-pts{color:var(--green-300) !important;",
+   "nieuw": ".standing-pts{color:var(--hit-text) !important;"
+  },
+  {
+   "reden": "R1 .standing-pts uit de lichte regel (.win-kicker = F2, .trn-champ-kicker = niet waargenomen: blijven)",
+   "oud": ",[data-theme=\"light\"] .standing-pts{color:var(--green-600) !important}",
+   "nieuw": "{color:var(--green-600) !important}"
+  },
+  {
+   "reden": "R1 idem, automatisch licht",
+   "oud": ",:root:not([data-theme=\"dark\"]) .standing-pts{color:var(--green-600) !important}}",
+   "nieuw": "{color:var(--green-600) !important}}"
+  },
+  {
+   "reden": "R2 .trn-match-header uit de lichte regel (winnaarsregels: niet waargenomen, blijven)",
+   "oud": ",[data-theme=\"light\"] #screen-trn-overview .trn-match.current .trn-match-header{color:var(--green-600) !important}",
+   "nieuw": "{color:var(--green-600) !important}"
+  },
+  {
+   "reden": "R2 idem, automatisch licht",
+   "oud": ",:root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-match.current .trn-match-header{color:var(--green-600) !important}}",
+   "nieuw": "{color:var(--green-600) !important}}"
+  },
+  {
+   "reden": "R1 tegelschaduw → --tile-shadow(-on) op dezelfde plek; R2 .ask-box (gebruikt al --elev-4); R3/uitzondering .home-tile/.home-quick-tile/.g-big3 button (OVERSCHREVEN)",
+   "oud": "/* Licht thema: diepte en gloed (v241) */\n[data-theme=\"light\"] .x-card,[data-theme=\"light\"] .g-prow,[data-theme=\"light\"] .g-target,[data-theme=\"light\"] .home-tile,[data-theme=\"light\"] .home-quick-tile,[data-theme=\"light\"] .metric,[data-theme=\"light\"] .win-card,[data-theme=\"light\"] .live-card,[data-theme=\"light\"] .ask-box,[data-theme=\"light\"] .g-big3 button,[data-theme=\"light\"] .bob-keys button{box-shadow:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22)}\n[data-theme=\"light\"] .x-card.on,[data-theme=\"light\"] .g-prow.on{box-shadow:0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)}\n@media (prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .x-card,:root:not([data-theme=\"dark\"]) .g-prow,:root:not([data-theme=\"dark\"]) .g-target,:root:not([data-theme=\"dark\"]) .home-tile,:root:not([data-theme=\"dark\"]) .home-quick-tile,:root:not([data-theme=\"dark\"]) .metric,:root:not([data-theme=\"dark\"]) .win-card,:root:not([data-theme=\"dark\"]) .live-card,:root:not([data-theme=\"dark\"]) .ask-box,:root:not([data-theme=\"dark\"]) .g-big3 button,:root:not([data-theme=\"dark\"]) .bob-keys button{box-shadow:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22)}:root:not([data-theme=\"dark\"]) .x-card.on,:root:not([data-theme=\"dark\"]) .g-prow.on{box-shadow:0 0 0 1px var(--accent-ring),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30)}}\n",
+   "nieuw": "/* Licht thema: diepte en gloed (v241); sinds 4C-3 via --tile-shadow / --tile-shadow-on (donker: none) */\n.x-card,.g-prow,.g-target,.win-card,.live-card{box-shadow:var(--tile-shadow)}\n.x-card.on,.g-prow.on{box-shadow:var(--tile-shadow-on)}\n/* 4C-3 uitzondering E-tegel: .home-tile/.home-quick-tile/.g-big3 button: wint nooit (OVERSCHREVEN); .bob-keys button: niet omzetbaar zonder specificiteitsverandering (de Mis-knop verloor in donker zijn schaduw). Blijft staan tot 4D */\n[data-theme=\"light\"] .home-tile,[data-theme=\"light\"] .home-quick-tile,[data-theme=\"light\"] .g-big3 button,[data-theme=\"light\"] .bob-keys button{box-shadow:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22)}\n@media (prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .home-tile,:root:not([data-theme=\"dark\"]) .home-quick-tile,:root:not([data-theme=\"dark\"]) .g-big3 button,:root:not([data-theme=\"dark\"]) .bob-keys button{box-shadow:0 1px 2px rgba(60,40,30,.06),0 8px 22px -10px rgba(120,60,30,.22)}}\n"
+  },
+  {
+   "reden": "R1 .g-miss rand",
+   "oud": "border:1.5px dashed rgba(255,122,107,.5);",
+   "nieuw": "border:1.5px dashed var(--miss-border);"
+  },
+  {
+   "reden": "R1 .metric schaduw (niet in de tegelregel: daar won de latere .metric-regel in licht)",
+   "oud": "border:0.5px solid var(--border);box-shadow:var(--elev-1)}\n.metric .val",
+   "nieuw": "border:0.5px solid var(--border);box-shadow:var(--metric-shadow)}\n.metric .val"
+  },
+  {
+   "reden": "R1 .g-chip tekst",
+   "oud": "background:var(--hit-soft);color:#CFEAD5;",
+   "nieuw": "background:var(--hit-soft);color:var(--chip-text);"
+  },
+  {
+   "reden": "R1 .g-miss rand, R2 .g-plus, .g-chip achtergrond; R1 .g-chip tekst; .g-miss tekst blijft (F3)",
+   "oud": "[data-theme=\"light\"] .g-miss{color:var(--red-700);border-color:rgba(179,38,30,.45)}\n[data-theme=\"light\"] .g-plus{color:var(--green-600)}\n[data-theme=\"light\"] .g-chip{color:var(--green-700);background:rgba(62,123,79,.18)}\n",
+   "nieuw": "[data-theme=\"light\"] .g-miss{color:var(--red-700)} /* 4C-3 uitzondering F3 */\n"
+  },
+  {
+   "reden": "idem, automatisch licht",
+   "oud": "@media (prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .g-miss{color:var(--red-700);border-color:rgba(179,38,30,.45)}:root:not([data-theme=\"dark\"]) .g-plus{color:var(--green-600)}:root:not([data-theme=\"dark\"]) .g-chip{color:var(--green-700);background:rgba(62,123,79,.18)}}",
+   "nieuw": "@media (prefers-color-scheme:light){:root:not([data-theme=\"dark\"]) .g-miss{color:var(--red-700)}}"
+  },
+  {
+   "reden": "R1 .card rand + schaduw",
+   "oud": "  border:0.5px solid var(--border);\n  margin-bottom:var(--sp-6);\n  box-shadow:var(--elev-1);\n}",
+   "nieuw": "  border:0.5px solid var(--card-border);\n  margin-bottom:var(--sp-6);\n  box-shadow:var(--card-shadow);\n}"
+  },
+  {
+   "reden": "R3 overschreven .card-randregels weg (2), anders worden ze werkzaam",
+   "oud": "/* ─── GLASS CARDS: light mode border shimmer ─── */\n@media (prefers-color-scheme:light){\n  :root:not([data-theme=\"dark\"]) .card{\n    border-color:rgba(255,255,255,0.6);\n  }\n}\n[data-theme=\"light\"] .card{border-color:rgba(255,255,255,0.6)}\n",
+   "nieuw": "/* ─── GLASS CARDS: lichte rand rgba(255,255,255,.6) verwijderd in 4C-3 (R3: werd altijd overschreven door de v217-regel, die nu --card-border is) ─── */\n"
+  },
+  {
+   "reden": "R1 lichte .card (automatisch)",
+   "oud": "  :root:not([data-theme=\"dark\"]) .card{border-color:rgba(60,40,30,.07);box-shadow:0 1px 2px rgba(60,40,30,.05),0 6px 18px -6px rgba(60,40,30,.10)}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 lichte .card (gekozen)",
+   "oud": ":root[data-theme=\"light\"] .card{border-color:rgba(60,40,30,.07);box-shadow:0 1px 2px rgba(60,40,30,.05),0 6px 18px -6px rgba(60,40,30,.10)}\n",
+   "nieuw": ""
+  }
+ ]
+}

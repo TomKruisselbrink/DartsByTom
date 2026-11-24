@@ -36,7 +36,9 @@ await T.t('elk token wordt gebruikt, of staat met reden op de lijst van nog onge
   const names = decl.map(d => d[0]);
   const useOut = n => new RegExp('var\\(' + n.replace(/-/g, '\\-') + '\\)').test(rest);
   const used = new Set(names.filter(useOut));
-  let grew = true; while (grew) { grew = false; for (const [n, v] of decl) if (used.has(n)) for (const m of v.matchAll(/var\((--[\w-]+)\)/g)) if (!used.has(m[1])) { used.add(m[1]); grew = true; } }
+  // ook de lichte overrides in het blok tellen mee (sinds 4C-3 verwijst bijv. --tag-text in licht naar --green-700)
+  const lightDecl = [...block.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(m => [m[1], m[2].trim()]);
+  let grew = true; while (grew) { grew = false; for (const [n, v] of decl.concat(lightDecl)) if (used.has(n)) for (const m of v.matchAll(/var\((--[\w-]+)\)/g)) if (!used.has(m[1])) { used.add(m[1]); grew = true; } }
   const unused = names.filter(n => !used.has(n));
   const bad = unused.filter(n => !UNUSED_OK[n]);
   ok(!bad.length, 'ongebruikt zonder reden: ' + bad.join(', '));
@@ -95,6 +97,16 @@ const MAP = [
   ['--nav-badge-ring', 'color', ['lit-theme', 'rgba(28,28,30,.92)', '#fff']],
   ['--controls-bg', 'backgroundColor', ['el', '#game-controls', 'backgroundColor']],
   ['--controls-border', 'borderTopColor', ['el', '#game-controls', 'borderTopColor']],
+  ['--card-border', 'borderTopColor', ['probe', '#app-content', 'card', 'borderTopColor']],
+  ['--card-shadow', 'boxShadow', ['probe', '#app-content', 'card', 'boxShadow']],
+  ['--tile-shadow', 'boxShadow', ['probe', '#sb-players', 'x-card', 'boxShadow']],
+  ['--tile-shadow-on', 'boxShadow', ['probe', '#sb-players', 'x-card on', 'boxShadow']],
+  ['--tag-text', 'color', ['probe', '#sb-players', 'x-last', 'color']],
+  ['--last-bg', 'backgroundColor', ['probe', '#sb-players', 'x-last', 'backgroundColor']],
+  ['--last-bust-bg', 'backgroundColor', ['probe', '#sb-players', 'x-last bust', 'backgroundColor']],
+  ['--miss-border', 'borderTopColor', ['probe', '#screen-atc', 'g-miss', 'borderTopColor']],
+  ['--chip-text', 'color', ['probe', '#screen-atc', 'g-chip', 'color']],
+  ['--metric-shadow', 'boxShadow', ['probe', '#app-content', 'metric', 'boxShadow']],
 ];
 // Bron = dezelfde regel in de goedgekeurde versie faf50f0 (daar staat nog de letterlijke waarde). Sinds 4C-2 gebruiken die
 // regels in de huidige code zelf de tokens, dus vergelijken met de huidige bron zou rondjes draaien.
