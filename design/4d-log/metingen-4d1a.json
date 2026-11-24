@@ -1,0 +1,3042 @@
+[
+ {
+  "k": "x01-2sp|1024x768|auto-dark|nl",
+  "ref": {
+   "score": 110,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 110,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1024x768|auto-light|nl",
+  "ref": {
+   "score": 110,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 110,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1024x768|dark|en",
+  "ref": {
+   "score": 110,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 110,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1024x768|dark|nl",
+  "ref": {
+   "score": 110,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 110,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1024x768|light|nl",
+  "ref": {
+   "score": 110,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 110,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1280x800|auto-dark|nl",
+  "ref": {
+   "score": 115.2,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 115.2,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1280x800|auto-light|nl",
+  "ref": {
+   "score": 115.2,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 115.2,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1280x800|dark|en",
+  "ref": {
+   "score": 115.2,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 115.2,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1280x800|dark|nl",
+  "ref": {
+   "score": 115.2,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 115.2,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1280x800|light|nl",
+  "ref": {
+   "score": 115.2,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 115.2,
+   "naam": 16,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1920x1080|auto-dark|nl",
+  "ref": {
+   "score": 162,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 162,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": 36.72,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1920x1080|auto-light|nl",
+  "ref": {
+   "score": 162,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 162,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": 36.72,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1920x1080|dark|en",
+  "ref": {
+   "score": 162,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 162,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": 36.72,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1920x1080|dark|nl",
+  "ref": {
+   "score": 162,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 162,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": 36.72,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|1920x1080|light|nl",
+  "ref": {
+   "score": 162,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 162,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": 36.72,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|360x640|auto-dark|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|360x640|auto-light|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|360x640|dark|en",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|360x640|dark|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|360x640|light|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -6,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|375x667|auto-dark|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 11,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 12,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|375x667|auto-light|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 11,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 12,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|375x667|dark|en",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 11,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 12,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|375x667|dark|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 11,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 12,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|375x667|light|nl",
+  "ref": {
+   "score": 42,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 11,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 42,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 12,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|390x844|auto-dark|nl",
+  "ref": {
+   "score": 63.72,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 63.72,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|390x844|auto-light|nl",
+  "ref": {
+   "score": 63.72,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 63.72,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|390x844|dark|en",
+  "ref": {
+   "score": 63.72,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 63.72,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|390x844|dark|nl",
+  "ref": {
+   "score": 63.72,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 63.72,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|390x844|light|nl",
+  "ref": {
+   "score": 63.72,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 63.72,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|430x932|auto-dark|nl",
+  "ref": {
+   "score": 75.16,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 75.16,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|430x932|auto-light|nl",
+  "ref": {
+   "score": 75.16,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 75.16,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|430x932|dark|en",
+  "ref": {
+   "score": 75.16,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 75.16,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|430x932|dark|nl",
+  "ref": {
+   "score": 75.16,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 75.16,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|430x932|light|nl",
+  "ref": {
+   "score": 75.16,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 75.16,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|768x1024|auto-dark|nl",
+  "ref": {
+   "score": 84,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 84,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|768x1024|auto-light|nl",
+  "ref": {
+   "score": 84,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 84,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|768x1024|dark|en",
+  "ref": {
+   "score": 84,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 84,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|768x1024|dark|nl",
+  "ref": {
+   "score": 84,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 84,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": 13.24804097114681,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-2sp|768x1024|light|nl",
+  "ref": {
+   "score": 84,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 84,
+   "naam": 13,
+   "label": 12,
+   "legs": 20,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": 10.915218808610957,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1024x768|auto-dark|nl",
+  "ref": {
+   "score": 56,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 56,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1024x768|auto-light|nl",
+  "ref": {
+   "score": 56,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 56,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1024x768|dark|en",
+  "ref": {
+   "score": 56,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 56,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1024x768|dark|nl",
+  "ref": {
+   "score": 56,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 56,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1024x768|light|nl",
+  "ref": {
+   "score": 56,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 56,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1280x800|auto-dark|nl",
+  "ref": {
+   "score": 64,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 64,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1280x800|auto-light|nl",
+  "ref": {
+   "score": 64,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 64,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1280x800|dark|en",
+  "ref": {
+   "score": 64,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 64,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1280x800|dark|nl",
+  "ref": {
+   "score": 64,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 64,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1280x800|light|nl",
+  "ref": {
+   "score": 64,
+   "naam": 16,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 64,
+   "naam": 16,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1920x1080|auto-dark|nl",
+  "ref": {
+   "score": 96,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 96,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": null,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1920x1080|auto-light|nl",
+  "ref": {
+   "score": 96,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 96,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": null,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1920x1080|dark|en",
+  "ref": {
+   "score": 96,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 96,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": null,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1920x1080|dark|nl",
+  "ref": {
+   "score": 96,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 96,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": null,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|1920x1080|light|nl",
+  "ref": {
+   "score": 96,
+   "naam": 20.52,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 96,
+   "naam": 20.52,
+   "label": 18.36,
+   "legs": null,
+   "meta": 18.36,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|360x640|auto-dark|nl",
+  "ref": {
+   "score": 26,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": -2,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": -3,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|360x640|auto-light|nl",
+  "ref": {
+   "score": 26,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -2,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -3,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|360x640|dark|en",
+  "ref": {
+   "score": 26,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -2,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -3,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|360x640|dark|nl",
+  "ref": {
+   "score": 26,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -2,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": -3,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|360x640|light|nl",
+  "ref": {
+   "score": 26,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -2,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": -3,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|375x667|auto-dark|nl",
+  "ref": {
+   "score": 26.03,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 16,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34.03,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 15,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|375x667|auto-light|nl",
+  "ref": {
+   "score": 26.03,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 16,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34.03,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 15,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|375x667|dark|en",
+  "ref": {
+   "score": 26.03,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 16,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34.03,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 15,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|375x667|dark|nl",
+  "ref": {
+   "score": 26.03,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 16,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34.03,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 15,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|375x667|light|nl",
+  "ref": {
+   "score": 26.03,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 16,
+   "scrollNodig": true
+  },
+  "nu": {
+   "score": 34.03,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 15,
+   "scrollNodig": true
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|390x844|auto-dark|nl",
+  "ref": {
+   "score": 41.96,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 49.96,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|390x844|auto-light|nl",
+  "ref": {
+   "score": 41.96,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 49.96,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|390x844|dark|en",
+  "ref": {
+   "score": 41.96,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 49.96,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|390x844|dark|nl",
+  "ref": {
+   "score": 41.96,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 49.96,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|390x844|light|nl",
+  "ref": {
+   "score": 41.96,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 49.96,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|430x932|auto-dark|nl",
+  "ref": {
+   "score": 49.88,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 57.88,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11.7217,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|430x932|auto-light|nl",
+  "ref": {
+   "score": 49.88,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 57.88,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11.7217,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|430x932|dark|en",
+  "ref": {
+   "score": 49.88,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 57.88,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11.7217,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|430x932|dark|nl",
+  "ref": {
+   "score": 49.88,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 57.88,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11.7217,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|430x932|light|nl",
+  "ref": {
+   "score": 49.88,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 57.88,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 11.7217,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|768x1024|auto-dark|nl",
+  "ref": {
+   "score": 52,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 66.16,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.970339949301775
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|768x1024|auto-light|nl",
+  "ref": {
+   "score": 52,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 66.16,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|768x1024|dark|en",
+  "ref": {
+   "score": 52,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 66.16,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|768x1024|dark|nl",
+  "ref": {
+   "score": 52,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 2.6408056296677564,
+    "label": null,
+    "legs": null,
+    "meta": 4.6223141841694835,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 66.16,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 13.24804097114681,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 7.335604597003594,
+    "naamAnder": 4.862572420752673
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ },
+ {
+  "k": "x01-4sp|768x1024|light|nl",
+  "ref": {
+   "score": 52,
+   "naam": 13,
+   "label": null,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 10,
+   "contrast": {
+    "naamActief": 3.0679668916869485,
+    "label": null,
+    "legs": null,
+    "meta": 3.513204784106119,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "nu": {
+   "score": 66.16,
+   "naam": 13,
+   "label": 12,
+   "legs": null,
+   "meta": 12,
+   "kleinsteTekst": 12,
+   "contrast": {
+    "naamActief": 10.915218808610957,
+    "label": 5.016666437814874,
+    "legs": null,
+    "meta": 5.580433446688516,
+    "naamAnder": 4.943264802667454
+   },
+   "ruimteBovenBalk": 18,
+   "scrollNodig": false
+  },
+  "fout": null
+ }
+]

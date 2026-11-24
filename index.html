@@ -89,6 +89,7 @@
   --miss-border:rgba(255,122,107,.5);  /* .g-miss stippelrand; uniek */
   --chip-text:#CFEAD5;  /* .g-chip tekst; uniek */
   --metric-shadow:var(--elev-1);  /* .metric (statistiektegels): donker --elev-1; licht de tegelschaduw (v241). In-place omzetten kon niet: de latere .metric-regel won dan in licht */
+  --turn-glow:0 0 0 1px rgba(185,78,42,.35),0 10px 26px -8px rgba(185,78,42,.45),0 0 32px -6px rgba(185,78,42,.30);  /* 4D-1a (K8): beurtgloed X01-spelerskaart, donker én licht (zelfde waarde als --tile-shadow-on in licht) */
   /* componenten (4C-3): themawaarden van componenten; donker = standaard, licht in de overrides hieronder */
   --page-bg:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%);  /* achtergrond body: donker verloop (automatisch en gekozen gelijk), licht gloed v217 */
   --page-glow:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(185,78,42,.07) 0%, transparent 70%),radial-gradient(ellipse 60% 40% at 80% 100%, rgba(157,191,158,.05) 0%, transparent 60%);  /* body::before diepte-gloed; licht geen (v217) */
@@ -341,6 +342,7 @@ body::before{
   #sb-players.x-compact .x-score{font-size:clamp(56px,min(9vh,5vw),150px) !important}
   #sb-players.x-many .x-score{font-size:clamp(40px,min(6vh,3.4vw),96px) !important}
   #sb-players .x-name{font-size:clamp(16px,1.9vh,26px)}
+  #sb-players:not(.x-compact) .x-card{grid-template-areas:"top legs" "score score" "hint hint" "meta meta"}
   #x01-side #checkout-strip .co-big{font-size:clamp(15px,min(26cqh,7.5cqw),54px)}
   #x01-side #checkout-strip .co-arr{font-size:clamp(12px,min(14cqh,3.5cqw),30px)}
   /* Oefenspellen en Cricket/Random Checkout (.g-wrap): doel en spelers links, invoer rechts onderaan */
@@ -354,6 +356,19 @@ body::before{
   .g-wrap > .g-input{grid-column:2;grid-row:1/5;align-self:end}
   .g-wrap > #rco-mid{grid-column:2;grid-row:1/3;min-height:0}
   .g-wrap:has(> #rco-mid) > .g-input{grid-row:3/5}
+}
+/* 4D-1a: kantineschaal X01-kop en -spelerskaart (K6: liggend vanaf 1600 px; K12: tekst ≥ 15 px) */
+@media (orientation:landscape) and (min-width:1600px){
+  #x01-head .g-head-sub{font-size:clamp(15px,1.6vh,22px)}
+  #x01-head .g-head-main{font-size:clamp(28px,3.2vh,44px)}
+  #x01-head .g-head-r{font-size:clamp(15px,1.6vh,22px)}
+  #x01-head .g-head-r b{font-size:clamp(24px,2.8vh,38px)}
+  #sb-players .x-meta,#sb-players .x-turn,#sb-players .x-lg small{font-size:clamp(15px,1.7vh,24px)}
+  #sb-players .x-lg b{font-size:clamp(28px,3.4vh,46px)}
+  #sb-players .x-dot{width:clamp(12px,1.3vh,18px);height:clamp(12px,1.3vh,18px)}
+  #sb-players .x-dots i{width:clamp(10px,1.1vh,15px);height:clamp(10px,1.1vh,15px)}
+  #sb-players .co-hint span{font-size:clamp(15px,1.6vh,22px) !important}
+  #trn-leg-bar{font-size:clamp(15px,1.6vh,22px) !important}
 }
 #x01-mid{flex:1 1 0;min-height:48px;container-type:size;display:flex;align-items:center;justify-content:center;padding:var(--sp-1) 0 var(--sp-3)}
 #checkout-strip{box-sizing:border-box;width:100%;max-height:100%;flex-direction:column;align-items:center;justify-content:center;gap:clamp(4px,5cqh,14px);padding:clamp(8px,8cqh,22px) 12px;background:rgba(62,123,79,.14);border:1px solid rgba(143,203,156,.25);border-radius:18px}
@@ -374,7 +389,15 @@ body::before{
 .x-card{padding:var(--sp-6);border-radius:var(--r-2xl);background:var(--card);border:2px solid var(--border);min-width:0}
 .x-card.on{background:var(--state-turn);border-color:var(--accent)}
 #sb-players.x-compact{gap:var(--sp-3)}
-#sb-players.x-compact .x-card{padding:7px var(--sp-5);display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"top score" "hint score" "meta score";align-items:center;column-gap:var(--sp-4);border-radius:var(--r-xl)}
+/* 4D-1a: X01-spelerskaart als raster; legstand eigen vak: telefoon/tablet staand onderaan rechts (naam houdt de breedte),
+   kantine-opstelling rechtsboven (zie het liggende blok), compact (3+ spelers) onder naast de meta */
+#sb-players .x-card{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"top top" "score score" "hint hint" "meta legs";align-items:center;column-gap:var(--sp-3)}
+#sb-players .x-top{grid-area:top;min-width:0}
+#sb-players .x-legs{grid-area:legs}
+#sb-players .x-score{grid-area:score}
+#sb-players .co-hint{grid-area:hint;flex-wrap:nowrap !important;overflow:hidden;min-width:0} /* route op één regel: de kaart wordt niet hoger (4D-1a) */
+#sb-players .x-meta{grid-area:meta}
+#sb-players.x-compact .x-card{padding:7px var(--sp-5);display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"top top score" "hint hint score" "meta legs score";align-items:center;column-gap:var(--sp-4);border-radius:var(--r-xl)}
 #sb-players.x-compact .x-top{grid-area:top;min-width:0}
 #sb-players.x-compact .x-score{grid-area:score;margin:0}
 #sb-players.x-compact .co-hint{grid-area:hint;flex-wrap:nowrap !important;overflow:hidden;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
@@ -383,11 +406,28 @@ body::before{
 @media(max-height:740px){#sb-players.x-many .x-meta,#sb-players.x-many .co-hint{display:none !important}#sb-players.x-many .x-card{padding:5px var(--sp-5)}}
 .x-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
 .x-name{font-size:var(--fs-small);font-weight:var(--fw-bold);color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.x-card.on .x-name{color:var(--accent);font-weight:800}
-.x-legs{display:flex;align-items:center;gap:var(--sp-2);flex-shrink:0}
-.x-legs i{width:8px;height:8px;border-radius:var(--r-round);background:rgba(127,127,127,.3);display:inline-block}
-.x-legs i.w{background:var(--accent)}
-.x-sets{font-size:10px;font-weight:800;color:var(--accent);margin-right:var(--sp-1)}
+/* 4D-1a (K8): beurt = terracotta rand + gloed + gevuld bolletje + label "gooit"; naam in gewone tekstkleur */
+#sb-players .x-name{display:flex;align-items:center;gap:var(--sp-2);min-width:0}
+#sb-players .x-nm{overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+#sb-players .x-name > :not(.x-nm){flex:none}
+#sb-players .x-card.on .x-name{color:var(--text)}
+#sb-players .x-card.on{box-shadow:var(--turn-glow)}
+.x-dot{width:10px;height:10px;border-radius:var(--r-round);background:var(--accent)}
+.x-turn{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-on-fill);background:var(--accent);padding:1px var(--sp-3);border-radius:var(--r-sm);letter-spacing:.06em;text-transform:uppercase;line-height:1.35}
+#sb-players .x-card.on .x-meta{color:var(--text-soft)}
+/* 4D-1a (K9): legstand als cijfer in Flow; bolletjes aanvullend bij ≤ 5 te winnen legs (alleen bij 1–2 spelers) */
+.x-legs{display:flex;align-items:baseline;gap:var(--sp-4);flex-shrink:0;justify-self:end}
+.x-lg{display:inline-flex;align-items:baseline;gap:var(--sp-2)}
+.x-lg small{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-muted);line-height:1}
+.x-lg b{font-family:var(--ff-display);font-size:var(--fs-title);font-weight:var(--fw-bold);color:var(--text);line-height:.8;font-synthesis:none} /* lijnhoogte .8: de legstand maakt de meta-regel niet hoger */
+.x-dots{display:inline-flex;gap:var(--sp-2);align-self:center}
+.x-dots i{width:8px;height:8px;border-radius:var(--r-round);box-shadow:inset 0 0 0 1.5px var(--text-muted);display:inline-block}
+.x-dots i.w{background:var(--accent-text);box-shadow:none}
+#sb-players.x-compact .x-lg b{font-size:var(--fs-body-lg)}
+@media (max-width:420px){#sb-players .x-dots{display:none}}
+@media (max-width:359px){#sb-players:not(.x-compact) .co-hint{flex-wrap:wrap !important}} /* 320 (K10): route mag naar twee regels, niets afgesneden; scrollen mag */
+/* 5–6 spelers: legstand naast de naam (meta en route kunnen op lage schermen wegvallen; de legstand mag de kaart niet hoger maken) */
+#sb-players.x-many .x-card{grid-template-areas:"top legs score" "hint hint score" "meta meta score"}
 .x-score{font-weight:900;line-height:1;margin:var(--sp-4) 0 var(--sp-3);letter-spacing:-.02em;color:var(--text)}
 .x-card:not(.on) .x-score{opacity:.8}
 .x-last{display:inline-block;margin-left:var(--sp-3);padding:1px 7px;border-radius:7px;font-size:var(--fs-caption);font-weight:800;background:var(--last-bg);color:var(--tag-text);vertical-align:1px}
@@ -2663,6 +2703,8 @@ var I18N={
 "gespeeld": "played",
 "gewonnen!": "won!",
 "gooit op": "aims at",
+"gooit": "throws",
+"sets": "sets",
 "halveren bij 3 misses": "halve on 3 misses",
 "jij": "you",
 "laden…": "loading…",
@@ -3584,7 +3626,7 @@ function _tr1(n){
 <div class="screen" id="screen-game" style="display:none;flex-direction:column;height:100%">
 
   <!-- Format indicator (tournament only) -->
-  <div id="trn-leg-bar" style="display:none;text-align:center;padding:5px 16px;background:rgba(185,78,42,.15);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;flex-shrink:0"></div>
+  <div id="trn-leg-bar" style="display:none;text-align:center;padding:5px 16px;background:rgba(185,78,42,.15);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--accent-text);letter-spacing:.5px;flex-shrink:0"></div>
 
   <!-- Kop: spel, regels, leg en beurt (v196) -->
   <div id="x01-head" class="g-head"></div>
@@ -8139,18 +8181,25 @@ function renderGame(){
   }
 
   // Scorekaarten (v196): legs als bolletjes in de kaart, gemiddelde en laatste beurt eronder
-  var scoreFontSize=n<=2?'clamp(42px,calc(13vh - 46px),84px)':n<=4?'clamp(26px,calc(9vh - 34px),52px)':'clamp(24px,calc(6vh - 14px),40px)'; // groeit mee op hoge schermen (v227)
+  var scoreFontSize=n<=2?'clamp(42px,calc(13vh - 46px),84px)':n<=4?'clamp(34px,calc(9vh - 26px),72px)':'clamp(24px,calc(6vh - 14px),40px)'; // groeit mee op hoge schermen (v227); 3–4 spelers min. 34 px (4D-1a)
   var sbGrid=document.getElementById('sb-players');
   sbGrid.style.gridTemplateColumns=n<=2?'repeat('+n+',minmax(0,1fr))':'repeat(2,minmax(0,1fr))';
   sbGrid.classList.toggle('x-compact',n>2);sbGrid.classList.toggle('x-many',n>4); // 3+ spelers: compacte kaarten, score rechts (v227)
   sbGrid.innerHTML='';
-  var _showLegs=hasLegs&&!state.trnMode;
+  // Legstand (4D-1a, K9): cijfer in Flow; bij sets "sets n  legs n" (legs = in de lopende set);
+  // bolletjes aanvullend als er ≤ 5 legs te winnen zijn en er 1–2 spelers zijn. Toernooi: elke leg is een eigen
+  // potje, dus de stand komt uit trn.currentMatch (w1/w2), niet uit state.legWins.
+  var _trnM=(state.trnMode&&typeof trn!=='undefined'&&trn&&trn.currentMatch)?trn.currentMatch:null;
+  var _showLegs=_trnM?(trn.bestOf>1):hasLegs;
   function legDotsFor(pi){
     if(!_showLegs)return '';
-    var need=legsNeededToWin(),won=(state.matchSets>1?(state.legsInSet[pi]||0):(state.legWins[pi]||0)),h='';
-    for(var l=0;l<need;l++)h+='<i class="'+(l<won?'w':'')+'"></i>';
-    var setTxt=state.matchSets>1?'<span class="x-sets">S'+(state.setWins[pi]||0)+'</span>':'';
-    return '<span class="x-legs">'+setTxt+h+'</span>';
+    var need,won,sets=null;
+    if(_trnM){need=Math.ceil(trn.bestOf/2);won=state.players[pi]===_trnM.p1?_trnM.w1:state.players[pi]===_trnM.p2?_trnM.w2:0;}
+    else{need=legsNeededToWin();won=(state.matchSets>1?(state.legsInSet[pi]||0):(state.legWins[pi]||0));if(state.matchSets>1)sets=state.setWins[pi]||0;}
+    won=Number(won)||0;
+    var h='';
+    if(need<=5&&n<=2){for(var l=0;l<need;l++)h+='<i class="'+(l<won?'w':'')+'"></i>';h='<span class="x-dots">'+h+'</span>';}
+    return '<span class="x-legs">'+(sets!==null?'<span class="x-lg"><small>sets</small><b>'+_esc(sets)+'</b></span>':'')+'<span class="x-lg"><small>legs</small><b>'+_esc(won)+'</b></span>'+h+'</span>';
   }
   function lastChip(pi){
     var hs=(state.history||[]).filter(function(h){return h.player===pi;});
@@ -8176,10 +8225,10 @@ function renderGame(){
     var _scoreChanged=(_prevScores[pi]!==undefined&&_prevScores[pi]!==rem);
     _prevScores[pi]=rem;
     cell.innerHTML=
-      '<div class="x-top"><span class="x-name">'+(isActive?'● ':'')+(state.teamOf?'<span class="x-team t'+state.teamOf[pi]+'">T'+(state.teamOf[pi]+1)+'</span>':'')+_esc(name)+lastChip(pi)+'</span>'+legDotsFor(pi)+'</div>'+
+      '<div class="x-top"><span class="x-name">'+(isActive?'<i class="x-dot"></i>':'')+(state.teamOf?'<span class="x-team t'+state.teamOf[pi]+'">T'+(state.teamOf[pi]+1)+'</span>':'')+'<span class="x-nm">'+_esc(name)+'</span>'+(isActive?(n<=2?'<span class="x-turn">gooit</span>':''):lastChip(pi))+'</span></div>'+legDotsFor(pi)+
       '<div class="x-score" style="font-size:'+scoreFontSize+';'+(_scoreChanged?'animation:scoreRoll .3s cubic-bezier(.34,1.56,.64,1)':'')+'">'+rem+'</div>'+
       '<div class="co-hint" style="display:flex;flex-wrap:wrap;gap:2px;min-height:0">'+(co&&!isActive?buildCheckoutBadges(co):'')+'</div>'+
-      '<div class="x-meta">'+(imp?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>';
+      '<div class="x-meta">'+(isActive&&n>2?'<span class="x-turn">gooit</span><span> · </span>':'')+(imp?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>';
     sbGrid.appendChild(cell);
   });
 
@@ -8281,8 +8330,8 @@ function buildCheckoutBadges(co){
   var darts=co.split(' ');
   return darts.map(function(d){
     var bg=dartBadgeColor(d);
-    return '<span style="display:inline-block;background:'+bg+';color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap">'+d+'</span>';
-  }).join('<span style="color:var(--muted);font-size:11px;margin:0 1px">→</span>');
+    return '<span style="display:inline-block;background:'+bg+';color:#fff;font-size:12px;font-weight:800;padding:1px 5px;border-radius:20px;white-space:nowrap">'+d+'</span>';
+  }).join('<span style="color:var(--muted);font-size:12px;margin:0 1px">→</span>');
 }
 
 function updateScoreboardCheckout(inputVal){

@@ -1,0 +1,1190 @@
+[
+ {
+  "geval": "bo5-2sp",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 1,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 2,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "bo5-2sp",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "bo5-2sp",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-2sp",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 2,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 1,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-2sp",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-2sp",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-3sp",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-3sp",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-3sp",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-6sp",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Jorn",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Anna",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Bas",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-6sp",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Jorn",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Anna",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Bas",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft3-6sp",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Jorn",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Anna",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Bas",
+    "beurt": false,
+    "legs": [
+     "legs",
+     0
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft7-2sp",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     4
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     6
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft7-2sp",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     4
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     6
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "ft7-2sp",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     4
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     6
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "sets-2sp",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "sets",
+     1,
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 2,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "sets",
+     0,
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 1,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "sets-2sp",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "sets",
+     1,
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "sets",
+     0,
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "sets-2sp",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "sets",
+     1,
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "sets",
+     0,
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "single-leg",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "single-leg",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "single-leg",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "teams-ft3",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Jorn",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "teams-ft3",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Jorn",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "teams-ft3",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Imke",
+    "beurt": false,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   },
+   {
+    "naam": "Jorn",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": ""
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "toernooi-bo1",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": "LEG 1 VAN 1  ·  Tom 0 – 0 Henk"
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": "LEG 1 VAN 1  ·  Tom 0 – 0 Henk"
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "toernooi-bo1",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": "LEG 1 VAN 1  ·  Tom 0 – 0 Henk"
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": "LEG 1 VAN 1  ·  Tom 0 – 0 Henk"
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "toernooi-bo1",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": "LEG 1 VAN 1  ·  Tom 0 – 0 Henk"
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [],
+    "dots": 0,
+    "dotsZichtbaar": false,
+    "gewonnen": 0,
+    "leg": "LEG 1 VAN 1  ·  Tom 0 – 0 Henk"
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "toernooi-bo5",
+  "viewport": "1920×1080 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 1,
+    "leg": "LEG 4 VAN 5  ·  Henk 2 – 1 Tom"
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": true,
+    "gewonnen": 2,
+    "leg": "LEG 4 VAN 5  ·  Henk 2 – 1 Tom"
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "toernooi-bo5",
+  "viewport": "375×667 nl",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": "LEG 4 VAN 5  ·  Henk 2 – 1 Tom"
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": "LEG 4 VAN 5  ·  Henk 2 – 1 Tom"
+   }
+  ],
+  "fouten": []
+ },
+ {
+  "geval": "toernooi-bo5",
+  "viewport": "390×844 en",
+  "ok": true,
+  "kaarten": [
+   {
+    "naam": "Tom",
+    "beurt": true,
+    "legs": [
+     "legs",
+     1
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 1,
+    "leg": "LEG 4 VAN 5  ·  Henk 2 – 1 Tom"
+   },
+   {
+    "naam": "Henk",
+    "beurt": false,
+    "legs": [
+     "legs",
+     2
+    ],
+    "dots": 3,
+    "dotsZichtbaar": false,
+    "gewonnen": 2,
+    "leg": "LEG 4 VAN 5  ·  Henk 2 – 1 Tom"
+   }
+  ],
+  "fouten": []
+ }
+]
