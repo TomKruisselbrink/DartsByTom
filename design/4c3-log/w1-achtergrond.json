@@ -1,0 +1,75 @@
+{
+ "groep": "achtergrond",
+ "titel": "achtergrond van de pagina",
+ "tokens": [
+  {
+   "naam": "--page-bg",
+   "donker": "linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)",
+   "licht": "radial-gradient(ellipse 95% 50% at 0% 0%,rgba(185,78,42,.14),rgba(185,78,42,0) 62%),radial-gradient(ellipse 95% 50% at 100% 100%,rgba(62,123,79,.14),rgba(62,123,79,0) 62%),#F4F1ED",
+   "reden": "achtergrond body: donker verloop (automatisch en gekozen gelijk), licht gloed v217"
+  },
+  {
+   "naam": "--page-glow",
+   "donker": "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(185,78,42,.07) 0%, transparent 70%),radial-gradient(ellipse 60% 40% at 80% 100%, rgba(157,191,158,.05) 0%, transparent 60%)",
+   "licht": "none",
+   "reden": "body::before diepte-gloed; licht geen (v217)"
+  }
+ ],
+ "edits": [
+  {
+   "reden": "R1 donkere body-regel (automatisch) weg; waarde is nu de standaard van --page-bg",
+   "oud": "@media (prefers-color-scheme:dark){\n  :root:not([data-theme=\"light\"]) body{background:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)}\n}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R3 overschreven lichte body-verloop (automatisch) weg; overschrijver (v217) wordt --page-bg",
+   "oud": "  :root:not([data-theme=\"dark\"]) body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 body achtergrond (var(--bg) won nooit: in elke themastand overschreven)",
+   "oud": "  background:var(--bg);\n  color:var(--text);\n  display:flex;",
+   "nieuw": "  background:var(--page-bg);\n  color:var(--text);\n  display:flex;"
+  },
+  {
+   "reden": "R1 body::before gloed",
+   "oud": "  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(185,78,42,.07) 0%, transparent 70%),\n             radial-gradient(ellipse 60% 40% at 80% 100%, rgba(157,191,158,.05) 0%, transparent 60%);\n}",
+   "nieuw": "  background:var(--page-glow);\n}"
+  },
+  {
+   "reden": "R3 overschreven lichte body::before (automatisch) weg; overschrijver (v217 none) wordt --page-glow",
+   "oud": "@media (prefers-color-scheme:light){\n  :root:not([data-theme=\"dark\"]) body::before{\n    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(185,78,42,.06) 0%, transparent 70%);\n  }\n}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 donkere body-regel (gekozen) weg",
+   "oud": "[data-theme=\"dark\"] body{background:linear-gradient(160deg,#000000 0%,#381000 30%,#0f2e10 100%)}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R3 overschreven lichte body-verloop (gekozen) weg; html-achtergrond (root) blijft",
+   "oud": "[data-theme=\"light\"]{background:#e8b89e}[data-theme=\"light\"] body{background:linear-gradient(160deg,#e8b89e 0%,#f4ebe4 55%,#ffffff 100%)}",
+   "nieuw": "[data-theme=\"light\"]{background:#e8b89e}"
+  },
+  {
+   "reden": "R1 lichte body (automatisch)",
+   "oud": "  :root:not([data-theme=\"dark\"]) body{background:radial-gradient(ellipse 95% 50% at 0% 0%,rgba(185,78,42,.14),rgba(185,78,42,0) 62%),radial-gradient(ellipse 95% 50% at 100% 100%,rgba(62,123,79,.14),rgba(62,123,79,0) 62%),#F4F1ED}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 lichte body::before (automatisch)",
+   "oud": "  :root:not([data-theme=\"dark\"]) body::before{background:none}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 lichte body (gekozen)",
+   "oud": ":root[data-theme=\"light\"] body{background:radial-gradient(ellipse 95% 50% at 0% 0%,rgba(185,78,42,.14),rgba(185,78,42,0) 62%),radial-gradient(ellipse 95% 50% at 100% 100%,rgba(62,123,79,.14),rgba(62,123,79,0) 62%),#F4F1ED}\n",
+   "nieuw": ""
+  },
+  {
+   "reden": "R1 lichte body::before (gekozen)",
+   "oud": ":root[data-theme=\"light\"] body::before{background:none}\n",
+   "nieuw": ""
+  }
+ ]
+}

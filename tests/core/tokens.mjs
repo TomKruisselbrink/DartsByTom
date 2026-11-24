@@ -107,6 +107,8 @@ const MAP = [
   ['--miss-border', 'borderTopColor', ['probe', '#screen-atc', 'g-miss', 'borderTopColor']],
   ['--chip-text', 'color', ['probe', '#screen-atc', 'g-chip', 'color']],
   ['--metric-shadow', 'boxShadow', ['probe', '#app-content', 'metric', 'boxShadow']],
+  ['--page-bg', 'background', ['el', 'body', 'background']],   // shorthand: de lichte waarde eindigt op een kleur
+  ['--page-glow', 'background', ['el', 'body', 'background', '::before']],
 ];
 // Bron = dezelfde regel in de goedgekeurde versie faf50f0 (daar staat nog de letterlijke waarde). Sinds 4C-2 gebruiken die
 // regels in de huidige code zelf de tokens, dus vergelijken met de huidige bron zou rondjes draaien.
