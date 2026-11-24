@@ -363,8 +363,9 @@ body::before{
   #x01-head .g-head-main{font-size:clamp(28px,3.2vh,44px)}
   #x01-head .g-head-r{font-size:clamp(15px,1.6vh,22px)}
   #x01-head .g-head-r b{font-size:clamp(24px,2.8vh,38px)}
-  #sb-players .x-meta,#sb-players .x-turn,#sb-players .x-lg small{font-size:clamp(15px,1.7vh,24px)}
+  #sb-players .x-meta,#sb-players .x-card .x-imp,#sb-players .x-turn,#sb-players .x-lg small{font-size:clamp(15px,1.7vh,24px)} /* .x-card bij .x-imp: de basisregel staat later (herstel 4D-1a) */
   #sb-players .x-lg b{font-size:clamp(28px,3.4vh,46px)}
+  #sb-players.x-compact .x-card .x-lg b{font-size:clamp(24px,2.9vh,39px)} /* herstel 4D-1a: de compacte regel (17 px) is specifieker dan de regel hierboven en staat later; daarom .x-card erbij. Zelfde verhouding als op de telefoon (17/20) */
   #sb-players .x-dot{width:clamp(12px,1.3vh,18px);height:clamp(12px,1.3vh,18px)}
   #sb-players .x-dots i{width:clamp(10px,1.1vh,15px);height:clamp(10px,1.1vh,15px)}
   #sb-players .co-hint span{font-size:clamp(15px,1.6vh,22px) !important}
@@ -403,7 +404,7 @@ body::before{
 #sb-players.x-compact .co-hint{grid-area:hint;flex-wrap:nowrap !important;overflow:hidden;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
 #sb-players.x-compact .x-last{display:none}
 #sb-players.x-compact .x-meta{grid-area:meta}
-@media(max-height:740px){#sb-players.x-many .x-meta,#sb-players.x-many .co-hint{display:none !important}#sb-players.x-many .x-card{padding:5px var(--sp-5)}}
+@media(max-height:740px){#sb-players.x-many .x-meta,#sb-players.x-many .co-hint,#sb-players.x-many .x-imp{display:none !important}#sb-players.x-many .x-card{padding:5px var(--sp-5)}}
 .x-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
 .x-name{font-size:var(--fs-small);font-weight:var(--fw-bold);color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 4D-1a (K8): beurt = terracotta rand + gloed + gevuld bolletje + label "gooit"; naam in gewone tekstkleur */
@@ -414,7 +415,7 @@ body::before{
 #sb-players .x-card.on{box-shadow:var(--turn-glow)}
 .x-dot{width:10px;height:10px;border-radius:var(--r-round);background:var(--accent)}
 .x-turn{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-on-fill);background:var(--accent);padding:1px var(--sp-3);border-radius:var(--r-sm);letter-spacing:.06em;text-transform:uppercase;line-height:1.35}
-#sb-players .x-card.on .x-meta{color:var(--text-soft)}
+#sb-players .x-card.on .x-meta,#sb-players .x-card.on .x-lg small{color:var(--text-soft)} /* herstel 4D-1a: ook "legs" op het beurtvlak (licht 3,51 met --text-muted) */
 /* 4D-1a (K9): legstand als cijfer in Flow; bolletjes aanvullend bij ≤ 5 te winnen legs (alleen bij 1–2 spelers) */
 .x-legs{display:flex;align-items:baseline;gap:var(--sp-4);flex-shrink:0;justify-self:end}
 .x-lg{display:inline-flex;align-items:baseline;gap:var(--sp-2)}
@@ -428,6 +429,21 @@ body::before{
 @media (max-width:359px){#sb-players:not(.x-compact) .co-hint{flex-wrap:wrap !important}} /* 320 (K10): route mag naar twee regels, niets afgesneden; scrollen mag */
 /* 5–6 spelers: legstand naast de naam (meta en route kunnen op lage schermen wegvallen; de legstand mag de kaart niet hoger maken) */
 #sb-players.x-many .x-card{grid-template-areas:"top legs score" "hint hint score" "meta meta score"}
+/* Herstel 4D-1a (keuzes Tom 24-11). Het GOOIT-label staat bij elk aantal spelers in de naamregel (tablet en kantine: ruimte
+   genoeg; de meta-regel houdt zo zijn breedte voor gemiddelde en legstand). Telefoon (< 600 px breed), 3+ spelers: geen label
+   (beurt = rand, gloed, stip, witte naam, kop "BEURT …" en beurtregel). Bij 3–4 spelers staat de legstand onderaan als cijfer
+   zonder het woord "legs" (alleen voor schermlezers), zodat naam én gemiddelde passen. */
+@media (max-width:599px){
+  #sb-players.x-compact .x-turn{display:none}
+  #sb-players.x-compact:not(.x-many) .x-lg small{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+/* "niet uitgooibaar" bij 3+ spelers op een eigen regel over de volle kaartbreedte, alleen als het geldt (het uitgooivak is
+   dan leeg en vangt de hoogte op); impliciete 4e rij, dus de rasterindeling hierboven blijft gelijk */
+#sb-players .x-imp{grid-column:1/-1;grid-row:4;min-width:0;font-size:var(--fs-caption);line-height:1.2;color:var(--text-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Die regel staat er alleen als de actieve speler niet kan uitgooien: dan is het uitgooivak leeg. Bij 3–4 spelers (JS zet
+   .x-imp-on) krimpt de minimale hoogte van dat lege vak met precies de regelhoogte (12 px × 1,2), zodat de toetsen niet zakken.
+   Niet in de liggende rasteropstelling: daar staat het uitgooivak in een eigen kolom. */
+@media (orientation:portrait),(max-width:999px){#screen-game.x-imp-on #x01-mid{min-height:calc(48px - 14.4px)}}
 .x-score{font-weight:900;line-height:1;margin:var(--sp-4) 0 var(--sp-3);letter-spacing:-.02em;color:var(--text)}
 .x-card:not(.on) .x-score{opacity:.8}
 .x-last{display:inline-block;margin-left:var(--sp-3);padding:1px 7px;border-radius:7px;font-size:var(--fs-caption);font-weight:800;background:var(--last-bg);color:var(--tag-text);vertical-align:1px}
@@ -8225,12 +8241,14 @@ function renderGame(){
     var _scoreChanged=(_prevScores[pi]!==undefined&&_prevScores[pi]!==rem);
     _prevScores[pi]=rem;
     cell.innerHTML=
-      '<div class="x-top"><span class="x-name">'+(isActive?'<i class="x-dot"></i>':'')+(state.teamOf?'<span class="x-team t'+state.teamOf[pi]+'">T'+(state.teamOf[pi]+1)+'</span>':'')+'<span class="x-nm">'+_esc(name)+'</span>'+(isActive?(n<=2?'<span class="x-turn">gooit</span>':''):lastChip(pi))+'</span></div>'+legDotsFor(pi)+
+      '<div class="x-top"><span class="x-name">'+(isActive?'<i class="x-dot"></i>':'')+(state.teamOf?'<span class="x-team t'+state.teamOf[pi]+'">T'+(state.teamOf[pi]+1)+'</span>':'')+'<span class="x-nm">'+_esc(name)+'</span>'+(isActive?(n<=2?'<span class="x-turn">gooit</span>':''):lastChip(pi))+''+(isActive&&n>2?'<span class="x-turn">gooit</span>':'')+'</span></div>'+legDotsFor(pi)+
       '<div class="x-score" style="font-size:'+scoreFontSize+';'+(_scoreChanged?'animation:scoreRoll .3s cubic-bezier(.34,1.56,.64,1)':'')+'">'+rem+'</div>'+
       '<div class="co-hint" style="display:flex;flex-wrap:wrap;gap:2px;min-height:0">'+(co&&!isActive?buildCheckoutBadges(co):'')+'</div>'+
-      '<div class="x-meta">'+(isActive&&n>2?'<span class="x-turn">gooit</span><span> · </span>':'')+(imp?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>';
+      '<div class="x-meta">'+(imp&&n<=2?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>'+
+      (imp&&n>2?'<div class="x-imp">niet uitgooibaar</div>':''); // herstel 4D-1a: eigen regel bij 3+ spelers
     sbGrid.appendChild(cell);
   });
+  document.getElementById('screen-game').classList.toggle('x-imp-on',n>2&&n<=4&&!!sbGrid.querySelector('.x-imp')); // herstel 4D-1a: zie .x-imp-on in de CSS
 
 
   // Stats grid — one card per player

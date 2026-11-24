@@ -1,0 +1,44 @@
+  ✗ x01-2sp/android-360-nl-dark.png  65 px
+  ✗ x01-2sp/android-360-nl-light.png  44 px
+  ✗ x01-2sp/groot-en-dark.png  70 px
+  ✗ x01-2sp/groot-en-light.png  44 px
+  ✗ x01-2sp/groot-nl-dark.png  70 px
+  ✗ x01-2sp/groot-nl-light.png  44 px
+  ✗ x01-2sp/kantine-1280-en-dark.png  71 px
+  ✗ x01-2sp/kantine-1280-en-light.png  42 px
+  ✗ x01-2sp/kantine-1280-nl-dark.png  71 px
+  ✗ x01-2sp/kantine-1280-nl-light.png  42 px
+  ✗ x01-2sp/kantine-1920-en-dark.png  163 px
+  ✗ x01-2sp/kantine-1920-en-light.png  123 px
+  ✗ x01-2sp/kantine-1920-nl-auto-dark.png  163 px
+  ✗ x01-2sp/kantine-1920-nl-dark.png  163 px
+  ✗ x01-2sp/kantine-1920-nl-light.png  123 px
+  ✗ x01-2sp/mobiel-en-dark.png  70 px
+  ✗ x01-2sp/mobiel-en-light.png  44 px
+  ✗ x01-2sp/mobiel-nl-auto-dark.png  70 px
+  ✗ x01-2sp/mobiel-nl-auto-light.png  44 px
+  ✗ x01-2sp/mobiel-nl-dark.png  70 px
+  ✗ x01-2sp/mobiel-nl-light.png  44 px
+  ✗ x01-2sp/se-en-dark.png  66 px
+  ✗ x01-2sp/se-en-light.png  44 px
+  ✗ x01-2sp/se-nl-dark.png  66 px
+  ✗ x01-2sp/se-nl-light.png  44 px
+  ✗ x01-2sp/tablet-liggend-nl-dark.png  65 px
+  ✗ x01-2sp/tablet-liggend-nl-light.png  46 px
+  ✗ x01-2sp/tablet-staand-nl-dark.png  70 px
+  ✗ x01-2sp/tablet-staand-nl-light.png  44 px
+  ✗ x01-4sp/android-360-nl-dark.png  643 px
+  ✗ x01-4sp/android-360-nl-light.png  595 px
+  ✗ x01-4sp/groot-en-dark.png  737 px
+  ✗ x01-4sp/groot-en-light.png  733 px
+  ✗ x01-4sp/groot-nl-dark.png  604 px
+  ✗ x01-4sp/groot-nl-light.png  602 px
+  ✗ x01-4sp/kantine-1280-en-dark.png  1750 px
+  ✗ x01-4sp/kantine-1280-en-light.png  1569 px
+  ✗ x01-4sp/kantine-1280-nl-dark.png  1376 px
+  ✗ x01-4sp/kantine-1280-nl-light.png  1222 px
+  ✗ x01-4sp/kantine-1920-en-dark.png  3808 px
+
+visueel: VERSCHIL — 1175/1253 opnames gelijk aan REF, 2907 s. Rapport: tests/visual/out/compare/nu/index.html
+##CASES ok=1175 total=1253
+exit 1

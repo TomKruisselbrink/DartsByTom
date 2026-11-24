@@ -1,0 +1,37 @@
+✓ core/tap-320.mjs                   2/2   126s
+✓ core/tap-320-en.mjs                2/2   127s
+✓ core/tap-360.mjs                   2/2   121s
+✓ core/tap-360-en.mjs                2/2   123s
+✓ core/tap-375-en.mjs                2/2   119s
+✓ core/tap-375.mjs                   2/2   118s
+✓ core/tap-390.mjs                   3/3   127s
+✓ core/tap-390-en.mjs                2/2   127s
+✓ security/rematch-start.mjs         1/1   33s
+✓ security/finish-gate.mjs           1/1   39s
+✓ security/taint-local.mjs           1/1   37s
+✓ core/ui.mjs                        6/6   47s
+✓ security/eli-save.mjs              1/1   16s
+✓ core/x01-kaart.mjs                13/13  18s
+✓ core/x01.mjs                      17/17  27s
+✓ security/x01-gate.mjs              1/1   12s
+✓ core/games.mjs                    12/12  26s
+✓ core/data.mjs                     14/14  26s
+✓ core/contrast.mjs                  5/5   7s
+✓ core/coverage.mjs                  7/7   1s
+✓ core/errlog.mjs                    7/7   7s
+✓ core/contrast-beurt.mjs            8/8   16s
+✓ core/theme-rules.mjs               3/3   1s
+✓ core/tokens-ratchet.mjs            2/2   0s
+✓ core/tokens.mjs                    9/9   11s
+✓ core/fase3.mjs                     6/6   15s
+✓ security/diag-legacy.test.mjs      1/1   3s
+✓ security/hi-correct.mjs            1/1   6s
+✓ security/html-sinks.mjs            1/1   0s
+✓ security/ec-correct.mjs            1/1   8s
+✓ security/names-compat.mjs          1/1   7s
+✓ security/no-disappear.mjs          1/1   7s
+✓ security/report.mjs                1/1   8s
+✓ security/taint-remote.mjs          1/1   11s
+
+GESLAAGD: 139/139 testgevallen in 34 suites, 691 s (2 tegelijk)
+npm exit 0

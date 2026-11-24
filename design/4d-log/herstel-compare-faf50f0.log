@@ -1,0 +1,44 @@
+  ✗ bevestig-stop/android-360-nl-dark.png  741 px
+  ✗ bevestig-stop/android-360-nl-light.png  641 px
+  ✗ bevestig-stop/groot-en-dark.png  1012 px
+  ✗ bevestig-stop/groot-en-light.png  794 px
+  ✗ bevestig-stop/groot-nl-dark.png  738 px
+  ✗ bevestig-stop/groot-nl-light.png  586 px
+  ✗ bevestig-stop/kantine-1280-en-dark.png  972 px
+  ✗ bevestig-stop/kantine-1280-en-light.png  968 px
+  ✗ bevestig-stop/kantine-1280-nl-dark.png  713 px
+  ✗ bevestig-stop/kantine-1280-nl-light.png  754 px
+  ✗ bevestig-stop/kantine-1920-en-dark.png  13182 px
+  ✗ bevestig-stop/kantine-1920-en-light.png  12488 px
+  ✗ bevestig-stop/kantine-1920-nl-auto-dark.png  12738 px
+  ✗ bevestig-stop/kantine-1920-nl-dark.png  12691 px
+  ✗ bevestig-stop/kantine-1920-nl-light.png  11922 px
+  ✗ bevestig-stop/mobiel-en-dark.png  1001 px
+  ✗ bevestig-stop/mobiel-en-light.png  835 px
+  ✗ bevestig-stop/mobiel-nl-auto-dark.png  750 px
+  ✗ bevestig-stop/mobiel-nl-auto-light.png  610 px
+  ✗ bevestig-stop/mobiel-nl-dark.png  743 px
+  ✗ bevestig-stop/mobiel-nl-light.png  610 px
+  ✗ bevestig-stop/se-en-dark.png  991 px
+  ✗ bevestig-stop/se-en-light.png  834 px
+  ✗ bevestig-stop/se-nl-dark.png  733 px
+  ✗ bevestig-stop/se-nl-light.png  629 px
+  ✗ bevestig-stop/tablet-liggend-nl-dark.png  677 px
+  ✗ bevestig-stop/tablet-liggend-nl-light.png  714 px
+  ✗ bevestig-stop/tablet-staand-nl-dark.png  795 px
+  ✗ bevestig-stop/tablet-staand-nl-light.png  528 px
+  ✗ x01-2sp/android-360-nl-dark.png  8358 px
+  ✗ x01-2sp/android-360-nl-light.png  6942 px
+  ✗ x01-2sp/groot-en-dark.png  5047 px
+  ✗ x01-2sp/groot-en-light.png  4405 px
+  ✗ x01-2sp/groot-nl-dark.png  4874 px
+  ✗ x01-2sp/groot-nl-light.png  4267 px
+  ✗ x01-2sp/kantine-1280-en-dark.png  5350 px
+  ✗ x01-2sp/kantine-1280-en-light.png  4214 px
+  ✗ x01-2sp/kantine-1280-nl-dark.png  5168 px
+  ✗ x01-2sp/kantine-1280-nl-light.png  4062 px
+  ✗ x01-2sp/kantine-1920-en-dark.png  27215 px
+
+visueel: VERSCHIL — 1086/1253 opnames gelijk aan REF, 2960 s. Rapport: tests/visual/out/compare/nu/index.html
+##CASES ok=1086 total=1253
+exit 1
