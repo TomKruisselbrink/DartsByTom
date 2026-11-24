@@ -1,0 +1,138 @@
+{
+ "_uitleg": "Uitzonderingen op tests/core/theme-rules.mjs (fase 4C-3, W2): themaregels voor componenten die (nog) blijven staan. Sleutel = media-voorwaarde + selectordeel + eigenschappen. Elke regel heeft een code en een reden; een regel verwijderen of toevoegen alleen met aantoonbare reden. Bewijs: design/4c3-log/classificatie.json, dood-bewijs.json, w1-kaarten-verloop.md.",
+ "_codes": {
+  "E1": "verborgen",
+  "E2": "dood",
+  "E3": "schermtokens",
+  "E4": "fout F1",
+  "E5": "fout F2",
+  "E6": "fout F3",
+  "E7": "niet waargenomen",
+  "E8": "overschreven",
+  "E9": "specificiteit"
+ },
+ "[data-theme=\"light\"] #game-bar { background, border-color }": {
+  "code": "E1 verborgen",
+  "reden": "#game-bar staat altijd op display:none!important (in alle 55 scenario's gemeten: design/4c3-log/dood-bewijs.json); omzetten heeft geen effect. Licht-automatisch heeft :not([data-force]), licht-gekozen niet: bestaand verschil, onzichtbaar."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #game-bar:not([data-force]) { background, border-color }": {
+  "code": "E1 verborgen",
+  "reden": "#game-bar staat altijd op display:none!important (in alle 55 scenario's gemeten: design/4c3-log/dood-bewijs.json); omzetten heeft geen effect. Licht-automatisch heeft :not([data-force]), licht-gekozen niet: bestaand verschil, onzichtbaar."
+ },
+ "[data-theme=\"light\"] .win-kicker { color }": {
+  "code": "E5 fout F2",
+  "reden": ".win-kicker in licht: de !important-regel overstemt de rode verlieskleur (verlies = groen in licht, rood in donker). Behouden voor 0 pixels; oplossen in 4D."
+ },
+ "[data-theme=\"light\"] .trn-champ-kicker { color }": {
+  "code": "E7 niet waargenomen",
+  "reden": "komt in geen van de 55 scenario's voor (classificatie: NIET-WAARGENOMEN), dus niet aantoonbaar 0 pixels om te zetten. Blijft zoals in faf50f0."
+ },
+ "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-name { color }": {
+  "code": "E7 niet waargenomen",
+  "reden": "komt in geen van de 55 scenario's voor (classificatie: NIET-WAARGENOMEN), dus niet aantoonbaar 0 pixels om te zetten. Blijft zoals in faf50f0."
+ },
+ "[data-theme=\"light\"] #screen-trn-overview .trn-player-row.winner .trn-player-wins { color }": {
+  "code": "E7 niet waargenomen",
+  "reden": "komt in geen van de 55 scenario's voor (classificatie: NIET-WAARGENOMEN), dus niet aantoonbaar 0 pixels om te zetten. Blijft zoals in faf50f0."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-name { color }": {
+  "code": "E7 niet waargenomen",
+  "reden": "komt in geen van de 55 scenario's voor (classificatie: NIET-WAARGENOMEN), dus niet aantoonbaar 0 pixels om te zetten. Blijft zoals in faf50f0."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #screen-trn-overview .trn-player-row.winner .trn-player-wins { color }": {
+  "code": "E7 niet waargenomen",
+  "reden": "komt in geen van de 55 scenario's voor (classificatie: NIET-WAARGENOMEN), dus niet aantoonbaar 0 pixels om te zetten. Blijft zoals in faf50f0."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .win-kicker { color }": {
+  "code": "E5 fout F2",
+  "reden": ".win-kicker in licht: de !important-regel overstemt de rode verlieskleur (verlies = groen in licht, rood in donker). Behouden voor 0 pixels; oplossen in 4D."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .trn-champ-kicker { color }": {
+  "code": "E7 niet waargenomen",
+  "reden": "komt in geen van de 55 scenario's voor (classificatie: NIET-WAARGENOMEN), dus niet aantoonbaar 0 pixels om te zetten. Blijft zoals in faf50f0."
+ },
+ "[data-theme=\"light\"] .home-tile { box-shadow }": {
+  "code": "E8 overschreven",
+  "reden": "wint in licht nooit: een andere regel (o.a. !important of hogere specificiteit) geeft de schaduw (classificatie: OVERSCHREVEN). Zonder effect; opruimen hoort bij 4D."
+ },
+ "[data-theme=\"light\"] .home-quick-tile { box-shadow }": {
+  "code": "E8 overschreven",
+  "reden": "wint in licht nooit: een andere regel (o.a. !important of hogere specificiteit) geeft de schaduw (classificatie: OVERSCHREVEN). Zonder effect; opruimen hoort bij 4D."
+ },
+ "[data-theme=\"light\"] .g-big3 button { box-shadow }": {
+  "code": "E8 overschreven",
+  "reden": "wint in licht nooit: een andere regel (o.a. !important of hogere specificiteit) geeft de schaduw (classificatie: OVERSCHREVEN). Zonder effect; opruimen hoort bij 4D."
+ },
+ "[data-theme=\"light\"] .bob-keys button { box-shadow }": {
+  "code": "E9 specificiteit",
+  "reden": "niet omzetbaar zonder specificiteitsverandering: als neutrale regel won .bob-keys button in donker van .g-miss (Mis-knop Bob's 27 verloor zijn schaduw; design/4c3-log/w1-kaarten-verloop.md)."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .home-tile { box-shadow }": {
+  "code": "E8 overschreven",
+  "reden": "wint in licht nooit: een andere regel (o.a. !important of hogere specificiteit) geeft de schaduw (classificatie: OVERSCHREVEN). Zonder effect; opruimen hoort bij 4D."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .home-quick-tile { box-shadow }": {
+  "code": "E8 overschreven",
+  "reden": "wint in licht nooit: een andere regel (o.a. !important of hogere specificiteit) geeft de schaduw (classificatie: OVERSCHREVEN). Zonder effect; opruimen hoort bij 4D."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .g-big3 button { box-shadow }": {
+  "code": "E8 overschreven",
+  "reden": "wint in licht nooit: een andere regel (o.a. !important of hogere specificiteit) geeft de schaduw (classificatie: OVERSCHREVEN). Zonder effect; opruimen hoort bij 4D."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .bob-keys button { box-shadow }": {
+  "code": "E9 specificiteit",
+  "reden": "niet omzetbaar zonder specificiteitsverandering: als neutrale regel won .bob-keys button in donker van .g-miss (Mis-knop Bob's 27 verloor zijn schaduw; design/4c3-log/w1-kaarten-verloop.md)."
+ },
+ "[data-theme=\"light\"] .g-miss { color }": {
+  "code": "E6 fout F3",
+  "reden": ".g-miss tekst in licht: wint door hogere specificiteit van een knop in een toetsengroep (donker: witte tekst, licht: rood). Omzetten verandert de specificiteit; oplossen in 4D."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .g-miss { color }": {
+  "code": "E6 fout F3",
+  "reden": ".g-miss tekst in licht: wint door hogere specificiteit van een knop in een toetsengroep (donker: witte tekst, licht: rood). Omzetten verandert de specificiteit; oplossen in 4D."
+ },
+ "@media(prefers-color-scheme:dark) :root:not([data-theme=\"light\"]) .ios-toggle { background }": {
+  "code": "E4 fout F1",
+  "reden": ".ios-toggle in automatisch donker: de donkere regel is specifieker dan .ios-toggle:checked, dus een ingeschakelde schakelaar is grijs i.p.v. groen. Omzetten zou de fout in een token vastleggen of zichtbaar repareren; oplossen in 4D."
+ },
+ "[data-theme=\"light\"] #screen-setup { --su-bar, --su-btn, --su-card, --su-green-text, --su-muted, --su-orange-text, --su-soft, --su-text, --su-w05, --su-w06, --su-w07, --su-w08, --su-w1, --su-w10, --su-w25, --su-well }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "[data-theme=\"light\"] #screen-trn-setup { --su-bar, --su-btn, --su-card, --su-green-text, --su-muted, --su-orange-text, --su-soft, --su-text, --su-w05, --su-w06, --su-w07, --su-w08, --su-w1, --su-w10, --su-w25, --su-well }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "[data-theme=\"light\"] #screen-setup { --setup-accent-text }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "[data-theme=\"light\"] #screen-trn-setup { --setup-accent-text }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #screen-setup { --su-bar, --su-btn, --su-card, --su-green-text, --su-muted, --su-orange-text, --su-soft, --su-text, --su-w05, --su-w06, --su-w07, --su-w08, --su-w1, --su-w10, --su-w25, --su-well }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #screen-trn-setup { --su-bar, --su-btn, --su-card, --su-green-text, --su-muted, --su-orange-text, --su-soft, --su-text, --su-w05, --su-w06, --su-w07, --su-w08, --su-w1, --su-w10, --su-w25, --su-well }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #screen-setup { --setup-accent-text }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) #screen-trn-setup { --setup-accent-text }": {
+  "code": "E3 schermtokens",
+  "reden": "#screen-setup/#screen-trn-setup zetten alleen eigen variabelen (--su-*, --setup-accent-text) per thema: dit zijn al tokens, per scherm. Gelijktrekken met de grijsfamilie hoort bij 4D (K2)."
+ },
+ "@media(prefers-color-scheme:light) :root:not([data-theme=\"dark\"]) .numpad .btn { box-shadow }": {
+  "code": "E2 dood",
+  "reden": "selector komt nergens in HTML of JS voor als klasse en matcht in geen enkel scenario (design/4c3-log/dood-bewijs.json). Opruimen = schoonmaak, niet in 4C-3."
+ },
+ "@media(prefers-color-scheme:light) .player-card.active { box-shadow }": {
+  "code": "E2 dood",
+  "reden": "selector komt nergens in HTML of JS voor als klasse en matcht in geen enkel scenario (design/4c3-log/dood-bewijs.json). Opruimen = schoonmaak, niet in 4C-3."
+ }
+}

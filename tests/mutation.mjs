@@ -24,6 +24,7 @@ const MUT = [
   { name: 'dekking: Stop-venster verschijnt niet meer', find: 'function confirmEndGame(){', repl: 'function confirmEndGame(){return;', only: 'core/tap-390' },
   { name: 'dekking: nieuw scherm zonder scenario', find: '</body>', repl: '<div class="screen" id="screen-nieuw"></div></body>', only: 'core/coverage' },
   { name: 'kleuren: nieuwe hardgecodeerde kleur', find: '</head>', repl: '<style>.x-nieuw{color:#123456}</style></head>', only: 'core/tokens-ratchet' },
+  { name: 'thema: nieuwe themaregel voor een component (geen token)', find: '</head>', repl: '<style>[data-theme="light"] .x-nieuw{color:var(--text)}</style></head>', only: 'core/theme-rules' },
 ];
 const src = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'); let bad = 0;
 for (const m of MUT) {
