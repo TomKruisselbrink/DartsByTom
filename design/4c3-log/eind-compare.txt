@@ -1,0 +1,4 @@
+
+visueel: GELIJK — 1253/1253 opnames gelijk aan REF, 2849 s. Rapport: tests/visual/out/compare/nu/index.html
+##CASES ok=1253 total=1253
+EXIT 0
