@@ -12,6 +12,11 @@ const P3 = "['Tom','Henk','Imke']", P4 = "['Tom','Henk','Imke','Jorn']", P6 = "[
 const AVG = "state.history=[];for(var i=0;i<4;i++)for(var k=0;k<state.players.length;k++)state.history.push({player:k,score:[100,60,81,45][i]});";
 const L = (p, sc, lw, extra) => `launchGame('501',${p},true,'firstto',3,1,501,0);state.legWins=${lw};state.scores=${sc};${extra || ''}renderGame();`;
 const SC = {
+  // F12 (24-11): 2 spelers, met en zonder legstand
+  '2 sp begin (niet uitgooibaar, legstand)': [`launchGame('501',['Tom','Henk'],true,'firstto',3,1,501,0);renderGame();`, true],
+  '2 sp begin (niet uitgooibaar, 1 leg)': [`launchGame('501',['Tom','Henk'],true,'firstto',1,1,501,0);renderGame();`, true],
+  '2 sp 181 met route ernaast, gemiddelden': [L("['Tom','Henk']", '[181,140]', '[1,2]', AVG), true],
+  '2 sp 121 (wel uitgooibaar)': [L("['Tom','Henk']", '[121,140]', '[1,2]', AVG), false],
   '3 sp begin (niet uitgooibaar)': [L(P3, '[501,501,501]', '[0,0,0]'), true],
   '4 sp route, gemiddelden': [L(P4, '[121,140,96,170]', '[2,1,0,2]', AVG), false],
   '4 sp niet uitgooibaar, gemiddelden': [L(P4, '[181,140,96,170]', '[2,1,0,2]', AVG), true],
@@ -62,15 +67,15 @@ for (const lang of ['nl', 'en']) {
   await ctx.close();
 }
 // (1b) Reparatie iPhone (24-11): de regel 'niet uitgooibaar' / 'no checkout' staat volledig op één regel over de volle
-//      kaartbreedte, op alle gangbare iPhone-maten, bij 3 en 4 spelers. Ook de opbouw wordt gecontroleerd: een eigen benoemde
+//      kaartbreedte, op alle gangbare iPhone-maten, bij 2 (F12), 3 en 4 spelers. Ook de opbouw wordt gecontroleerd: een eigen benoemde
 //      rasterrij ('imp') en geen afkapstijl (nowrap/ellipsis). In Safari gaf de oude opbouw (impliciete rij, grid-column:1/-1)
 //      alleen de breedte naast de score ("niet uitgooibaa…"); Chromium toont dat verschil niet, dus de opbouw zelf wordt bewaakt.
 {
-  const IMPSC = { '3 spelers': `launchGame('501',${P3},true,'firstto',3,1,501,0);renderGame();`, '4 spelers': L(P4, '[501,501,501,501]', '[2,1,0,2]', AVG) };
+  const IMPSC = { '2 spelers (legstand)': `launchGame('501',['Tom','Henk'],true,'firstto',3,1,501,0);renderGame();`, '2 spelers (1 leg)': `launchGame('501',['Tom','Henk'],true,'firstto',1,1,501,0);renderGame();`, '3 spelers': `launchGame('501',${P3},true,'firstto',3,1,501,0);renderGame();`, '4 spelers': L(P4, '[501,501,501,501]', '[2,1,0,2]', AVG) };
   for (const lang of ['nl', 'en']) {
     const { p, errs, ctx } = await page(b, { ls: { lang } });
     await open(p, 900);
-    await T.t(`${lang.toUpperCase()} iPhone-maten: '${lang === 'nl' ? 'niet uitgooibaar' : 'no checkout'}' volledig, één regel, volle kaartbreedte, eigen rasterrij`, async () => {
+    await T.t(`${lang.toUpperCase()} iPhone-maten, 2/3/4 spelers: '${lang === 'nl' ? 'niet uitgooibaar' : 'no checkout'}' volledig, één regel, volle kaartbreedte, eigen rasterrij`, async () => {
       const fails = [];
       for (const [w, h] of [[360, 640], [375, 667], [375, 812], [390, 844], [393, 852], [402, 874], [414, 896], [430, 932], [440, 956]]) {
         await p.setViewportSize({ width: w, height: h });

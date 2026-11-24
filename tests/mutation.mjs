@@ -28,10 +28,11 @@ const MUT = [
   // Herstel 4D-1a: de gerichte tests vangen het terugdraaien van elk herstelpunt
   { name: 'beurtcontrast: "legs" op het beurtvlak weer --text-muted (licht 3,51)', find: '#sb-players .x-card.on .x-meta,#sb-players .x-card.on .x-lg small{color:var(--text-soft)}', repl: '#sb-players .x-card.on .x-meta{color:var(--text-soft)}', only: 'core/contrast-beurt' },
   { name: 'kaart: kantine-legsgetal weer 17 px (specificiteit)', find: '#sb-players.x-compact .x-card .x-lg b{font-size:clamp(24px,2.9vh,39px)}', repl: '#sb-players.x-compact .x-lg b{font-size:clamp(24px,2.9vh,39px)}', only: 'core/x01-kaart' },
-  { name: "kaart: 'niet uitgooibaar' bij 3+ spelers weer weg", find: `(imp&&n>2?'<div class="x-imp">niet uitgooibaar</div>':'')`, repl: "''", only: 'core/x01-kaart' },
+  { name: "kaart: 'niet uitgooibaar' weer weg (alle aantallen spelers)", find: `(imp?'<div class="x-imp">niet uitgooibaar</div>':'')`, repl: "''", only: 'core/x01-kaart' },
   { name: "kaart: 'niet uitgooibaar' op de kantine weer 12 px (specificiteit)", find: '#sb-players .x-card .x-imp,#sb-players .x-turn', repl: '#sb-players .x-imp,#sb-players .x-turn', only: 'core/x01-kaart' },
   { name: "kaart: 'niet uitgooibaar' weer in een impliciete rij (grid-column:1/-1; Safari-afkapping)", find: '#sb-players .x-imp{grid-area:imp;', repl: '#sb-players .x-imp{grid-column:1/-1;grid-row:4;', only: 'core/x01-kaart' },
   { name: "kaart: 'niet uitgooibaar' weer met afkapstijl (nowrap + ellipsis)", find: 'color:var(--text-soft);white-space:normal;overflow:visible}', repl: 'color:var(--text-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}', only: 'core/x01-kaart' },
+  { name: "kaart (F12): 'niet uitgooibaar' bij 2 spelers weer in de meta-regel", find: `(imp?'<div class="x-imp">niet uitgooibaar</div>':'')`, repl: `(imp&&n>2?'<div class="x-imp">niet uitgooibaar</div>':'')`, only: 'core/x01-kaart' },
   { name: 'kaart: GOOIT-label op de telefoon weer zichtbaar bij 3+ spelers', find: '  #sb-players.x-compact .x-turn{display:none}', repl: '', only: 'core/x01-kaart' },
 ];
 const src = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'); let bad = 0;

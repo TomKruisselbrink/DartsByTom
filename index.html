@@ -343,6 +343,7 @@ body::before{
   #sb-players.x-many .x-score{font-size:clamp(40px,min(6vh,3.4vw),96px) !important}
   #sb-players .x-name{font-size:clamp(16px,1.9vh,26px)}
   #sb-players:not(.x-compact) .x-card{grid-template-areas:"top legs" "score score" "hint hint" "meta meta"}
+  #sb-players:not(.x-compact) .x-card.x-imp-card{grid-template-areas:"top legs" "score score" "hint hint" "meta meta" "imp imp"} /* F12 */
   #x01-side #checkout-strip .co-big{font-size:clamp(15px,min(26cqh,7.5cqw),54px)}
   #x01-side #checkout-strip .co-arr{font-size:clamp(12px,min(14cqh,3.5cqw),30px)}
   /* Oefenspellen en Cricket/Random Checkout (.g-wrap): doel en spelers links, invoer rechts onderaan */
@@ -441,11 +442,12 @@ body::before{
    dan leeg en vangt de hoogte op). Reparatie iPhone (24-11): een benoemde rij "imp" over alle kolommen in de rasterindeling
    van die kaart (.x-imp-card), niet meer een impliciete 4e rij met grid-column:1/-1 (in Safari kreeg de regel daarmee alleen
    de breedte naast de score: "niet uitgooibaa…"). Nooit afkappen: is de regel ooit te smal, dan breekt hij op de spatie. */
+#sb-players .x-card.x-imp-card{grid-template-areas:"top top" "score score" "hint hint" "meta legs" "imp imp"} /* F12: 1–2 spelers */
 #sb-players.x-compact .x-card.x-imp-card{grid-template-areas:"top top score" "hint hint score" "meta legs score" "imp imp imp"}
 #sb-players.x-many .x-card.x-imp-card{grid-template-areas:"top legs score" "hint hint score" "meta meta score" "imp imp imp"}
 #sb-players .x-imp{grid-area:imp;min-width:0;font-size:var(--fs-caption);line-height:1.2;color:var(--text-soft);white-space:normal;overflow:visible}
-/* Die regel staat er alleen als de actieve speler niet kan uitgooien: dan is het uitgooivak leeg. Bij 3–4 spelers (JS zet
-   .x-imp-on) krimpt de minimale hoogte van dat lege vak met precies de regelhoogte (12 px × 1,2), zodat de toetsen niet zakken.
+/* Die regel staat er alleen als de actieve speler niet kan uitgooien: dan is het uitgooivak leeg. Bij 1–4 spelers (JS zet
+   .x-imp-on; F12: ook 1–2) krimpt de minimale hoogte van dat lege vak met precies de regelhoogte (12 px × 1,2), zodat de toetsen niet zakken.
    Niet in de liggende rasteropstelling: daar staat het uitgooivak in een eigen kolom. */
 @media (orientation:portrait),(max-width:999px){#screen-game.x-imp-on #x01-mid{min-height:calc(48px - 14.4px)}}
 .x-score{font-weight:900;line-height:1;margin:var(--sp-4) 0 var(--sp-3);letter-spacing:-.02em;color:var(--text)}
@@ -8240,7 +8242,7 @@ function renderGame(){
     var co=getCheckout(rem);
     var imp=isActive&&isImpossible(rem)&&rem>1;
     var cell=document.createElement('div');
-    cell.className='x-card'+(isActive?' on':'')+(imp&&n>2?' x-imp-card':''); // reparatie iPhone: eigen rasterrij voor 'niet uitgooibaar'
+    cell.className='x-card'+(isActive?' on':'')+(imp?' x-imp-card':''); // reparatie iPhone: eigen rasterrij voor 'niet uitgooibaar' (F12: ook bij 2 spelers)
     cell.setAttribute('data-pi',pi);
     var _scoreChanged=(_prevScores[pi]!==undefined&&_prevScores[pi]!==rem);
     _prevScores[pi]=rem;
@@ -8248,11 +8250,11 @@ function renderGame(){
       '<div class="x-top"><span class="x-name">'+(isActive?'<i class="x-dot"></i>':'')+(state.teamOf?'<span class="x-team t'+state.teamOf[pi]+'">T'+(state.teamOf[pi]+1)+'</span>':'')+'<span class="x-nm">'+_esc(name)+'</span>'+(isActive?(n<=2?'<span class="x-turn">gooit</span>':''):lastChip(pi))+''+(isActive&&n>2?'<span class="x-turn">gooit</span>':'')+'</span></div>'+legDotsFor(pi)+
       '<div class="x-score" style="font-size:'+scoreFontSize+';'+(_scoreChanged?'animation:scoreRoll .3s cubic-bezier(.34,1.56,.64,1)':'')+'">'+rem+'</div>'+
       '<div class="co-hint" style="display:flex;flex-wrap:wrap;gap:2px;min-height:0">'+(co&&!isActive?buildCheckoutBadges(co):'')+'</div>'+
-      '<div class="x-meta">'+(imp&&n<=2?'niet uitgooibaar · ':'')+'gem. '+avg3str(pi)+'</div>'+
-      (imp&&n>2?'<div class="x-imp">niet uitgooibaar</div>':''); // herstel 4D-1a: eigen regel bij 3+ spelers
+      '<div class="x-meta">'+'gem. '+avg3str(pi)+'</div>'+
+      (imp?'<div class="x-imp">niet uitgooibaar</div>':''); // eigen regel bij elk aantal spelers (herstel 4D-1a; 2 spelers: F12)
     sbGrid.appendChild(cell);
   });
-  document.getElementById('screen-game').classList.toggle('x-imp-on',n>2&&n<=4&&!!sbGrid.querySelector('.x-imp')); // herstel 4D-1a: zie .x-imp-on in de CSS
+  document.getElementById('screen-game').classList.toggle('x-imp-on',n<=4&&!!sbGrid.querySelector('.x-imp')); // herstel 4D-1a: zie .x-imp-on in de CSS
 
 
   // Stats grid — one card per player

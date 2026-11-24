@@ -1,0 +1,802 @@
+{
+ "2sp-121-1024x768-en.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "230/230",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-1024x768-nl.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "230/230",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-1280x800-en.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "237/237",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-1280x800-nl.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "237/237",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-1920x1080-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "328/328",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-1920x1080-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "328/328",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-320x568-en.png": {
+  "kb": -97,
+  "toets": 44,
+  "kaart": "164/164",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": true
+ },
+ "2sp-121-320x568-nl.png": {
+  "kb": -97,
+  "toets": 44,
+  "kaart": "164/164",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": true
+ },
+ "2sp-121-360x640-en.png": {
+  "kb": -5,
+  "toets": 45,
+  "kaart": "142/142",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": true
+ },
+ "2sp-121-360x640-nl.png": {
+  "kb": -5,
+  "toets": 45,
+  "kaart": "142/142",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": true
+ },
+ "2sp-121-375x667-en.png": {
+  "kb": 12,
+  "toets": 47,
+  "kaart": "142/142",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": true
+ },
+ "2sp-121-375x667-nl.png": {
+  "kb": 12,
+  "toets": 47,
+  "kaart": "142/142",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": true
+ },
+ "2sp-121-375x812-en.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "159/159",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-375x812-nl.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "159/159",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-390x844-en.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "163/163",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-390x844-nl.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "163/163",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-430x932-en.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "175/175",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-430x932-nl.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "175/175",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-768x1024-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "184/184",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-121-768x1024-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "184/184",
+  "afgekapt": "",
+  "imp": "-",
+  "scroll": false
+ },
+ "2sp-181-route-1024x768-en.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "230/230",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-1024x768-nl.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "230/230",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-1280x800-en.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "237/237",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-1280x800-nl.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "237/237",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-1920x1080-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "328/328",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-1920x1080-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "328/328",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-320x568-en.png": {
+  "kb": -97,
+  "toets": 44,
+  "kaart": "164/164",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-181-route-320x568-nl.png": {
+  "kb": -97,
+  "toets": 44,
+  "kaart": "164/164",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-181-route-360x640-en.png": {
+  "kb": -6,
+  "toets": 45,
+  "kaart": "142/142",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-181-route-360x640-nl.png": {
+  "kb": -6,
+  "toets": 45,
+  "kaart": "142/142",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-181-route-375x667-en.png": {
+  "kb": 12,
+  "toets": 47,
+  "kaart": "142/142",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-181-route-375x667-nl.png": {
+  "kb": 12,
+  "toets": 47,
+  "kaart": "142/142",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-181-route-375x812-en.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "160/160",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-375x812-nl.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "160/160",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-390x844-en.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "164/164",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-390x844-nl.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "164/164",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-430x932-en.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "175/175",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-430x932-nl.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "175/175",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-768x1024-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "184/184",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-181-route-768x1024-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "184/184",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-1024x768-en.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "210/210",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-1024x768-nl.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "210/210",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-1280x800-en.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "217/217",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-1280x800-nl.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "217/217",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-1920x1080-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "300/300",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-1920x1080-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "300/300",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-320x568-en.png": {
+  "kb": -55,
+  "toets": 44,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-1leg-320x568-nl.png": {
+  "kb": -55,
+  "toets": 44,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-1leg-360x640-en.png": {
+  "kb": 15,
+  "toets": 45,
+  "kaart": "122/122",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-1leg-360x640-nl.png": {
+  "kb": 15,
+  "toets": 45,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-1leg-375x667-en.png": {
+  "kb": 18,
+  "toets": 47,
+  "kaart": "122/122",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-375x667-nl.png": {
+  "kb": 18,
+  "toets": 47,
+  "kaart": "122/122",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-375x812-en.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "139/139",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-375x812-nl.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "139/139",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-390x844-en.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "143/143",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-390x844-nl.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "143/143",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-430x932-en.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "155/155",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-430x932-nl.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "155/155",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-768x1024-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "164/164",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-1leg-768x1024-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "164/164",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-1024x768-en.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "210/210",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-1024x768-nl.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "210/210",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-1280x800-en.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "217/217",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-1280x800-nl.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "217/217",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-1920x1080-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "300/300",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-1920x1080-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "300/300",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-320x568-en.png": {
+  "kb": -55,
+  "toets": 44,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-legs-320x568-nl.png": {
+  "kb": -55,
+  "toets": 44,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-legs-360x640-en.png": {
+  "kb": 15,
+  "toets": 45,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-legs-360x640-nl.png": {
+  "kb": 15,
+  "toets": 45,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-begin-legs-375x667-en.png": {
+  "kb": 18,
+  "toets": 47,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-375x667-nl.png": {
+  "kb": 18,
+  "toets": 47,
+  "kaart": "122/122",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-375x812-en.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "139/139",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-375x812-nl.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "139/139",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-390x844-en.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "143/143",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-390x844-nl.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "143/143",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-430x932-en.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "155/155",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-430x932-nl.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "155/155",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-768x1024-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "164/164",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-begin-legs-768x1024-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "164/164",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-1024x768-en.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "230/230",
+  "afgekapt": "0.x-nm",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-1024x768-nl.png": {
+  "kb": 18,
+  "toets": 56,
+  "kaart": "230/230",
+  "afgekapt": "0.x-nm",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-1280x800-en.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "237/237",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-1280x800-nl.png": {
+  "kb": 18,
+  "toets": 59,
+  "kaart": "237/237",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-1920x1080-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "328/328",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-1920x1080-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "328/328",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-320x568-en.png": {
+  "kb": -75,
+  "toets": 44,
+  "kaart": "142/142",
+  "afgekapt": "0.x-nm 0.x-meta 1.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-sets-320x568-nl.png": {
+  "kb": -75,
+  "toets": 44,
+  "kaart": "142/142",
+  "afgekapt": "0.x-nm 0.x-meta 1.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-sets-360x640-en.png": {
+  "kb": -6,
+  "toets": 45,
+  "kaart": "142/142",
+  "afgekapt": "0.x-nm 0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-sets-360x640-nl.png": {
+  "kb": -6,
+  "toets": 45,
+  "kaart": "142/142",
+  "afgekapt": "0.x-meta 1.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-sets-375x667-en.png": {
+  "kb": 12,
+  "toets": 47,
+  "kaart": "142/142",
+  "afgekapt": "0.x-nm 0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-sets-375x667-nl.png": {
+  "kb": 12,
+  "toets": 47,
+  "kaart": "142/142",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": true
+ },
+ "2sp-sets-375x812-en.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "160/160",
+  "afgekapt": "0.x-nm 0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-375x812-nl.png": {
+  "kb": 18,
+  "toets": 60,
+  "kaart": "160/160",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-390x844-en.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "164/164",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-390x844-nl.png": {
+  "kb": 18,
+  "toets": 63,
+  "kaart": "164/164",
+  "afgekapt": "0.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-430x932-en.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "175/175",
+  "afgekapt": "0.x-meta 1.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-430x932-nl.png": {
+  "kb": 18,
+  "toets": 71,
+  "kaart": "175/175",
+  "afgekapt": "0.x-meta 1.x-meta",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-768x1024-en.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "184/184",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ },
+ "2sp-sets-768x1024-nl.png": {
+  "kb": 18,
+  "toets": 74,
+  "kaart": "184/184",
+  "afgekapt": "",
+  "imp": "in meta",
+  "scroll": false
+ }
+}

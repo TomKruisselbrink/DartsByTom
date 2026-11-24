@@ -1,0 +1,44 @@
+  ✗ bevestig-stop/android-360-nl-dark.png  60 px
+  ✗ bevestig-stop/android-360-nl-light.png  53 px
+  ✗ bevestig-stop/groot-en-dark.png  240 px
+  ✗ bevestig-stop/groot-en-light.png  290 px
+  ✗ bevestig-stop/groot-nl-dark.png  240 px
+  ✗ bevestig-stop/groot-nl-light.png  290 px
+  ✗ bevestig-stop/kantine-1280-en-dark.png  4384 px
+  ✗ bevestig-stop/kantine-1280-en-light.png  3660 px
+  ✗ bevestig-stop/kantine-1280-nl-dark.png  4204 px
+  ✗ bevestig-stop/kantine-1280-nl-light.png  3601 px
+  ✗ bevestig-stop/kantine-1920-en-dark.png  10689 px
+  ✗ bevestig-stop/kantine-1920-en-light.png  9361 px
+  ✗ bevestig-stop/kantine-1920-nl-auto-dark.png  10120 px
+  ✗ bevestig-stop/kantine-1920-nl-dark.png  10113 px
+  ✗ bevestig-stop/kantine-1920-nl-light.png  9027 px
+  ✗ bevestig-stop/mobiel-en-dark.png  80 px
+  ✗ bevestig-stop/mobiel-en-light.png  93 px
+  ✗ bevestig-stop/mobiel-nl-auto-dark.png  128 px
+  ✗ bevestig-stop/mobiel-nl-auto-light.png  93 px
+  ✗ bevestig-stop/mobiel-nl-dark.png  80 px
+  ✗ bevestig-stop/mobiel-nl-light.png  93 px
+  ✗ bevestig-stop/se-en-dark.png  60 px
+  ✗ bevestig-stop/se-en-light.png  53 px
+  ✗ bevestig-stop/se-nl-dark.png  60 px
+  ✗ bevestig-stop/se-nl-light.png  53 px
+  ✗ bevestig-stop/tablet-liggend-nl-dark.png  3576 px
+  ✗ bevestig-stop/tablet-liggend-nl-light.png  2800 px
+  ✗ bevestig-stop/tablet-staand-nl-dark.png  412 px
+  ✗ bevestig-stop/tablet-staand-nl-light.png  479 px
+  ✗ x01-stats-blad/android-360-nl-dark.png  1997 px
+  ✗ x01-stats-blad/android-360-nl-light.png  2253 px
+  ✗ x01-stats-blad/groot-en-dark.png  3129 px
+  ✗ x01-stats-blad/groot-en-light.png  3414 px
+  ✗ x01-stats-blad/groot-nl-dark.png  3243 px
+  ✗ x01-stats-blad/groot-nl-light.png  3512 px
+  ✗ x01-stats-blad/mobiel-en-dark.png  2802 px
+  ✗ x01-stats-blad/mobiel-en-light.png  2951 px
+  ✗ x01-stats-blad/mobiel-nl-auto-dark.png  3012 px
+  ✗ x01-stats-blad/mobiel-nl-auto-light.png  3044 px
+  ✗ x01-stats-blad/mobiel-nl-dark.png  2893 px
+
+visueel: VERSCHIL — 1204/1253 opnames gelijk aan REF, 2871 s. Rapport: tests/visual/out/compare/nu/index.html
+##CASES ok=1204 total=1253
+exit 1

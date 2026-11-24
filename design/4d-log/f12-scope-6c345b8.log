@@ -1,0 +1,4 @@
+✓ x01-stats-blad       20 opnames anders
+✓ bevestig-stop        29 opnames anders, pixels binnen het venster: max 0
+scope 4D-1a: GOED — 1253 opnames, 49 anders, allemaal in toegestane scenario's: true
+exit 0
