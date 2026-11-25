@@ -1,0 +1,20 @@
+{
+ "_uitleg": "Toegestane visuele verschillen voor 4D-1c (X01 op tablet en kantine) t.o.v. de vorige goedgekeurde stand f1340ee (4D-1b). Per stap: alleen deze scenario's én alleen deze viewports mogen veranderen; elk ander verschil = stoppen en melden. Controle: STAP=n node design/scope_4d1c.mjs (na REF=<f1340ee> node tests/visual/compare.mjs). De nulmeting (faf50f0) en de lijst van 4D-1a blijven ongewijzigd.",
+ "stap": "4D-1c X01 grote schermen",
+ "referentie": "f1340ee",
+ "goedgekeurd": "ontwerp: Tom, 25-11-2026 (B1–B6); verschillen per stap: na beoordeling door Tom",
+ "scenarios": {
+  "x01-2sp": "X01-scorebord: banen, matchbalk, route in de kaart, dock",
+  "x01-4sp": "X01-scorebord: tegels in twee kolommen",
+  "x01-teams": "X01-scorebord teams (tegels)",
+  "x01-double-vraag": "X01-scherm achter de double-vraag",
+  "x01-dubbel-kiezen": "X01-scherm achter de dubbelkeuze",
+  "x01-stats-blad": "X01-scherm achter het statistiekenblad",
+  "bevestig-stop": "alleen de X01-achtergrond; het bevestigvenster zelf mag niet veranderen (controle binnen de afgeronde vorm)"
+ },
+ "viewports": {
+  "1": ["tablet-liggend", "kantine-1280", "kantine-1920"],
+  "2": ["tablet-liggend", "kantine-1280", "kantine-1920", "tablet-staand"]
+ },
+ "venster": { "bevestig-stop": ".ask-box" }
+}

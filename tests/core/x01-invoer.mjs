@@ -207,10 +207,11 @@ await T.t('gamebalk niet in X01 (wel in andere spellen); Stats en Stop in de kop
   await p.evaluate(`launchGame('atc',['Tom','Henk'],true,'firstto',1,1,501,0);`); await wait(200);
   ok(await p.evaluate("document.getElementById('game-controls').classList.contains('show')"), 'balk hoort er bij ATC nog wel te zijn');
   await p.setViewportSize({ width: 1920, height: 1080 }); await p.evaluate(L2('[121,140]')); await wait(200);
-  eq(await p.evaluate("[document.querySelectorAll('#x01-side .x01-acts-side .x01-act').length,[...document.querySelectorAll('.x01-act')].filter(function(x){return x.offsetParent}).map(function(x){return !!x.closest('#x01-side')})]"), [2, [true, true]], 'kantine: acties boven de invoerkolom');
+  // 4D-1c (B2, akkoord Tom 25-11): op grote liggende schermen staan Stats/Stop rechtsboven in de matchbalk (#x01-head), niet meer boven het dock
+  eq(await p.evaluate("[...document.querySelectorAll('.x01-act')].filter(function(x){return x.offsetParent}).map(function(x){return !!x.closest('#x01-head')})"), [true, true], 'kantine: Stats/Stop in de matchbalk');
   await p.evaluate('quickScore(60)'); await wait(600);
   const k = await p.evaluate(() => { const f = s => parseFloat(getComputedStyle(document.querySelector(s)).fontSize), hgt = s => Math.round(document.querySelector(s).getBoundingClientRect().height);
-    return { fbs: f('#x01-fbs'), fbr: f('#x01-fbr'), disp: f('#numpad-display'), res: f('#np-res'), who: f('#np-who'), fbn: f('#x01-fbn'), q: f('.x01-q'), undo: hgt('#x01-undo'), act: hgt('#x01-side .x01-act'), fb: hgt('#x01-fb') }; });
+    return { fbs: f('#x01-fbs'), fbr: f('#x01-fbr'), disp: f('#numpad-display'), res: f('#np-res'), who: f('#np-who'), fbn: f('#x01-fbn'), q: f('.x01-q'), undo: hgt('#x01-undo'), act: hgt('#x01-head .x01-act'), fb: hgt('#x01-fb') }; });
   ok(k.fbs >= 40 && k.fbr >= 40 && k.disp >= 40 && k.res >= 28 && k.who >= 15 && k.fbn >= 15 && k.q >= 15 && k.undo >= 52 && k.act >= 52 && k.fb >= 64, 'kantinematen (K12): ' + JSON.stringify(k));
   await p.setViewportSize({ width: 390, height: 844 });
 });

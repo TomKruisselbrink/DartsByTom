@@ -7,10 +7,11 @@ const L501 = `launchGame('501',['Tom','Henk'],true,'firstto',3,1,501,0);state.sc
 const metric = () => { const sc = document.querySelector('#sb-players .x-score'), pad = document.querySelector('.x01-pad').getBoundingClientRect(), gc = document.getElementById('game-controls').getBoundingClientRect();
   const hits = [...document.querySelectorAll('#screen-game button')].filter(e => { const q = e.getBoundingClientRect(); return q.height > 2 && q.bottom > gc.top + 1 && q.top < gc.bottom - 1 && q.right > gc.left + 1 && q.left < gc.right - 1; }).length;
   return { font: parseFloat(getComputedStyle(sc).fontSize), padW: pad.width, hits, ov: document.documentElement.scrollWidth > innerWidth + 1 }; };
-for (const [w, h, min] of [[1920, 1080, 160], [1280, 800, 110], [1600, 900, 120]]) await S.t(`501 liggend ${w}×${h}: score ≥ ${min}px, numpad ≤ 520px, niets onder de spelbalk`, async () => {
+// 4D-1c (akkoord Tom 25-11): invoerdock clamp(380px, 32vw, 600px) i.p.v. max. 520 px
+for (const [w, h, min] of [[1920, 1080, 160], [1280, 800, 110], [1600, 900, 120]]) await S.t(`501 liggend ${w}×${h}: score ≥ ${min}px, numpad ≤ 600px, niets onder de spelbalk`, async () => {
   const { p, errs } = await page(b, { db: DB('Tom', 'Henk'), viewport: { width: w, height: h }, fast: 10 }); await open(p, 500);
   await p.evaluate(L501); await wait(250); const r = await p.evaluate(metric);
-  ok(r.font >= min, 'score ' + r.font); ok(r.padW <= 520.5, 'numpad ' + r.padW); eq(r.hits, 0, 'knoppen onder spelbalk'); ok(!r.ov, 'overloop');
+  ok(r.font >= min, 'score ' + r.font); ok(r.padW <= 600.5, 'numpad ' + r.padW); eq(r.hits, 0, 'knoppen onder spelbalk'); ok(!r.ov, 'overloop');
   if (errs.length) throw new Error('pageerror ' + errs[0]); await p.close();
 });
 await S.t('oefenspellen liggend 1280×800 en 1366×768: invoer rechts, doel links, niets onder de spelbalk', async () => {

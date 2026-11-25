@@ -1,0 +1,448 @@
+{
+ "opnames": 1253,
+ "verschillend": 41,
+ "perScenario": {
+  "x01-2sp": {
+   "verschillend": 11,
+   "maxPixelsInVenster": 0,
+   "ok": true
+  },
+  "x01-4sp": {
+   "verschillend": 11,
+   "maxPixelsInVenster": 0,
+   "ok": true
+  },
+  "x01-teams": {
+   "verschillend": 2,
+   "maxPixelsInVenster": 0,
+   "ok": true
+  },
+  "x01-double-vraag": {
+   "verschillend": 2,
+   "maxPixelsInVenster": 0,
+   "ok": true
+  },
+  "x01-dubbel-kiezen": {
+   "verschillend": 2,
+   "maxPixelsInVenster": 0,
+   "ok": true
+  },
+  "x01-stats-blad": {
+   "verschillend": 2,
+   "maxPixelsInVenster": 0,
+   "ok": true
+  },
+  "bevestig-stop": {
+   "verschillend": 11,
+   "maxPixelsInVenster": 5,
+   "ok": false
+  }
+ },
+ "details": [
+  {
+   "file": "x01-2sp/kantine-1280-nl-light.png",
+   "vp": "kantine-1280",
+   "pixels": 158480,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1280-nl-dark.png",
+   "vp": "kantine-1280",
+   "pixels": 305182,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1280-en-light.png",
+   "vp": "kantine-1280",
+   "pixels": 159864,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1280-en-dark.png",
+   "vp": "kantine-1280",
+   "pixels": 305606,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1920-nl-light.png",
+   "vp": "kantine-1920",
+   "pixels": 268213,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1920-nl-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 603271,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1920-en-light.png",
+   "vp": "kantine-1920",
+   "pixels": 270336,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1920-en-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 604507,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 109540,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 230713,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-2sp/kantine-1920-nl-auto-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 302846,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1280-nl-light.png",
+   "vp": "kantine-1280",
+   "pixels": 112045,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1280-nl-dark.png",
+   "vp": "kantine-1280",
+   "pixels": 215174,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1280-en-light.png",
+   "vp": "kantine-1280",
+   "pixels": 112679,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1280-en-dark.png",
+   "vp": "kantine-1280",
+   "pixels": 216483,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1920-nl-light.png",
+   "vp": "kantine-1920",
+   "pixels": 193634,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1920-nl-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 399530,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1920-en-light.png",
+   "vp": "kantine-1920",
+   "pixels": 194811,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1920-en-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 400635,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 90865,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 175969,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-4sp/kantine-1920-nl-auto-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 264748,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-teams/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 80597,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-teams/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 167814,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-double-vraag/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 29636,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-double-vraag/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 23406,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-dubbel-kiezen/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 18752,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-dubbel-kiezen/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 12553,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-stats-blad/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 46399,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "x01-stats-blad/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 45152,
+   "toegestaan": true,
+   "pixelsInVenster": null,
+   "ok": true
+  },
+  {
+   "file": "bevestig-stop/kantine-1280-nl-light.png",
+   "vp": "kantine-1280",
+   "pixels": 84749,
+   "toegestaan": true,
+   "pixelsInVenster": 5,
+   "venster": [
+    470,
+    321,
+    810,
+    479,
+    20
+   ],
+   "ok": false
+  },
+  {
+   "file": "bevestig-stop/kantine-1280-nl-dark.png",
+   "vp": "kantine-1280",
+   "pixels": 86055,
+   "toegestaan": true,
+   "pixelsInVenster": 2,
+   "venster": [
+    470,
+    321,
+    810,
+    479,
+    20
+   ],
+   "ok": false
+  },
+  {
+   "file": "bevestig-stop/kantine-1280-en-light.png",
+   "vp": "kantine-1280",
+   "pixels": 85752,
+   "toegestaan": true,
+   "pixelsInVenster": 5,
+   "venster": [
+    470,
+    321,
+    810,
+    479,
+    20
+   ],
+   "ok": false
+  },
+  {
+   "file": "bevestig-stop/kantine-1280-en-dark.png",
+   "vp": "kantine-1280",
+   "pixels": 87024,
+   "toegestaan": true,
+   "pixelsInVenster": 2,
+   "venster": [
+    470,
+    321,
+    810,
+    479,
+    20
+   ],
+   "ok": false
+  },
+  {
+   "file": "bevestig-stop/kantine-1920-nl-light.png",
+   "vp": "kantine-1920",
+   "pixels": 166740,
+   "toegestaan": true,
+   "pixelsInVenster": 3,
+   "venster": [
+    790,
+    461,
+    1130,
+    619,
+    20
+   ],
+   "ok": false
+  },
+  {
+   "file": "bevestig-stop/kantine-1920-nl-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 166937,
+   "toegestaan": true,
+   "pixelsInVenster": 0,
+   "venster": [
+    790,
+    461,
+    1130,
+    619,
+    20
+   ],
+   "ok": true
+  },
+  {
+   "file": "bevestig-stop/kantine-1920-en-light.png",
+   "vp": "kantine-1920",
+   "pixels": 168574,
+   "toegestaan": true,
+   "pixelsInVenster": 3,
+   "venster": [
+    790,
+    461,
+    1130,
+    619,
+    20
+   ],
+   "ok": false
+  },
+  {
+   "file": "bevestig-stop/kantine-1920-en-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 168891,
+   "toegestaan": true,
+   "pixelsInVenster": 0,
+   "venster": [
+    790,
+    461,
+    1130,
+    619,
+    20
+   ],
+   "ok": true
+  },
+  {
+   "file": "bevestig-stop/tablet-liggend-nl-light.png",
+   "vp": "tablet-liggend",
+   "pixels": 60491,
+   "toegestaan": true,
+   "pixelsInVenster": 0,
+   "venster": [
+    342,
+    305,
+    682,
+    463,
+    20
+   ],
+   "ok": true
+  },
+  {
+   "file": "bevestig-stop/tablet-liggend-nl-dark.png",
+   "vp": "tablet-liggend",
+   "pixels": 60393,
+   "toegestaan": true,
+   "pixelsInVenster": 0,
+   "venster": [
+    342,
+    305,
+    682,
+    463,
+    20
+   ],
+   "ok": true
+  },
+  {
+   "file": "bevestig-stop/kantine-1920-nl-auto-dark.png",
+   "vp": "kantine-1920",
+   "pixels": 165227,
+   "toegestaan": true,
+   "pixelsInVenster": 5,
+   "venster": [
+    790,
+    461,
+    1130,
+    619,
+    20
+   ],
+   "ok": false
+  }
+ ]
+}
