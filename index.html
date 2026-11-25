@@ -505,6 +505,7 @@ body::before{
   #x01-head .g-head-r{font-size:clamp(16px,2.1vh,28px);display:flex;align-items:baseline;gap:.5em;text-transform:uppercase;letter-spacing:.04em;color:var(--text-soft)}
   #x01-head .g-head-r b{display:inline;font-size:clamp(30px,5vh,64px);font-family:var(--ff-display);line-height:1}
   #x01-head .x01-acts{display:flex;gap:clamp(8px,.8vw,14px)}
+  #x01-head .x-hm-long{display:none} #x01-head .x-hm-short{display:inline} /* geen dubbele BEURT: links de naam, rechts BEURT n */
   #screen-game .x01-act{width:clamp(48px,5.6vh,76px);height:clamp(48px,5.6vh,76px)}
   #screen-game .x01-act svg{width:40%;height:40%}
   /* kaarten, gedeeld */
@@ -513,7 +514,7 @@ body::before{
   #screen-game #sb-players .x-card .x-score{font-size:var(--p-score);margin:0;line-height:.86;letter-spacing:-.01em}
   #screen-game #sb-players .x-card:not(.on) .x-score{opacity:.72}
   #screen-game #sb-players .x-card .x-name{font-size:var(--p-name);gap:.2em var(--sp-4);white-space:normal;flex-wrap:wrap;line-height:1.1}
-  #screen-game #sb-players .x-card .x-nm{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;white-space:normal;overflow-wrap:anywhere} /* lange namen (24 tekens): max. twee regels */
+  #screen-game #sb-players .x-card .x-nm{overflow:visible;white-space:normal;overflow-wrap:anywhere;text-overflow:clip} /* lange namen (max. 24 tekens) altijd volledig: mogen over meerdere regels, nooit … */
   #screen-game #sb-players .x-card .x-top,#screen-game #sb-players .x-card .x-route,#screen-game #sb-players .x-card .x-meta,#screen-game #sb-players .x-card .co-hint{justify-self:stretch;min-width:0}
   #screen-game #sb-players .x-dot{display:none}
   #screen-game #sb-players .x-card .x-turn,#screen-game #sb-players .x-card .x-last{font-size:var(--p-tag);padding:.1em .5em;border-radius:var(--r-md)}
@@ -578,9 +579,9 @@ body::before{
   html.x01-nocq #screen-game #sb-players:not(.x-compact) .x-card{--p-score:min(27vh,21vw,460px);--p-name:clamp(20px,min(5vh,3vw),72px);--p-tag:clamp(14px,2.6vh,30px);--p-meta:clamp(15px,3vh,34px);--p-legs:clamp(28px,min(7.5vh,4.4vw),110px);--p-chip:clamp(15px,2.4vh,32px);--p-route:clamp(20px,min(4.6vh,2.2vw),66px)}
   html.x01-nocq #screen-game #sb-players[data-n="1"] .x-card{--p-score:min(50vh,20vw,460px)}
   html.x01-nocq #screen-game #sb-players[data-n="3"] .x-card{--p-score:min(18vh,21vw);--p-name:clamp(20px,3.4vh,72px);--p-tag:clamp(14px,1.9vh,30px);--p-meta:clamp(15px,2.2vh,34px);--p-legs:clamp(28px,5vh,110px);--p-chip:clamp(15px,2.2vh,32px);--p-route:clamp(18px,min(3.6vh,2vw),66px)}
-  html.x01-nocq #screen-game #sb-players.x-compact:not([data-n="3"]) .x-card{--p-score:min(17vh,15vw);--p-name:clamp(18px,4vh,64px);--p-tag:clamp(13px,2vh,28px);--p-meta:clamp(15px,2.2vh,32px);--p-legs:clamp(24px,4.6vh,80px);--p-chip:clamp(14px,2.3vh,32px);--p-route:clamp(18px,min(3.8vh,2.2vw),56px)}
+  html.x01-nocq #screen-game #sb-players.x-compact:not([data-n="3"]) .x-card{--p-score:min(17vh,15vw);--p-name:clamp(18px,min(4vh,2.2vw),64px);--p-tag:clamp(13px,2vh,28px);--p-meta:clamp(15px,2.2vh,32px);--p-legs:clamp(24px,4.6vh,80px);--p-chip:clamp(14px,2.3vh,32px);--p-route:clamp(18px,min(3.8vh,2.2vw),56px)}
   @media (max-width:1400px){html.x01-nocq #screen-game #sb-players:not(.x-compact) .x-route .x-co-lbl,html.x01-nocq #screen-game #sb-players[data-n="3"] .x-route .x-co-lbl{display:none}}
-  html.x01-nocq #screen-game #sb-players.x-compact.x-many:not([data-n="3"]) .x-card{--p-score:min(12.5vh,15vw);--p-name:clamp(18px,2.8vh,64px);--p-tag:clamp(13px,1.6vh,28px);--p-meta:clamp(15px,1.7vh,32px);--p-legs:clamp(24px,3.2vh,80px);--p-chip:clamp(14px,1.8vh,32px);--p-route:clamp(18px,2.6vh,56px)}
+  html.x01-nocq #screen-game #sb-players.x-compact.x-many:not([data-n="3"]) .x-card{--p-score:min(12.5vh,15vw);--p-name:clamp(18px,min(2.8vh,2.2vw),64px);--p-tag:clamp(13px,1.6vh,28px);--p-meta:clamp(15px,1.7vh,32px);--p-legs:clamp(24px,3.2vh,80px);--p-chip:clamp(14px,1.8vh,32px);--p-route:clamp(18px,2.6vh,56px)}
   html.x01-nocq #screen-game #sb-players.x-compact:not([data-n="3"]) .x-card.x-long,html.x01-nocq #screen-game #sb-players.x-compact:not([data-n="3"]) .x-card.x-imp-card{--p-score:min(13vh,15vw)}
   html.x01-nocq #screen-game #sb-players.x-compact.x-many:not([data-n="3"]) .x-card.x-long,html.x01-nocq #screen-game #sb-players.x-compact.x-many:not([data-n="3"]) .x-card.x-imp-card{--p-score:min(7vh,15vw)}
   html.x01-nocq #screen-game #sb-players.x-compact:not([data-n="3"]) .x-card.x-long.on{--p-score:min(10vh,15vw)}
@@ -588,6 +589,7 @@ body::before{
 }
 /* telefoon/tablet staand: de route in de kaart bestaat alleen voor de grote opstelling */
 .x-route{display:none}
+.x-hm-short{display:none} /* kop zonder legs (toernooi, 1 leg): korte variant (alleen de naam) alleen op grote liggende schermen */
 /* gedeelde spelcomponenten */.sp-row{padding:var(--sp-5) 0;border-top:1px solid var(--border)}
 .sp-row:first-child{border-top:0;padding-top:var(--sp-1)}
 .sp-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);margin-bottom:var(--sp-4)}
@@ -8246,6 +8248,9 @@ function renderGame(){
     var _main=(hasLegs&&!state.trnMode)?('Leg '+(state.currentLeg||1)+(state.matchSets>1?' · set '+(state.currentSet||1):'')):('Beurt '+_esc(state.players[cur]));
     _hd.innerHTML='<div class="g-head-l"><span class="g-head-sub">'+_sub+'</span><span class="g-head-main">'+_main+'</span></div>'+
       '<div class="x01-hr"><div class="g-head-r">Beurt<b>'+_beurt+'</b></div><span class="x01-acts"><button type="button" class="x01-act" onclick="toggleX01Stats()" aria-label="Statistieken"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8"/></svg></button><button type="button" class="x01-act x01-stop" onclick="confirmEndGame()" aria-label="Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></button></span></div>';
+    // 4D-1c: kop zonder legs (toernooi, 1 leg) = "Beurt <naam>"; op grote liggende schermen staat rechts al BEURT n,
+    // dus daar alleen de naam (CSS wisselt .x-hm-long/.x-hm-short). Met DOM-functies, de naam als tekst.
+    if(!(hasLegs&&!state.trnMode)){var _hm=_hd.querySelector('.g-head-main');if(_hm){var _hl=document.createElement('span');_hl.className='x-hm-long';while(_hm.firstChild)_hl.appendChild(_hm.firstChild);var _hs=document.createElement('span');_hs.className='x-hm-short';_hs.textContent=state.players[cur];_hm.appendChild(_hl);_hm.appendChild(_hs);}}
   }
   if(false){
     msBar.style.display='block';

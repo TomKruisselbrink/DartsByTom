@@ -93,3 +93,71 @@ Vellen (in de zip, niet in de repo):
 4. **Tablet liggend, 1–2 spelers:** de 18-px-voorwaarde voor de route kost 26 px score (zie §2).
 5. **Echt apparaat:** alleen Chromium getest. Op de Evolve en iPad (Safari) handmatig: leesbaarheid vanaf 4–6 m, Stop rechtsboven bereikbaar, toetsen van 140–160 px prettig.
 6. **Stap 2 (tablet staand)** is nog niet gedaan.
+
+---
+
+# Correcties op stap 1 (verzoek Tom 25-11, vóór stap 2)
+
+Basis `0dabcbf`. Geen andere ontwerpwijzigingen. Spelregels, scores, checkout, opslag, Firebase, sync, `main`, `APP_VERSION`, nulmeting, allowlists en ratchets zijn niet aangeraakt.
+
+## Correctie 1 — geen dubbele BEURT in de kop
+
+- **Probleem:** zonder legstand (toernooi, en ook bij een potje van 1 leg) is de kop links "BEURT <naam>". Op grote liggende schermen staat rechts in de matchbalk al "BEURT n".
+- **Oplossing:**
+  - `renderGame` zet na het opbouwen van de kop de bestaande tekst in `.x-hm-long` en voegt `.x-hm-short` toe (alleen de naam, via `textContent`).
+  - Op grote liggende schermen toont CSS de korte variant: links **HENK**, rechts **BEURT 4**.
+  - Op telefoon en tablet staand blijft de lange variant zichtbaar ("Beurt Henk"; rechts staat daar "Beurt n" klein), pixel-gelijk.
+- **Ook bij 1 leg:** dezelfde dubbele aanduiding zat in elk potje zonder legstand. Die heb ik met dezelfde regel meegenomen, omdat het hetzelfde element is. Daardoor veranderen ook de visuele opnames van `x01-4sp`, `x01-teams` en de double-vraag/dubbelkeuze, want die scenario's spelen 1 leg.
+- **Inhoud toernooibalk behouden:** "LEG 1 VAN 3 · <speler> 0 – 0 <speler>" bovenaan is ongewijzigd. In de matchbalk staan nog steeds wie gooit (naam), de regels ("501 · DOUBLE OUT") en BEURT n.
+- **Engels:** de lange variant wordt vertaald zoals voorheen; de korte is alleen de naam.
+
+## Correctie 2 — lange namen altijd volledig (ook in de terugval)
+
+- **Oorzaak:**
+  - Op grote schermen was de naam begrensd op twee regels met "…" (`-webkit-line-clamp:2`).
+  - In de terugval was de naam in tegels groter (4 vh = 31 px op 1024×768) dan in de containermatenweergave (≈ 19 px). Daardoor waren er drie regels nodig, dus "…".
+- **Oplossing:**
+  - Geen inkorting meer op grote schermen: de naam mag over meerdere regels, nooit "…".
+  - Naamgrootte in de terugval: tegels `clamp(18px, min(4vh, 2,2vw), 64px)`, 5–6 spelers `min(2,8vh, 2,2vw)`. Dat benadert 8 % van de tegelbreedte, zoals de containermaten.
+  - De score hoefde daarvoor niet kleiner. De bestaande `x-long`-regels (iets kleinere score in tegels bij een lange naam) blijven ongewijzigd.
+- **Telefoon:** ongewijzigd. Daar kort de naam af met "…" zoals in 4D-1a; dat valt buiten deze correctie.
+- **Nog wel ingekort:** in het invoerdock (terugmelding "WILHELMIN…", invoerregel "MAXIMILIAAN VAN BERGEN…") worden lange namen nog steeds ingekort. Dat is het 4D-1b-dock, op elk scherm, en hoort niet bij de spelerskaarten. Niet aangepast; jouw keuze of dat ook moet.
+
+## Tests
+
+| Controle | Resultaat |
+|---|---|
+| `npm test` | **162/162** in 36 suites |
+| `x01-groot` (uitgebreid) | Naam volledig (geen "…", niets buiten de kaart) bij **lange namen 1, 2, 3, 4, 5 en 6 spelers**, 4 spelers met de laatste aan de beurt, 6 spelers met "niet uitgooibaar" en toernooi met lange namen; 4 formaten; containermaten **én** terugval. Kop zonder dubbele BEURT bij toernooi en bij 1 leg: links de naam, rechts BEURT n. |
+| Bijzondere situaties, volledige matrix (`design/special_4d1c.mjs`, uitgebreid met lange namen 1/5 en toernooi met lange namen) | Containermaten: **448/448** zonder bevindingen (14 situaties × 4 formaten × 4 themastanden × NL/EN). Terugval: **224/224** (licht/donker × NL/EN). Geen enkele naam ingekort. |
+| Mutaties | Nieuw: "lange naam weer ingekort" en "kop toont weer BEURT <naam>": beide gevangen. Volledige run: zie onder. |
+| Telefoon + tablet staand pixel-gelijk | **60/60** eigen opnames (360, 375, 390, 430, 844×390 liggend, 768×1024 × licht/donker × 1/2/3/4/6 spelers) identiek aan f1340ee. In de visuele test geen enkele telefoon- of tablet-staandopname anders. |
+
+## Visuele vergelijking
+
+- **T.o.v. 0dabcbf (stap 1):** **17 van 1253 opnames anders**, allemaal alleen in de kop linksboven (verschilvak bijv. 1920×1080: x 34–471, y 45–177). Reden: 1 leg, dus "BEURT TOM" wordt "TOM".
+  - `x01-4sp`: tablet-liggend 2, kantine-1280 4, kantine-1920 5 (incl. automatisch donker).
+  - `x01-teams`, `x01-double-vraag`, `x01-dubbel-kiezen`: tablet-liggend 2 elk.
+  - **Niet** anders: `x01-2sp`, `x01-stats-blad`, `bevestig-stop` (die scenario's hebben een legstand), alle telefoons, tablet staand en alle andere spellen.
+  - Correctie 2 is in de testmatrix niet zichtbaar (geen lange namen in de scenario's); zie vel `2-lange-namen-1024.png`.
+- **T.o.v. f1340ee (`STAP=1 node design/scope_4d1c.mjs`):** 41 anders, dezelfde scenario's en viewports als na stap 1. Rood op dezelfde 7 Stop-opnames, met dezelfde 2–5 randpixels (≤ 0,3 px van de afgeronde rand; zie stap 1).
+- **T.o.v. de nulmeting faf50f0:** zie onder.
+- **T.o.v. de nulmeting faf50f0:** 1086 gelijk, 167 anders, in dezelfde 7 X01-scenario's als na 4D-1b en stap 1. De 4D-1a-scopecontrole meet een rechthoek en meldt daarom de hoeken van het Stop-venster (bekend sinds 4D-1b); binnen de afgeronde vorm ≤ 0,34 px van de rand.
+
+## Volledige mutatierun en een correctie op mijn verslag van stap 1
+
+- `REF=<huidige code> node tests/mutation.mjs --visual`: **2 mutaties vonden hun zoektekst niet**:
+  - "kantine-legsgetal weer 17 px";
+  - "'niet uitgooibaar' op de kantine weer 12 px".
+- Ze wezen naar het ≥ 1600 px-blok dat in stap 1 is opgegaan in het 4D-1c-blok. **Dat zat al in stap 1.** Daar had ik alleen de nieuwe 4D-1c-mutaties gedraaid, niet de volledige run. Mijn melding "9/9 gevangen" klopte dus, maar de volledige mutatiesuite was in stap 1 niet groen.
+- Hersteld door beide mutaties naar de nieuwe code te laten wijzen; dezelfde fout wordt nagebootst:
+  - legsgetal vast 17 px i.p.v. `--p-legs`;
+  - `.x-imp` niet meer in de meta-maat.
+- Beide worden nu gevangen door `x01-kaart`. Daarmee is de volledige run **51/51 gevangen**. Geen allowlist of ratchet aangepast.
+
+## Gewijzigde bestanden
+
+- `index.html`: kop (`.x-hm-long`/`.x-hm-short` in `renderGame` + CSS), naamregels op grote schermen (geen inkorting), naamgrootte in de terugval.
+- `tests/core/x01-groot.mjs`: naam volledig, kop zonder dubbele BEURT, lange namen 1–6, toernooi met lange namen, 1 leg.
+- `tests/mutation.mjs`: 2 nieuwe mutaties, 2 bestaande naar de nieuwe code.
+- `design/special_4d1c.mjs`: lange namen 1/5, toernooi met lange namen, controle naam volledig en kop.

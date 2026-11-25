@@ -10,6 +10,9 @@ const SC = {
   'toernooi': `trnPlayers=['Tom','Jorn','Imke','Henk'];trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();[...document.querySelectorAll('#screen-trn-overview button')].find(b=>/Speel leg/.test(b.textContent)).click();${W(300)}trnChooseStart(0);trnConfirmStart();${W(300)}${PLAY([[100, 60], [140, 85], [60, 45]])}`,
   'sets': `launchGame('501',['Tom','Jorn'],true,'firstto',3,3,501,0);state.setWins=[1,0];state.legsInSet=[1,2];renderGame();${PLAY([[100, 60], [140, 85], [60, 45], [60, 84]])}`,
   'teams': `_pendingTeams=[0,1,0,1];launchGame('501',['Tom','Jorn','Imke','Henk'],true,'firstto',3,1,501,0);${PLAY([[100, 60, 81, 45], [140, 85, 100, 26]])}`,
+  'lange-namen-1': `launchGame('501',${JSON.stringify(LN.slice(0, 1))},true,'firstto',3,1,501,0);renderGame();${PLAY([[100], [140], [60], [60]])}`,
+  'lange-namen-5': `launchGame('501',${JSON.stringify(LN.slice(0, 5))},true,'firstto',3,1,501,0);renderGame();${PLAY([[100, 60, 81, 45, 45], [140, 85, 100, 26, 100]])}`,
+  'toernooi-lange-namen': `trnPlayers=${JSON.stringify(LN.slice(0, 4))};trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();[...document.querySelectorAll('#screen-trn-overview button')].find(b=>/Speel leg/.test(b.textContent)).click();${W(300)}trnChooseStart(0);trnConfirmStart();${W(300)}${PLAY([[100, 60], [140, 85], [60, 45]])}`,
   'lange-namen-2': `launchGame('501',${JSON.stringify(LN.slice(0, 2))},true,'firstto',3,1,501,0);state.legWins=[1,1];renderGame();${PLAY([[100, 60], [140, 85], [60, 45], [60, 84]])}`,
   'lange-namen-3': `launchGame('501',${JSON.stringify(LN.slice(0, 3))},true,'firstto',3,1,501,0);renderGame();${PLAY([[100, 60, 81], [140, 85, 100], [60, 45, 140], [60, 84, 84]])}`,
   'lange-namen-4': `launchGame('501',${JSON.stringify(LN.slice(0, 4))},true,'firstto',3,1,501,0);renderGame();${PLAY([[100, 60, 81, 45], [140, 85, 100, 26], [60, 45, 140, 60], [60, 84, 84, 60]])}`,
@@ -40,12 +43,13 @@ for (const [w, h] of VP) for (const th of TH) for (const lang of LANGS) for (con
     document.querySelectorAll('#sb-players .x-card').forEach((c, i) => {
       const cr = c.getBoundingClientRect();
       for (const s of ['.x-nm', '.x-meta', '.x-imp', '.x-turn', '.x-route', '.x-legs', '.co-hint']) { const e = c.querySelector(s); if (tr(e)) out.trunc.push(i + s); }
-      const nm = c.querySelector('.x-nm'); if (vis(nm) && nm.scrollHeight > nm.clientHeight + 1) out.clamp = (out.clamp || []).concat(i);
+      const nm = c.querySelector('.x-nm'); if (vis(nm) && (nm.scrollHeight > nm.clientHeight + 1 || nm.scrollWidth > nm.clientWidth + 1)) out.clamp = (out.clamp || []).concat(i);
       const els = [...c.querySelectorAll('.x-top,.x-legs,.x-score,.x-route,.x-meta,.x-imp,.co-hint')].filter(e => vis(e) && e.getBoundingClientRect().width > 0 && e.textContent.trim());
       for (const e of els) { const r = e.getBoundingClientRect(); if (r.left < cr.left - 1 || r.right > cr.right + 1 || r.top < cr.top - 1 || r.bottom > cr.bottom + 1) out.outside.push(i + '.' + e.className.split(' ')[0]); }
       for (let a = 0; a < els.length; a++) for (let k = a + 1; k < els.length; k++) { const A = els[a].getBoundingClientRect(), B = els[k].getBoundingClientRect();
         const ix = Math.min(A.right, B.right) - Math.max(A.left, B.left), iy = Math.min(A.bottom, B.bottom) - Math.max(A.top, B.top); if (ix > 2 && iy > 2) out.overlap.push(i + ':' + els[a].className.split(' ')[0] + '×' + els[k].className.split(' ')[0]); }
     });
+    const hm = document.querySelector('#x01-head .g-head-main'); out.kop = hm ? hm.innerText.trim() + ' | ' + document.querySelector('#x01-head .g-head-r').innerText.trim().replace(/\s+/g, ' ') : '';
     const hd = document.querySelector('#x01-head'); if (hd && hd.scrollWidth > hd.clientWidth + 1) out.trunc.push('kop');
     const bar = document.querySelector('#trn-leg-bar'); out.trn = bar && vis(bar) ? bar.textContent : '';
     out.scroll = document.scrollingElement.scrollHeight > innerHeight + 2;
@@ -58,7 +62,9 @@ for (const [w, h] of VP) for (const th of TH) for (const lang of LANGS) for (con
   await p.screenshot({ path: path.join(OUT, idn + '.png') }); await ctx.close();
 }
 await b.close(); fs.writeFileSync(path.join(OUT, 'special.json'), JSON.stringify(res, null, 1));
-const bad = res.filter(r => r.errs.length || r.scroll || r.trunc.length || r.overlap.length || r.outside.length || r.scr !== 'screen-game');
+const bad = res.filter(r => r.errs.length || r.scroll || r.trunc.length || r.overlap.length || r.outside.length || r.clamp.length || r.scr !== 'screen-game' || (/^beurt\b/i.test(r.kop) && innerWidthOf(r) >= 1000));
+function innerWidthOf(r) { return +r.id.match(/-(\d+)x\d+-/)[1]; }
 for (const r of bad) console.log('✗', r.id, JSON.stringify({ e: r.errs, s: r.scroll, t: r.trunc, o: r.overlap, u: r.outside, scr: r.scr }));
-for (const r of res) if (r.clamp.length) console.log('… naam ingekort (2 regels + …):', r.id, r.clamp.join(','));
+for (const r of res) if (r.clamp.length) console.log('… naam niet volledig:', r.id, r.clamp.join(','));
+for (const r of res) if (/toernooi/.test(r.id) && /-1920x1080-dark-nl$/.test(r.id)) console.log('kop', r.id, r.kop);
 console.log(`bijzonder: ${res.length - bad.length}/${res.length} zonder bevindingen`);

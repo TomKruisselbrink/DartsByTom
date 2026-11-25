@@ -50,7 +50,7 @@
   {
    "file": "x01-2sp/kantine-1280-nl-dark.png",
    "vp": "kantine-1280",
-   "pixels": 305182,
+   "pixels": 305178,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -66,7 +66,7 @@
   {
    "file": "x01-2sp/kantine-1280-en-dark.png",
    "vp": "kantine-1280",
-   "pixels": 305606,
+   "pixels": 305602,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -74,7 +74,7 @@
   {
    "file": "x01-2sp/kantine-1920-nl-light.png",
    "vp": "kantine-1920",
-   "pixels": 268213,
+   "pixels": 268254,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -82,7 +82,7 @@
   {
    "file": "x01-2sp/kantine-1920-nl-dark.png",
    "vp": "kantine-1920",
-   "pixels": 603271,
+   "pixels": 603299,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -90,7 +90,7 @@
   {
    "file": "x01-2sp/kantine-1920-en-light.png",
    "vp": "kantine-1920",
-   "pixels": 270336,
+   "pixels": 270379,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -98,7 +98,7 @@
   {
    "file": "x01-2sp/kantine-1920-en-dark.png",
    "vp": "kantine-1920",
-   "pixels": 604507,
+   "pixels": 604531,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -114,7 +114,7 @@
   {
    "file": "x01-2sp/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 230713,
+   "pixels": 230708,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -122,7 +122,7 @@
   {
    "file": "x01-2sp/kantine-1920-nl-auto-dark.png",
    "vp": "kantine-1920",
-   "pixels": 302846,
+   "pixels": 302873,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -130,7 +130,7 @@
   {
    "file": "x01-4sp/kantine-1280-nl-light.png",
    "vp": "kantine-1280",
-   "pixels": 112045,
+   "pixels": 111090,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -138,7 +138,7 @@
   {
    "file": "x01-4sp/kantine-1280-nl-dark.png",
    "vp": "kantine-1280",
-   "pixels": 215174,
+   "pixels": 214087,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -146,7 +146,7 @@
   {
    "file": "x01-4sp/kantine-1280-en-light.png",
    "vp": "kantine-1280",
-   "pixels": 112679,
+   "pixels": 111234,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -154,7 +154,7 @@
   {
    "file": "x01-4sp/kantine-1280-en-dark.png",
    "vp": "kantine-1280",
-   "pixels": 216483,
+   "pixels": 214852,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -162,7 +162,7 @@
   {
    "file": "x01-4sp/kantine-1920-nl-light.png",
    "vp": "kantine-1920",
-   "pixels": 193634,
+   "pixels": 191924,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -170,7 +170,7 @@
   {
    "file": "x01-4sp/kantine-1920-nl-dark.png",
    "vp": "kantine-1920",
-   "pixels": 399530,
+   "pixels": 397772,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -178,7 +178,7 @@
   {
    "file": "x01-4sp/kantine-1920-en-light.png",
    "vp": "kantine-1920",
-   "pixels": 194811,
+   "pixels": 192262,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -186,7 +186,7 @@
   {
    "file": "x01-4sp/kantine-1920-en-dark.png",
    "vp": "kantine-1920",
-   "pixels": 400635,
+   "pixels": 397769,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -194,7 +194,7 @@
   {
    "file": "x01-4sp/tablet-liggend-nl-light.png",
    "vp": "tablet-liggend",
-   "pixels": 90865,
+   "pixels": 90109,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -202,7 +202,7 @@
   {
    "file": "x01-4sp/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 175969,
+   "pixels": 175035,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -210,7 +210,7 @@
   {
    "file": "x01-4sp/kantine-1920-nl-auto-dark.png",
    "vp": "kantine-1920",
-   "pixels": 264748,
+   "pixels": 262990,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -218,7 +218,7 @@
   {
    "file": "x01-teams/tablet-liggend-nl-light.png",
    "vp": "tablet-liggend",
-   "pixels": 80597,
+   "pixels": 79854,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -226,7 +226,7 @@
   {
    "file": "x01-teams/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 167814,
+   "pixels": 166884,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -234,7 +234,7 @@
   {
    "file": "x01-double-vraag/tablet-liggend-nl-light.png",
    "vp": "tablet-liggend",
-   "pixels": 29636,
+   "pixels": 28942,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -242,7 +242,7 @@
   {
    "file": "x01-double-vraag/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 23406,
+   "pixels": 22728,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -250,7 +250,7 @@
   {
    "file": "x01-dubbel-kiezen/tablet-liggend-nl-light.png",
    "vp": "tablet-liggend",
-   "pixels": 18752,
+   "pixels": 18058,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -258,7 +258,7 @@
   {
    "file": "x01-dubbel-kiezen/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 12553,
+   "pixels": 11875,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -266,7 +266,7 @@
   {
    "file": "x01-stats-blad/tablet-liggend-nl-light.png",
    "vp": "tablet-liggend",
-   "pixels": 46399,
+   "pixels": 46400,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -274,7 +274,7 @@
   {
    "file": "x01-stats-blad/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 45152,
+   "pixels": 45150,
    "toegestaan": true,
    "pixelsInVenster": null,
    "ok": true
@@ -282,7 +282,7 @@
   {
    "file": "bevestig-stop/kantine-1280-nl-light.png",
    "vp": "kantine-1280",
-   "pixels": 84749,
+   "pixels": 84748,
    "toegestaan": true,
    "pixelsInVenster": 5,
    "venster": [
@@ -297,7 +297,7 @@
   {
    "file": "bevestig-stop/kantine-1280-nl-dark.png",
    "vp": "kantine-1280",
-   "pixels": 86055,
+   "pixels": 86061,
    "toegestaan": true,
    "pixelsInVenster": 2,
    "venster": [
@@ -312,7 +312,7 @@
   {
    "file": "bevestig-stop/kantine-1280-en-light.png",
    "vp": "kantine-1280",
-   "pixels": 85752,
+   "pixels": 85748,
    "toegestaan": true,
    "pixelsInVenster": 5,
    "venster": [
@@ -327,7 +327,7 @@
   {
    "file": "bevestig-stop/kantine-1280-en-dark.png",
    "vp": "kantine-1280",
-   "pixels": 87024,
+   "pixels": 87031,
    "toegestaan": true,
    "pixelsInVenster": 2,
    "venster": [
@@ -342,7 +342,7 @@
   {
    "file": "bevestig-stop/kantine-1920-nl-light.png",
    "vp": "kantine-1920",
-   "pixels": 166740,
+   "pixels": 166737,
    "toegestaan": true,
    "pixelsInVenster": 3,
    "venster": [
@@ -357,7 +357,7 @@
   {
    "file": "bevestig-stop/kantine-1920-nl-dark.png",
    "vp": "kantine-1920",
-   "pixels": 166937,
+   "pixels": 166931,
    "toegestaan": true,
    "pixelsInVenster": 0,
    "venster": [
@@ -372,7 +372,7 @@
   {
    "file": "bevestig-stop/kantine-1920-en-light.png",
    "vp": "kantine-1920",
-   "pixels": 168574,
+   "pixels": 168566,
    "toegestaan": true,
    "pixelsInVenster": 3,
    "venster": [
@@ -387,7 +387,7 @@
   {
    "file": "bevestig-stop/kantine-1920-en-dark.png",
    "vp": "kantine-1920",
-   "pixels": 168891,
+   "pixels": 168885,
    "toegestaan": true,
    "pixelsInVenster": 0,
    "venster": [
@@ -402,7 +402,7 @@
   {
    "file": "bevestig-stop/tablet-liggend-nl-light.png",
    "vp": "tablet-liggend",
-   "pixels": 60491,
+   "pixels": 60495,
    "toegestaan": true,
    "pixelsInVenster": 0,
    "venster": [
@@ -417,7 +417,7 @@
   {
    "file": "bevestig-stop/tablet-liggend-nl-dark.png",
    "vp": "tablet-liggend",
-   "pixels": 60393,
+   "pixels": 60395,
    "toegestaan": true,
    "pixelsInVenster": 0,
    "venster": [
@@ -432,7 +432,7 @@
   {
    "file": "bevestig-stop/kantine-1920-nl-auto-dark.png",
    "vp": "kantine-1920",
-   "pixels": 165227,
+   "pixels": 165221,
    "toegestaan": true,
    "pixelsInVenster": 5,
    "venster": [

@@ -19,6 +19,7 @@ const MEET = () => {
   const area = cards.reduce((a, c) => { const r = c.getBoundingClientRect(); return a + r.width * r.height; }, 0) / (innerWidth * innerHeight);
   const bad = [];
   cards.forEach((c, i) => { const cr = c.getBoundingClientRect();
+    const nm = c.querySelector('.x-nm'); if (nm) { const st = getComputedStyle(nm); if (nm.scrollWidth > nm.clientWidth + 1 || nm.scrollHeight > nm.clientHeight + 1 || st.webkitLineClamp !== 'none' && st.webkitLineClamp !== '' || st.textOverflow === 'ellipsis' && nm.scrollWidth > nm.clientWidth) bad.push(i + ' naam niet volledig'); }
     for (const s of ['.x-meta', '.x-imp', '.x-turn', '.x-route', '.x-legs', '.co-hint', '.x-top']) { const e = c.querySelector(s); if (vis(e) && e.scrollWidth > e.clientWidth + 1) bad.push(i + s + ' afgekapt'); }
     const els = [...c.querySelectorAll('.x-top,.x-legs,.x-score,.x-route,.x-meta,.x-imp,.co-hint')].filter(e => vis(e) && e.textContent.trim());
     for (const e of els) { const r = e.getBoundingClientRect(); if (r.left < cr.left - 1 || r.right > cr.right + 1 || r.top < cr.top - 1 || r.bottom > cr.bottom + 1) bad.push(i + '.' + e.className.split(' ')[0] + ' buiten de kaart'); }
@@ -80,11 +81,14 @@ await T.t('ontwerpdoel 40′ op 6 m (65″, 0,75 mm/px): score bij 1920×1080 vo
 });
 
 const SPECIAAL = {
+  'toernooi lange namen': `trnPlayers=${JSON.stringify(LN.slice(0, 4))};trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();[...document.querySelectorAll('#screen-trn-overview button')].find(b=>/Speel leg/.test(b.textContent)).click();trnChooseStart(0);trnConfirmStart();state.scores=[141,227];${AVG(2)}renderGame();`,
   'toernooi': `trnPlayers=['Tom','Jorn','Imke','Henk'];trnFormat='roundrobin';trnBO=3;trnDoubleOut=true;trnGame=501;startTournament();[...document.querySelectorAll('#screen-trn-overview button')].find(b=>/Speel leg/.test(b.textContent)).click();trnChooseStart(0);trnConfirmStart();state.scores=[141,227];${AVG(2)}renderGame();`,
   'sets': `launchGame('501',['Tom','Jorn'],true,'firstto',3,3,501,0);state.setWins=[1,0];state.legsInSet=[1,2];state.scores=[141,227];${AVG(2)}renderGame();`,
   'teams': `_pendingTeams=[0,1,0,1];launchGame('501',['Tom','Jorn','Imke','Henk'],true,'firstto',3,1,501,0);state.scores=[141,227,141,227];${AVG(4)}renderGame();`,
-  'lange namen 2': L(2, LN), 'lange namen 3': L(3, LN), 'lange namen 4': L(4, LN), 'lange namen 6': L(6, LN),
+  'lange namen 1': L(1, LN), 'lange namen 2': L(2, LN), 'lange namen 3': L(3, LN), 'lange namen 4': L(4, LN), 'lange namen 5': L(5, LN, SCORES, 'state.legWins=[1,0,1,0,0];'), 'lange namen 6': L(6, LN),
+  'lange namen 4, laatste aan de beurt': L(4, LN, SCORES, 'state.currentPlayer=3;'), 'lange namen 6, niet uitgooibaar': L(6, LN, [169, 227, 96, 310, 255, 230]),
   'niet uitgooibaar 2': L(2, NAMES, [169, 227]), 'niet uitgooibaar 4': L(4, NAMES, [169, 227, 96, 310]), 'niet uitgooibaar 6': L(6, LN, [169, 227, 96, 310, 255, 230]),
+  'één leg': `launchGame('501',['Tom','Jorn'],true,'firstto',1,1,501,0);state.scores=[141,227];${AVG(2)}renderGame();`,
   'bot': `botEnabled=true;botLevelMode='manual';botManualLevel='medium';launchGame('501',['Tom','Bot'],true,'firstto',3,1,501,0);state.botPlayerIndex=1;state.scores=[141,227];${AVG(2)}renderGame();`,
 };
 for (const nocq of [false, true]) {
@@ -97,7 +101,9 @@ for (const nocq of [false, true]) {
         const r = await p.evaluate(MEET); const extra = await p.evaluate(() => ({ trn: (document.getElementById('trn-leg-bar').offsetParent ? document.getElementById('trn-leg-bar').getBoundingClientRect().height : 0), imp: !!document.querySelector('#sb-players .x-imp'), scr: document.querySelector('.screen.active').id }));
         if (extra.scr !== 'screen-game') { fails.push(`${w} ${id}: scherm ${extra.scr}`); continue; }
         if (r.bad.length) fails.push(`${w} ${id}: ${r.bad.join(', ')}`);
-        if (id === 'toernooi' && !extra.trn) fails.push(`${w} toernooi: balk ontbreekt`);
+        if (id.startsWith('toernooi') && !extra.trn) fails.push(`${w} ${id}: balk ontbreekt`);
+        if (id.startsWith('toernooi') || id === 'één leg') { const hd = await p.evaluate(() => { const m = document.querySelector('#x01-head .g-head-main'), r = document.querySelector('#x01-head .g-head-r'); return { m: m.innerText.trim(), r: r.innerText.trim(), cur: state.players[state.currentPlayer] }; });
+          if (/beurt/i.test(hd.m) || hd.m.toUpperCase() !== hd.cur.toUpperCase() || !/beurt/i.test(hd.r)) fails.push(`${w} ${id}: kop '${hd.m}' / '${hd.r}' (verwacht naam links, BEURT n rechts)`); }
         if (id.startsWith('niet uitgooibaar') && !extra.imp) fails.push(`${w} ${id}: melding ontbreekt`);
       } }
     await p.evaluate(() => document.documentElement.classList.remove('x01-nocq'));
