@@ -1,4 +1,4 @@
-// 4D-1b — X01-invoer: invoerblokkade, terugmelding, Ongedaan (één stap), bot annuleren, Uit-knop, double-vraag Terug,
+// 4D-1b — X01-invoer: invoerblokkade, terugmelding, Ongedaan (één stap), wachttijd bot (2,5 s, botscore definitief), Uit-knop, double-vraag Terug,
 // Stats/Stop in de kop, geen zwevende balk in X01, NL/EN. Spelregels en scoreberekening worden niet getest op nieuwe
 // uitkomsten: alleen dat de invoer de bestaande functies (submitScore, undoThrow, confirmDouble) juist aanroept en
 // dat de stand na Ongedaan exact gelijk is aan de stand vóór de invoer.
@@ -33,6 +33,9 @@ await T.t('Ongedaan herstelt de stand exact (snelscore, getypt, bust te hoog, bu
     'double-vraag Nee': [L2('[121,40]') + 'state.currentPlayer=1;renderGame();', "x01Uit();confirmDouble(false,40,40,1)", 1300],
     'teams 2 tegen 2': [`_pendingTeams=[0,1,0,1];launchGame('501',['Tom','Henk','Imke','Jorn'],false,'firstto',3,1,501,0);`, 'quickScore(100)', 1100],
     'Ongedaan binnen 400 ms (vóór de beurtwissel)': [L2('[121,140]'), 'quickScore(60)', 150],
+    'solo, na de beurtwissel (ronde telt elke beurt)': [`launchGame('501',['Tom'],true,'firstto',3,1,501,0);`, 'quickScore(60)', 1100],
+    'ronde 3, laatste speler (beurt terug naar de eerste)': [L2('[301,301]') + 'state.round=3;state.currentPlayer=1;renderGame();', 'quickScore(45)', 1100],
+    'ronde 3, eerste speler (geen rondewissel)': [L2('[301,301]') + 'state.round=3;renderGame();', 'quickScore(45)', 1100],
   };
   const fails = [];
   for (const [naam, [setup, act, w]] of Object.entries(cases)) {
@@ -71,23 +74,101 @@ await T.t('terugmelding blijft staan terwijl de volgende speler intikt; bust; ni
   f = await p.evaluate(fb); ok(/is-leeg/.test(f.cls) && !f.undo, 'begin leg: ' + JSON.stringify(f));
 });
 
-await T.t('bot: Ongedaan tijdens de botbeurt annuleert de botworp; na de botworp gooit de bot opnieuw; geen invoer tijdens de botbeurt', async () => {
-  const LB = `botEnabled=true;botLevelMode='manual';botManualLevel='medium';launchGame('501',['Tom','Bot'],true,'firstto',3,1,501,0);state.botPlayerIndex=1;state.scores=[301,301];renderGame();`;
-  // (a) vóór de botworp (bot is aan de beurt, nog niet gegooid)
-  await p.evaluate(LB); await wait(100); const voor = await p.evaluate(SNAP);
-  await p.evaluate('quickScore(60)'); await wait(700); // beurt is naar de bot, botworp nog niet geboekt (na ±1700 ms)
-  ok(await p.evaluate('state.currentPlayer===1&&state.history.length===1'), 'bot zou nu aan de beurt moeten zijn zonder worp');
-  ok(await p.evaluate("(quickScore(26),state.history.length===1)"), 'invoer tijdens de botbeurt geblokkeerd');
+// Bot (besluit Tom 25-11, B+D): de bot wacht 2,5 s na het indienen; zolang mag de mens zijn score terugzetten.
+// Een ingediende botscore is nooit ongedaan te maken; Ongedaan laat de bot nooit opnieuw gooien.
+const LB = (sc = '[301,301]', extra = '') => `botEnabled=true;botLevelMode='manual';botManualLevel='medium';launchGame('501',['Tom','Bot'],true,'firstto',3,1,501,0);state.botPlayerIndex=1;state.scores=${sc};renderGame();${extra}`;
+const isWin = `document.getElementById('x01-undo').classList.contains('is-win')`;
+// Wacht tot de bot begint (_x01BotOn) en geef de tijd sinds indienen terug.
+const startBot = `new Promise(function(res){var t0=performance.now();quickScore(60);var iv=setInterval(function(){if(_x01BotOn){clearInterval(iv);res(Math.round(performance.now()-t0));}},10);setTimeout(function(){clearInterval(iv);res(-1)},6000);})`;
+
+await T.t('bot: de bot wacht 2,5 s na indienen (ook na een bust); in die tijd Ongedaan met aftelbalk; daarna niet meer', async () => {
+  await p.evaluate(LB()); await wait(100);
+  const ms = await p.evaluate(startBot);
+  ok(ms >= 2450 && ms <= 2900, `bot begon ${ms} ms na indienen (verwacht 2500)`);
+  await p.evaluate(LB('[301,40]')); await wait(100);
+  const ms2 = await p.evaluate(`new Promise(function(res){var t0=performance.now();numpadPress('6');numpadPress('0');numpadPress('enter');var iv=setInterval(function(){if(_x01BotOn){clearInterval(iv);res(Math.round(performance.now()-t0));}},10);setTimeout(function(){clearInterval(iv);res(-1)},6000);})`);
+  ok(ms2 >= 2450 && ms2 <= 2900, `na een bust begon de bot ${ms2} ms na indienen (verwacht 2500)`);
+  // binnen het venster
+  await p.evaluate(LB()); await wait(100); const voor = await p.evaluate(SNAP);
+  await p.evaluate('quickScore(60)'); await wait(150);
+  let f = await p.evaluate(fb); ok(f.undo && await p.evaluate(isWin), 'direct na indienen: Ongedaan met aftelbalk ' + JSON.stringify(f));
+  await wait(750);
+  f = await p.evaluate(fb);
+  ok(await p.evaluate('state.currentPlayer===1&&state.history.length===1&&!_x01BotOn'), 'bot aan de beurt, wacht nog');
+  ok(f.undo && await p.evaluate(isWin) && /Bot wacht/.test(f.who), 'tijdens het wachten: ' + JSON.stringify(f));
+  ok(await p.evaluate("(quickScore(26),numpadPress('4'),numpadPress('enter'),x01Uit(),state.history.length===1)"), 'geen invoer tijdens de wachttijd');
+  await wait(1200); // ±2,2 s na indienen: nog net binnen het venster
+  ok(await p.evaluate('state.history.length===1&&!_x01BotOn'), 'op 2,2 s nog geen botworp');
   await p.evaluate('x01Undo()'); await wait(3500);
-  eq(await p.evaluate(SNAP), voor, 'stand na Ongedaan tijdens botbeurt (en geen botworp daarna)');
-  // (b) ná de botworp: Ongedaan haalt de botscore weg, de bot gooit opnieuw, daarna is Tom aan de beurt
-  await p.evaluate(LB + 'quickScore(60);'); await wait(1900);
-  ok(await p.evaluate('state.history.length===2&&state.history[1].player===1'), 'botworp verwacht');
-  await p.evaluate('x01Undo()'); await wait(150);
-  ok(await p.evaluate('state.history.length===1&&state.currentPlayer===1'), 'na Ongedaan van de botscore: bot weer aan de beurt');
+  eq(await p.evaluate(SNAP), voor, 'Ongedaan op 2,2 s: stand exact terug, geen botworp daarna');
+  f = await p.evaluate(fb); ok(!(await p.evaluate(isWin)) && /Tom gooit/.test(f.who), 'Tom weer aan de beurt, geen balk: ' + JSON.stringify(f));
+  ok(!errs.length, 'pageerror: ' + errs[0]);
+});
+
+await T.t('bot: zodra de bot gooit is de vorige score definitief; een botscore kan nooit ongedaan (geen nieuwe worp)', async () => {
+  await p.evaluate(LB()); await wait(100); await p.evaluate(startBot); // bot is begonnen (venster dicht)
+  let f = await p.evaluate(fb);
+  ok(!f.undo && !(await p.evaluate(isWin)) && /Bot gooit…/.test(f.who), 'bot gooit: Ongedaan uit ' + JSON.stringify(f));
+  let h = await p.evaluate('JSON.stringify(state.history)'); await p.evaluate('x01Undo()');
+  eq(await p.evaluate('JSON.stringify(state.history)'), h, 'Ongedaan tijdens het gooien doet niets');
+  await wait(1100); // botscore geboekt
+  ok(await p.evaluate('state.history.length===2&&state.history[1].player===1'), 'botworp geboekt');
+  f = await p.evaluate(fb); ok(!f.undo && f.n === 'Bot' && f.m === 'definitief', 'botscore: definitief, Ongedaan uit ' + JSON.stringify(f));
+  await wait(1500); // beurt terug naar Tom
+  const s1 = await p.evaluate(SNAP); f = await p.evaluate(fb);
+  ok(await p.evaluate('state.currentPlayer===0') && !f.undo && f.m === 'definitief', 'Tom aan de beurt, botscore blijft definitief ' + JSON.stringify(f));
+  await p.evaluate('x01Undo()'); await wait(3000);
+  eq(await p.evaluate(SNAP), s1, 'Ongedaan na de botworp: niets veranderd, de bot gooit niet opnieuw');
+  // ook een bust van de bot is definitief: bot staat op 2, dwing een bust af via de generator
+  await p.evaluate(LB('[301,2]', 'var _bg=botGenerateScore;botGenerateScore=function(){return 60};window._bgr=function(){botGenerateScore=_bg};'));
+  await wait(100); await p.evaluate(startBot); await wait(1100);
+  ok(await p.evaluate('state.history.length===2&&state.history[1].bust===true'), 'botbust geboekt');
+  f = await p.evaluate(fb); h = await p.evaluate('JSON.stringify(state.history)'); await p.evaluate('x01Undo()'); await wait(2500);
+  ok(!f.undo && f.m === 'definitief', 'botbust definitief ' + JSON.stringify(f));
+  eq(await p.evaluate('JSON.stringify(state.history)'), h, 'botbust niet ongedaan');
+  await p.evaluate('_bgr()');
+  ok(!errs.length, 'pageerror: ' + errs[0]);
+});
+
+await T.t('bot: wachttijd en Stop, hervatten, Ongedaan + opnieuw indienen, nieuwe leg, snelle dubbele invoer, mens na mens', async () => {
+  // Stop tijdens de wachttijd: geen botworp meer, spel blijft weg
+  await p.evaluate(LB('[301,301]', 'quickScore(60);')); await wait(800);
+  await p.evaluate("confirmEndGame()"); await wait(150); await p.evaluate("[...document.querySelectorAll('.ask-ov button')].find(function(b){return /^Stop$/.test(b.textContent.trim())}).click()");
   await wait(3500);
-  const r = await p.evaluate(`({n:state.history.length,p:state.history.map(function(h){return h.player}),c:state.currentPlayer,s0:state.scores[0]})`);
-  eq([r.n, r.p, r.c, r.s0], [2, [0, 1], 0, 241], 'bot heeft opnieuw gegooid, Tom aan de beurt');
+  ok(await p.evaluate("document.querySelector('.screen.active').id!=='screen-game'&&!_x01BotOn&&_x01SubAt===0"), 'na Stop: geen botbeurt, venster dicht');
+  // Hervatten tijdens de wachttijd: de bot gooit verder, maar Tom's score kan niet meer terug (venster vervallen)
+  await p.evaluate(LB('[301,301]', 'quickScore(60);')); await wait(800);
+  const snap = await p.evaluate("JSON.parse(localStorage.getItem(LIVE_KEY)||'null')");
+  ok(snap && snap.state && snap.state.currentPlayer === 1, 'snapshot met de bot aan de beurt');
+  await p.evaluate(s => _liveResume(s, true), snap); await wait(80);
+  let f = await p.evaluate(fb); ok(!f.undo && !(await p.evaluate(isWin)), 'na hervatten geen Ongedaan van de oude score ' + JSON.stringify(f));
+  await wait(2600);
+  ok(await p.evaluate('state.history.length===2&&state.history[1].player===1&&state.currentPlayer===0'), 'bot heeft na hervatten één keer gegooid, Tom aan de beurt');
+  // Ongedaan en opnieuw indienen: nieuw venster van 2,5 s vanaf de nieuwe score
+  await p.evaluate(LB('[301,301]', 'quickScore(60);')); await wait(1500); await p.evaluate('x01Undo()'); await wait(300);
+  const ms = await p.evaluate(startBot);
+  ok(ms >= 2450 && ms <= 2900, `na Ongedaan + opnieuw: bot begon ${ms} ms na de nieuwe score`);
+  await wait(2500);
+  ok(await p.evaluate('state.history.length===2'), 'precies één Tom-score en één botscore: ' + await p.evaluate('JSON.stringify(state.history)'));
+  // Nieuwe leg: Tom gooit uit (single out), leg 2 begint met de bot zonder wachttijd en zonder Ongedaan
+  await p.evaluate(`botEnabled=true;botLevelMode='manual';botManualLevel='medium';launchGame('501',['Tom','Bot'],false,'firstto',3,1,501,0);state.botPlayerIndex=1;state.scores=[40,301];renderGame();quickScore(40);`);
+  // legwissel 1200 ms + bot 600 ms (ongewijzigd) → bot begint op ±1,8 s, niet later: geen extra wachttijd
+  const tb = await p.evaluate(`new Promise(function(res){var t0=performance.now();var iv=setInterval(function(){if(_x01BotOn){clearInterval(iv);res(Math.round(performance.now()-t0));}},10);setTimeout(function(){clearInterval(iv);res(-1)},6000);})`);
+  ok(tb > 0 && tb <= 2100, `leg 2: bot begon ${tb} ms na de uitgooi (verwacht ±1800, zonder extra wachttijd)`);
+  await wait(2400);
+  const r = await p.evaluate(`({leg:state.currentLeg,h:state.history.length,p:state.history.map(function(h){return h.player}),c:state.currentPlayer,sub:_x01SubAt})`);
+  ok(r.leg === 2 && r.h === 1 && r.p[0] === 1 && r.c === 0 && r.sub === 0, 'leg 2: bot begon en gooide, Tom aan de beurt ' + JSON.stringify(r));
+  f = await p.evaluate(fb); ok(!f.undo && f.m === 'definitief', 'leg 2: botscore definitief ' + JSON.stringify(f));
+  // Snelle dubbele invoer in een botpotje
+  for (const gap of [80, 250, 380, 450]) {
+    await p.evaluate(LB('[301,301]', `quickScore(60);setTimeout(function(){quickScore(45);numpadPress('4');numpadPress('5');numpadPress('enter')},${gap});`)); await wait(700);
+    eq(await p.evaluate(`state.history.map(function(h){return state.players[h.player]+' '+h.score})`), ['Tom 60'], `botpotje, tweede invoer na ${gap} ms`);
+  }
+  // Mens na mens (Tom, Henk, Bot): geen wachttijd voor Henk, Tom's score blijft terug te zetten tot Henk indient (B6)
+  await p.evaluate(`botEnabled=true;botLevelMode='manual';botManualLevel='medium';launchGame('501',['Tom','Henk','Bot'],true,'firstto',3,1,501,0);state.botPlayerIndex=2;renderGame();quickScore(60);`);
+  await wait(4000);
+  f = await p.evaluate(fb); ok(f.undo && !(await p.evaluate(isWin)) && /Henk gooit/.test(f.who), 'mens na mens: Ongedaan blijft, geen balk ' + JSON.stringify(f));
+  await p.evaluate('quickScore(45)'); await wait(150); ok(await p.evaluate(isWin), 'Henk → bot: aftelbalk');
   ok(!errs.length, 'pageerror: ' + errs[0]);
 });
 

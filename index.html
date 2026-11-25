@@ -485,6 +485,12 @@ body::before{
 .x01-fb.is-terug{background:var(--card);border-color:var(--border)}
 .x01-undo{height:40px;padding:0 var(--sp-5);border-radius:var(--r-lg);border:1px solid var(--border);background:var(--card);color:var(--text);display:flex;align-items:center;gap:6px;font:inherit;font-size:var(--fs-small);font-weight:800;touch-action:manipulation;cursor:pointer}
 .x01-undo:disabled{opacity:.35;cursor:default}
+/* Herstelvenster vóór de botworp (B+D): een balk onderaan Ongedaan loopt in X01_BOT_WAIT leeg */
+.x01-undo{position:relative;overflow:hidden}
+.x01-undo.is-win{border-color:var(--accent)}
+.x01-undo.is-win::after{content:'';position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--accent);transform-origin:left;animation:x01Win var(--x01-win,2500ms) linear forwards}
+@keyframes x01Win{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media (prefers-reduced-motion:reduce){.x01-undo.is-win::after{animation:none}}
 .x01-fbt{display:flex;align-items:baseline;justify-content:flex-end;gap:var(--sp-4);min-width:0;white-space:nowrap}
 .x01-fbn{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-soft);text-transform:uppercase;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;align-self:center}
 .x01-fbs,.x01-fbr{font-family:var(--ff-display);font-weight:var(--fw-bold);font-size:clamp(26px,4.2vh,36px);line-height:1;font-synthesis:none;flex:none}
@@ -2533,6 +2539,7 @@ var I18N={
 "Onbekende gebruikersnaam.": "Unknown username.",
 "Ongedaan": "Undo",
 "Nog geen worp deze leg": "No visit yet this leg",
+"definitief": "final",
 "rest": "left",
 "blijft op": "stays on",
 "Ongeldig": "Invalid",
@@ -2919,7 +2926,7 @@ var I18N_PATTERNS=[
  [/^Statistieken van (.+) wissen$/,'Clear statistics of $1'],
  [/^Statistieken van (.+) wissen\? Dit verwijdert ook alle wedstrijdgeschiedenis van deze speler\.$/,'Clear statistics of $1? This also removes all match history of this player.'],
  [/^nog (\d+)$/,'$1 left'],[/^(\d+) beurt(en)?$/,function(m){return m[1]+(m[2]?' turns':' turn');}],
- [/^rest (\d+)$/,'$1 left'],[/^Uit (\d+)$/,'Out $1'],[/^Teruggezet: (.+) (\S+)$/,'Undone: $1 $2'],[/^(.+) gooit…$/,'$1 throwing…'],[/^staat op (\d+)$/,'on $1'],[/^wordt (\d+)$/,'becomes $1'],[/^→ restant: (\d+)$/,'→ remaining: $1'],
+ [/^rest (\d+)$/,'$1 left'],[/^Uit (\d+)$/,'Out $1'],[/^Teruggezet: (.+) (\S+)$/,'Undone: $1 $2'],[/^(.+) gooit…$/,'$1 throwing…'],[/^(.+) wacht…$/,'$1 waiting…'],[/^staat op (\d+)$/,'on $1'],[/^wordt (\d+)$/,'becomes $1'],[/^→ restant: (\d+)$/,'→ remaining: $1'],
  [/^en je komt op (\d+):$/,'and you reach $1:'],
  [/^gem\.? (.+)$/,'avg $1'],[/^tegen (.+)$/,function(m){return 'vs '+_tr(m[1]);}],[/^dubbel (\d+%.*)$/,'double $1'],[/^(\d+)% dubbel$/,'$1% double'],[/^score (\d+)$/,'score $1'],
  [/^exact (\d+)$/,'exact $1'],[/^Gehalveerd → (\d+)$/,'Halved → $1'],[/^\+(\d+) → (\d+)$/,'+$1 → $2'],
@@ -7399,7 +7406,9 @@ function triggerBotTurn(){
   var remaining=state.scores[state.botPlayerIndex];
   var avg=getBotAvg();
 
-  // 4D-1b: "Bot gooit…" staat in de invoerregel; alle stappen via _x01Later, zodat Ongedaan of Stop ze kan annuleren
+  // 4D-1b: "Bot gooit…" staat in de invoerregel; alle stappen via _x01Later, zodat Stop of hervatten ze kan annuleren.
+  // Vanaf hier is het herstelvenster dicht: de vorige score is definitief (_x01BotOn).
+  _x01BotOn=true;_x01SubAt=0;
   document.getElementById('score-input').disabled=true;
   _x01Draw();
 
@@ -8631,23 +8640,44 @@ var _numpadVal='';
 // verhoogd is (Ongedaan, Stop, nieuwe leg, hervatten). _x01Busy: van indienen tot de beurtwissel; dan geen invoer.
 // _x01UndoUsed: na Ongedaan {name,label} tot de volgende score (één stap terug). Geen van drieën zit in state/snapshot.
 var _x01Gen=0,_x01Busy=false,_x01UndoUsed=null,_x01PendScore=null;
+// Wachttijd bot (besluit Tom 25-11, B+D): na de worp van een mens wacht de bot X01_BOT_WAIT ms (vanaf indienen) voordat
+// hij gaat gooien. Zolang (_x01SubAt gezet, bot nog niet begonnen) mag de mens zijn eigen score ongedaan maken.
+// Een ingediende botscore is nooit ongedaan te maken (geen nieuwe worp via Ongedaan).
+var X01_BOT_WAIT=2500,_x01SubAt=0,_x01BotOn=false;
+function _x01Sub(){_x01SubAt=Date.now();_x01Draw();}
+// Kan de laatste score nog terug? Niet na een gewonnen leg, niet twee keer, nooit een botscore, en niet meer
+// zodra de bot aan zijn worp begonnen is.
+function _x01CanUndo(){var h=state.history||[],last=h[h.length-1];
+  if(!last||last.won||_x01UndoUsed)return false;
+  if(state.botPlayerIndex>=0&&last.player===state.botPlayerIndex)return false;
+  if(_x01BotOn)return false;
+  if(_x01IsBot()&&!_x01SubAt)return false;
+  return true;}
+// Loopt het herstelvenster nu (de bot is de volgende en wacht nog)? Voor de aftelbalk op Ongedaan.
+function _x01InWindow(){if(!_x01SubAt||!_x01CanUndo()||state.botPlayerIndex<0)return false;
+  if(_x01IsBot())return true;
+  return _x01Busy&&(state.currentPlayer+1)%state.players.length===state.botPlayerIndex;}
 function _x01Later(fn,ms){var g=_x01Gen;return setTimeout(function(){if(g!==_x01Gen)return;try{fn();}catch(e){_errLog(e,'_x01Later')}},ms);}
 function _x01IsBot(){return state.botPlayerIndex>=0&&state.currentPlayer===state.botPlayerIndex;}
 function _x01Locked(){return _x01Busy||_x01IsBot()||!!document.getElementById('dbl-yn-overlay');}
-function _x01Reset(){_x01Gen++;_x01Busy=false;_x01UndoUsed=null;_x01PendScore=null;var i=document.getElementById('score-input');if(i)i.disabled=false;}
+function _x01Reset(){_x01Gen++;_x01Busy=false;_x01UndoUsed=null;_x01PendScore=null;_x01SubAt=0;_x01BotOn=false;var i=document.getElementById('score-input');if(i)i.disabled=false;}
 function _x01Draw(){
   var $=function(id){return document.getElementById(id);},fb=$('x01-fb');
   if(!fb||!state.players||!state.scores||state.currentPlayer===undefined)return;
   var h=state.history||[],last=h[h.length-1],u=_x01UndoUsed,cls='x01-fb',nm='',sc='',ar='',rs='',ms='',can=false;
   if(u){cls+=' is-terug';ms='Teruggezet: '+u.name+' '+u.label;}
   else if(!last||last.won){cls+=' is-leeg';ms='Nog geen worp deze leg';}
-  else{nm=state.players[last.player]||'';can=true;
+  else{nm=state.players[last.player]||'';can=_x01CanUndo();
+    if(!can&&state.botPlayerIndex>=0&&last.player===state.botPlayerIndex)ms='definitief';
     if(last.bust){cls+=' is-bust';sc='Bust';ar='blijft op';rs=String(last.remaining);}
     else{sc=String(last.score);ar='→';rs=String(last.newRemaining!=null?last.newRemaining:last.remaining-last.score);}}
   fb.className=cls;$('x01-fbn').textContent=nm;$('x01-fbs').textContent=sc;$('x01-fba').textContent=ar;$('x01-fbr').textContent=rs;$('x01-fbm').textContent=ms;
-  $('x01-undo').disabled=!can;
+  var ub0=$('x01-undo');ub0.disabled=!can;
+  var win=can&&_x01InWindow();
+  if(win){if(!ub0.classList.contains('is-win')){ub0.style.setProperty('--x01-win',Math.max(0,X01_BOT_WAIT-(Date.now()-_x01SubAt))+'ms');ub0.classList.add('is-win');}}
+  else ub0.classList.remove('is-win');
   var cur=state.currentPlayer,rem=state.scores[cur],v=parseInt(_numpadVal)||0,bot=_x01IsBot(),lbl='',big='',bc='',uit=false;
-  $('np-who').textContent=(state.players[cur]||'')+(bot?' gooit…':' gooit');
+  $('np-who').textContent=(state.players[cur]||'')+(bot?(_x01BotOn?' gooit…':' wacht…'):' gooit');
   if(bot){big='…';}
   else if(_numpadVal===''){if(!_x01Busy&&rem>1&&getCheckout(rem))uit=true;else{lbl='rest';big=String(rem);}}
   else if(v>180){lbl='max. 180';big='Ongeldig';bc='bust';}
@@ -8655,11 +8685,11 @@ function _x01Draw(){
   $('np-rest').textContent=lbl;var b=$('np-res');b.textContent=big;b.className=bc;
   var ub=$('x01-uit');ub.hidden=!uit;if(uit)ub.textContent='Uit '+rem;
 }
-// Ongedaan: precies de laatst ingediende score (ook die van de bot), één stap. Annuleert geplande stappen.
+// Ongedaan: de laatst ingediende score van een mens, één stap (zie _x01CanUndo). Annuleert geplande stappen.
 function x01Undo(){
   var h=state.history||[],last=h[h.length-1];
-  if(!last||last.won||_x01UndoUsed)return;
-  var busyWas=_x01Busy;
+  if(!_x01CanUndo())return;
+  var busyWas=_x01Busy;_x01SubAt=0;
   _x01Gen++;_x01Busy=false;var si=document.getElementById('score-input');if(si){si.disabled=false;si.value='';}
   var ov=document.getElementById('dbl-yn-overlay');if(ov)ov.parentNode.removeChild(ov);
   _x01PendScore=null;_numpadVal='';var d=document.getElementById('numpad-display');if(d){d.textContent='—';d.style.color='';}
@@ -8672,7 +8702,7 @@ function x01Undo(){
   undoThrow(); // bestaande functie: score, beurten, geschiedenis en speler terug
   state.round=_rnd;
   updateCheckoutStrip();
-  if(_x01IsBot())_x01Later(triggerBotTurn,400); // botscore ongedaan: de bot is weer aan de beurt en gooit opnieuw
+  if(_x01IsBot())_x01Later(triggerBotTurn,400); // vangnet; komt niet voor (een botscore kan niet terug)
 }
 // Uit-knop: vult de rest in en gaat door de bestaande uitgooiflow
 function x01Uit(){
@@ -8874,7 +8904,7 @@ function submitScore(){
     pushEntry({player:cur,score:0,remaining:remaining,bust:true});
     state.dartCount[cur]++;state.allDartCount[cur]++;
     _x01Busy=true;clearNumpad(); // terugmelding "BUST" in de invoer (4D-1b)
-    _x01Later(function(){nextPlayer501()},900);
+    _x01Sub();_x01Later(function(){nextPlayer501()},900);
     return;
   }
   // Bust: left on 1 with double out
@@ -8883,7 +8913,7 @@ function submitScore(){
     pushEntry({player:cur,score:0,remaining:remaining,bust:true});
     state.dartCount[cur]++;state.allDartCount[cur]++;
     _x01Busy=true;clearNumpad();
-    _x01Later(function(){nextPlayer501()},900);
+    _x01Sub();_x01Later(function(){nextPlayer501()},900);
     return;
   }
 
@@ -8930,7 +8960,7 @@ function submitScore(){
   pushEntry({player:cur,score:score,remaining:remaining,newRemaining:newScore,bust:false,
     checkoutAttempt:wasCheckout,checkoutMissed:wasCheckout});
   _x01Busy=true;clearNumpad(); // 4D-1b: blokkade tot de beurtwissel
-  _x01Later(function(){nextPlayer501()},400);
+  _x01Sub();_x01Later(function(){nextPlayer501()},400);
 }
 
 
@@ -8981,18 +9011,20 @@ function confirmDouble(isDouble,remaining,score,cur){
     state.allHistory.push({player:cur,score:0,remaining:remaining,bust:true,
       checkoutAttempt:true,checkoutHit:false});
     _x01UndoUsed=null;_x01Busy=true;_x01Draw(); // 4D-1b: terugmelding "BUST" in de invoer
-    _x01Later(function(){nextPlayer501()},900);
+    _x01Sub();_x01Later(function(){nextPlayer501()},900);
   }
 }
 
 function nextPlayer501(){
-  _x01Busy=false; // 4D-1b: beurtwissel klaar
+  _x01Busy=false;_x01BotOn=false; // 4D-1b: beurtwissel klaar (ook de botbeurt)
   state.currentPlayer=(state.currentPlayer+1)%state.players.length;
   if(state.currentPlayer===state.firstPlayer)state.round++;
   renderGame();
   // Trigger bot if it's their turn
   if(state.currentPlayer===state.botPlayerIndex){
-    _x01Later(triggerBotTurn,400);
+    // Wachttijd: X01_BOT_WAIT vanaf het indienen van de vorige (menselijke) score, minstens 400 ms zoals voorheen
+    var _w=_x01SubAt?Math.max(400,X01_BOT_WAIT-(Date.now()-_x01SubAt)):400;
+    _x01Later(triggerBotTurn,_w);
   }
 }
 
