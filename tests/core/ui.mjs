@@ -26,7 +26,8 @@ const CHECK = () => {
     const cs = getComputedStyle(el); if (cs.visibility === 'hidden' || cs.display === 'none') return false;
     return q.bottom > r.top + 1 && q.top < r.bottom - 1 && q.right > r.left + 1 && q.left < r.right - 1;
   }).map(el => (el.textContent || el.id || el.tagName).trim().slice(0, 20));
-  const out = { scr: sc.id, scroll, gcVisible: getComputedStyle(gc).display !== 'none' && r.height > 0, hits, overflow: document.documentElement.scrollWidth > innerWidth + 1 };
+  const acts = [...sc.querySelectorAll('#x01-head .x01-act')].filter(el => { const q = el.getBoundingClientRect(); return q.width >= 40 && q.height >= 40 && q.top >= 0; });
+  const out = { scr: sc.id, scroll, gcVisible: getComputedStyle(gc).display !== 'none' && r.height > 0, headActs: acts.length, hits, overflow: document.documentElement.scrollWidth > innerWidth + 1 };
   ac.scrollTop = 0; return out;
 };
 for (const [w, h] of [[375, 667], [375, 812], [390, 844], [430, 932]]) {
@@ -36,7 +37,9 @@ for (const [w, h] of [[375, 667], [375, 812], [390, 844], [430, 932]]) {
     for (const [g, L] of Object.entries(GAMES)) for (const n of [2, 4]) {
       await p.evaluate(() => { showScreen('screen-home'); }); await p.evaluate(L(n)); await wait(250);
       const r = await p.evaluate(CHECK);
-      if (!r.gcVisible) bad.push(`${g}/${n}: spelbalk niet zichtbaar (${r.scr})`);
+      // 4D-1b (B1): bij X01 zit Stats/Stop in de kop en is de zwevende spelbalk bewust weg.
+      if (r.scr === 'screen-game') { if (r.gcVisible) bad.push(`${g}/${n}: spelbalk zichtbaar bij X01`); if (r.headActs !== 2) bad.push(`${g}/${n}: Stats/Stop niet in de kop (${r.headActs})`); }
+      else if (!r.gcVisible) bad.push(`${g}/${n}: spelbalk niet zichtbaar (${r.scr})`);
       if (r.hits.length) bad.push(`${g}/${n}: ${r.hits.join(', ')}`);
       if (r.overflow) bad.push(`${g}/${n}: horizontale overloop`);
       if (r.scroll) WARN.add(`${w}×${h} ${g}/${n}`);

@@ -343,6 +343,8 @@ body::before{
   #sb-players.x-many .x-score{font-size:clamp(40px,min(6vh,3.4vw),96px) !important}
   #sb-players .x-name{font-size:clamp(16px,1.9vh,26px)}
   #sb-players:not(.x-compact) .x-card{grid-template-areas:"top legs" "score score" "hint hint" "meta meta"}
+  #x01-side > .x01-acts-side{display:flex;justify-content:flex-end;margin-bottom:var(--sp-5)}
+  #x01-head .x01-acts{display:none}
   #sb-players:not(.x-compact) .x-card.x-imp-card{grid-template-areas:"top legs" "score score" "hint hint" "meta meta" "imp imp"} /* F12 */
   #x01-side #checkout-strip .co-big{font-size:clamp(15px,min(26cqh,7.5cqw),54px)}
   #x01-side #checkout-strip .co-arr{font-size:clamp(12px,min(14cqh,3.5cqw),30px)}
@@ -368,6 +370,11 @@ body::before{
   #sb-players .x-lg b{font-size:clamp(28px,3.4vh,46px)}
   #sb-players.x-compact .x-card .x-lg b{font-size:clamp(24px,2.9vh,39px)} /* herstel 4D-1a: de compacte regel (17 px) is specifieker dan de regel hierboven en staat later; daarom .x-card erbij. Zelfde verhouding als op de telefoon (17/20) */
   #sb-players .x-dot{width:clamp(12px,1.3vh,18px);height:clamp(12px,1.3vh,18px)}
+  /* 4D-1b: invoerdock op kantinemaat (K12). #screen-game ervoor: de basisregels staan later in het bestand */
+  #screen-game .x01-fb,#screen-game .x01-input .np-disp{height:clamp(64px,8vh,96px)}
+  #screen-game .x01-fbs,#screen-game .x01-fbr,#screen-game #numpad-display{font-size:clamp(40px,5vh,60px)} #screen-game #np-res{font-size:clamp(28px,3.4vh,44px)}
+  #screen-game .x01-fbn,#screen-game .x01-fba,#screen-game .x01-fbm,#screen-game #np-who,#screen-game #np-rest,#screen-game .x01-undo,#screen-game .x01-uit,#screen-game .x01-input .x01-q{font-size:clamp(15px,1.7vh,22px)!important}
+  #screen-game .x01-act{width:52px;height:52px} #screen-game .x01-undo,#screen-game .x01-uit{height:52px}
   #sb-players .x-dots i{width:clamp(10px,1.1vh,15px);height:clamp(10px,1.1vh,15px)}
   #sb-players .co-hint span{font-size:clamp(15px,1.6vh,22px) !important}
   #trn-leg-bar{font-size:clamp(15px,1.6vh,22px) !important}
@@ -455,11 +462,51 @@ body::before{
 .x-last{display:inline-block;margin-left:var(--sp-3);padding:1px 7px;border-radius:7px;font-size:var(--fs-caption);font-weight:800;background:var(--last-bg);color:var(--tag-text);vertical-align:1px}
 .x-last.bust{background:var(--last-bust-bg);color:var(--danger-text)}
 .x-meta{font-size:var(--fs-caption);color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Gedeeld met Eliminatie (die bouwt dezelfde klassen in JS): ongewijzigd laten. */
 .np-disp{height:clamp(44px,calc(8vh - 10px),62px);border-radius:var(--r-xl);background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 var(--sp-8);margin-bottom:var(--sp-3);box-sizing:border-box}
 .np-disp span{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-muted);min-width:70px}
-#np-rest{text-align:right}
 .x01-input .btn-sm{height:clamp(32px,calc(6vh - 8px),44px);border-radius:var(--r-md) !important}
 .x01-pad .btn{height:clamp(44px,calc(9vh - 13px),74px);padding:0 !important;border-radius:var(--r-xl) !important}
+/* ═══ 4D-1b: invoerdock X01 (terugmeldingsregel, invoerregel, snelscores, toetsen). Alleen #screen-game: Eliminatie deelt .np-disp/.x01-input/.x01-pad ═══ */
+#screen-game .np-disp{height:clamp(42px,calc(7.5vh - 6px),64px);border-radius:var(--r-xl);background:var(--card);border:1px solid var(--border);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--sp-4);padding:0 var(--sp-3) 0 var(--sp-6);margin-bottom:var(--sp-3);box-sizing:border-box}
+#screen-game .np-disp span{min-width:0}
+.x01-cur{display:flex;align-items:baseline;gap:var(--sp-5);min-width:0}
+#np-who{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-soft);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;align-self:center}
+#numpad-display{font-family:var(--ff-display);font-weight:var(--fw-bold);font-size:clamp(26px,4vh,36px);color:var(--accent-text);line-height:1;letter-spacing:.02em;font-synthesis:none;flex:none}
+.x01-res{display:flex;align-items:baseline;gap:var(--sp-3);white-space:nowrap}
+#np-rest{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-muted)}
+#np-res{font-family:var(--ff-display);font-size:clamp(20px,3vh,28px);font-weight:var(--fw-bold);color:var(--text);font-synthesis:none}
+#np-res.bust{color:var(--danger-text)} #np-res.uit{color:var(--hit-text)}
+.x01-uit{height:40px;padding:0 var(--sp-6);border-radius:var(--r-lg);border:1.5px solid var(--hit);background:var(--hit-soft);color:var(--text);font:inherit;font-size:var(--fs-small);font-weight:800;touch-action:manipulation;cursor:pointer}
+.x01-uit[hidden]{display:none}
+.x01-fb{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:var(--sp-4);height:clamp(42px,calc(7vh - 4px),60px);margin-bottom:var(--sp-3);padding:0 var(--sp-5) 0 var(--sp-2);border-radius:var(--r-xl);background:var(--state-turn);border:1px solid var(--accent-ring);box-sizing:border-box}
+.x01-fb.is-leeg{background:transparent;border:1px dashed var(--border)}
+.x01-fb.is-bust{background:var(--danger-soft);border-color:var(--miss-border)}
+.x01-fb.is-terug{background:var(--card);border-color:var(--border)}
+.x01-undo{height:40px;padding:0 var(--sp-5);border-radius:var(--r-lg);border:1px solid var(--border);background:var(--card);color:var(--text);display:flex;align-items:center;gap:6px;font:inherit;font-size:var(--fs-small);font-weight:800;touch-action:manipulation;cursor:pointer}
+.x01-undo:disabled{opacity:.35;cursor:default}
+.x01-fbt{display:flex;align-items:baseline;justify-content:flex-end;gap:var(--sp-4);min-width:0;white-space:nowrap}
+.x01-fbn{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-soft);text-transform:uppercase;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;align-self:center}
+.x01-fbs,.x01-fbr{font-family:var(--ff-display);font-weight:var(--fw-bold);font-size:clamp(26px,4.2vh,36px);line-height:1;font-synthesis:none;flex:none}
+.x01-fbs{color:var(--text)} .x01-fbr{color:var(--accent-text)}
+.x01-fb.is-bust .x01-fbs{color:var(--danger-text)}
+.x01-fba{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--text-muted);align-self:center;flex:none}
+.x01-fbm{font-size:var(--fs-small);font-weight:var(--fw-bold);color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;min-width:0}
+.x01-fbm:empty,.x01-fbn:empty,.x01-fbs:empty,.x01-fba:empty,.x01-fbr:empty{display:none}
+.x01-input .x01-q{font-size:var(--fs-body)!important;font-weight:800!important;color:var(--text)!important;padding:0 var(--sp-1)!important}
+.x01-dbl-back{margin-top:var(--sp-7);background:none;border:none;color:var(--text-soft);font:inherit;font-size:var(--fs-small);font-weight:var(--fw-bold);text-decoration:underline;text-underline-offset:3px;padding:var(--sp-5);cursor:pointer;min-height:44px}
+/* kop: Stats en Stop rechts naast "Beurt"; spelinfo krijgt voorrang (krimpt met ellips, de knoppen niet) */
+#x01-head{align-items:center}
+#x01-head .g-head-l{flex:1 1 auto}
+.x01-hr{display:flex;align-items:center;gap:var(--sp-3);flex:none}
+.x01-acts{display:flex;align-items:center;gap:var(--sp-3);flex:none}
+.x01-acts-side{display:none}
+.x01-act{width:40px;height:40px;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--card);color:var(--text-soft);display:flex;align-items:center;justify-content:center;padding:0;touch-action:manipulation;cursor:pointer;position:relative}
+.x01-act::after{content:"";position:absolute;inset:-2px}
+.x01-act.x01-stop{color:var(--danger-text);border-color:var(--miss-border);background:var(--danger-soft)}
+@media (max-height:700px){.x01-fb,#screen-game .x01-input .np-disp{margin-bottom:var(--sp-2)}#screen-game .x01-pad{gap:5px!important}.x01-undo{height:36px}}
+#screen-game .x01-input .btn-sm{height:clamp(40px,calc(6vh - 4px),48px);border-radius:var(--r-md) !important}
+#screen-game .x01-pad .btn{height:clamp(45px,calc(8.4vh - 8px),74px);padding:0 !important;border-radius:var(--r-xl) !important} /* 4D-1b: geen zwevende balk meer in X01; de ruimte gaat naar het dock */
 /* gedeelde spelcomponenten */.sp-row{padding:var(--sp-5) 0;border-top:1px solid var(--border)}
 .sp-row:first-child{border-top:0;padding-top:var(--sp-1)}
 .sp-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);margin-bottom:var(--sp-4)}
@@ -2485,6 +2532,11 @@ var I18N={
 "Onbekend formaat.": "Unknown format.",
 "Onbekende gebruikersnaam.": "Unknown username.",
 "Ongedaan": "Undo",
+"Nog geen worp deze leg": "No visit yet this leg",
+"rest": "left",
+"blijft op": "stays on",
+"Ongeldig": "Invalid",
+"Terug, score aanpassen": "Back, change score",
 "Ongeldige code — controleer of je de volledige code hebt geplakt.": "Invalid code — check that you pasted the whole code.",
 "Ongeldige score (0–180)": "Invalid score (0–180)",
 "Ontbrekende spelers en potjes worden toegevoegd. Er wordt niets van deze telefoon verwijderd.": "Missing players and games are added. Nothing is removed from this phone.",
@@ -2867,7 +2919,7 @@ var I18N_PATTERNS=[
  [/^Statistieken van (.+) wissen$/,'Clear statistics of $1'],
  [/^Statistieken van (.+) wissen\? Dit verwijdert ook alle wedstrijdgeschiedenis van deze speler\.$/,'Clear statistics of $1? This also removes all match history of this player.'],
  [/^nog (\d+)$/,'$1 left'],[/^(\d+) beurt(en)?$/,function(m){return m[1]+(m[2]?' turns':' turn');}],
- [/^rest (\d+)$/,'$1 left'],[/^staat op (\d+)$/,'on $1'],[/^wordt (\d+)$/,'becomes $1'],[/^→ restant: (\d+)$/,'→ remaining: $1'],
+ [/^rest (\d+)$/,'$1 left'],[/^Uit (\d+)$/,'Out $1'],[/^Teruggezet: (.+) (\S+)$/,'Undone: $1 $2'],[/^(.+) gooit…$/,'$1 throwing…'],[/^staat op (\d+)$/,'on $1'],[/^wordt (\d+)$/,'becomes $1'],[/^→ restant: (\d+)$/,'→ remaining: $1'],
  [/^en je komt op (\d+):$/,'and you reach $1:'],
  [/^gem\.? (.+)$/,'avg $1'],[/^tegen (.+)$/,function(m){return 'vs '+_tr(m[1]);}],[/^dubbel (\d+%.*)$/,'double $1'],[/^(\d+)% dubbel$/,'$1% double'],[/^score (\d+)$/,'score $1'],
  [/^exact (\d+)$/,'exact $1'],[/^Gehalveerd → (\d+)$/,'Halved → $1'],[/^\+(\d+) → (\d+)$/,'+$1 → $2'],
@@ -3667,19 +3719,23 @@ function _tr1(n){
   <!-- Uitgooi: vult de vrije ruimte tussen scorekaarten en invoer, groot leesbaar vanaf de oche (v228) -->
   <!-- x01-side: op de telefoon display:contents (geen effect); liggend groot scherm de rechterkolom (v252) -->
   <div id="x01-side">
+  <div class="x01-acts x01-acts-side"><button type="button" class="x01-act" onclick="toggleX01Stats()" aria-label="Statistieken"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8"/></svg></button><button type="button" class="x01-act x01-stop" onclick="confirmEndGame()" aria-label="Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></button></div><!-- 4D-1b: Stats en Stop boven de invoerkolom (alleen liggend ≥ 1000 px) -->
   <div id="x01-mid"><div id="checkout-strip" style="display:none"></div></div>
   <div class="x01-input" style="flex-shrink:0">
     <!-- Score display -->
-    <div class="np-disp"><span id="np-who"></span><div id="numpad-display" style="font-size:30px;font-weight:900;color:var(--accent);letter-spacing:.04em">—</div><span id="np-rest"></span></div>
+    <!-- 4D-1b: terugmelding van de laatst ingediende score (blijft tot de volgende score), met Ongedaan (één stap) -->
+    <div id="x01-fb" class="x01-fb is-leeg" aria-live="polite"><button type="button" id="x01-undo" class="x01-undo" onclick="x01Undo()" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg><span>Ongedaan</span></button><div class="x01-fbt"><span id="x01-fbn" class="x01-fbn"></span><span id="x01-fbs" class="x01-fbs"></span><span id="x01-fba" class="x01-fba"></span><span id="x01-fbr" class="x01-fbr"></span><span id="x01-fbm" class="x01-fbm"></span></div></div>
+    <!-- Invoerregel: huidige speler, ingetikte score, gevolg of Uit-knop -->
+    <div class="np-disp"><div class="x01-cur"><span id="np-who"></span><div id="numpad-display">—</div></div><div class="x01-res"><span id="np-rest"></span><b id="np-res"></b><button type="button" id="x01-uit" class="x01-uit" onclick="x01Uit()" hidden></button></div></div>
     <!-- Quick scores -->
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:7px">
-      <button class="btn btn-sm" onclick="quickScore(0)" style="color:var(--muted);padding:7px 2px;font-size:12px">0</button>
-      <button class="btn btn-sm" onclick="quickScore(26)" style="padding:7px 2px;font-size:12px">26</button>
-      <button class="btn btn-sm" onclick="quickScore(45)" style="padding:7px 2px;font-size:12px">45</button>
-      <button class="btn btn-sm" onclick="quickScore(60)" style="padding:7px 2px;font-size:12px">60</button>
-      <button class="btn btn-sm" onclick="quickScore(100)" style="padding:7px 2px;font-size:12px">100</button>
-      <button class="btn btn-sm" onclick="quickScore(140)" style="padding:7px 2px;font-size:12px">140</button>
-      <button class="btn btn-sm" onclick="quickScore(180)" style="color:var(--warning);font-weight:800;padding:7px 2px;font-size:12px">180</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(0)">0</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(26)">26</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(45)">45</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(60)">60</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(100)">100</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(140)">140</button>
+      <button class="btn btn-sm x01-q" onclick="quickScore(180)">180</button>
     </div>
     <!-- Numpad grid 3×4 -->
     <div class="x01-pad" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-bottom:4px">
@@ -5638,7 +5694,7 @@ function showScreen(id){
   var _inGame=_gameScreens.indexOf(id)>=0;
   var gb=document.getElementById('game-controls');
   if(gb){
-    if(_inGame)gb.classList.add('show');else gb.classList.remove('show');
+    if(_inGame&&id!=='screen-game')gb.classList.add('show');else gb.classList.remove('show'); // 4D-1b: X01 heeft Stats/Stop in de kop en Ongedaan in de invoer
     var _gTitles={'screen-afgooien':'Afgooien','screen-game':state.gameType||'X01','screen-atc':'Around the Clock','screen-bobs27':"Bob's 27",'screen-shanghai':'Shanghai','screen-halveit':'Halve It','screen-checkout121':'121 Checkout','screen-cricket':'Cricket','screen-eliminatie':'Eliminatie','screen-randomco':'Random Checkout'};
     var gbt=document.getElementById('game-bar-title');if(gbt)gbt.textContent=_gTitles[id]||'';
     var _gs=document.getElementById('gc-stats'),_gss=document.getElementById('gc-stats-sep');
@@ -7343,30 +7399,31 @@ function triggerBotTurn(){
   var remaining=state.scores[state.botPlayerIndex];
   var avg=getBotAvg();
 
-  // Show "thinking" feedback
-  setScoreFeedback('🤖 Bot gooit…','var(--muted)');
+  // 4D-1b: "Bot gooit…" staat in de invoerregel; alle stappen via _x01Later, zodat Ongedaan of Stop ze kan annuleren
   document.getElementById('score-input').disabled=true;
+  _x01Draw();
 
-  setTimeout(function(){
+  _x01Later(function(){
     var score=botGenerateScore(remaining,avg);
     var newRemaining=remaining-score;
 
     // Bust check
     if(newRemaining<0||newRemaining===1&&state.doubleOut){
       score=0;newRemaining=remaining;
-      setScoreFeedback('🤖 Bot: Bust!','var(--danger)');
       state.history.push({player:state.botPlayerIndex,score:0,remaining:remaining,bust:true});
       state.allHistory.push({player:state.botPlayerIndex,score:0,remaining:remaining,bust:true});
       state.dartCount[state.botPlayerIndex]++;
       state.allDartCount[state.botPlayerIndex]++;
       document.getElementById('score-input').disabled=false;
-      setTimeout(function(){nextPlayer501();},1200);
+      _x01UndoUsed=null;_x01Busy=true;_x01Draw();
+      _x01Later(function(){nextPlayer501();},1200);
       return;
     }
 
     // Win
     if(newRemaining===0){
       setScoreFeedback('🤖 Bot gooit '+score+' — uitgegooid!','var(--accent)');
+      _x01Busy=true;
       state.botLastFinish=remaining;
       state.scores[state.botPlayerIndex]=0;
       state.dartCount[state.botPlayerIndex]++;
@@ -7374,7 +7431,8 @@ function triggerBotTurn(){
       state.history.push({player:state.botPlayerIndex,score:score,remaining:remaining,bust:false,won:true});
       state.allHistory.push({player:state.botPlayerIndex,score:score,remaining:remaining,bust:false,won:true});
       document.getElementById('score-input').disabled=false;
-      setTimeout(function(){endGame501(state.players[state.botPlayerIndex]);},1000);
+      _x01Draw();
+      _x01Later(function(){endGame501(state.players[state.botPlayerIndex]);},1000);
       return;
     }
 
@@ -7384,9 +7442,9 @@ function triggerBotTurn(){
     state.allDartCount[state.botPlayerIndex]++;
     state.history.push({player:state.botPlayerIndex,score:score,remaining:remaining,newRemaining:newRemaining,bust:false});
     state.allHistory.push({player:state.botPlayerIndex,score:score,remaining:remaining,newRemaining:newRemaining,bust:false});
-    setScoreFeedback('🤖 Bot gooit '+score+' → restant: '+newRemaining,'var(--muted)');
     document.getElementById('score-input').disabled=false;
-    setTimeout(function(){nextPlayer501();},1200);
+    _x01UndoUsed=null;_x01Busy=true;_x01Draw(); // 4D-1b: terugmelding van de botscore in de invoer
+    _x01Later(function(){nextPlayer501();},1200);
   },900); // "thinking" delay
 }
 
@@ -7758,10 +7816,10 @@ function launchGame(gameType,players,dblOut,fmt,n,sets,startScore,startIdx){
     var start=startScore||(gameType==='301'?301:501);
     state.scores=players.map(function(){return start});
     state.x01Start=start;  // remember for leg resets
-    state.history=[];
+    state.history=[];_x01Reset(); // 4D-1b
     setTimeout(saveRematchConfig,0);
     renderGame();showScreen('screen-game');
-    if(state.botPlayerIndex>=0&&state.botPlayerIndex===state.firstPlayer){setTimeout(triggerBotTurn,800);}
+    if(state.botPlayerIndex>=0&&state.botPlayerIndex===state.firstPlayer){_x01Later(triggerBotTurn,800);} // 4D-1b: annuleerbaar
   } else if(gameType==='bobs27'){
     state.bobScores=players.map(function(){return 27;});state.bobRound=players.map(function(){return 0;});
     state.bobOut=players.map(function(){return false;});state.bobHits=players.map(function(){return 0;});
@@ -8103,7 +8161,7 @@ function renderGame(){
     var _beurt=Math.floor((state.history?state.history.length:0)/Math.max(1,n))+1;
     var _main=(hasLegs&&!state.trnMode)?('Leg '+(state.currentLeg||1)+(state.matchSets>1?' · set '+(state.currentSet||1):'')):('Beurt '+_esc(state.players[cur]));
     _hd.innerHTML='<div class="g-head-l"><span class="g-head-sub">'+_sub+'</span><span class="g-head-main">'+_main+'</span></div>'+
-      '<div class="g-head-r">Beurt<b>'+_beurt+'</b></div>';
+      '<div class="x01-hr"><div class="g-head-r">Beurt<b>'+_beurt+'</b></div><span class="x01-acts"><button type="button" class="x01-act" onclick="toggleX01Stats()" aria-label="Statistieken"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8"/></svg></button><button type="button" class="x01-act x01-stop" onclick="confirmEndGame()" aria-label="Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></button></span></div>';
   }
   if(false){
     msBar.style.display='block';
@@ -8254,7 +8312,8 @@ function renderGame(){
       (imp?'<div class="x-imp">niet uitgooibaar</div>':''); // eigen regel bij elk aantal spelers (herstel 4D-1a; 2 spelers: F12)
     sbGrid.appendChild(cell);
   });
-  document.getElementById('screen-game').classList.toggle('x-imp-on',n<=4&&!!sbGrid.querySelector('.x-imp')); // herstel 4D-1a: zie .x-imp-on in de CSS
+  document.getElementById('screen-game').classList.toggle('x-imp-on',n<=4&&!!sbGrid.querySelector('.x-imp'));
+  _x01Draw(); // 4D-1b // herstel 4D-1a: zie .x-imp-on in de CSS
 
 
   // Stats grid — one card per player
@@ -8567,15 +8626,68 @@ function getCheckout(n){
 
 // ─── Custom numpad ───────────────────────────────────────
 var _numpadVal='';
-function updateNpSide(){
-  var who=document.getElementById('np-who'),rest=document.getElementById('np-rest');
-  if(!who||!rest||!state.players||state.currentPlayer===undefined||!state.scores)return;
-  who.textContent=(state.players[state.currentPlayer]||'')+' gooit';
-  var v=parseInt(_numpadVal)||0, rem=state.scores[state.currentPlayer];
-  if(_numpadVal===''||isNaN(rem)){rest.textContent='rest '+rem;return;}
-  var r=rem-v;
-  rest.textContent=(v>180||r<0||(r===1&&state.doubleOut!==false))?'bust':(r===0?'uit!':'rest '+r);
+// ═══ 4D-1b: invoerdock X01 — terugmelding, Ongedaan (één stap), invoerblokkade, Uit, double-vraag Terug ═══
+// _x01Gen: elke geplande stap (beurtwissel, botworp, uitgooi bot) loopt via _x01Later en vervalt als _x01Gen intussen
+// verhoogd is (Ongedaan, Stop, nieuwe leg, hervatten). _x01Busy: van indienen tot de beurtwissel; dan geen invoer.
+// _x01UndoUsed: na Ongedaan {name,label} tot de volgende score (één stap terug). Geen van drieën zit in state/snapshot.
+var _x01Gen=0,_x01Busy=false,_x01UndoUsed=null,_x01PendScore=null;
+function _x01Later(fn,ms){var g=_x01Gen;return setTimeout(function(){if(g!==_x01Gen)return;try{fn();}catch(e){_errLog(e,'_x01Later')}},ms);}
+function _x01IsBot(){return state.botPlayerIndex>=0&&state.currentPlayer===state.botPlayerIndex;}
+function _x01Locked(){return _x01Busy||_x01IsBot()||!!document.getElementById('dbl-yn-overlay');}
+function _x01Reset(){_x01Gen++;_x01Busy=false;_x01UndoUsed=null;_x01PendScore=null;var i=document.getElementById('score-input');if(i)i.disabled=false;}
+function _x01Draw(){
+  var $=function(id){return document.getElementById(id);},fb=$('x01-fb');
+  if(!fb||!state.players||!state.scores||state.currentPlayer===undefined)return;
+  var h=state.history||[],last=h[h.length-1],u=_x01UndoUsed,cls='x01-fb',nm='',sc='',ar='',rs='',ms='',can=false;
+  if(u){cls+=' is-terug';ms='Teruggezet: '+u.name+' '+u.label;}
+  else if(!last||last.won){cls+=' is-leeg';ms='Nog geen worp deze leg';}
+  else{nm=state.players[last.player]||'';can=true;
+    if(last.bust){cls+=' is-bust';sc='Bust';ar='blijft op';rs=String(last.remaining);}
+    else{sc=String(last.score);ar='→';rs=String(last.newRemaining!=null?last.newRemaining:last.remaining-last.score);}}
+  fb.className=cls;$('x01-fbn').textContent=nm;$('x01-fbs').textContent=sc;$('x01-fba').textContent=ar;$('x01-fbr').textContent=rs;$('x01-fbm').textContent=ms;
+  $('x01-undo').disabled=!can;
+  var cur=state.currentPlayer,rem=state.scores[cur],v=parseInt(_numpadVal)||0,bot=_x01IsBot(),lbl='',big='',bc='',uit=false;
+  $('np-who').textContent=(state.players[cur]||'')+(bot?' gooit…':' gooit');
+  if(bot){big='…';}
+  else if(_numpadVal===''){if(!_x01Busy&&rem>1&&getCheckout(rem))uit=true;else{lbl='rest';big=String(rem);}}
+  else if(v>180){lbl='max. 180';big='Ongeldig';bc='bust';}
+  else{var r=rem-v;if(r<0||(r===1&&state.doubleOut!==false)){big='Bust';bc='bust';}else if(r===0){big='Uit!';bc='uit';}else{lbl='rest';big=String(r);}}
+  $('np-rest').textContent=lbl;var b=$('np-res');b.textContent=big;b.className=bc;
+  var ub=$('x01-uit');ub.hidden=!uit;if(uit)ub.textContent='Uit '+rem;
 }
+// Ongedaan: precies de laatst ingediende score (ook die van de bot), één stap. Annuleert geplande stappen.
+function x01Undo(){
+  var h=state.history||[],last=h[h.length-1];
+  if(!last||last.won||_x01UndoUsed)return;
+  var busyWas=_x01Busy;
+  _x01Gen++;_x01Busy=false;var si=document.getElementById('score-input');if(si){si.disabled=false;si.value='';}
+  var ov=document.getElementById('dbl-yn-overlay');if(ov)ov.parentNode.removeChild(ov);
+  _x01PendScore=null;_numpadVal='';var d=document.getElementById('numpad-display');if(d){d.textContent='—';d.style.color='';}
+  _x01UndoUsed={name:state.players[last.player]||'',label:last.bust?'bust':String(last.score)};
+  // Ronde: nextPlayer501 telt een ronde op als de beurt bij de eerste speler terugkomt; undoThrow zet die niet terug
+  // (zijn controle komt ná het terugzetten van de speler). Was de beurt al gewisseld en zo bij de eerste speler beland,
+  // dan hoort de ronde één terug. Solo: elke beurtwissel telt, dus alleen als de wissel al gebeurd was (niet meer bezig).
+  var _adv=state.currentPlayer!==last.player||(state.players.length===1&&!busyWas);
+  var _rnd=(_adv&&state.currentPlayer===state.firstPlayer&&state.round>1)?state.round-1:state.round;
+  undoThrow(); // bestaande functie: score, beurten, geschiedenis en speler terug
+  state.round=_rnd;
+  updateCheckoutStrip();
+  if(_x01IsBot())_x01Later(triggerBotTurn,400); // botscore ongedaan: de bot is weer aan de beurt en gooit opnieuw
+}
+// Uit-knop: vult de rest in en gaat door de bestaande uitgooiflow
+function x01Uit(){
+  if(_x01Locked())return;var rem=state.scores[state.currentPlayer];if(!(rem>1)||!getCheckout(rem))return;
+  _numpadVal=String(rem);var i=document.getElementById('score-input');if(i)i.value=rem;submitScore();
+}
+// Double-vraag: terug naar de invoer met de ingetikte score; er is nog niets opgeslagen
+function x01DoubleBack(){
+  var ov=document.getElementById('dbl-yn-overlay');if(ov)ov.parentNode.removeChild(ov);
+  var sc=_x01PendScore;_x01PendScore=null;if(sc==null)return;
+  _numpadVal=String(sc);var i=document.getElementById('score-input');if(i)i.value=sc;
+  var d=document.getElementById('numpad-display');if(d)d.textContent=_numpadVal;
+  _x01Draw();
+}
+function updateNpSide(){_x01Draw();} // 4D-1b: invoerregel en terugmelding worden samen getekend
 // Algemeen onderblad voor spelinfo (rondes, pogingen) (v196)
 function openGameSheet(title,html){
   closeGameSheet();
@@ -8602,11 +8714,12 @@ function clearNumpad(){
   var inp=document.getElementById('score-input');
   if(inp)inp.value='';
   var disp=document.getElementById('numpad-display');
-  if(disp){disp.textContent='—';disp.style.color='var(--accent)';}
+  if(disp){disp.textContent='—';disp.style.color='';}
   updateCheckoutStrip();
   updateNpSide();
 }
 function numpadPress(key){
+  if(_x01Locked())return; // 4D-1b: geen invoer tijdens de beurtwissel, de botbeurt of de double-vraag
   if(key==='del'){
     _numpadVal=_numpadVal.slice(0,-1);
   } else if(key==='enter'){
@@ -8623,7 +8736,7 @@ function numpadPress(key){
   var disp=document.getElementById('numpad-display');
   if(disp){
     disp.textContent=_numpadVal||'—';
-    disp.style.color=_numpadVal?((v>180)?'var(--danger)':'var(--accent)'):'var(--accent)';
+    disp.style.color=(_numpadVal&&v>180)?'var(--danger-text)':'';
   }
   updateNpSide();
 }
@@ -8729,6 +8842,7 @@ function _doRematch(startIdx){
 }
 
 function quickScore(val){
+  if(_x01Locked())return; // 4D-1b
   _numpadVal=String(val);
   var disp=document.getElementById('numpad-display');
   if(disp)disp.textContent=String(val);
@@ -8737,11 +8851,12 @@ function quickScore(val){
 }
 
 function submitScore(){
+  if(_x01Locked())return; // 4D-1b: één invoer per beurt; een tweede tik vóór de beurtwissel doet niets
   var inp=document.getElementById('score-input');
   var raw=inp.value.trim();
   if(raw===''){raw='0';}
   var score=parseInt(raw);
-  if(isNaN(score)||score<0||score>180){setScoreFeedback('Ongeldige score (0–180)','var(--danger)');return;}
+  if(isNaN(score)||score<0||score>180){_x01Draw();return;} // 4D-1b: de invoerregel toont "Ongeldig · max. 180"
 
   var cur=state.currentPlayer;
   var remaining=state.scores[cur];
@@ -8750,32 +8865,32 @@ function submitScore(){
   function pushEntry(entry){
     state.history.push(entry);
     state.allHistory.push(entry);
+    _x01UndoUsed=null; // 4D-1b: nieuwe score, de vorige is definitief
   }
 
   // Bust: score too high
   if(newScore<0){
-    setScoreFeedback('Bust! Score te hoog — beurt overgeslagen','var(--danger)');
     if(navigator.vibrate)navigator.vibrate([60,30,60]);
     pushEntry({player:cur,score:0,remaining:remaining,bust:true});
     state.dartCount[cur]++;state.allDartCount[cur]++;
-    clearNumpad();
-    setTimeout(function(){nextPlayer501()},900);
+    _x01Busy=true;clearNumpad(); // terugmelding "BUST" in de invoer (4D-1b)
+    _x01Later(function(){nextPlayer501()},900);
     return;
   }
   // Bust: left on 1 with double out
   if(newScore===1&&state.doubleOut){
-    setScoreFeedback('Bust! Kan niet op 1 eindigen met double out','var(--danger)');
     if(navigator.vibrate)navigator.vibrate([60,30,60]);
     pushEntry({player:cur,score:0,remaining:remaining,bust:true});
     state.dartCount[cur]++;state.allDartCount[cur]++;
-    clearNumpad();
-    setTimeout(function(){nextPlayer501()},900);
+    _x01Busy=true;clearNumpad();
+    _x01Later(function(){nextPlayer501()},900);
     return;
   }
 
   // Win
   if(newScore===0){
     if(state.doubleOut){
+      _x01PendScore=score; // 4D-1b: voor "Terug, score aanpassen"
       clearNumpad();
       // Show centered overlay instead of inline in player card
       var _dblOvl=document.createElement('div');
@@ -8790,6 +8905,7 @@ function submitScore(){
             '<button class="btn btn-full" style="border-color:var(--danger);color:var(--danger);font-size:16px;font-weight:800;padding:14px" onclick="confirmDouble(false,'+remaining+','+score+','+cur+')">✗ Nee</button>'+
             '<button class="btn btn-primary btn-full" style="font-size:16px;font-weight:800;padding:14px" onclick="confirmDouble(true,'+remaining+','+score+','+cur+')">✓ Ja!</button>'+
           '</div>'+
+          '<button type="button" class="x01-dbl-back" onclick="x01DoubleBack()">Terug, score aanpassen</button>'+
         '</div>';
       document.body.appendChild(_dblOvl);
       return;
@@ -8813,8 +8929,8 @@ function submitScore(){
   var wasCheckout=!isImpossible(remaining)&&remaining<=170;
   pushEntry({player:cur,score:score,remaining:remaining,newRemaining:newScore,bust:false,
     checkoutAttempt:wasCheckout,checkoutMissed:wasCheckout});
-  clearNumpad();
-  setTimeout(function(){nextPlayer501()},400);
+  _x01Busy=true;clearNumpad(); // 4D-1b: blokkade tot de beurtwissel
+  _x01Later(function(){nextPlayer501()},400);
 }
 
 
@@ -8849,7 +8965,7 @@ _FINISH.x01=_x01Finish;
 function confirmDouble(isDouble,remaining,score,cur){
   // Remove the overlay
   var _ov=document.getElementById('dbl-yn-overlay');if(_ov)_ov.parentNode.removeChild(_ov);
-  setScoreFeedback('','');
+  _x01PendScore=null;
   if(isDouble){
     state.scores[cur]=0;_syncTeam(cur);
     state.dartCount[cur]++;state.allDartCount[cur]++;
@@ -8864,18 +8980,19 @@ function confirmDouble(isDouble,remaining,score,cur){
       checkoutAttempt:true,checkoutHit:false});
     state.allHistory.push({player:cur,score:0,remaining:remaining,bust:true,
       checkoutAttempt:true,checkoutHit:false});
-    setScoreFeedback('Bust! Geen double — beurt overgeslagen','var(--danger)');
-    setTimeout(function(){nextPlayer501()},900);
+    _x01UndoUsed=null;_x01Busy=true;_x01Draw(); // 4D-1b: terugmelding "BUST" in de invoer
+    _x01Later(function(){nextPlayer501()},900);
   }
 }
 
 function nextPlayer501(){
+  _x01Busy=false; // 4D-1b: beurtwissel klaar
   state.currentPlayer=(state.currentPlayer+1)%state.players.length;
   if(state.currentPlayer===state.firstPlayer)state.round++;
   renderGame();
   // Trigger bot if it's their turn
   if(state.currentPlayer===state.botPlayerIndex){
-    setTimeout(triggerBotTurn,400);
+    _x01Later(triggerBotTurn,400);
   }
 }
 
@@ -9036,7 +9153,7 @@ function finishEndGame501(winnerName){
   } else {
     var start=state.x01Start||501;
     state.scores=state.players.map(function(){return start});
-    state.history=[];state.round=1;
+    state.history=[];state.round=1;_x01Reset(); // 4D-1b: nieuwe leg, geen Ongedaan over de leggrens
     state.dartCount=state.players.map(function(){return 0});
     state.currentLeg++;
     // Wissel op volgorde van leg — leg 1: speler 0, leg 2: speler 1, etc.
@@ -9046,7 +9163,7 @@ function finishEndGame501(winnerName){
     setTimeout(function(){
       renderGame();
       if(state.currentPlayer===state.botPlayerIndex){
-        setTimeout(triggerBotTurn,600);
+        _x01Later(triggerBotTurn,600); // 4D-1b: annuleerbaar
       }
     },1200);
   }
@@ -9054,6 +9171,7 @@ function finishEndGame501(winnerName){
 function confirmEndGame(){
   _askConfirm('Spel beëindigen?','De voortgang wordt niet opgeslagen.','Stop',true,function(){
     if(typeof _inGame!=='undefined')_inGame=false;
+    _x01Reset(); // 4D-1b: geplande beurtwissel/botworp annuleren
     // Save stats for any active game
     if(state.gameType==='checkout121')saveCo121Stats();
     if(state.trnMode){state.trnMode=false;state.trnMatchCallback=null;renderTrnOverview();showScreen('screen-trn-overview');}
@@ -13174,6 +13292,7 @@ function _liveResume(s,quiet){
   _liveOff=true;
   try{
     Object.keys(state).forEach(function(k){delete state[k];});Object.assign(state,s.state);
+    _x01Reset(); // 4D-1b: blokkade en Ongedaan-status horen niet bij de snapshot
     rco=s.rco||null;if(rco&&!rco.darts)rco.visitsLeft=Infinity;
     if(s.rematch)rematchConfig=s.rematch;
     if(s.bot){botEnabled=s.bot.en;botLevelMode=s.bot.mode;botManualLevel=s.bot.lvl;botSelectedPlayer=s.bot.sel;}

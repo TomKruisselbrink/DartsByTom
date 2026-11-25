@@ -45,7 +45,7 @@ await S.t('ongeldige invoer (181, -5, 999) verandert niets', async () => {
 await S.t('double out uitgooien: Ja → dubbel kiezen → doubleStats + winst + leg-dubbel', async () => {
   const f = await fresh(); await f.p.evaluate(L('firstto', 1, 1, true) + 'state.scores[0]=40;renderGame();'); await f.p.evaluate(() => sub(40)); await wait(150);
   ok(await f.p.evaluate(() => !!document.getElementById('dbl-yn-overlay')), 'double-vraag');
-  await f.p.evaluate(() => [...document.querySelectorAll('#dbl-yn-overlay button')].pop().click()); await wait(150);
+  await f.p.evaluate(() => document.querySelector('#dbl-yn-overlay .btn-primary').click()); await wait(150);
   ok(await f.p.evaluate(() => document.getElementById('double-modal').style.display === 'flex'), 'dubbelkeuze');
   await f.p.evaluate(() => onDoubleSelected('D20')); await wait(300);
   const r = await f.p.evaluate(() => ({ ds: dbCache.Tom.doubleStats, e: dbCache.Tom.gameHistory[0], h: dbCache.Henk.gameHistory[0], scr: _curScreen }));

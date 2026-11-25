@@ -18,7 +18,7 @@ export const SCENARIOS = [
   { id: 'x01-4sp', group: 'Spellen', label: '501, 4 spelers (compact)', land: true, setup: `launchGame('501',${P4},true,'firstto',1,1,501,0);state.scores=[121,301,96,501];renderGame();` },
   { id: 'x01-teams', group: 'Spellen', label: '501, 2 tegen 2', setup: `_pendingTeams=[0,1,0,1];launchGame('501',${P4},false,'firstto',1,1,501,0);` },
   { id: 'x01-double-vraag', group: 'Spellen', label: '501: "Was het op een double?"', setup: `launchGame('501',${P2},true,'firstto',1,1,501,0);state.scores[0]=40;renderGame();${SUB(40)}` },
-  { id: 'x01-dubbel-kiezen', group: 'Spellen', label: '501: welke dubbel', setup: `launchGame('501',${P2},true,'firstto',1,1,501,0);state.scores[0]=40;renderGame();${SUB(40)}[...document.querySelectorAll('#dbl-yn-overlay button')].pop().click();` },
+  { id: 'x01-dubbel-kiezen', group: 'Spellen', label: '501: welke dubbel', setup: `launchGame('501',${P2},true,'firstto',1,1,501,0);state.scores[0]=40;renderGame();${SUB(40)}document.querySelector('#dbl-yn-overlay .btn-primary').click();` },
   { id: 'x01-stats-blad', group: 'Spellen', label: '501: statistieken-onderblad', setup: `launchGame('501',${P2},true,'firstto',3,1,501,0);${SUB(100)}${SUB(45)}${SUB(60)}toggleX01Stats(true);` },
   { id: 'cricket', group: 'Spellen', label: 'Cricket', land: true, setup: `launchGame('cricket',${P2},true,'firstto',1,1,501,0);state.crMarks[0]=[3,2,1,0,0,0,0];state.crScores=[20,0];renderCricket();` },
   { id: 'atc', group: 'Spellen', label: 'Around the Clock', land: true, setup: `launchGame('atc',${P2},true,'firstto',1,1,501,0);` },

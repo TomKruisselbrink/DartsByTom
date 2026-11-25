@@ -33,6 +33,11 @@ const MUT = [
   { name: "kaart: 'niet uitgooibaar' weer in een impliciete rij (grid-column:1/-1; Safari-afkapping)", find: '#sb-players .x-imp{grid-area:imp;', repl: '#sb-players .x-imp{grid-column:1/-1;grid-row:4;', only: 'core/x01-kaart' },
   { name: "kaart: 'niet uitgooibaar' weer met afkapstijl (nowrap + ellipsis)", find: 'color:var(--text-soft);white-space:normal;overflow:visible}', repl: 'color:var(--text-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}', only: 'core/x01-kaart' },
   { name: "kaart (F12): 'niet uitgooibaar' bij 2 spelers weer in de meta-regel", find: `(imp?'<div class="x-imp">niet uitgooibaar</div>':'')`, repl: `(imp&&n>2?'<div class="x-imp">niet uitgooibaar</div>':'')`, only: 'core/x01-kaart' },
+  { name: '4D-1b: invoerblokkade tijdens de beurtwissel uit', find: 'function _x01Locked(){return _x01Busy||', repl: 'function _x01Locked(){return false&&_x01Busy||', only: 'core/x01-invoer' },
+  { name: '4D-1b: generatiebewaking van uitgestelde stappen weg (oude timers lopen door na Ongedaan)', find: 'if(g!==_x01Gen)return;', repl: '', only: 'core/x01-invoer' },
+  { name: '4D-1b: Ongedaan mag meer dan één stap terug', find: '||_x01UndoUsed)return;', repl: ')return;', only: 'core/x01-invoer' },
+  { name: '4D-1b: double-vraag Terug doet niets', find: 'function x01DoubleBack(){', repl: 'function x01DoubleBack(){return;', only: 'core/x01-invoer' },
+  { name: '4D-1b: knop Uit ook zonder mogelijke checkout', find: 'if(!_x01Busy&&rem>1&&getCheckout(rem))uit=true;', repl: 'if(!_x01Busy&&rem>1)uit=true;', only: 'core/x01-invoer' },
   { name: 'kaart: GOOIT-label op de telefoon weer zichtbaar bij 3+ spelers', find: '  #sb-players.x-compact .x-turn{display:none}', repl: '', only: 'core/x01-kaart' },
 ];
 const src = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'); let bad = 0;
